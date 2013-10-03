@@ -11,7 +11,7 @@ Command to publish the blog: `juberblog publish`
     -p, --purge             Regenerate all blog posts.
     -q, --quiet             Be quiet and don't post to social networks.
     -s, --sites             Generate static sites.
-    -d, --drafts            Publish drafts.
+    -d, --draft             Publish drafts.
 
 Command to create drafts: `juberblog create`
 
