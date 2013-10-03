@@ -16,7 +16,9 @@ import de.weltraumschaf.commons.Version;
 import org.apache.log4j.Logger;
 
 /**
+ * Main class.
  *
+ * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class App extends InvokableAdapter {
 
