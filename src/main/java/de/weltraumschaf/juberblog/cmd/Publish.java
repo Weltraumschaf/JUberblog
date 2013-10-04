@@ -19,14 +19,14 @@ import de.weltraumschaf.juberblog.CliOptions;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Publish extends BaseCommand implements Command {
+public class Publish extends BaseCommand {
 
     public Publish(final CliOptions options, final IOStreams io) {
         super(options, io);
     }
 
     @Override
-    public void execute() {
+    public void run() {
         io.println("pulish");
     }
 

@@ -12,12 +12,18 @@
 
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.commons.ApplicationException;
+
 /**
+ * Command pattern.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public interface Command {
 
-    void execute();
+    /**
+     * Executes the command.
+     */
+    void execute() throws ApplicationException;
 
 }

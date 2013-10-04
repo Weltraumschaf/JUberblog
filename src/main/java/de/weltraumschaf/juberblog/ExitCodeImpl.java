@@ -18,7 +18,7 @@ import de.weltraumschaf.commons.system.ExitCode;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-enum ExitCodeImpl implements ExitCode {
+public enum ExitCodeImpl implements ExitCode {
 
     FATAL(-1),
     /**
@@ -29,8 +29,8 @@ enum ExitCodeImpl implements ExitCode {
      * Unspecified fatal error occurred.
      */
     UNKNOWN_COMMAND(1),
-    TOO_FEW_ARGUMENTS(2);
-
+    TOO_FEW_ARGUMENTS(2),
+    CANT_LOAD_CONFIG(3);
     /**
      * Exit code number returned as exit code to JVM.
      */

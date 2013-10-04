@@ -19,14 +19,14 @@ import de.weltraumschaf.juberblog.CliOptions;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Create extends BaseCommand implements Command {
+public class Create extends BaseCommand  {
 
     public Create(final CliOptions options, final IOStreams io) {
         super(options, io);
     }
 
     @Override
-    public void execute() {
+    public void run() {
         io.println("create");
     }
 
