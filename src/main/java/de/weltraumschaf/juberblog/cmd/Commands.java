@@ -21,20 +21,24 @@ import de.weltraumschaf.juberblog.CliOptions;
  */
 public final class Commands {
 
+    private static final String CREATE = "create";
+    private static final String PUBLISH = "publish";
+    public static final String INSTALL = "install";
+
     private Commands() {
         super();
     }
 
-    public static Command create(final String subcommandName, final CliOptions options, final IOStreams io) {
-        switch (subcommandName) {
-            case "create":
+    public static Command create(final CliOptions options, final IOStreams io) {
+        switch (options.getSubCommandName()) {
+            case CREATE:
                 return new Create(options, io);
-            case "publish":
+            case PUBLISH:
                 return new Publish(options, io);
-            case "install":
+            case INSTALL:
                 return new Install(options, io);
             default:
-                throw new IllegalArgumentException(String.format("Unknown command '%s'!", subcommandName));
+                throw new IllegalArgumentException(String.format("Unknown command '%s'!", options.getSubCommandName()));
         }
     }
 }

@@ -26,7 +26,8 @@ import org.junit.Before;
 public class ConfigurationTest {
 
     private static final String DIR_SEP = Constants.DIR_SEP.toString();
-    private static final String PACKAGE = "src.main.resources." + Constants.SCAFFOLD_PACKAGE.toString();
+    private static final String PACKAGE = "src.main.resources."
+            + Constants.SCAFFOLD_PACKAGE.toString() + ".configuration";
 
     private Configuration sut;
 
