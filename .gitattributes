@@ -1,0 +1,29 @@
+* text=auto 
+
+# Archves
+*.tar.bz    binary -delta
+*.tar.bz2   binary -delta
+*.tar.gz    binary -delta
+*.zip       binary -delta
+# Compiled
+*.jar       binary -delta
+*.exe       binary -delta
+
+# Images
+*.ico       binary -delta
+*.jpg       binary -delta
+*.gif       binary -delta
+*.png       binary -delta
+
+# Java
+*.java  text diff=java
+
+*.md    text
+*.html  text
+
+# XML
+*.xml   text
+ 
+# Other
+*.txt   text
+ 
