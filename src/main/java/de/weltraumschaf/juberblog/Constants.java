@@ -36,7 +36,11 @@ public enum Constants {
     /**
      * Location of scaffold directory.
      */
-    SCAFFOLD_PACKAGE("de.weltraumschaf.juberblog.scaffold.configuration");
+    SCAFFOLD_PACKAGE("de.weltraumschaf.juberblog.scaffold"),
+    /**
+     * Name of environment variable to enable debug mode.
+     */
+    ENVIRONMENT_VARIABLE_DEBUG("JUBERBLOG_DEBUG");
 
     /**
      * Constant value.

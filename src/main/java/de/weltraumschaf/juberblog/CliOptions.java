@@ -20,6 +20,8 @@ import com.beust.jcommander.Parameter;
  */
 public class CliOptions {
 
+    private final String subCommandName;
+
     /**
      * Help flag.
      */
@@ -60,6 +62,14 @@ public class CliOptions {
      */
     @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
     private String title;
+
+    public CliOptions(String subCommandName) {
+        this.subCommandName = subCommandName;
+    }
+
+    public String getSubCommandName() {
+        return subCommandName;
+    }
 
     public boolean isHelp() {
         return help;
