@@ -26,14 +26,16 @@ import org.junit.Before;
 public class ConfigurationTest {
 
     private static final String DIR_SEP = System.getProperty("file.separator");
+    private static final String PACKAGE = "src.main.resources.de.weltraumschaf.juberblog.scaffold.configuration";
 
     private Configuration sut;
 
     @Before
     public void createSut() throws IOException {
         final String baseDir = System.getProperty("user.dir");
-        final String fileName = baseDir + DIR_SEP + "src" + DIR_SEP + "test" + DIR_SEP + "resources" + DIR_SEP + "de"
-                + DIR_SEP + "weltraumschaf" + DIR_SEP + "juberblog" + DIR_SEP + "configuration.properties";
+        final String fileName = baseDir + DIR_SEP
+                + PACKAGE.replace(".", DIR_SEP)
+                + DIR_SEP + "configuration.properties";
         sut = new Configuration(fileName);
         sut.load();
     }
