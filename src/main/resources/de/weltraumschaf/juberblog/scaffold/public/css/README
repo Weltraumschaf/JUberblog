@@ -1,0 +1,6 @@
+# The CSS Style
+
+Use SASS (http://sass-lang.com/) and the files in the `sass/` directory to generate
+a custom themeing.
+
+You can delete this file.
