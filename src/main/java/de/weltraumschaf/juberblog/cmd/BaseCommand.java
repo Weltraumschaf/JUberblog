@@ -17,9 +17,6 @@ import de.weltraumschaf.juberblog.CliOptions;
 import de.weltraumschaf.juberblog.Configuration;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -43,6 +40,7 @@ abstract class BaseCommand implements Command {
      * Loaded from file.
      */
     private Configuration configuration;
+    private boolean requireConfiguration;
 
     /**
      * Dedicated constructor.
@@ -50,12 +48,13 @@ abstract class BaseCommand implements Command {
      * @param options must not be {@code null}
      * @param io must not be {@code null}
      */
-    public BaseCommand(final CliOptions options, final IOStreams io) {
+    public BaseCommand(final CliOptions options, final IOStreams io, final boolean requireConfiguration) {
         super();
         Validate.notNull(options, "Options must not be null!");
         this.options = options;
         Validate.notNull(io, "IO must not be null!");
         this.io = io;
+        this.requireConfiguration = requireConfiguration;
     }
 
     @Override
@@ -76,6 +75,7 @@ abstract class BaseCommand implements Command {
      * Command deinitialization invoked after {@link #run()}.
      */
     private void deinit() {
+        // Nothing to do here yet.
     }
 
     /**
@@ -84,15 +84,16 @@ abstract class BaseCommand implements Command {
     abstract protected void run();
 
     private void loadConfiguration() throws ApplicationException {
-        configuration = new Configuration(options.getConfigurationFile());
-
         try {
+            configuration = new Configuration(options.getConfigurationFile());
             configuration.load();
-        } catch (IOException ex) {
-            throw new ApplicationException(
-                ExitCodeImpl.CANT_LOAD_CONFIG,
-                String.format("Can't load configuration file '%s'!", options.getConfigurationFile()),
-                ex);
+        } catch (IOException | IllegalArgumentException | NullPointerException ex) {
+            if (requireConfiguration) {
+                throw new ApplicationException(
+                        ExitCodeImpl.CANT_LOAD_CONFIG,
+                        String.format("Can't load configuration file '%s'!", options.getConfigurationFile()),
+                        ex);
+            }
         }
     }
 

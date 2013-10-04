@@ -27,9 +27,10 @@ class Create extends BaseCommand  {
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(Create.class);
+    private static final boolean REQUIRE_CONFIGURATION = true;
 
     public Create(final CliOptions options, final IOStreams io) {
-        super(options, io);
+        super(options, io, REQUIRE_CONFIGURATION);
     }
 
     @Override

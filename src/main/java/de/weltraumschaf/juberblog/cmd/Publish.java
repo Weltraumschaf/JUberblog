@@ -23,13 +23,15 @@ import org.apache.log4j.Logger;
  */
 class Publish extends BaseCommand {
 
+    private static final boolean REQUIRE_CONFIGURATION = true;
+
     /**
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(Create.class);
 
     public Publish(final CliOptions options, final IOStreams io) {
-        super(options, io);
+        super(options, io, REQUIRE_CONFIGURATION);
     }
 
     @Override
