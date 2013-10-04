@@ -14,27 +14,27 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.IOStreams;
 import de.weltraumschaf.juberblog.CliOptions;
-import org.apache.log4j.Logger;
 
 /**
- * Creates a post or site draft.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Create extends BaseCommand  {
+public final class Commands {
 
-    /**
-     * Log facility.
-     */
-    private static final Logger LOG = Logger.getLogger(Create.class);
-
-    public Create(final CliOptions options, final IOStreams io) {
-        super(options, io);
+    private Commands() {
+        super();
     }
 
-    @Override
-    public void run() {
-        LOG.debug("create");
+    public static Command create(final String subcommandName, final CliOptions options, final IOStreams io) {
+        switch (subcommandName) {
+            case "create":
+                return new Create(options, io);
+            case "publish":
+                return new Publish(options, io);
+            case "install":
+                return new Install(options, io);
+            default:
+                throw new IllegalArgumentException(String.format("Unknown command '%s'!", subcommandName));
+        }
     }
-
 }

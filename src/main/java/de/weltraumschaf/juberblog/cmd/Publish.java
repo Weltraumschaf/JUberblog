@@ -14,12 +14,19 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.IOStreams;
 import de.weltraumschaf.juberblog.CliOptions;
+import org.apache.log4j.Logger;
 
 /**
+ * Publish all sites from data directory.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Publish extends BaseCommand {
+class Publish extends BaseCommand {
+
+    /**
+     * Log facility.
+     */
+    private static final Logger LOG = Logger.getLogger(Create.class);
 
     public Publish(final CliOptions options, final IOStreams io) {
         super(options, io);
@@ -27,7 +34,7 @@ public class Publish extends BaseCommand {
 
     @Override
     public void run() {
-        io.println("pulish");
+        LOG.debug("pulish");
     }
 
 }

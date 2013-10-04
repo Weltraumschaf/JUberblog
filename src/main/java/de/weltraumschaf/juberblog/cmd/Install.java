@@ -17,24 +17,26 @@ import de.weltraumschaf.juberblog.CliOptions;
 import org.apache.log4j.Logger;
 
 /**
- * Creates a post or site draft.
+ * Installation command.
+ *
+ * Creates a scaffold directory in specified location.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Create extends BaseCommand  {
+class Install extends BaseCommand {
 
     /**
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(Create.class);
 
-    public Create(final CliOptions options, final IOStreams io) {
+    public Install(final CliOptions options, final IOStreams io) {
         super(options, io);
     }
 
     @Override
-    public void run() {
-        LOG.debug("create");
+    protected void run() {
+        LOG.debug("install");
     }
 
 }

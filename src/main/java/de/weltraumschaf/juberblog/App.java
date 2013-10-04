@@ -16,8 +16,7 @@ import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.InvokableAdapter;
 import de.weltraumschaf.commons.Version;
 import de.weltraumschaf.juberblog.cmd.Command;
-import de.weltraumschaf.juberblog.cmd.Create;
-import de.weltraumschaf.juberblog.cmd.Publish;
+import de.weltraumschaf.juberblog.cmd.Commands;
 import java.util.Arrays;
 import org.apache.log4j.Logger;
 
@@ -71,7 +70,7 @@ public class App extends InvokableAdapter {
         final CliOptions options = new CliOptions();
         final String[] args = getArgs().length > 1
                 ? Arrays.copyOfRange(getArgs(), 1, getArgs().length)
-                : new String[] {};
+                : new String[]{};
         final JCommander optionsParser = new JCommander(options, args);
         optionsParser.setProgramName("juberblog");
 
@@ -85,19 +84,14 @@ public class App extends InvokableAdapter {
         }
 
         final Command cmd;
+        try {
+            cmd = Commands.create(commandName, options, getIoStreams());
 
-        switch (commandName) {
-            case "create":
-                cmd = new Create(options, getIoStreams());
-                break;
-            case "publish":
-                cmd = new Publish(options, getIoStreams());
-                break;
-            default:
-                throw new ApplicationException(
+        } catch (final IllegalArgumentException ex) {
+            throw new ApplicationException(
                     ExitCodeImpl.UNKNOWN_COMMAND,
-                    String.format("Unknown command '%s'!", commandName),
-                    null);
+                    ex.getMessage(),
+                    ex);
         }
 
         cmd.execute();
