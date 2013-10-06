@@ -62,7 +62,8 @@ class Install extends BaseCommand {
 
     @Override
     protected void run() {
-        LOG.debug("install");
+        final String target = options.getLocation();
+        io.println(String.format("Install scaffold to '%s'...", target));
         final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split("!");
         final String jarFile = paths[0];
         LOG.debug(jarFile);
@@ -71,10 +72,7 @@ class Install extends BaseCommand {
             try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
                 final String scaffold = paths[1];
                 final Path dir = fs.getPath(scaffold);
-                Files.walkFileTree(dir,
-                        new CopyDirectoryVisitor(
-                        new File("/Users/sxs/tmp/juberblog").toPath(),
-                        PREFIX));
+                Files.walkFileTree(dir, new CopyDirectoryVisitor(new File(target).toPath(), PREFIX));
             }
         } catch (IOException ex) {
             io.errorln("Can't copy scaffold: " + ex.getMessage());

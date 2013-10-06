@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog;
 
 import com.beust.jcommander.Parameter;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Command line options.
@@ -36,7 +37,7 @@ public class CliOptions {
      * Configuration file argument.
      */
     @Parameter(names = {"-c", "--config" }, description = "Config file to use. [required]")
-    private String configurationFile;
+    private String configurationFile = "";
     /**
      * Purge flag.
      */
@@ -61,9 +62,21 @@ public class CliOptions {
      * Title argument.
      */
     @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
-    private String title;
+    private String title = "";
+    /**
+     * Where to install the blog scaffold.
+     */
+    @Parameter(names = {"-l", "--location" }, description = "Install location.")
+    private String location = "";
 
-    public CliOptions(String subCommandName) {
+    /**
+     * Dedicated constructor.
+     *
+     * @param subCommandName must not be {@code null}
+     */
+    public CliOptions(final String subCommandName) {
+        super();
+        Validate.notNull(subCommandName, "Sub command must not be null!");
         this.subCommandName = subCommandName;
     }
 
@@ -102,4 +115,9 @@ public class CliOptions {
     public String getTitle() {
         return title;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
 }
