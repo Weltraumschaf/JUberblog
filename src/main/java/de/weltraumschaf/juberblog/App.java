@@ -20,7 +20,6 @@ import de.weltraumschaf.juberblog.cmd.Command;
 import de.weltraumschaf.juberblog.cmd.Commands;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,7 +33,6 @@ public class App extends InvokableAdapter {
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(App.class);
-    private static final boolean DEBUG = true;
     /**
      * Version information.
      */
