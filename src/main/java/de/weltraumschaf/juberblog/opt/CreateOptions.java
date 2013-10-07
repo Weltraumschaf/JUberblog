@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.opt;
 import com.beust.jcommander.Parameter;
 
 /**
+ * Options for create commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -22,22 +23,28 @@ public class CreateOptions extends CreateAndPublishOptions {
     /**
      * Site flag.
      */
-    @Parameter(names = {"-s", "--site"}, description = "Create site draft.")
+    @Parameter(names = {"-s", "--site" }, description = "Create site draft.")
     private boolean sites;
     /**
      * Title argument.
      */
-    @Parameter(names = {"-t", "--title"}, description = "Title of the blog post.")
+    @Parameter(names = {"-t", "--title" }, required = true, description = "Title of the blog post.")
     private String title = "";
 
-    public CreateOptions() {
-        super();
-    }
-
+    /**
+     * Whether to create a site or a post.
+     *
+     * @return {@code true} for site, {@code false} for post
+     */
     public boolean isSites() {
         return sites;
     }
 
+    /**
+     * Get title.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getTitle() {
         return title;
     }

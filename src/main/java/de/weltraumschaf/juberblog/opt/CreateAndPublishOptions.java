@@ -15,14 +15,11 @@ package de.weltraumschaf.juberblog.opt;
 import com.beust.jcommander.Parameter;
 
 /**
+ * Common options for create and publish commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public abstract class CreateAndPublishOptions extends CommonOptions {
-
-    public CreateAndPublishOptions() {
-        super();
-    }
 
     /**
      * Configuration file argument.
@@ -30,7 +27,11 @@ public abstract class CreateAndPublishOptions extends CommonOptions {
     @Parameter(names = {"-c", "--config" }, required = true, description = "Config file to use.")
     private String configurationFile = "";
 
-
+    /**
+     * Get configuration file.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getConfigurationFile() {
         return configurationFile;
     }

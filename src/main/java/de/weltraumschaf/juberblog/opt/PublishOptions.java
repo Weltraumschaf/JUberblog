@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.opt;
 import com.beust.jcommander.Parameter;
 
 /**
+ * Options for publish commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -22,31 +23,42 @@ public class PublishOptions extends CreateAndPublishOptions {
     /**
      * Purge flag.
      */
-    @Parameter(names = {"-p", "--purge"}, description = "Regenerate all blog posts and sites.")
+    @Parameter(names = {"-p", "--purge" }, description = "Regenerate all blog posts and sites.")
     private boolean purge;
     /**
      * Quiet flag.
      */
-    @Parameter(names = {"-q", "--quiet"}, description = "Be quiet and don't post to social networks.")
+    @Parameter(names = {"-q", "--quiet" }, description = "Be quiet and don't post to social networks.")
     private boolean quiet;
     /**
      * Site flag.
      */
-    @Parameter(names = {"-s", "--site"}, description = "Publish sites.")
+    @Parameter(names = {"-s", "--site" }, description = "Publish sites.")
     private boolean sites;
 
-    public PublishOptions() {
-        super();
-    }
-
+    /**
+     * Whether to purge all published files.
+     *
+     * @return default is {@code false}
+     */
     public boolean isPurge() {
         return purge;
     }
 
+    /**
+     * Whether to do not print anything to STDOUT.
+     *
+     * @return default is {@code false}
+     */
     public boolean isQuiet() {
         return quiet;
     }
 
+    /**
+     * Whether to publish sites.
+     *
+     * @return default is {@code false}
+     */
     public boolean isSites() {
         return sites;
     }

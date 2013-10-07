@@ -15,6 +15,7 @@ package de.weltraumschaf.juberblog.opt;
 import com.beust.jcommander.Parameter;
 
 /**
+ * Common options for all commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -31,14 +32,12 @@ abstract class CommonOptions implements Options {
     @Parameter(names = {"-v", "--verbose" }, description = "Tell you more.")
     private boolean verbose;
 
-    public CommonOptions() {
-        super();
-    }
-
+    @Override
     public boolean isHelp() {
         return help;
     }
 
+    @Override
     public boolean isVerbose() {
         return verbose;
     }

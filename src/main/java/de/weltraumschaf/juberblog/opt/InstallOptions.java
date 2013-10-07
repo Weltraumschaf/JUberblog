@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.opt;
 import com.beust.jcommander.Parameter;
 
 /**
+ * Options for install commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -22,13 +23,14 @@ public class InstallOptions extends CommonOptions {
     /**
      * Where to install the blog scaffold.
      */
-    @Parameter(names = {"-l", "--location"}, description = "Install location of the blog scaffold.")
+    @Parameter(names = {"-l", "--location" }, description = "Install location of the blog scaffold.")
     private String location = "";
 
-    public InstallOptions() {
-        super();
-    }
-
+    /**
+     * Get install locations.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getLocation() {
         return location;
     }

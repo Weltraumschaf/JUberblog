@@ -13,14 +13,23 @@
 package de.weltraumschaf.juberblog.opt;
 
 /**
- * Marker interface.
+ * Interface for immutable options value objects.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public interface Options {
 
+    /**
+     * Whether the help flag is set.
+     *
+     * @return {@code true} if set, else {@code false}
+     */
     boolean isHelp();
-
+    /**
+     * Whether the verbose flag is set.
+     *
+     * @return {@code true} if set, else {@code false}
+     */
     boolean isVerbose();
 
 }
