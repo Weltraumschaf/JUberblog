@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import com.google.common.base.Objects;
 
 /**
  * Common options for all commands.
@@ -40,6 +41,11 @@ abstract class CommonOptions implements Options {
     @Override
     public boolean isVerbose() {
         return verbose;
+    }
+
+    @Override
+    public String toString() {
+        return "help: " + help + ", verbose: " + verbose;
     }
 
 }

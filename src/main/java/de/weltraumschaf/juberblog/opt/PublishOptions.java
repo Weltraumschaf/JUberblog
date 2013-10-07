@@ -33,7 +33,7 @@ public class PublishOptions extends CreateAndPublishOptions {
     /**
      * Site flag.
      */
-    @Parameter(names = {"-s", "--site" }, description = "Publish sites.")
+    @Parameter(names = {"-s", "--sites" }, description = "Publish sites.")
     private boolean sites;
 
     /**
@@ -62,4 +62,10 @@ public class PublishOptions extends CreateAndPublishOptions {
     public boolean isSites() {
         return sites;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", purge: " + purge + ", quiet: " + quiet + ", sites: " + sites;
+    }
+
 }

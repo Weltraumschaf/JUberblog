@@ -34,4 +34,10 @@ public class InstallOptions extends CommonOptions {
     public String getLocation() {
         return location;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", location: " + location;
+    }
+
 }

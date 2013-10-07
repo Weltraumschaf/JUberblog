@@ -24,7 +24,7 @@ public class CreateOptions extends CreateAndPublishOptions {
      * Site flag.
      */
     @Parameter(names = {"-s", "--site" }, description = "Create site draft.")
-    private boolean sites;
+    private boolean site;
     /**
      * Title argument.
      */
@@ -36,8 +36,8 @@ public class CreateOptions extends CreateAndPublishOptions {
      *
      * @return {@code true} for site, {@code false} for post
      */
-    public boolean isSites() {
-        return sites;
+    public boolean isSite() {
+        return site;
     }
 
     /**
@@ -48,4 +48,10 @@ public class CreateOptions extends CreateAndPublishOptions {
     public String getTitle() {
         return title;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", site: " + site + ", title: " + title;
+    }
+
 }

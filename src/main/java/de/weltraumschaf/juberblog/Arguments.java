@@ -58,4 +58,11 @@ public class Arguments {
 
         return Arrays.copyOfRange(args, 1, args.length);
     }
+
+    @Override
+    public String toString() {
+        return "first: " + getFirstArgument()
+                + ", tail: " + Arrays.asList(getTailArguments()).toString();
+    }
+
 }

@@ -36,4 +36,9 @@ public abstract class CreateAndPublishOptions extends CommonOptions {
         return configurationFile;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + ", configurationFile: " + configurationFile;
+    }
+
 }
