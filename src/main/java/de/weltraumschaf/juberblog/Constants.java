@@ -28,7 +28,7 @@ public enum Constants {
     /**
      * Used default new line separator.
      */
-    DEFAULT_NEW_LINE("\n"),
+    DEFAULT_NEW_LINE(String.format("%n")),
     /**
      * System dependent file separator.
      */
@@ -40,7 +40,11 @@ public enum Constants {
     /**
      * Name of environment variable to enable debug mode.
      */
-    ENVIRONMENT_VARIABLE_DEBUG("JUBERBLOG_DEBUG");
+    ENVIRONMENT_VARIABLE_DEBUG("JUBERBLOG_DEBUG"),
+    /**
+     * NAme of the command line script.
+     */
+    COMMAND_NAME("juberblog");
 
     /**
      * Constant value.

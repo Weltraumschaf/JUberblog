@@ -10,20 +10,29 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.opt;
 
-import de.weltraumschaf.commons.ApplicationException;
+import com.beust.jcommander.Parameter;
 
 /**
- * Command pattern.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public interface Command {
+public abstract class CreateAndPublishOptions extends CommonOptions {
+
+    public CreateAndPublishOptions() {
+        super();
+    }
 
     /**
-     * Executes the command.
+     * Configuration file argument.
      */
-    void execute() throws ApplicationException;
+    @Parameter(names = {"-c", "--config" }, required = true, description = "Config file to use.")
+    private String configurationFile = "";
+
+
+    public String getConfigurationFile() {
+        return configurationFile;
+    }
 
 }

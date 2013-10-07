@@ -12,7 +12,7 @@
 ## Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
 ##
 
-export JUBERBLOG_DEBUG=true
+export JUBERBLOG_DEBUG=false
 
 # JVM settings.
 JVM_MIN_HEAP_SPACE="128m"

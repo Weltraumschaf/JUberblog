@@ -12,8 +12,9 @@
 
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.commons.IOStreams;
-import de.weltraumschaf.juberblog.CliOptions;
+import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.juberblog.opt.CreateOptions;
+import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -21,21 +22,32 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Create extends BaseCommand  {
+class CreateSubCommand extends CreateAndPublishCommand<CreateOptions>  {
 
     /**
      * Log facility.
      */
-    private static final Logger LOG = Logger.getLogger(Create.class);
-    private static final boolean REQUIRE_CONFIGURATION = true;
+    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
+    private CreateOptions options;
 
-    public Create(final CliOptions options, final IOStreams io) {
-        super(options, io, REQUIRE_CONFIGURATION);
+    public CreateSubCommand(final IO io) {
+        super(io);
     }
 
     @Override
     public void run() {
         LOG.debug("create");
+    }
+
+    @Override
+    public void setOptions(final CreateOptions opt) {
+        Validate.notNull(opt, "Options must not be null!");
+        options = opt;
+    }
+
+    @Override
+    public CreateOptions getOptions() {
+        return options;
     }
 
 }

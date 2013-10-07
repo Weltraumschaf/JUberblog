@@ -12,9 +12,9 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
-import de.weltraumschaf.commons.IOStreams;
-import de.weltraumschaf.juberblog.CliOptions;
+import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -36,19 +36,17 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Install extends BaseCommand {
+class InstallSubCommand extends BaseSubCommand<InstallOptions> {
 
-    /**
-     * This command does not require configuration file.
-     */
-    private static final boolean REQUIRE_CONFIGURATION = false;
     /**
      * Log facility.
      */
-    private static final Logger LOG = Logger.getLogger(Create.class);
+    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
     private static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()
                                        .replace(".", Constants.DIR_SEP.toString());
     private static final String PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();
+
+    private InstallOptions options;
 
     /**
      * Dedicated constructor.
@@ -56,8 +54,8 @@ class Install extends BaseCommand {
      * @param options must not be {@code null}
      * @param io must not be {@code null}
      */
-    public Install(final CliOptions options, final IOStreams io) {
-        super(options, io, REQUIRE_CONFIGURATION);
+    public InstallSubCommand(final IO io) {
+        super(io);
     }
 
     @Override
@@ -78,6 +76,17 @@ class Install extends BaseCommand {
             io.errorln("Can't copy scaffold: " + ex.getMessage());
             io.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public void setOptions(final InstallOptions opt) {
+        Validate.notNull(opt, "Options must not be null!");
+        options = opt;
+    }
+
+    @Override
+    public InstallOptions getOptions() {
+        return options;
     }
 
     /**
