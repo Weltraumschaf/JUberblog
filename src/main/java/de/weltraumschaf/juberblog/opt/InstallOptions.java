@@ -37,7 +37,7 @@ public class InstallOptions extends CommonOptions {
 
     @Override
     public String toString() {
-        return super.toString() + ", location: " + location;
+        return "InstallOptions{" + super.toString() + ", location: " + location + '}';
     }
 
 }

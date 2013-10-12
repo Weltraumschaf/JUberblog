@@ -51,7 +51,7 @@ public class CreateOptions extends CreateAndPublishOptions {
 
     @Override
     public String toString() {
-        return super.toString() + ", site: " + site + ", title: " + title;
+        return "CreateOptions{" + super.toString() + ", site: " + site + ", title: " + title + '}';
     }
 
 }

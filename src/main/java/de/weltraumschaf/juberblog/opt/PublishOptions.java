@@ -65,7 +65,7 @@ public class PublishOptions extends CreateAndPublishOptions {
 
     @Override
     public String toString() {
-        return super.toString() + ", purge: " + purge + ", quiet: " + quiet + ", sites: " + sites;
+        return "PublishOptions{" + super.toString() + ", purge: " + purge + ", quiet: " + quiet + ", sites: " + sites  + '}';
     }
 
 }
