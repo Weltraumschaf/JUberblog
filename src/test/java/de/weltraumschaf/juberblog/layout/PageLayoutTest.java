@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.*;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class LayoutTest {
+public class PageLayoutTest {
 
     /**
      * Freemarker templates resource directory.
@@ -64,7 +64,7 @@ public class LayoutTest {
 
     @Test
     public void renderLAyout() throws IOException, URISyntaxException, TemplateException {
-        final Layout layout = new Layout(configureTemplates(), "layout.ftl");
+        final PageLayout layout = new PageLayout(configureTemplates(), "layout.ftl");
         layout.setTitle("foo");
         layout.setDescription("bar");
         final InputStream htmlFile = getClass().getResourceAsStream(TEMPLATE_DIRECTORRY + "/layout.html");
@@ -84,39 +84,4 @@ public class LayoutTest {
         return cfg;
     }
 
-    public class Layout {
-
-        private final String templateFile;
-        private final Configuration configuration;
-        private String title = "";
-        private String description = "";
-
-        public Layout(final Configuration configuration, final String templateFile) {
-            super();
-            this.configuration = configuration;
-            this.templateFile = templateFile;
-        }
-
-        public void setTitle(String title) {
-            Validate.notNull(title);
-            this.title = title;
-        }
-
-        public void setDescription(final String description) {
-            Validate.notNull(description);
-            this.description = description;
-        }
-
-        public String render(final String content) throws IOException, TemplateException {
-            final freemarker.template.Template tpl = configuration.getTemplate(templateFile);
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            final Map<String, Object> templateVariables = Maps.newHashMap();
-            templateVariables.put("content", content);
-            templateVariables.put("title", title);
-            templateVariables.put("description", description);
-            templateVariables.put("encoding", configuration.getDefaultEncoding());
-            tpl.process(templateVariables, new OutputStreamWriter(out, configuration.getDefaultEncoding()));
-            return out.toString(configuration.getDefaultEncoding());
-        }
-    }
 }
