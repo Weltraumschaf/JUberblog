@@ -48,4 +48,11 @@ if [ ! -f "${JAR}" ] ; then
     exit 1
 fi
 
-java ${JVM_OPTIONS} -jar "${JAR}" $@
+if [ "${JUBERBLOG_DEBUG}" == "true" ]; then
+    JCOMMANDER_DEBUG=true
+else
+    JCOMMANDER_DEBUG=false
+fi
+
+
+java ${JVM_OPTIONS} -Djcommander.debug="${JCOMMANDER_DEBUG}" -jar "${JAR}" $@
