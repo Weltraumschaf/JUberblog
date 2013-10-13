@@ -54,4 +54,10 @@ public class ArgumentsTest {
                 is(equalTo(new String[] {"bar", "baz"})));
     }
 
+    @Test
+    public void testToString() {
+        assertThat(new Arguments(new String[] {"foo", "bar", "baz"}).toString(),
+                is(equalTo("first: foo, tail: [bar, baz]")));
+    }
+
 }
