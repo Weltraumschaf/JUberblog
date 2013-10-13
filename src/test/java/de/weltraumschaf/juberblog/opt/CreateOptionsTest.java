@@ -37,4 +37,27 @@ public class CreateOptionsTest extends CreateAndPublishOptionsTest {
         super.defaultValues();
     }
 
+    @Test
+    public void siteShortArgument() {
+        optionsParser.parse(new String[]{"-s"});
+        assertThat(sut().isSite(), is(true));
+    }
+
+    @Test
+    public void siteLongArgument() {
+        optionsParser.parse(new String[]{"--site"});
+        assertThat(sut().isSite(), is(true));
+    }
+
+    @Test
+    public void titleShortArgument() {
+        optionsParser.parse(new String[]{"-t", "foobar"});
+        assertThat(sut().getTitle(), is(equalTo("foobar")));
+    }
+
+    @Test
+    public void titleLongArgument() {
+        optionsParser.parse(new String[]{"--title", "foobar"});
+        assertThat(sut().getTitle(), is(equalTo("foobar")));
+    }
 }
