@@ -28,7 +28,7 @@ public class CreateOptions extends CreateAndPublishOptions {
     /**
      * Title argument.
      */
-    @Parameter(names = {"-t", "--title" }, required = true, description = "Title of the blog post.")
+    @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
     private String title = "";
 
     /**

@@ -27,6 +27,10 @@ public class CreateAndPublishOptionsTest extends CommonOptionsTest {
         super(new CreateAndPublishOptions() { });
     }
 
+    protected CreateAndPublishOptionsTest(CommonOptions sut) {
+        super(sut);
+    }
+
     private CreateAndPublishOptions sut() {
         return (CreateAndPublishOptions) sut;
     }
