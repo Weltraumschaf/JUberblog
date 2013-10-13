@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import com.google.common.collect.Lists;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Constants;
@@ -22,8 +23,6 @@ import freemarker.template.TemplateExceptionHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
@@ -39,7 +38,7 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
     /**
      * Freemarker templates resource directory.
      */
-    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/layout";
+    private static final String TEMPLATE_DIRECTORRY = "de/weltraumschaf/juberblog/layout";
 
     /**
      * Log facility.
@@ -146,7 +145,7 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
     private List<String> readFileList(final String dirname) {
         Validate.notEmpty(dirname);
         LOG.debug(String.format("Read file list from '%s'...", dirname));
-        return Collections.EMPTY_LIST;
+        return Lists.newArrayList();
     }
 
     private void publishFile(final PageLayout layout, final String filename) {
