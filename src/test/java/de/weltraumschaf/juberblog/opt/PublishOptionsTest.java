@@ -32,9 +32,39 @@ public class PublishOptionsTest extends CreateAndPublishOptionsTest {
     }
 
     @Test
-    @Override
-    public void defaultValues() {
-        super.defaultValues();
+    public void purgeShortArgument() {
+        optionsParser.parse(new String[]{"-p"});
+        assertThat(sut().isPurge(), is(true));
+    }
+
+    @Test
+    public void purgeLongArgument() {
+        optionsParser.parse(new String[]{"--purge"});
+        assertThat(sut().isPurge(), is(true));
+    }
+
+    @Test
+    public void quietShortArgument() {
+        optionsParser.parse(new String[]{"-q"});
+        assertThat(sut().isQuiet(), is(true));
+    }
+
+    @Test
+    public void quietLongArgument() {
+        optionsParser.parse(new String[]{"--quiet"});
+        assertThat(sut().isQuiet(), is(true));
+    }
+
+    @Test
+    public void sitesShortArgument() {
+        optionsParser.parse(new String[]{"-s"});
+        assertThat(sut().isSites(), is(true));
+    }
+
+    @Test
+    public void sitesLongArgument() {
+        optionsParser.parse(new String[]{"--sites"});
+        assertThat(sut().isSites(), is(true));
     }
 
 }
