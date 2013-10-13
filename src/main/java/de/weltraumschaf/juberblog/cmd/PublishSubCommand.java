@@ -39,7 +39,6 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
      * Freemarker templates resource directory.
      */
     private static final String TEMPLATE_DIRECTORRY = "de/weltraumschaf/juberblog/layout";
-
     /**
      * Log facility.
      */
@@ -59,10 +58,6 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
         watch.reset();
         watch.start();
         LOG.debug("Start pulishing...");
-
-        if (options.isPurge()) {
-            purgeContent();
-        }
 
         if (options.isSites()) {
             publishSites();
@@ -84,22 +79,6 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
         return options;
     }
 
-    private void purgeContent() {
-        if (options.isSites()) {
-            purgeSites();
-        }
-
-        purgePosts();
-    }
-
-    private void purgeSites() {
-        LOG.debug("Purge sites.");
-    }
-
-    private void purgePosts() {
-        LOG.debug("Purge posts.");
-    }
-
     public BlogConfiguration getBlogConfig() {
         if (null == blogConfig) {
             blogConfig = new BlogConfiguration(options.getConfigurationFile());
@@ -107,7 +86,6 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
 
         return blogConfig;
     }
-
 
     private void publishSites() {
         LOG.debug("Publish sites.");
@@ -151,5 +129,24 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
     private void publishFile(final PageLayout layout, final String filename) {
         Validate.notEmpty(filename);
         LOG.debug(String.format("Publish file '%s'...", filename));
+
+        if (publishedFileExists(filename)) {
+            LOG.debug("Published already exists.");
+
+            if (options.isPurge()) {
+                LOG.debug("Purge option is true. File will be republished.");
+            } else {
+                LOG.debug("Skip file.");
+                return;
+            }
+        }
+
+        // TODO Publish file.
     }
+
+    private boolean publishedFileExists(final String filename) {
+        // TODO Implement if file xist check
+        return false;
+    }
+
 }
