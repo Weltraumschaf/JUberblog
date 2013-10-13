@@ -17,37 +17,36 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Tests for {@link InstallOptions}.
+ * Tests for {@link CreateAndPublishOptions}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class InstallOptionsTest extends CommonOptionsTest {
+public class CreateAndPublishOptionsTest extends CommonOptionsTest {
 
-    public InstallOptionsTest() {
-        super(new InstallOptions());
+    public CreateAndPublishOptionsTest() {
+        super(new CreateAndPublishOptions() { });
     }
 
-    private InstallOptions sut() {
-        return (InstallOptions) sut;
+    private CreateAndPublishOptions sut() {
+        return (CreateAndPublishOptions) sut;
     }
 
     @Test
     @Override
     public void defaultValues() {
         super.defaultValues();
-        assertThat(sut().getLocation(), is(equalTo("")));
+        assertThat(sut().getConfigurationFile(), is(equalTo("")));
     }
 
     @Test
-    public void locationShortArgument() {
-        optionsParser.parse(new String[]{"-l", "foobar"});
-        assertThat(sut().getLocation(), is(equalTo("foobar")));
+    public void configurationFileShortArgument() {
+        optionsParser.parse(new String[]{"-c", "foobar"});
+        assertThat(sut().getConfigurationFile(), is(equalTo("foobar")));
     }
 
     @Test
-    public void locationLongArgument() {
-        optionsParser.parse(new String[]{"--location", "foobar"});
-        assertThat(sut().getLocation(), is(equalTo("foobar")));
+    public void configurationFileLongArgument() {
+        optionsParser.parse(new String[]{"--config", "foobar"});
+        assertThat(sut().getConfigurationFile(), is(equalTo("foobar")));
     }
-
 }

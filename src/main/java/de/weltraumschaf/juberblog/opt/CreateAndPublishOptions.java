@@ -24,7 +24,7 @@ public abstract class CreateAndPublishOptions extends CommonOptions {
     /**
      * Configuration file argument.
      */
-    @Parameter(names = {"-c", "--config" }, required = true, description = "Config file to use.")
+    @Parameter(names = {"-c", "--config" }, description = "Config file to use.")
     private String configurationFile = "";
 
     /**
