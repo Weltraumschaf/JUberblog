@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.juberblog;
 
+import freemarker.template.Version;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -45,6 +46,26 @@ public enum Constants {
      * NAme of the command line script.
      */
     COMMAND_NAME("juberblog");
+
+    /**
+     * Major version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MAJOR_VERSION = 2;
+    /**
+     * Minor version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MINOR_VERSION = 3;
+    /**
+     * Mini version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MINI_VERSION = 20;
+    /**
+     * Used Freemarker version.
+     */
+    public static final Version FREEMARKER_VERSION = new Version(
+            FREEMARKER_MAJOR_VERSION,
+            FREEMARKER_MINOR_VERSION,
+            FREEMARKER_MINI_VERSION);
 
     /**
      * Constant value.

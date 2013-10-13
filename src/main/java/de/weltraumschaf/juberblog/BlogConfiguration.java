@@ -24,7 +24,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Configuration {
+public class BlogConfiguration {
 
     private static final String HEADLINE = "headline";
     private static final String DESCRIPTION = "description";
@@ -45,7 +45,7 @@ public class Configuration {
     private final Properties properties = new Properties();
     private final String fileName;
 
-    public Configuration(final String fileName) {
+    public BlogConfiguration(final String fileName) {
         super();
         Validate.notEmpty(fileName, "File name must not be null or empty!");
         this.fileName = fileName;

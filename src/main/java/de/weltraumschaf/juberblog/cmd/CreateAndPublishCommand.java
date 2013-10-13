@@ -13,7 +13,7 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
-import de.weltraumschaf.juberblog.Configuration;
+import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
@@ -27,7 +27,7 @@ abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extend
     /**
      * Loaded from file.
      */
-    private Configuration configuration;
+    private BlogConfiguration configuration;
 
     public CreateAndPublishCommand(IO io) {
         super(io);
@@ -41,7 +41,7 @@ abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extend
 
     private void loadConfiguration() throws ApplicationException {
         try {
-            configuration = new Configuration(getOptions().getConfigurationFile());
+            configuration = new BlogConfiguration(getOptions().getConfigurationFile());
             configuration.load();
         } catch (IOException | IllegalArgumentException | NullPointerException ex) {
             throw new ApplicationException(
@@ -51,7 +51,7 @@ abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extend
         }
     }
 
-    protected Configuration getConfiguration() {
+    protected BlogConfiguration getConfiguration() {
         return configuration;
     }
 

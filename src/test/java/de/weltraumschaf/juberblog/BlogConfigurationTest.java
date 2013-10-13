@@ -19,17 +19,17 @@ import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 
 /**
- * Tests for {@link Configuration}.
+ * Tests for {@link BlogConfiguration}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class ConfigurationTest {
+public class BlogConfigurationTest {
 
     private static final String DIR_SEP = Constants.DIR_SEP.toString();
     private static final String PACKAGE = "src.main.resources."
             + Constants.SCAFFOLD_PACKAGE.toString() + ".configuration";
 
-    private Configuration sut;
+    private BlogConfiguration sut;
 
     @Before
     public void createSut() throws IOException {
@@ -37,7 +37,7 @@ public class ConfigurationTest {
         final String fileName = baseDir + DIR_SEP
                 + PACKAGE.replace(".", DIR_SEP)
                 + DIR_SEP + "configuration.properties";
-        sut = new Configuration(fileName);
+        sut = new BlogConfiguration(fileName);
         sut.load();
     }
 

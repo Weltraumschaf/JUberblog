@@ -41,26 +41,6 @@ public class PageLayoutTest {
      * Freemarker templates resource directory.
      */
     private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/layout";
-    /**
-     * Major version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MAJOR_VERSION = 2;
-    /**
-     * Minor version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MINOR_VERSION = 3;
-    /**
-     * Mini version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MINI_VERSION = 20;
-    /**
-     * Used Freemarker version.
-     */
-    private static final Version FREEMARKER_VERSION = new Version(
-            FREEMARKER_MAJOR_VERSION,
-            FREEMARKER_MINOR_VERSION,
-            FREEMARKER_MINI_VERSION);
-    private static final String ENCODING = "UTF-8";
 
     @Test
     public void renderLAyout() throws IOException, URISyntaxException, TemplateException {
@@ -77,10 +57,10 @@ public class PageLayoutTest {
         final File templateDir = new File(getClass().getResource(TEMPLATE_DIRECTORRY).toURI());
         cfg.setDirectoryForTemplateLoading(templateDir);
         cfg.setObjectWrapper(new DefaultObjectWrapper());
-        cfg.setDefaultEncoding(ENCODING);
+        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 //        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        cfg.setIncompatibleImprovements(FREEMARKER_VERSION);
+        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
         return cfg;
     }
 

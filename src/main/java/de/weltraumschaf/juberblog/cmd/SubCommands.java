@@ -13,6 +13,8 @@ package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.IO;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
@@ -53,7 +55,7 @@ public enum SubCommands {
         throw new IllegalArgumentException(String.format("Unknown command '%s'!", subCommandName));
     }
 
-    public static SubCommand create(final SubCommands type, final IO io) {
+    public static SubCommand create(final SubCommands type, final IO io) throws IOException, URISyntaxException {
         switch (type) {
             case CREATE:
                 return new CreateSubCommand(io);
