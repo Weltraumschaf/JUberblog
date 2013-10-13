@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BlogConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">BlogConfiguration.java</span></div><h1>BlogConfiguration.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Blog configuration.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class BlogConfiguration {
+
+    private static final String HEADLINE = &quot;headline&quot;;
+    private static final String DESCRIPTION = &quot;description&quot;;
+    private static final String SITE_URI = &quot;siteUrl&quot;;
+    private static final String LANGUAGE = &quot;language&quot;;
+    private static final String DATA_DIR = &quot;dataDir&quot;;
+    private static final String TEMPLATE_DIR = &quot;tplDir&quot;;
+    private static final String HTDOCS = &quot;htdocs&quot;;
+    private static final String TWITTER_CONSUMER_KEY = &quot;twitter.consumer_key&quot;;
+    private static final String TWITTER_CONSUMER_SECRET = &quot;twitter.consumer_secret&quot;;
+    private static final String TWITTER_OAUTH_TOKEN = &quot;twitter.oauth_token&quot;;
+    private static final String TWITTER_OAUTH_TOKEN_SECRET = &quot;twitter.oauth_token_secret&quot;;
+    private static final String BITLY_USERNAME = &quot;bitly.username&quot;;
+    private static final String BITLY_APIKEY = &quot;bitly.apikey&quot;;
+    private static final String API_URI = &quot;api.url&quot;;
+    private static final String FEATURE_RATING = &quot;features.rating&quot;;
+    private static final String FEATURE_COMMENTS = &quot;features.comments&quot;;
+<span class="fc" id="L45">    private final Properties properties = new Properties();</span>
+    private final String fileName;
+
+    public BlogConfiguration(final String fileName) {
+<span class="fc" id="L49">        super();</span>
+<span class="fc" id="L50">        Validate.notEmpty(fileName, &quot;File name must not be null or empty!&quot;);</span>
+<span class="fc" id="L51">        this.fileName = fileName;</span>
+<span class="fc" id="L52">    }</span>
+
+    public void load() throws IOException {
+<span class="fc" id="L55">        InputStream in = null;</span>
+
+        try {
+<span class="fc" id="L58">            in = new FileInputStream(new File(fileName));</span>
+<span class="fc" id="L59">            properties.load(in);</span>
+<span class="fc" id="L60">            IOUtils.closeQuietly(in);</span>
+        } finally {
+<span class="pc" id="L62">            IOUtils.closeQuietly(in);</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">    }</span>
+
+    private String getProperty(final String name) {
+<span class="fc" id="L67">        return properties.getProperty(name, &quot;&quot;);</span>
+    }
+
+    public String getHeadline() {
+<span class="fc" id="L71">        return getProperty(HEADLINE);</span>
+    }
+
+    public String getDescription() {
+<span class="fc" id="L75">        return getProperty(DESCRIPTION);</span>
+    }
+
+    public String getSiteUri() {
+<span class="fc" id="L79">        return getProperty(SITE_URI);</span>
+    }
+
+    public String getLanguage() {
+<span class="fc" id="L83">        return getProperty(LANGUAGE);</span>
+    }
+
+    public String getDataDir() {
+<span class="fc" id="L87">        return getProperty(DATA_DIR);</span>
+    }
+
+    public String getTemplateDir() {
+<span class="fc" id="L91">        return getProperty(TEMPLATE_DIR);</span>
+    }
+
+    public String getHtdocs() {
+<span class="fc" id="L95">        return getProperty(HTDOCS);</span>
+    }
+
+    public String getTwitterConsumerKey() {
+<span class="fc" id="L99">        return getProperty(TWITTER_CONSUMER_KEY);</span>
+    }
+
+    public String getTwitterConsumerSecret() {
+<span class="fc" id="L103">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
+    }
+
+    public String getTwitterOAuthToken() {
+<span class="fc" id="L107">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
+    }
+
+    public String getTwitterOAuthTokenSecret() {
+<span class="fc" id="L111">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
+    }
+
+    public String getBitlyUsername() {
+<span class="fc" id="L115">        return getProperty(BITLY_USERNAME);</span>
+    }
+
+    public String getBitlyApikey() {
+<span class="fc" id="L119">        return getProperty(BITLY_APIKEY);</span>
+    }
+
+    public String getApiUri() {
+<span class="fc" id="L123">        return getProperty(API_URI);</span>
+    }
+
+    public boolean getFeatureRating() {
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
+    }
+
+    public boolean getFeatureComments() {
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>JUberblog - Checkstyle report</title>
+    <link>http://weltraumschaf.github.io/JUberblog/</link>
+    <description>JUberblog - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2013</copyright>
+    <item>
+      <title>File: 32,
+             Errors: 88,
+             Warnings: 6,
+             Infos: 0
+      </title>
+            <link>http://weltraumschaf.github.io/JUberblog//checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateAndPublishOptionsTest.java">de/weltraumschaf/juberblog/opt/CreateAndPublishOptionsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.SubCommands.java">de/weltraumschaf/juberblog/cmd/SubCommands.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.BlogConfiguration.java">de/weltraumschaf/juberblog/BlogConfiguration.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  37
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.InstallOptionsTest.java">de/weltraumschaf/juberblog/opt/InstallOptionsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.InstallOptions.java">de/weltraumschaf/juberblog/opt/InstallOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.PublishOptionsTest.java">de/weltraumschaf/juberblog/opt/PublishOptionsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.App.java">de/weltraumschaf/juberblog/App.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CommonOptions.java">de/weltraumschaf/juberblog/opt/CommonOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.PublishSubCommand.java">de/weltraumschaf/juberblog/cmd/PublishSubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.Options.java">de/weltraumschaf/juberblog/opt/Options.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.scaffold.configuration.configuration.properties">de/weltraumschaf/juberblog/scaffold/configuration/configuration.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.InstallSubCommand.java">de/weltraumschaf/juberblog/cmd/InstallSubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateAndPublishOptions.java">de/weltraumschaf/juberblog/opt/CreateAndPublishOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.version.properties">de/weltraumschaf/juberblog/version.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.markdown.MarkdownFormatter.java">de/weltraumschaf/juberblog/markdown/MarkdownFormatter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.ExitCodeImpl.java">de/weltraumschaf/juberblog/ExitCodeImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.BlogConfigurationTest.java">de/weltraumschaf/juberblog/BlogConfigurationTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.BaseSubCommand.java">de/weltraumschaf/juberblog/cmd/BaseSubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.ArgumentsTest.java">de/weltraumschaf/juberblog/ArgumentsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.layout.PageLayoutTest.java">de/weltraumschaf/juberblog/layout/PageLayoutTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.CreateSubCommand.java">de/weltraumschaf/juberblog/cmd/CreateSubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Arguments.java">de/weltraumschaf/juberblog/Arguments.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.layout.PageLayout.java">de/weltraumschaf/juberblog/layout/PageLayout.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateOptions.java">de/weltraumschaf/juberblog/opt/CreateOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CommonOptionsTest.java">de/weltraumschaf/juberblog/opt/CommonOptionsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Constants.java">de/weltraumschaf/juberblog/Constants.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.markdown.MarkdownFormatterTest.java">de/weltraumschaf/juberblog/markdown/MarkdownFormatterTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#log4j.properties">log4j.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.PublishOptions.java">de/weltraumschaf/juberblog/opt/PublishOptions.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.SubCommand.java">de/weltraumschaf/juberblog/cmd/SubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.CreateAndPublishCommand.java">de/weltraumschaf/juberblog/cmd/CreateAndPublishCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateOptionsTest.java">de/weltraumschaf/juberblog/opt/CreateOptionsTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

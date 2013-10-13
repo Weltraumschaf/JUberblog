@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog;
+
+import com.beust.jcommander.JCommander;
+import de.weltraumschaf.commons.ApplicationException;
+import de.weltraumschaf.commons.IOStreams;
+import de.weltraumschaf.commons.InvokableAdapter;
+import de.weltraumschaf.commons.Version;
+import de.weltraumschaf.juberblog.cmd.SubCommand;
+import de.weltraumschaf.juberblog.cmd.SubCommands;
+import de.weltraumschaf.juberblog.opt.CreateOptions;
+import de.weltraumschaf.juberblog.opt.InstallOptions;
+import de.weltraumschaf.juberblog.opt.Options;
+import de.weltraumschaf.juberblog.opt.PublishOptions;
+import java.io.UnsupportedEncodingException;
+import org.apache.log4j.Logger;
+
+/**
+ * Main class.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class App extends InvokableAdapter {
+
+    /**
+     * Log facility.
+     */
+<span class="nc" id="L38">    private static final Logger LOG = Logger.getLogger(App.class);</span>
+    /**
+     * Version information.
+     */
+    private final Version version;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param args must not be {@code null}
+     */
+    public App(final String[] args) {
+<span class="nc" id="L50">        super(args);</span>
+<span class="nc" id="L51">        version = new Version(&quot;/de/weltraumschaf/juberblog/version.properties&quot;);</span>
+<span class="nc" id="L52">    }</span>
+
+    /**
+     * Main entry point of VM.
+     *
+     * @param args cli arguments from VM
+     */
+    public static void main(final String[] args) {
+<span class="nc" id="L60">        final App invokable = new App(args);</span>
+
+        try {
+<span class="nc" id="L63">            InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());</span>
+<span class="nc" id="L64">        } catch (UnsupportedEncodingException ex) {</span>
+<span class="nc" id="L65">            LOG.fatal(&quot;Can't create IO streams!&quot;, ex);</span>
+<span class="nc" id="L66">            invokable.exit(-1);</span>
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">    }</span>
+
+    private boolean isDebug() {
+<span class="nc" id="L71">        final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());</span>
+
+<span class="nc bnc" id="L73" title="All 4 branches missed.">        if (null == debug || debug.isEmpty()) {</span>
+<span class="nc" id="L74">            return false;</span>
+        }
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (&quot;true&quot;.equalsIgnoreCase(debug.trim())) {</span>
+<span class="nc" id="L78">            return true;</span>
+        }
+
+<span class="nc" id="L81">        return false;</span>
+    }
+
+    @Override
+    public void execute() throws Exception {
+<span class="nc" id="L86">        version.load();</span>
+<span class="nc" id="L87">        registerShutdownHook(new Runnable() {</span>
+            @Override
+            public void run() {
+<span class="nc" id="L90">            }</span>
+        });
+
+
+<span class="nc" id="L94">        final Arguments args = new Arguments(getArgs());</span>
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (args.getFirstArgument().isEmpty()) {</span>
+<span class="nc" id="L97">            final StringBuilder errorMesage = new StringBuilder(&quot;No sub comamnd given!&quot;);</span>
+<span class="nc" id="L98">            errorMesage.append(Constants.DEFAULT_NEW_LINE)</span>
+                    .append(&quot;Usage: &quot;).append(Constants.COMMAND_NAME).append(' ');
+<span class="nc" id="L100">            boolean first = true;</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            for (final SubCommands cmd : SubCommands.values()) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                if (!first) {</span>
+<span class="nc" id="L104">                    errorMesage.append('|');</span>
+                }
+
+<span class="nc" id="L107">                errorMesage.append(cmd.getSubCommandName());</span>
+<span class="nc" id="L108">                first = false;</span>
+            }
+
+<span class="nc" id="L111">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);</span>
+        }
+
+<span class="nc" id="L114">        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());</span>
+        final SubCommand cmd;
+
+        try {
+<span class="nc" id="L118">            cmd = SubCommands.create(subCommandName, getIoStreams());</span>
+<span class="nc" id="L119">        } catch (final IllegalArgumentException ex) {</span>
+<span class="nc" id="L120">            throw new ApplicationException(</span>
+                    ExitCodeImpl.UNKNOWN_COMMAND,
+                    ex.getMessage(),
+                    ex);
+<span class="nc" id="L124">        }</span>
+
+<span class="nc" id="L126">        final JCommander optionsParser = new JCommander();</span>
+<span class="nc" id="L127">        optionsParser.setProgramName(Constants.COMMAND_NAME.toString());</span>
+        final Options opts;
+
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        switch (subCommandName) {</span>
+            case CREATE:
+<span class="nc" id="L132">                opts = new CreateOptions();</span>
+<span class="nc" id="L133">                optionsParser.addObject(opts);</span>
+<span class="nc" id="L134">                break;</span>
+            case INSTALL:
+<span class="nc" id="L136">                opts = new InstallOptions();</span>
+<span class="nc" id="L137">                optionsParser.addObject(new InstallOptions());</span>
+<span class="nc" id="L138">                break;</span>
+            case PUBLISH:
+<span class="nc" id="L140">                opts = new PublishOptions();</span>
+<span class="nc" id="L141">                optionsParser.addObject(new PublishOptions());</span>
+<span class="nc" id="L142">                break;</span>
+            default:
+<span class="nc" id="L144">                opts = null;</span>
+        }
+
+<span class="nc" id="L147">        optionsParser.parse(args.getTailArguments());</span>
+<span class="nc" id="L148">        cmd.setOptions(opts);</span>
+
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (opts.isHelp()) {</span>
+<span class="nc" id="L151">            final StringBuilder errorMessage = new StringBuilder();</span>
+<span class="nc" id="L152">            optionsParser.usage(errorMessage);</span>
+<span class="nc" id="L153">            throw new ApplicationException(</span>
+                    ExitCodeImpl.OK,
+                    errorMessage.toString(),
+                    null);
+        }
+
+<span class="nc" id="L159">        cmd.execute();</span>
+<span class="nc" id="L160">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

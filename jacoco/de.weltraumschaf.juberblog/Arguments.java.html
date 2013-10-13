@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Arguments.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Arguments.java</span></div><h1>Arguments.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog;
+
+import java.util.Arrays;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Abstraction for CLI arguments.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class Arguments {
+
+    /**
+     * The arguments.
+     */
+    private final String[] args;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param args must not be {@code null}, defense copied
+     */
+<span class="fc" id="L35">    public Arguments(final String[] args) {</span>
+<span class="fc" id="L36">        Validate.notNull(args, &quot;Argumets must not be null!&quot;);</span>
+<span class="fc" id="L37">        this.args = args.clone();</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Get the first argument.
+     *
+     * @return never {@code null}, maybe empty
+     */
+    public String getFirstArgument() {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        return args.length == 0 ? &quot;&quot; : args[0];</span>
+    }
+
+    /**
+     * Get all arguments but the first.
+     *
+     * @return @return never {@code null}, maybe empty
+     */
+    public String[] getTailArguments() {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (args.length &lt; 2) {</span>
+<span class="fc" id="L56">            return new String[] {};</span>
+        }
+
+<span class="fc" id="L59">        return Arrays.copyOfRange(args, 1, args.length);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L64">        return &quot;first: &quot; + getFirstArgument()</span>
+                + &quot;, tail: &quot; + Arrays.asList(getTailArguments()).toString();
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

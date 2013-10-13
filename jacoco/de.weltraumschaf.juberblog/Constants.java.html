@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog;
+
+import freemarker.template.Version;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Contains global constants.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="pc" id="L23">public enum Constants {</span>
+
+    /**
+     * Used default string encoding.
+     */
+<span class="fc" id="L28">    DEFAULT_ENCODING(&quot;UTF-8&quot;),</span>
+    /**
+     * Used default new line separator.
+     */
+<span class="fc" id="L32">    DEFAULT_NEW_LINE(String.format(&quot;%n&quot;)),</span>
+    /**
+     * System dependent file separator.
+     */
+<span class="fc" id="L36">    DIR_SEP(System.getProperty(&quot;file.separator&quot;)),</span>
+    /**
+     * Location of scaffold directory.
+     */
+<span class="fc" id="L40">    SCAFFOLD_PACKAGE(&quot;de.weltraumschaf.juberblog.scaffold&quot;),</span>
+    /**
+     * Name of environment variable to enable debug mode.
+     */
+<span class="fc" id="L44">    ENVIRONMENT_VARIABLE_DEBUG(&quot;JUBERBLOG_DEBUG&quot;),</span>
+    /**
+     * NAme of the command line script.
+     */
+<span class="fc" id="L48">    COMMAND_NAME(&quot;juberblog&quot;);</span>
+
+    /**
+     * Major version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MAJOR_VERSION = 2;
+    /**
+     * Minor version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MINOR_VERSION = 3;
+    /**
+     * Mini version of Freemarker template engine.
+     */
+    private static final int FREEMARKER_MINI_VERSION = 20;
+    /**
+     * Used Freemarker version.
+     */
+<span class="fc" id="L65">    public static final Version FREEMARKER_VERSION = new Version(</span>
+            FREEMARKER_MAJOR_VERSION,
+            FREEMARKER_MINOR_VERSION,
+            FREEMARKER_MINI_VERSION);
+
+    /**
+     * Constant value.
+     */
+    private final String value;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param value must not be {@code null}
+     */
+<span class="fc" id="L80">    private Constants(final String value) {</span>
+<span class="fc" id="L81">        Validate.notNull(value, &quot;Value must not be null!&quot;);</span>
+<span class="fc" id="L82">        this.value = value;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Get the constant value as string.
+     *
+     * @return never {@code null}
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L92">        return value;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

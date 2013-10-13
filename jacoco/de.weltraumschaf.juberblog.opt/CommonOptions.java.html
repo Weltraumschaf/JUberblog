@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommonOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">CommonOptions.java</span></div><h1>CommonOptions.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog.opt;
+
+import com.beust.jcommander.Parameter;
+
+/**
+ * Common options for all commands.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="fc" id="L22">abstract class CommonOptions implements Options {</span>
+
+    /**
+     * Help flag.
+     */
+    @Parameter(names = {&quot;-h&quot;, &quot;--help&quot; }, description = &quot;Show this message.&quot;, help = true)
+    private boolean help;
+    /**
+     * Verbose flag.
+     */
+    @Parameter(names = {&quot;-v&quot;, &quot;--verbose&quot; }, description = &quot;Tell you more.&quot;)
+    private boolean verbose;
+
+    @Override
+    public boolean isHelp() {
+<span class="fc" id="L37">        return help;</span>
+    }
+
+    @Override
+    public boolean isVerbose() {
+<span class="fc" id="L42">        return verbose;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L47">        return &quot;help: &quot; + help + &quot;, verbose: &quot; + verbose;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

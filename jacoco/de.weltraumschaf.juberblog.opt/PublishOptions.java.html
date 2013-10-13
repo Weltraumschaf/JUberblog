@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PublishOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">PublishOptions.java</span></div><h1>PublishOptions.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.opt;
+
+import com.beust.jcommander.Parameter;
+
+/**
+ * Options for publish commands.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="fc" id="L21">public class PublishOptions extends CreateAndPublishOptions {</span>
+
+    /**
+     * Purge flag.
+     */
+    @Parameter(names = {&quot;-p&quot;, &quot;--purge&quot; }, description = &quot;Regenerate all blog posts and sites.&quot;)
+    private boolean purge;
+    /**
+     * Quiet flag.
+     */
+    @Parameter(names = {&quot;-q&quot;, &quot;--quiet&quot; }, description = &quot;Be quiet and don't post to social networks.&quot;)
+    private boolean quiet;
+    /**
+     * Site flag.
+     */
+    @Parameter(names = {&quot;-s&quot;, &quot;--sites&quot; }, description = &quot;Publish sites.&quot;)
+    private boolean sites;
+
+    /**
+     * Whether to purge all published files.
+     *
+     * @return default is {@code false}
+     */
+    public boolean isPurge() {
+<span class="fc" id="L45">        return purge;</span>
+    }
+
+    /**
+     * Whether to do not print anything to STDOUT.
+     *
+     * @return default is {@code false}
+     */
+    public boolean isQuiet() {
+<span class="fc" id="L54">        return quiet;</span>
+    }
+
+    /**
+     * Whether to publish sites.
+     *
+     * @return default is {@code false}
+     */
+    public boolean isSites() {
+<span class="fc" id="L63">        return sites;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L68">        return &quot;PublishOptions{&quot; + super.toString() + &quot;, purge: &quot; + purge + &quot;, quiet: &quot; + quiet + &quot;, sites: &quot; + sites  + '}';</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -1,0 +1,23 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+JUberblog,de.weltraumschaf.juberblog,App.new Object() {...},26,0,0,0,1,0,1,0,1,0
+JUberblog,de.weltraumschaf.juberblog,BlogConfiguration,8,117,2,2,0,29,2,19,0,19
+JUberblog,de.weltraumschaf.juberblog,App.new Runnable() {...},7,0,0,0,2,0,2,0,2,0
+JUberblog,de.weltraumschaf.juberblog,App,218,0,18,0,56,0,15,0,5,0
+JUberblog,de.weltraumschaf.juberblog,Constants,9,98,0,0,0,13,2,3,2,3
+JUberblog,de.weltraumschaf.juberblog,ExitCodeImpl,79,0,0,0,10,0,5,0,5,0
+JUberblog,de.weltraumschaf.juberblog,Arguments,0,59,0,4,0,9,0,6,0,4
+JUberblog,de.weltraumschaf.juberblog.cmd,SubCommands,143,0,8,0,22,0,12,0,7,0
+JUberblog,de.weltraumschaf.juberblog.cmd,CreateSubCommand,25,0,0,0,9,0,5,0,5,0
+JUberblog,de.weltraumschaf.juberblog.cmd,InstallSubCommand,164,0,8,0,24,0,9,0,5,0
+JUberblog,de.weltraumschaf.juberblog.cmd,InstallSubCommand.CopyDirectoryVisitor,157,0,8,0,27,0,9,0,5,0
+JUberblog,de.weltraumschaf.juberblog.cmd,PublishSubCommand,239,0,10,0,56,0,18,0,13,0
+JUberblog,de.weltraumschaf.juberblog.cmd,CreateAndPublishCommand,44,0,0,0,12,0,4,0,4,0
+JUberblog,de.weltraumschaf.juberblog.cmd,BaseSubCommand,28,0,0,0,11,0,4,0,4,0
+JUberblog,de.weltraumschaf.juberblog.cmd,SubCommands.new Object() {...},26,0,0,0,1,0,1,0,1,0
+JUberblog,de.weltraumschaf.juberblog.opt,CommonOptions,0,24,0,0,0,4,0,4,0,4
+JUberblog,de.weltraumschaf.juberblog.opt,CreateAndPublishOptions,0,22,0,0,0,4,0,3,0,3
+JUberblog,de.weltraumschaf.juberblog.opt,PublishOptions,0,39,0,0,0,5,0,5,0,5
+JUberblog,de.weltraumschaf.juberblog.opt,InstallOptions,0,26,0,0,0,4,0,3,0,3
+JUberblog,de.weltraumschaf.juberblog.opt,CreateOptions,0,34,0,0,0,5,0,4,0,4
+JUberblog,de.weltraumschaf.juberblog.layout,PageLayout,0,96,0,0,0,24,0,4,0,4
+JUberblog,de.weltraumschaf.juberblog.markdown,MarkdownFormatter,2,24,1,1,0,6,1,2,0,2

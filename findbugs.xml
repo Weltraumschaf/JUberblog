@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BugCollection version='2.0.1' threshold='low' effort='max'><Error></Error><Project><SrcDir>/Users/sxs/src/java/JUberblog/src/main/java</SrcDir><SrcDir>/Users/sxs/src/java/JUberblog/src/test/java</SrcDir></Project></BugCollection>
