@@ -29,11 +29,17 @@ public class CommonOptionsTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-    private final JCommander optionsParser = new JCommander();
-    private final CommonOptions sut = new CommonOptions() {
-    };
+    protected final JCommander optionsParser = new JCommander();
+    protected final CommonOptions sut;
 
     public CommonOptionsTest() {
+        this(new CommonOptions() {
+        });
+    }
+
+    protected CommonOptionsTest(final CommonOptions sut) {
+        super();
+        this.sut = sut;
         optionsParser.addObject(sut);
     }
 
