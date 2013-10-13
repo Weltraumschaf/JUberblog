@@ -11,6 +11,10 @@
         - site
         - post
     - embed formatted content in layout template and format
+- Metainformation
+    - preparse block of `<?juberblog (key:value)* ?>`
+- Categories
+- RSS
 
 ## Bugs
 
