@@ -13,7 +13,6 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
-import com.google.common.base.Objects;
 
 /**
  * Common options for all commands.
