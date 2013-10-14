@@ -22,7 +22,9 @@ import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
 
 /**
@@ -90,9 +92,15 @@ public class App extends InvokableAdapter {
             }
         });
 
+        final Arguments args = validateArguments();
+        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());
+        final SubCommand cmd = createSubcommand(subCommandName);
+        parseOptions(subCommandName, args, cmd);
+        cmd.execute();
+    }
 
+    private Arguments validateArguments() throws ApplicationException {
         final Arguments args = new Arguments(getArgs());
-
         if (args.getFirstArgument().isEmpty()) {
             final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
             errorMesage.append(Constants.DEFAULT_NEW_LINE)
@@ -110,19 +118,21 @@ public class App extends InvokableAdapter {
 
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);
         }
+        return args;
+    }
 
-        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());
-        final SubCommand cmd;
-
+    private SubCommand createSubcommand(final SubCommands subCommandName) throws IOException, URISyntaxException, ApplicationException {
         try {
-            cmd = SubCommands.create(subCommandName, getIoStreams());
+            return SubCommands.create(subCommandName, getIoStreams());
         } catch (final IllegalArgumentException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.UNKNOWN_COMMAND,
                     ex.getMessage(),
                     ex);
         }
+    }
 
+    private void parseOptions(final SubCommands subCommandName, final Arguments args, final SubCommand cmd) throws ApplicationException {
         final JCommander optionsParser = new JCommander();
         optionsParser.setProgramName(Constants.COMMAND_NAME.toString());
         final Options opts;
@@ -156,8 +166,6 @@ public class App extends InvokableAdapter {
                     errorMessage.toString(),
                     null);
         }
-
-        cmd.execute();
     }
 
 }
