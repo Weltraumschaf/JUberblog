@@ -43,7 +43,7 @@ abstract class BaseSubCommand<T extends Options> implements SubCommand<T> {
     }
 
     @Override
-    public void execute() throws ApplicationException {
+    public final void execute() throws ApplicationException {
         Validate.notNull(getOptions(), "Options must nit be null! Invoke #setOptions() before executing.");
         init();
         run();
