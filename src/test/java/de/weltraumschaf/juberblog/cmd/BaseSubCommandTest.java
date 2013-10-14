@@ -56,9 +56,12 @@ public class BaseSubCommandTest {
         verify(sut).deinit();
     }
 
+    /**
+     * Testable implementation.
+     */
     private static class BaseSubCommandStub extends BaseSubCommand {
 
-        private Options opt;
+        private Options options;
 
         public BaseSubCommandStub(final IO io) {
             super(io);
@@ -71,12 +74,12 @@ public class BaseSubCommandTest {
 
         @Override
         public void setOptions(final Options opt) {
-            this.opt = opt;
+            this.options = opt;
         }
 
         @Override
         public Options getOptions() {
-            return opt;
+            return options;
         }
 
     }
