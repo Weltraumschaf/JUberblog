@@ -47,7 +47,8 @@ public enum SubCommands {
     }
 
     public static SubCommands forSubCommandName(final String subCommandName) {
-        final String normalizedName = subCommandName.toLowerCase();
+        final String normalizedName = subCommandName.trim().toLowerCase();
+
         if (LOOKUP.containsKey(normalizedName)) {
             return LOOKUP.get(normalizedName);
         }

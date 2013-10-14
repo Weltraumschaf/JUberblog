@@ -134,20 +134,21 @@ public class App extends InvokableAdapter {
                 break;
             case INSTALL:
                 opts = new InstallOptions();
-                optionsParser.addObject(new InstallOptions());
+                optionsParser.addObject(opts);
                 break;
             case PUBLISH:
                 opts = new PublishOptions();
-                optionsParser.addObject(new PublishOptions());
+                optionsParser.addObject(opts);
                 break;
             default:
+                LOG.warn(String.format("Unsupported sub command %s!", subCommandName));
                 opts = null;
         }
 
         optionsParser.parse(args.getTailArguments());
         cmd.setOptions(opts);
 
-        if (opts.isHelp()) {
+        if (null != opts && opts.isHelp()) {
             final StringBuilder errorMessage = new StringBuilder();
             optionsParser.usage(errorMessage);
             throw new ApplicationException(
