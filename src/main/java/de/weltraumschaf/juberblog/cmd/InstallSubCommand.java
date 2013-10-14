@@ -12,8 +12,10 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
@@ -59,23 +62,11 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     }
 
     @Override
-    protected void run() {
-        final String target = options.getLocation();
-        io.println(String.format("Install scaffold to '%s'...", target));
-        final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split("!");
-        final String jarFile = paths[0];
-        LOG.debug(jarFile);
-
-        try {
-            try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
-                final String scaffold = paths[1];
-                final Path dir = fs.getPath(scaffold);
-                Files.walkFileTree(dir, new CopyDirectoryVisitor(new File(target).toPath(), PREFIX));
-            }
-        } catch (IOException ex) {
-            io.errorln("Can't copy scaffold: " + ex.getMessage());
-            io.printStackTrace(ex);
-        }
+    protected void run() throws ApplicationException {
+        final String location = options.getLocation().trim();
+        final File target = validateLocation(location);
+        io.println(String.format("Install scaffold to '%s'...", location));
+        copyFiles(target);
     }
 
     @Override
@@ -87,6 +78,46 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     @Override
     public InstallOptions getOptions() {
         return options;
+    }
+
+    private void copyFiles(final File target) {
+        final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split("!");
+        final String jarFile = paths[0];
+        LOG.debug(jarFile);
+
+        try {
+            try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
+                final String scaffold = paths[1];
+                final Path dir = fs.getPath(scaffold);
+                Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), PREFIX));
+            }
+        } catch (IOException ex) {
+            io.errorln("Can't copy scaffold: " + ex.getMessage());
+            io.printStackTrace(ex);
+        }
+    }
+
+    private File validateLocation(final String location) throws ApplicationException {
+        if (location.isEmpty()) {
+            throw new ApplicationException(
+                ExitCodeImpl.MISSING_ARGUMENT,
+                "Empty location given! Please specify a valid direcotry as installation location.",
+                null);
+        }
+        final File target = new File(location);
+        if (!target.exists()) {
+            throw new ApplicationException(
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format("Install location '%s' does not exist!", location),
+                null);
+        }
+        if (!target.isDirectory()) {
+            throw new ApplicationException(
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format("Install location '%s' is not a directory!", location),
+                null);
+        }
+        return target;
     }
 
     /**
