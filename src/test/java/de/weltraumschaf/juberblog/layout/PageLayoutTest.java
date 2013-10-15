@@ -11,27 +11,22 @@
  */
 package de.weltraumschaf.juberblog.layout;
 
-import com.google.common.collect.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
-import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
+ * Tests for {@link PageLayout}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -59,7 +54,6 @@ public class PageLayoutTest {
         cfg.setObjectWrapper(new DefaultObjectWrapper());
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-//        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
         cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
         return cfg;
     }
