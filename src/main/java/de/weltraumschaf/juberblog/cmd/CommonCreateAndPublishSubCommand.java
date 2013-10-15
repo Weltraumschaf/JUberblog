@@ -29,7 +29,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     /**
      * Loaded from file.
      */
-    private BlogConfiguration configuration;
+    private BlogConfiguration blogConfiguration;
 
     /**
      * Dedicated constructor.
@@ -43,7 +43,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     @Override
     protected void init() throws ApplicationException {
         super.init();
-        loadConfiguration();
+        loadBlogConfiguration();
     }
 
     /**
@@ -51,11 +51,11 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
      *
      * @throws ApplicationException if configuration file can't be loaded
      */
-    private void loadConfiguration() throws ApplicationException {
+    private void loadBlogConfiguration() throws ApplicationException {
         // TODO Argument validation.
         try {
-            configuration = new BlogConfiguration(getOptions().getConfigurationFile());
-            configuration.load();
+            blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());
+            blogConfiguration.load();
         } catch (IOException | IllegalArgumentException | NullPointerException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.CANT_LOAD_CONFIG,
@@ -69,8 +69,8 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
      *
      * @return never {@code null}
      */
-    protected BlogConfiguration getConfiguration() {
-        return configuration;
+    protected BlogConfiguration getBlogConfiguration() {
+        return blogConfiguration;
     }
 
 }

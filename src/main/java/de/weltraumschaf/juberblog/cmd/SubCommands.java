@@ -13,8 +13,6 @@ package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.IO;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
@@ -25,39 +23,68 @@ import org.apache.commons.lang3.Validate;
  */
 public enum SubCommands {
 
+    /**
+     * Name for {@link CreateSubCommand}.
+     */
     CREATE("create"),
+    /**
+     * Name for {@link PublishSubCommand}.
+     */
     PUBLISH("publish"),
+    /**
+     * Name for {@link InstallSubCommand}.
+     */
     INSTALL("install");
-
+    /**
+     * Used to lookup type by name.
+     */
     private static final Map<String, SubCommands> LOOKUP = Maps.newHashMap();
     static {
         for (final SubCommands cmd : values()) {
-            LOOKUP.put(cmd.getSubCommandName(), cmd);
+            LOOKUP.put(cmd.toString(), cmd);
         }
     }
+    /**
+     * Textual name of sub command.
+     */
     private final String subCommandName;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param subCommandName must not be {@code null} or empty
+     */
     SubCommands(final String subCommandName) {
         Validate.notEmpty(subCommandName, "Sub command name must not be null or empty!");
         this.subCommandName = subCommandName;
     }
 
-    public String getSubCommandName() {
+    @Override
+    public String toString() {
         return subCommandName;
     }
 
-    public static SubCommands forSubCommandName(final String subCommandName) {
-        final String normalizedName = subCommandName.trim().toLowerCase();
+    /**
+     * Factory to lookup type for a given name.
+     *
+     * Throws {@link IllegalArgumentException} if given name can't be looked up.
+     *
+     * @param name must not be {@code null}
+     * @return never {@code null}
+     */
+    public static SubCommands forSubCommandName(final String name) {
+        Validate.notNull(name, "Name must not be null!");
+        final String normalizedName = name.trim().toLowerCase();
 
         if (LOOKUP.containsKey(normalizedName)) {
             return LOOKUP.get(normalizedName);
         }
 
-        throw new IllegalArgumentException(String.format("Unknown command '%s'!", subCommandName));
+        throw new IllegalArgumentException(String.format("Unknown command '%s'!", name));
     }
 
     /**
-     * Create sub command for givne type.
+     * Create sub command for given type.
      *
      * Throws {@link IllegalArgumentException} if unsupported type was given.
      *

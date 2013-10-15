@@ -122,7 +122,7 @@ public class App extends InvokableAdapter {
                     errorMesage.append('|');
                 }
 
-                errorMesage.append(cmd.getSubCommandName());
+                errorMesage.append(cmd.toString());
                 first = false;
             }
 

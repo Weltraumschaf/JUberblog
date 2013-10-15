@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;
@@ -44,12 +45,25 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Log facility.
      */
-    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
-    private PublishOptions options;
-    private Configuration templateConfig;
-    private BlogConfiguration blogConfig;
+    private static final Logger LOG = Logger.getLogger(PublishSubCommand.class);
+    /**
+     * USed to measure publish time.
+     */
     private final StopWatch watch = new StopWatch();
+    /**
+     * Command line options.
+     */
+    private PublishOptions options;
+    /**
+     * Template configuration.
+     */
+    private Configuration templateConfig;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@code null}
+     */
     public PublishSubCommand(final IO io) {
         super(io);
     }
@@ -62,6 +76,23 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         } catch (final IOException | URISyntaxException ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
         }
+    }
+
+    /**
+     * Configure templates and returns configuration.
+     *
+     * @return never {@code null}
+     * @throws IOException if template directory can't be read
+     * @throws URISyntaxException if template directory URI can't be created from class loader
+     */
+    private Configuration configureTemplates() throws IOException, URISyntaxException {
+        final Configuration cfg = new Configuration();
+        cfg.setDirectoryForTemplateLoading(new File(getClass().getResource(TEMPLATE_DIRECTORRY).toURI()));
+        cfg.setObjectWrapper(new DefaultObjectWrapper());
+        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
+        return cfg;
     }
 
     @Override
@@ -90,39 +121,34 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         return options;
     }
 
-    public BlogConfiguration getBlogConfig() {
-        if (null == blogConfig) {
-            blogConfig = new BlogConfiguration(options.getConfigurationFile());
-        }
-
-        return blogConfig;
-    }
-
+    /**
+     * Publish sites.
+     */
     private void publishSites() {
         LOG.debug("Publish sites.");
         final PageLayout layout = new PageLayout(templateConfig, "/site.ftl");
-        publishFiles(layout, getBlogConfig().getDataDir() + "/sites");
+        publishFiles(layout, getBlogConfiguration().getDataDir() + "/sites");
     }
 
+    /**
+     * Publish posts.
+     */
     private void publisPosts() {
         LOG.debug("Publish posts.");
         final PageLayout layout = new PageLayout(templateConfig, "/post.ftl");
-        publishFiles(layout, getBlogConfig().getDataDir() + "/posts");
+        publishFiles(layout, getBlogConfiguration().getDataDir() + "/posts");
 
     }
 
-    private Configuration configureTemplates() throws IOException, URISyntaxException {
-        final Configuration cfg = new Configuration();
-        final File templateDir = new File(getClass().getResource(TEMPLATE_DIRECTORRY).toURI());
-        cfg.setDirectoryForTemplateLoading(templateDir);
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
-        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
-        return cfg;
-    }
-
+    /**
+     * Publish all files in given directory with given layout.
+     *
+     * @param layout must not be {@code null}
+     * @param dirname must not be {@code null}
+     */
     private void publishFiles(final PageLayout layout, final String dirname) {
+        Validate.notNull(layout, "Layout must not be null!");
+        Validate.notNull(dirname, "Dirname must not be null!");
         LOG.debug(String.format("Pubish files from '%s'...", dirname));
         final List<String> fileList = readFileList(dirname);
 
@@ -131,14 +157,28 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         }
     }
 
+    /**
+     * Read all files from a given directory.
+     *
+     * @param dirname must not be {@code null}
+     * @return never {@code null} or empty
+     */
     private List<String> readFileList(final String dirname) {
-        Validate.notEmpty(dirname);
+        Validate.notEmpty(dirname, "Dirname must not be null or empty");
         LOG.debug(String.format("Read file list from '%s'...", dirname));
+        // TODO Read ile list.
         return Lists.newArrayList();
     }
 
+    /**
+     * Publish a given file with a given layout.
+     *
+     * @param layout must not be {@code null}
+     * @param filename must not be {@code null} or empty
+     */
     private void publishFile(final PageLayout layout, final String filename) {
-        Validate.notEmpty(filename);
+        Validate.notNull(layout, "Layout must not be null!");
+        Validate.notEmpty(filename, "File name must not be null or empty!");
         LOG.debug(String.format("Publish file '%s'...", filename));
 
         if (publishedFileExists(filename)) {
@@ -155,6 +195,12 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         // TODO Publish file.
     }
 
+    /**
+     * Checks if a file to be published already exists.
+     *
+     * @param filename must not be {@code null} or empty
+     * @return {@code true} if file already exists, else {@code false}
+     */
     private boolean publishedFileExists(final String filename) {
         // TODO Implement if file xist check
         return false;
