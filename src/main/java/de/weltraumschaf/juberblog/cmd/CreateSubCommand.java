@@ -28,8 +28,16 @@ class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
+    /**
+     * Command line options.
+     */
     private CreateOptions options;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@code null}
+     */
     public CreateSubCommand(final IO io) {
         super(io);
     }

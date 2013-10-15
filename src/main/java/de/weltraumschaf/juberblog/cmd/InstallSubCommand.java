@@ -28,7 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
@@ -45,16 +44,23 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
+    /**
+     * Location of the scaffold directory with all default files and directories.
+     */
     private static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()
                                        .replace(".", Constants.DIR_SEP.toString());
+    /**
+     * Prefix to strip of from resource name.
+     */
     private static final String PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();
-
+    /**
+     * Command line options.
+     */
     private InstallOptions options;
 
     /**
      * Dedicated constructor.
      *
-     * @param options must not be {@code null}
      * @param io must not be {@code null}
      */
     public InstallSubCommand(final IO io) {
@@ -80,10 +86,15 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         return options;
     }
 
+    /**
+     * Copy all files from scaffold to target directory.
+     *
+     * @param target must not be {@code null}
+     */
     private void copyFiles(final File target) {
+        Validate.notNull(target, "Target must not be null!");
         final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split("!");
         final String jarFile = paths[0];
-        LOG.debug(jarFile);
 
         try {
             try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
@@ -97,26 +108,41 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         }
     }
 
+    /**
+     * Validate instalation directory.
+     *
+     * Validates that given string is not empty and is an existing directory.
+     *
+     * @param location must not be {@code null} or empty
+     * @return never {@code null}
+     * @throws ApplicationException if target does not exist or is not a directory
+     */
     private File validateLocation(final String location) throws ApplicationException {
+        Validate.notNull(location, "Location must not be null!");
+
         if (location.isEmpty()) {
             throw new ApplicationException(
                 ExitCodeImpl.MISSING_ARGUMENT,
                 "Empty location given! Please specify a valid direcotry as installation location.",
                 null);
         }
+
         final File target = new File(location);
+
         if (!target.exists()) {
             throw new ApplicationException(
                 ExitCodeImpl.BAD_ARGUMENT,
                 String.format("Install location '%s' does not exist!", location),
                 null);
         }
+
         if (!target.isDirectory()) {
             throw new ApplicationException(
                 ExitCodeImpl.BAD_ARGUMENT,
                 String.format("Install location '%s' is not a directory!", location),
                 null);
         }
+
         return target;
     }
 
@@ -194,7 +220,14 @@ class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             return result;
         }
 
+        /**
+         * Strips prefix from given path.
+         *
+         * @param file must not be {@code null}
+         * @return never {@code null}
+         */
         private String baseName(final Path file) {
+            Validate.notNull(file, "File must not be null!");
             return file.toString().replace(prefix, "");
         }
 

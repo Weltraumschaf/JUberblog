@@ -62,10 +62,12 @@ public enum Constants {
     /**
      * Used Freemarker version.
      */
+    //CHECKSTYLE:OFF Must be declared after private numbers.
     public static final Version FREEMARKER_VERSION = new Version(
             FREEMARKER_MAJOR_VERSION,
             FREEMARKER_MINOR_VERSION,
             FREEMARKER_MINI_VERSION);
+    //CHECKSTYLE:ON
 
     /**
      * Constant value.
