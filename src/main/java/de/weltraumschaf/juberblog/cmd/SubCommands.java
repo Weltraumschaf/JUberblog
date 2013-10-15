@@ -34,7 +34,11 @@ public enum SubCommands {
     /**
      * Name for {@link InstallSubCommand}.
      */
-    INSTALL("install");
+    INSTALL("install"),
+    /**
+     * Used for testing.
+     */
+    NOT_IMPLEMENTED("not-implemented");
     /**
      * Used to lookup type by name.
      */

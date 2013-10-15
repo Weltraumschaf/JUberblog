@@ -73,7 +73,7 @@ public class App extends InvokableAdapter {
      *
      * @return by default {@code false} if environment is not present or false
      */
-    private boolean isDebug() {
+    boolean isDebug() {
         final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
 
         if (null == debug || debug.isEmpty()) {
@@ -109,8 +109,9 @@ public class App extends InvokableAdapter {
      * @return never {@code null}
      * @throws ApplicationException if too few arguments given
      */
-    private Arguments validateArguments() throws ApplicationException {
+    Arguments validateArguments() throws ApplicationException {
         final Arguments args = new Arguments(getArgs());
+
         if (args.getFirstArgument().isEmpty()) {
             final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
             errorMesage.append(Constants.DEFAULT_NEW_LINE)
@@ -118,6 +119,10 @@ public class App extends InvokableAdapter {
             boolean first = true;
 
             for (final SubCommands cmd : SubCommands.values()) {
+                if (SubCommands.NOT_IMPLEMENTED == cmd) {
+                    continue;
+                }
+
                 if (!first) {
                     errorMesage.append('|');
                 }
@@ -138,7 +143,7 @@ public class App extends InvokableAdapter {
      * @return never {@code null}
      * @throws ApplicationException if command is unknown
      */
-    private SubCommand createSubcommand(final SubCommands subCommandType) throws ApplicationException {
+    SubCommand createSubcommand(final SubCommands subCommandType) throws ApplicationException {
         Validate.notNull(subCommandType, "Sub command type must not be null!");
 
         try {

@@ -79,7 +79,7 @@
         <dependency>
             <groupId>de.weltraumschaf</groupId>
             <artifactId>commons</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
