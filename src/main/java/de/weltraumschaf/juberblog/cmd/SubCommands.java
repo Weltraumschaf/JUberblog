@@ -56,7 +56,19 @@ public enum SubCommands {
         throw new IllegalArgumentException(String.format("Unknown command '%s'!", subCommandName));
     }
 
-    public static SubCommand create(final SubCommands type, final IO io) throws IOException, URISyntaxException {
+    /**
+     * Create sub command for givne type.
+     *
+     * Throws {@link IllegalArgumentException} if unsupported type was given.
+     *
+     * @param type must not be {@code null}
+     * @param io must not be {@code null}
+     * @return never {@code null}
+     */
+    public static SubCommand create(final SubCommands type, final IO io) {
+        Validate.notNull(type, "Type must not be null!");
+        Validate.notNull(io, "IO must not be null!");
+
         switch (type) {
             case CREATE:
                 return new CreateSubCommand(io);

@@ -25,6 +25,7 @@ import de.weltraumschaf.juberblog.opt.PublishOptions;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -69,6 +70,11 @@ public class App extends InvokableAdapter {
         }
     }
 
+    /**
+     * Determine if debug is enabled by environment variable {@link Constants#ENVIRONMENT_VARIABLE_DEBUG}.
+     *
+     * @return by default {@code false} if environment is not present or false
+     */
     private boolean isDebug() {
         final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
 
@@ -99,6 +105,12 @@ public class App extends InvokableAdapter {
         cmd.execute();
     }
 
+    /**
+     * Validates the command line arguments and creates the argument object.
+     *
+     * @return never {@code null}
+     * @throws ApplicationException if too few arguments given
+     */
     private Arguments validateArguments() throws ApplicationException {
         final Arguments args = new Arguments(getArgs());
         if (args.getFirstArgument().isEmpty()) {
@@ -121,9 +133,18 @@ public class App extends InvokableAdapter {
         return args;
     }
 
-    private SubCommand createSubcommand(final SubCommands subCommandName) throws IOException, URISyntaxException, ApplicationException {
+    /**
+     * Creates sub command object.
+     *
+     * @param subCommandType must not be {@code null}
+     * @return never {@code null}
+     * @throws ApplicationException if command is unknown
+     */
+    private SubCommand createSubcommand(final SubCommands subCommandType) throws ApplicationException {
+        Validate.notNull(subCommandType, "Sub command type must not be null!");
+
         try {
-            return SubCommands.create(subCommandName, getIoStreams());
+            return SubCommands.create(subCommandType, getIoStreams());
         } catch (final IllegalArgumentException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.UNKNOWN_COMMAND,
@@ -132,12 +153,25 @@ public class App extends InvokableAdapter {
         }
     }
 
-    private void parseOptions(final SubCommands subCommandName, final Arguments args, final SubCommand cmd) throws ApplicationException {
+    /**
+     * Parses the command line options and set them to the command.
+     *
+     * Also checks if help is wanted.
+     *
+     * @param type must not be {@code null}
+     * @param args must not be {@code null}
+     * @param cmd must not be {@code null}
+     * @throws ApplicationException if help is wanted
+     */
+    private void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd) throws ApplicationException {
+        Validate.notNull(type, "Type must not be null!");
+        Validate.notNull(args, "Arguments must not be null!");
+        Validate.notNull(cmd, "Sub command must not be null!");
         final JCommander optionsParser = new JCommander();
         optionsParser.setProgramName(Constants.COMMAND_NAME.toString());
         final Options opts;
 
-        switch (subCommandName) {
+        switch (type) {
             case CREATE:
                 opts = new CreateOptions();
                 optionsParser.addObject(opts);
@@ -151,7 +185,7 @@ public class App extends InvokableAdapter {
                 optionsParser.addObject(opts);
                 break;
             default:
-                LOG.warn(String.format("Unsupported sub command %s!", subCommandName));
+                LOG.warn(String.format("Unsupported sub command %s!", type));
                 opts = null;
         }
 

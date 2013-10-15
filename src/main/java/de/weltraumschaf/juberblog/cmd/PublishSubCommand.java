@@ -12,9 +12,11 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Lists;
+import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.layout.PageLayout;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import freemarker.template.Configuration;
@@ -44,13 +46,22 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
      */
     private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
     private PublishOptions options;
-    private final Configuration configuration;
+    private Configuration templateConfig;
     private BlogConfiguration blogConfig;
     private final StopWatch watch = new StopWatch();
 
-    public PublishSubCommand(final IO io) throws IOException, URISyntaxException {
+    public PublishSubCommand(final IO io) {
         super(io);
-        configuration = configureTemplates();
+    }
+
+    @Override
+    protected void init() throws ApplicationException {
+        super.init();
+        try {
+            templateConfig = configureTemplates();
+        } catch (final IOException | URISyntaxException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
+        }
     }
 
     @Override
@@ -89,13 +100,13 @@ class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
 
     private void publishSites() {
         LOG.debug("Publish sites.");
-        final PageLayout layout = new PageLayout(configuration, "/site.ftl");
+        final PageLayout layout = new PageLayout(templateConfig, "/site.ftl");
         publishFiles(layout, getBlogConfig().getDataDir() + "/sites");
     }
 
     private void publisPosts() {
         LOG.debug("Publish posts.");
-        final PageLayout layout = new PageLayout(configuration, "/post.ftl");
+        final PageLayout layout = new PageLayout(templateConfig, "/post.ftl");
         publishFiles(layout, getBlogConfig().getDataDir() + "/posts");
 
     }
