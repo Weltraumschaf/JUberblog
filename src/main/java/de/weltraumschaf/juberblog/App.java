@@ -22,9 +22,7 @@ import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
@@ -163,7 +161,8 @@ public class App extends InvokableAdapter {
      * @param cmd must not be {@code null}
      * @throws ApplicationException if help is wanted
      */
-    private void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd) throws ApplicationException {
+    private void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd)
+            throws ApplicationException {
         Validate.notNull(type, "Type must not be null!");
         Validate.notNull(args, "Arguments must not be null!");
         Validate.notNull(cmd, "Sub command must not be null!");
