@@ -82,7 +82,7 @@ public class PageLayout {
      * Renders the given context into the layout.
      *
      * @param content must not be {@code null}
-     * @return never {@code null{
+     * @return never {@code null}
      * @throws IOException on any IO error for template file
      * @throws TemplateException on any template parse error
      */
