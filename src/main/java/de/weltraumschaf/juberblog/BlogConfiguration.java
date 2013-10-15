@@ -202,38 +202,83 @@ public class BlogConfiguration {
         return getProperty(HTDOCS);
     }
 
+    /**
+     * Get the Twitter consumer key.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterConsumerKey() {
         return getProperty(TWITTER_CONSUMER_KEY);
     }
 
+    /**
+     * Get the Twitter consumer secret.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterConsumerSecret() {
         return getProperty(TWITTER_CONSUMER_SECRET);
     }
 
+    /**
+     * Get the Twitter OAuth token.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterOAuthToken() {
         return getProperty(TWITTER_OAUTH_TOKEN);
     }
 
+    /**
+     * Get the Twitter OAuth secret.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterOAuthTokenSecret() {
         return getProperty(TWITTER_OAUTH_TOKEN_SECRET);
     }
 
+    /**
+     * Get the Bitly username.
+     *
+     * @return never {@code null}
+     */
     public String getBitlyUsername() {
         return getProperty(BITLY_USERNAME);
     }
 
+    /**
+     * Get the Bitly API key.
+     *
+     * @return never {@code null}
+     */
     public String getBitlyApikey() {
         return getProperty(BITLY_APIKEY);
     }
 
+    /**
+     * Get the blog API URI.
+     *
+     * @return never {@code null}
+     */
     public String getApiUri() {
         return getProperty(API_URI);
     }
 
+    /**
+     * Get the if rating feature is enabled.
+     *
+     * @return never {@code null}
+     */
     public boolean getFeatureRating() {
         return "true".equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;
     }
 
+    /**
+     * Get the if comment feature is enabled.
+     *
+     * @return never {@code null}
+     */
     public boolean getFeatureComments() {
         return "true".equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;
     }

@@ -61,6 +61,8 @@ abstract class BaseSubCommand<T extends Options> implements SubCommand<T> {
 
     /**
      * SubCommand deinitialization invoked after {@link #run()}.
+     *
+     * @throws ApplicationException on any executions error
      */
     protected void deinit() throws ApplicationException {
         // Nothing to do here yet.
@@ -68,6 +70,8 @@ abstract class BaseSubCommand<T extends Options> implements SubCommand<T> {
 
     /**
      * Main command method.
+     *
+     * @throws ApplicationException on any executions error
      */
     protected abstract void run() throws ApplicationException;
 

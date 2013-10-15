@@ -35,7 +35,7 @@ import org.apache.commons.lang3.time.StopWatch;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class PublishSubCommand extends CreateAndPublishCommand<PublishOptions> {
+class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
 
     /**
      * Freemarker templates resource directory.

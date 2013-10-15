@@ -19,17 +19,24 @@ import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
 
 /**
+ * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
  *
+ * @param <T> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
+abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
 
     /**
      * Loaded from file.
      */
     private BlogConfiguration configuration;
 
-    public CreateAndPublishCommand(IO io) {
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@code null}
+     */
+    public CommonCreateAndPublishSubCommand(IO io) {
         super(io);
     }
 
@@ -39,7 +46,13 @@ abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extend
         loadConfiguration();
     }
 
+    /**
+     * Load the configuration file.
+     *
+     * @throws ApplicationException if configuration file can't be loaded
+     */
     private void loadConfiguration() throws ApplicationException {
+        // TODO Argument validation.
         try {
             configuration = new BlogConfiguration(getOptions().getConfigurationFile());
             configuration.load();
@@ -51,6 +64,11 @@ abstract class CreateAndPublishCommand<T extends CreateAndPublishOptions> extend
         }
     }
 
+    /**
+     * Accessor for blog configuration provided by command line argument.
+     *
+     * @return never {@code null}
+     */
     protected BlogConfiguration getConfiguration() {
         return configuration;
     }
