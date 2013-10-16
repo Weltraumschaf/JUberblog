@@ -60,7 +60,7 @@ public class AppTest {
         try {
             createSut().createSubcommand(SubCommands.NOT_IMPLEMENTED);
             fail("Expected exception not thrown!");
-        } catch (final ApplicationException ex){
+        } catch (final ApplicationException ex) {
             assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.UNKNOWN_COMMAND));
             assertThat(ex.getMessage(), is(equalTo("Unknown command type 'not-implemented'!")));
         }
