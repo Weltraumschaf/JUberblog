@@ -28,6 +28,15 @@ public class Arguments {
     private final String[] args;
 
     /**
+     * Creates empty arguments.
+     *
+     * Mostly for testing purposes.
+     */
+    Arguments() {
+        this(new String[] {});
+    }
+
+    /**
      * Dedicated constructor.
      *
      * @param args must not be {@code null}, defense copied

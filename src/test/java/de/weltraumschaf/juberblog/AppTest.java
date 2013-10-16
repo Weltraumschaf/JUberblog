@@ -9,16 +9,18 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
+import com.sun.tracing.dtrace.ArgsAttributes;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.commons.system.ExitCode;
+import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import static org.mockito.Mockito.*;
@@ -36,16 +38,17 @@ public class AppTest {
     //CHECKSTYLE:ON
 
     private App createSut() {
-        return createSut(new String[] {});
+        return createSut(new String[]{});
     }
 
-    private App createSut(final String ... args) {
+    private App createSut(final String... args) {
         final App app = new App(args);
         app.setIoStreams(mock(IO.class));
         return app;
     }
 
-    @Test public void isDebug_returnFalseByDefault() {
+    @Test
+    public void isDebug_returnFalseByDefault() {
         assertThat(createSut().isDebug(), is(false));
     }
 
@@ -124,7 +127,7 @@ public class AppTest {
         final Arguments args = sut.validateArguments();
         assertThat(args, is(not(nullValue())));
         assertThat(args.getFirstArgument(), is(equalTo("foo")));
-        assertThat(args.getTailArguments(), is(new String[] {}));
+        assertThat(args.getTailArguments(), is(new String[]{}));
     }
 
     @Test
@@ -133,6 +136,63 @@ public class AppTest {
         final Arguments args = sut.validateArguments();
         assertThat(args, is(not(nullValue())));
         assertThat(args.getFirstArgument(), is(equalTo("foo")));
-        assertThat(args.getTailArguments(), is(new String[] {"bar", "baz"}));
+        assertThat(args.getTailArguments(), is(new String[]{"bar", "baz"}));
+    }
+
+    @Test
+    public void parseOptions_throwsExceptionIfTypeIsNull() throws ApplicationException {
+        final App sut = createSut();
+        thrown.expect(NullPointerException.class);
+        sut.parseOptions(null, new Arguments(), mock(SubCommand.class));
+    }
+
+    @Test
+    public void parseOptions_throwsExceptionIfArgsIsNull() throws ApplicationException {
+        final App sut = createSut();
+        thrown.expect(NullPointerException.class);
+        sut.parseOptions(SubCommands.CREATE, null, mock(SubCommand.class));
+    }
+
+    @Test
+    public void parseOptions_throwsExceptionIfSubCommandIsNull() throws ApplicationException {
+        final App sut = createSut();
+        thrown.expect(NullPointerException.class);
+        sut.parseOptions(SubCommands.CREATE, new Arguments(), null);
+    }
+
+    @Test
+    @Ignore
+    public void parseOptions_forCreateSubcommand() throws ApplicationException {
+        final App sut = createSut();
+        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
+        // TODO Implement test
+    }
+
+    @Test
+    @Ignore
+    public void parseOptions_forInstallSubcommand() throws ApplicationException {
+        final App sut = createSut();
+        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
+        // TODO Implement test
+    }
+
+    @Test
+    @Ignore
+    public void parseOptions_forPublishSubcommand() throws ApplicationException {
+        final App sut = createSut();
+        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
+        // TODO Implement test
+    }
+
+    @Test
+    @Ignore
+    public void parseOptions_showHelp() {
+        final App sut = createSut();
+        try {
+            final Arguments args = new Arguments();
+            sut.parseOptions(SubCommands.CREATE, args, null);
+            fail("Expected exception not thrown!");
+        } catch (final ApplicationException ex) {
+        }
     }
 }
