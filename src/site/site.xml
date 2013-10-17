@@ -40,6 +40,7 @@
         </breadcrumbs>
         <menu name="${project.name}">
             <item name="Home" href="index.html"/>
+            <item name="Installation" href="installation"/>
         </menu>
         <menu name="Reports" ref="reports"/>
     </body>
