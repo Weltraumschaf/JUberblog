@@ -22,113 +22,265 @@ import org.apache.commons.lang3.Validate;
 /**
  * Blog configuration.
  *
+ * Abstracts the configuration properties file.
+ *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
 public class BlogConfiguration {
 
+    /**
+     * Name of blog headline  property.
+     */
     private static final String HEADLINE = &quot;headline&quot;;
+    /**
+     * Name of blog description property.
+     */
     private static final String DESCRIPTION = &quot;description&quot;;
+    /**
+     * Name of site base URI property.
+     */
     private static final String SITE_URI = &quot;siteUrl&quot;;
+    /**
+     * Name of site language property.
+     */
     private static final String LANGUAGE = &quot;language&quot;;
+    /**
+     * Name of data directory property.
+     */
     private static final String DATA_DIR = &quot;dataDir&quot;;
+    /**
+     * Name of template directory property.
+     */
     private static final String TEMPLATE_DIR = &quot;tplDir&quot;;
+    /**
+     * Name of published htdocs directory property.
+     */
     private static final String HTDOCS = &quot;htdocs&quot;;
+    /**
+     * Name of Twitter consumer key property.
+     */
     private static final String TWITTER_CONSUMER_KEY = &quot;twitter.consumer_key&quot;;
+    /**
+     * Name of Twitter consumer secret property.
+     */
     private static final String TWITTER_CONSUMER_SECRET = &quot;twitter.consumer_secret&quot;;
+    /**
+     * Name of Twitter OAuth token property.
+     */
     private static final String TWITTER_OAUTH_TOKEN = &quot;twitter.oauth_token&quot;;
+    /**
+     * Name of Twitter OAuth secret property.
+     */
     private static final String TWITTER_OAUTH_TOKEN_SECRET = &quot;twitter.oauth_token_secret&quot;;
+    /**
+     * Name of Bitly username property.
+     */
     private static final String BITLY_USERNAME = &quot;bitly.username&quot;;
+    /**
+     * Name of Bitly API key property.
+     */
     private static final String BITLY_APIKEY = &quot;bitly.apikey&quot;;
+    /**
+     * Name of blog API URI property.
+     */
     private static final String API_URI = &quot;api.url&quot;;
+    /**
+     * Name of rating feature switch property.
+     */
     private static final String FEATURE_RATING = &quot;features.rating&quot;;
+    /**
+     * Name of comments feature switch property.
+     */
     private static final String FEATURE_COMMENTS = &quot;features.comments&quot;;
-<span class="fc" id="L45">    private final Properties properties = new Properties();</span>
+    /**
+     * Used to load and parse file.
+     */
+<span class="fc" id="L98">    private final Properties properties = new Properties();</span>
+    /**
+     * Absolute path to property file.
+     */
     private final String fileName;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param fileName must not be {@code null} or empty
+     */
     public BlogConfiguration(final String fileName) {
-<span class="fc" id="L49">        super();</span>
-<span class="fc" id="L50">        Validate.notEmpty(fileName, &quot;File name must not be null or empty!&quot;);</span>
-<span class="fc" id="L51">        this.fileName = fileName;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L110">        super();</span>
+<span class="fc" id="L111">        Validate.notEmpty(fileName, &quot;File name must not be null or empty!&quot;);</span>
+<span class="fc" id="L112">        this.fileName = fileName;</span>
+<span class="fc" id="L113">    }</span>
 
+    /**
+     * Load the properties from file.
+     *
+     * @throws IOException if configuration file can not be loaded
+     */
     public void load() throws IOException {
-<span class="fc" id="L55">        InputStream in = null;</span>
+<span class="fc" id="L121">        InputStream in = null;</span>
 
         try {
-<span class="fc" id="L58">            in = new FileInputStream(new File(fileName));</span>
-<span class="fc" id="L59">            properties.load(in);</span>
-<span class="fc" id="L60">            IOUtils.closeQuietly(in);</span>
+<span class="fc" id="L124">            in = new FileInputStream(new File(fileName));</span>
+<span class="fc" id="L125">            properties.load(in);</span>
         } finally {
-<span class="pc" id="L62">            IOUtils.closeQuietly(in);</span>
-<span class="fc" id="L63">        }</span>
-<span class="fc" id="L64">    }</span>
+<span class="pc" id="L127">            IOUtils.closeQuietly(in);</span>
+<span class="fc" id="L128">        }</span>
+<span class="fc" id="L129">    }</span>
 
+    /**
+     * Get property with empty string as default.
+     *
+     * @param name must not be {code null} or empty
+     * @return never {@code null}
+     */
     private String getProperty(final String name) {
-<span class="fc" id="L67">        return properties.getProperty(name, &quot;&quot;);</span>
+<span class="fc" id="L138">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+<span class="fc" id="L139">        return properties.getProperty(name, &quot;&quot;);</span>
     }
 
+    /**
+     * Get the site main headline.
+     *
+     * @return never {@code null}
+     */
     public String getHeadline() {
-<span class="fc" id="L71">        return getProperty(HEADLINE);</span>
+<span class="fc" id="L148">        return getProperty(HEADLINE);</span>
     }
 
+    /**
+     * Get the site main description.
+     *
+     * @return never {@code null}
+     */
     public String getDescription() {
-<span class="fc" id="L75">        return getProperty(DESCRIPTION);</span>
+<span class="fc" id="L157">        return getProperty(DESCRIPTION);</span>
     }
 
+    /**
+     * Get the site base URI.
+     *
+     * @return never {@code null}
+     */
     public String getSiteUri() {
-<span class="fc" id="L79">        return getProperty(SITE_URI);</span>
+<span class="fc" id="L166">        return getProperty(SITE_URI);</span>
     }
 
+    /**
+     * Get the site language.
+     *
+     * @return never {@code null}
+     */
     public String getLanguage() {
-<span class="fc" id="L83">        return getProperty(LANGUAGE);</span>
+<span class="fc" id="L175">        return getProperty(LANGUAGE);</span>
     }
 
+    /**
+     * Get the data directory.
+     *
+     * @return never {@code null}
+     */
     public String getDataDir() {
-<span class="fc" id="L87">        return getProperty(DATA_DIR);</span>
+<span class="fc" id="L184">        return getProperty(DATA_DIR);</span>
     }
 
+    /**
+     * Get the template directory.
+     *
+     * @return never {@code null}
+     */
     public String getTemplateDir() {
-<span class="fc" id="L91">        return getProperty(TEMPLATE_DIR);</span>
+<span class="fc" id="L193">        return getProperty(TEMPLATE_DIR);</span>
     }
 
+    /**
+     * Get the htdocs directory.
+     *
+     * @return never {@code null}
+     */
     public String getHtdocs() {
-<span class="fc" id="L95">        return getProperty(HTDOCS);</span>
+<span class="fc" id="L202">        return getProperty(HTDOCS);</span>
     }
 
+    /**
+     * Get the Twitter consumer key.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterConsumerKey() {
-<span class="fc" id="L99">        return getProperty(TWITTER_CONSUMER_KEY);</span>
+<span class="fc" id="L211">        return getProperty(TWITTER_CONSUMER_KEY);</span>
     }
 
+    /**
+     * Get the Twitter consumer secret.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterConsumerSecret() {
-<span class="fc" id="L103">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
+<span class="fc" id="L220">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
     }
 
+    /**
+     * Get the Twitter OAuth token.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterOAuthToken() {
-<span class="fc" id="L107">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
+<span class="fc" id="L229">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
     }
 
+    /**
+     * Get the Twitter OAuth secret.
+     *
+     * @return never {@code null}
+     */
     public String getTwitterOAuthTokenSecret() {
-<span class="fc" id="L111">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
+<span class="fc" id="L238">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
     }
 
+    /**
+     * Get the Bitly username.
+     *
+     * @return never {@code null}
+     */
     public String getBitlyUsername() {
-<span class="fc" id="L115">        return getProperty(BITLY_USERNAME);</span>
+<span class="fc" id="L247">        return getProperty(BITLY_USERNAME);</span>
     }
 
+    /**
+     * Get the Bitly API key.
+     *
+     * @return never {@code null}
+     */
     public String getBitlyApikey() {
-<span class="fc" id="L119">        return getProperty(BITLY_APIKEY);</span>
+<span class="fc" id="L256">        return getProperty(BITLY_APIKEY);</span>
     }
 
+    /**
+     * Get the blog API URI.
+     *
+     * @return never {@code null}
+     */
     public String getApiUri() {
-<span class="fc" id="L123">        return getProperty(API_URI);</span>
+<span class="fc" id="L265">        return getProperty(API_URI);</span>
     }
 
+    /**
+     * Get the if rating feature is enabled.
+     *
+     * @return never {@code null}
+     */
     public boolean getFeatureRating() {
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
     }
 
+    /**
+     * Get the if comment feature is enabled.
+     *
+     * @return never {@code null}
+     */
     public boolean getFeatureComments() {
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
     }
 
 }

@@ -13,8 +13,6 @@ package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.IO;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
@@ -23,48 +21,94 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="nc" id="L26">public enum SubCommands {</span>
+<span class="pc" id="L24">public enum SubCommands {</span>
 
-<span class="nc" id="L28">    CREATE(&quot;create&quot;),</span>
-<span class="nc" id="L29">    PUBLISH(&quot;publish&quot;),</span>
-<span class="nc" id="L30">    INSTALL(&quot;install&quot;);</span>
-
-<span class="nc" id="L32">    private static final Map&lt;String, SubCommands&gt; LOOKUP = Maps.newHashMap();</span>
+    /**
+     * Name for {@link CreateSubCommand}.
+     */
+<span class="fc" id="L29">    CREATE(&quot;create&quot;),</span>
+    /**
+     * Name for {@link PublishSubCommand}.
+     */
+<span class="fc" id="L33">    PUBLISH(&quot;publish&quot;),</span>
+    /**
+     * Name for {@link InstallSubCommand}.
+     */
+<span class="fc" id="L37">    INSTALL(&quot;install&quot;),</span>
+    /**
+     * Used for testing.
+     */
+<span class="fc" id="L41">    NOT_IMPLEMENTED(&quot;not-implemented&quot;);</span>
+    /**
+     * Used to lookup type by name.
+     */
+<span class="fc" id="L45">    private static final Map&lt;String, SubCommands&gt; LOOKUP = Maps.newHashMap();</span>
     static {
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        for (final SubCommands cmd : values()) {</span>
-<span class="nc" id="L35">            LOOKUP.put(cmd.getSubCommandName(), cmd);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (final SubCommands cmd : values()) {</span>
+<span class="fc" id="L48">            LOOKUP.put(cmd.toString(), cmd);</span>
         }
-<span class="nc" id="L37">    }</span>
+<span class="fc" id="L50">    }</span>
+    /**
+     * Textual name of sub command.
+     */
     private final String subCommandName;
 
-<span class="nc" id="L40">    SubCommands(final String subCommandName) {</span>
-<span class="nc" id="L41">        Validate.notEmpty(subCommandName, &quot;Sub command name must not be null or empty!&quot;);</span>
-<span class="nc" id="L42">        this.subCommandName = subCommandName;</span>
-<span class="nc" id="L43">    }</span>
+    /**
+     * Dedicated constructor.
+     *
+     * @param subCommandName must not be {@code null} or empty
+     */
+<span class="fc" id="L61">    SubCommands(final String subCommandName) {</span>
+<span class="fc" id="L62">        Validate.notEmpty(subCommandName, &quot;Sub command name must not be null or empty!&quot;);</span>
+<span class="fc" id="L63">        this.subCommandName = subCommandName;</span>
+<span class="fc" id="L64">    }</span>
 
-    public String getSubCommandName() {
-<span class="nc" id="L46">        return subCommandName;</span>
+    @Override
+    public String toString() {
+<span class="fc" id="L68">        return subCommandName;</span>
     }
 
-    public static SubCommands forSubCommandName(final String subCommandName) {
-<span class="nc" id="L50">        final String normalizedName = subCommandName.toLowerCase();</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (LOOKUP.containsKey(normalizedName)) {</span>
-<span class="nc" id="L52">            return LOOKUP.get(normalizedName);</span>
+    /**
+     * Factory to lookup type for a given name.
+     *
+     * Throws {@link IllegalArgumentException} if given name can't be looked up.
+     *
+     * @param name must not be {@code null}
+     * @return never {@code null}
+     */
+    public static SubCommands forSubCommandName(final String name) {
+<span class="fc" id="L80">        Validate.notNull(name, &quot;Name must not be null!&quot;);</span>
+<span class="fc" id="L81">        final String normalizedName = name.trim().toLowerCase();</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (LOOKUP.containsKey(normalizedName)) {</span>
+<span class="fc" id="L84">            return LOOKUP.get(normalizedName);</span>
         }
 
-<span class="nc" id="L55">        throw new IllegalArgumentException(String.format(&quot;Unknown command '%s'!&quot;, subCommandName));</span>
+<span class="fc" id="L87">        throw new IllegalArgumentException(String.format(&quot;Unknown command '%s'!&quot;, name));</span>
     }
 
-    public static SubCommand create(final SubCommands type, final IO io) throws IOException, URISyntaxException {
-<span class="nc bnc" id="L59" title="All 4 branches missed.">        switch (type) {</span>
+    /**
+     * Create sub command for given type.
+     *
+     * Throws {@link IllegalArgumentException} if unsupported type was given.
+     *
+     * @param type must not be {@code null}
+     * @param io must not be {@code null}
+     * @return never {@code null}
+     */
+    public static SubCommand create(final SubCommands type, final IO io) {
+<span class="fc" id="L100">        Validate.notNull(type, &quot;Type must not be null!&quot;);</span>
+<span class="fc" id="L101">        Validate.notNull(io, &quot;IO must not be null!&quot;);</span>
+
+<span class="pc bfc" id="L103" title="All 4 branches covered.">        switch (type) {</span>
             case CREATE:
-<span class="nc" id="L61">                return new CreateSubCommand(io);</span>
+<span class="fc" id="L105">                return new CreateSubCommand(io);</span>
             case PUBLISH:
-<span class="nc" id="L63">                return new PublishSubCommand(io);</span>
+<span class="fc" id="L107">                return new PublishSubCommand(io);</span>
             case INSTALL:
-<span class="nc" id="L65">                return new InstallSubCommand(io);</span>
+<span class="fc" id="L109">                return new InstallSubCommand(io);</span>
             default:
-<span class="nc" id="L67">                throw new IllegalArgumentException(String.format(&quot;Unknown command type '%s'!&quot;, type));</span>
+<span class="fc" id="L111">                throw new IllegalArgumentException(String.format(&quot;Unknown command type '%s'!&quot;, type));</span>
         }
     }
 }

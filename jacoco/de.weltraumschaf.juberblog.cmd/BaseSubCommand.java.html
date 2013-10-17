@@ -37,18 +37,18 @@ abstract class BaseSubCommand&lt;T extends Options&gt; implements SubCommand&lt;
      * @param io must not be {@code null}
      */
     public BaseSubCommand(final IO io) {
-<span class="nc" id="L40">        super();</span>
-<span class="nc" id="L41">        Validate.notNull(io, &quot;IO must not be null!&quot;);</span>
-<span class="nc" id="L42">        this.io = io;</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L40">        super();</span>
+<span class="fc" id="L41">        Validate.notNull(io, &quot;IO must not be null!&quot;);</span>
+<span class="fc" id="L42">        this.io = io;</span>
+<span class="fc" id="L43">    }</span>
 
     @Override
-    public void execute() throws ApplicationException {
-<span class="nc" id="L47">        Validate.notNull(getOptions(), &quot;Options must nit be null! Invoke #setOptions() before executing.&quot;);</span>
-<span class="nc" id="L48">        init();</span>
-<span class="nc" id="L49">        run();</span>
-<span class="nc" id="L50">        deinit();</span>
-<span class="nc" id="L51">    }</span>
+    public final void execute() throws ApplicationException {
+<span class="fc" id="L47">        Validate.notNull(getOptions(), &quot;Options must nit be null! Invoke #setOptions() before executing.&quot;);</span>
+<span class="fc" id="L48">        init();</span>
+<span class="fc" id="L49">        run();</span>
+<span class="fc" id="L50">        deinit();</span>
+<span class="fc" id="L51">    }</span>
 
     /**
      * SubCommand initialization invoked before {@link #run()}.
@@ -57,19 +57,23 @@ abstract class BaseSubCommand&lt;T extends Options&gt; implements SubCommand&lt;
      */
     protected void init() throws ApplicationException {
         // Nothing to do here yet.
-<span class="nc" id="L60">    }</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * SubCommand deinitialization invoked after {@link #run()}.
+     *
+     * @throws ApplicationException on any executions error
      */
-    protected void deinit() {
+    protected void deinit() throws ApplicationException {
         // Nothing to do here yet.
-<span class="nc" id="L67">    }</span>
+<span class="fc" id="L69">    }</span>
 
     /**
      * Main command method.
+     *
+     * @throws ApplicationException on any executions error
      */
-    protected abstract void run();
+    protected abstract void run() throws ApplicationException;
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -18,19 +18,36 @@ import de.weltraumschaf.commons.system.ExitCode;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="nc" id="L21">public enum ExitCodeImpl implements ExitCode {</span>
+<span class="pc" id="L21">public enum ExitCodeImpl implements ExitCode {</span>
 
-<span class="nc" id="L23">    FATAL(-1),</span>
+    /**
+     * Any unspecified error.
+     */
+<span class="fc" id="L26">    FATAL(-1),</span>
     /**
      * No errors.
      */
-<span class="nc" id="L27">    OK(0),</span>
+<span class="fc" id="L30">    OK(0),</span>
     /**
      * Unspecified fatal error occurred.
      */
-<span class="nc" id="L31">    UNKNOWN_COMMAND(1),</span>
-<span class="nc" id="L32">    TOO_FEW_ARGUMENTS(2),</span>
-<span class="nc" id="L33">    CANT_LOAD_CONFIG(3);</span>
+<span class="fc" id="L34">    UNKNOWN_COMMAND(1),</span>
+    /**
+     * Too few command line arguments.
+     */
+<span class="fc" id="L38">    TOO_FEW_ARGUMENTS(2),</span>
+    /**
+     * Can't load configuration file.
+     */
+<span class="fc" id="L42">    CANT_LOAD_CONFIG(3),</span>
+    /**
+     * Indicates a missing command line argument.
+     */
+<span class="fc" id="L46">    MISSING_ARGUMENT(4),</span>
+    /**
+     * Indicates an invalid command line argument.
+     */
+<span class="fc" id="L50">    BAD_ARGUMENT(5);</span>
     /**
      * Exit code number returned as exit code to JVM.
      */
@@ -41,13 +58,13 @@ import de.weltraumschaf.commons.system.ExitCode;
      *
      * @param code exit code number
      */
-<span class="nc" id="L44">    ExitCodeImpl(final int code) {</span>
-<span class="nc" id="L45">        this.code = code;</span>
-<span class="nc" id="L46">    }</span>
+<span class="fc" id="L61">    ExitCodeImpl(final int code) {</span>
+<span class="fc" id="L62">        this.code = code;</span>
+<span class="fc" id="L63">    }</span>
 
     @Override
     public int getCode() {
-<span class="nc" id="L50">        return code;</span>
+<span class="nc" id="L67">        return code;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

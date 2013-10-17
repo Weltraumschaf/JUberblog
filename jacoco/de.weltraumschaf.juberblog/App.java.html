@@ -23,6 +23,7 @@ import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import java.io.UnsupportedEncodingException;
+import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +36,7 @@ public class App extends InvokableAdapter {
     /**
      * Log facility.
      */
-<span class="nc" id="L38">    private static final Logger LOG = Logger.getLogger(App.class);</span>
+<span class="fc" id="L39">    private static final Logger LOG = Logger.getLogger(App.class);</span>
     /**
      * Version information.
      */
@@ -47,9 +48,9 @@ public class App extends InvokableAdapter {
      * @param args must not be {@code null}
      */
     public App(final String[] args) {
-<span class="nc" id="L50">        super(args);</span>
-<span class="nc" id="L51">        version = new Version(&quot;/de/weltraumschaf/juberblog/version.properties&quot;);</span>
-<span class="nc" id="L52">    }</span>
+<span class="fc" id="L51">        super(args);</span>
+<span class="fc" id="L52">        version = new Version(&quot;/de/weltraumschaf/juberblog/version.properties&quot;);</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Main entry point of VM.
@@ -57,107 +58,153 @@ public class App extends InvokableAdapter {
      * @param args cli arguments from VM
      */
     public static void main(final String[] args) {
-<span class="nc" id="L60">        final App invokable = new App(args);</span>
+<span class="nc" id="L61">        final App invokable = new App(args);</span>
 
         try {
-<span class="nc" id="L63">            InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());</span>
-<span class="nc" id="L64">        } catch (UnsupportedEncodingException ex) {</span>
-<span class="nc" id="L65">            LOG.fatal(&quot;Can't create IO streams!&quot;, ex);</span>
-<span class="nc" id="L66">            invokable.exit(-1);</span>
-<span class="nc" id="L67">        }</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L64">            InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());</span>
+<span class="nc" id="L65">        } catch (UnsupportedEncodingException ex) {</span>
+<span class="nc" id="L66">            LOG.fatal(&quot;Can't create IO streams!&quot;, ex);</span>
+<span class="nc" id="L67">            invokable.exit(-1);</span>
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">    }</span>
 
-    private boolean isDebug() {
-<span class="nc" id="L71">        final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());</span>
+    /**
+     * Determine if debug is enabled by environment variable {@link Constants#ENVIRONMENT_VARIABLE_DEBUG}.
+     *
+     * @return by default {@code false} if environment is not present or false
+     */
+    boolean isDebug() {
+<span class="fc" id="L77">        final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());</span>
 
-<span class="nc bnc" id="L73" title="All 4 branches missed.">        if (null == debug || debug.isEmpty()) {</span>
-<span class="nc" id="L74">            return false;</span>
+<span class="pc bpc" id="L79" title="3 of 4 branches missed.">        if (null == debug || debug.isEmpty()) {</span>
+<span class="fc" id="L80">            return false;</span>
         }
 
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (&quot;true&quot;.equalsIgnoreCase(debug.trim())) {</span>
-<span class="nc" id="L78">            return true;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (&quot;true&quot;.equalsIgnoreCase(debug.trim())) {</span>
+<span class="nc" id="L84">            return true;</span>
         }
 
-<span class="nc" id="L81">        return false;</span>
+<span class="nc" id="L87">        return false;</span>
     }
 
     @Override
     public void execute() throws Exception {
-<span class="nc" id="L86">        version.load();</span>
-<span class="nc" id="L87">        registerShutdownHook(new Runnable() {</span>
+<span class="nc" id="L92">        version.load();</span>
+<span class="nc" id="L93">        registerShutdownHook(new Runnable() {</span>
             @Override
             public void run() {
-<span class="nc" id="L90">            }</span>
+<span class="nc" id="L96">            }</span>
         });
 
+<span class="nc" id="L99">        final Arguments args = validateArguments();</span>
+<span class="nc" id="L100">        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());</span>
+<span class="nc" id="L101">        final SubCommand cmd = createSubcommand(subCommandName);</span>
+<span class="nc" id="L102">        parseOptions(subCommandName, args, cmd);</span>
+<span class="nc" id="L103">        cmd.execute();</span>
+<span class="nc" id="L104">    }</span>
 
-<span class="nc" id="L94">        final Arguments args = new Arguments(getArgs());</span>
+    /**
+     * Validates the command line arguments and creates the argument object.
+     *
+     * @return never {@code null}
+     * @throws ApplicationException if too few arguments given
+     */
+    Arguments validateArguments() throws ApplicationException {
+<span class="fc" id="L113">        final Arguments args = new Arguments(getArgs());</span>
 
-<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (args.getFirstArgument().isEmpty()) {</span>
-<span class="nc" id="L97">            final StringBuilder errorMesage = new StringBuilder(&quot;No sub comamnd given!&quot;);</span>
-<span class="nc" id="L98">            errorMesage.append(Constants.DEFAULT_NEW_LINE)</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (args.getFirstArgument().isEmpty()) {</span>
+<span class="fc" id="L116">            final StringBuilder errorMesage = new StringBuilder(&quot;No sub comamnd given!&quot;);</span>
+<span class="fc" id="L117">            errorMesage.append(Constants.DEFAULT_NEW_LINE)</span>
                     .append(&quot;Usage: &quot;).append(Constants.COMMAND_NAME).append(' ');
-<span class="nc" id="L100">            boolean first = true;</span>
+<span class="fc" id="L119">            boolean first = true;</span>
 
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            for (final SubCommands cmd : SubCommands.values()) {</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">                if (!first) {</span>
-<span class="nc" id="L104">                    errorMesage.append('|');</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            for (final SubCommands cmd : SubCommands.values()) {</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                if (SubCommands.NOT_IMPLEMENTED == cmd) {</span>
+<span class="fc" id="L123">                    continue;</span>
                 }
 
-<span class="nc" id="L107">                errorMesage.append(cmd.getSubCommandName());</span>
-<span class="nc" id="L108">                first = false;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                if (!first) {</span>
+<span class="fc" id="L127">                    errorMesage.append('|');</span>
+                }
+
+<span class="fc" id="L130">                errorMesage.append(cmd.toString());</span>
+<span class="fc" id="L131">                first = false;</span>
             }
 
-<span class="nc" id="L111">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);</span>
+<span class="fc" id="L134">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);</span>
         }
+<span class="fc" id="L136">        return args;</span>
+    }
 
-<span class="nc" id="L114">        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());</span>
-        final SubCommand cmd;
+    /**
+     * Creates sub command object.
+     *
+     * @param subCommandType must not be {@code null}
+     * @return never {@code null}
+     * @throws ApplicationException if command is unknown
+     */
+    SubCommand createSubcommand(final SubCommands subCommandType) throws ApplicationException {
+<span class="fc" id="L147">        Validate.notNull(subCommandType, &quot;Sub command type must not be null!&quot;);</span>
 
         try {
-<span class="nc" id="L118">            cmd = SubCommands.create(subCommandName, getIoStreams());</span>
-<span class="nc" id="L119">        } catch (final IllegalArgumentException ex) {</span>
-<span class="nc" id="L120">            throw new ApplicationException(</span>
+<span class="fc" id="L150">            return SubCommands.create(subCommandType, getIoStreams());</span>
+<span class="fc" id="L151">        } catch (final IllegalArgumentException ex) {</span>
+<span class="fc" id="L152">            throw new ApplicationException(</span>
                     ExitCodeImpl.UNKNOWN_COMMAND,
                     ex.getMessage(),
                     ex);
-<span class="nc" id="L124">        }</span>
+        }
+    }
 
-<span class="nc" id="L126">        final JCommander optionsParser = new JCommander();</span>
-<span class="nc" id="L127">        optionsParser.setProgramName(Constants.COMMAND_NAME.toString());</span>
+    /**
+     * Parses the command line options and set them to the command.
+     *
+     * Also checks if help is wanted.
+     *
+     * @param type must not be {@code null}
+     * @param args must not be {@code null}
+     * @param cmd must not be {@code null}
+     * @throws ApplicationException if help is wanted
+     */
+    void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd)
+        throws ApplicationException {
+<span class="fc" id="L171">        Validate.notNull(type, &quot;Type must not be null!&quot;);</span>
+<span class="fc" id="L172">        Validate.notNull(args, &quot;Arguments must not be null!&quot;);</span>
+<span class="fc" id="L173">        Validate.notNull(cmd, &quot;Sub command must not be null!&quot;);</span>
+<span class="fc" id="L174">        final JCommander optionsParser = new JCommander();</span>
+<span class="fc" id="L175">        optionsParser.setProgramName(Constants.COMMAND_NAME.toString());</span>
         final Options opts;
 
-<span class="nc bnc" id="L130" title="All 4 branches missed.">        switch (subCommandName) {</span>
+<span class="pc bfc" id="L178" title="All 4 branches covered.">        switch (type) {</span>
             case CREATE:
-<span class="nc" id="L132">                opts = new CreateOptions();</span>
-<span class="nc" id="L133">                optionsParser.addObject(opts);</span>
-<span class="nc" id="L134">                break;</span>
+<span class="fc" id="L180">                opts = new CreateOptions();</span>
+<span class="fc" id="L181">                optionsParser.addObject(opts);</span>
+<span class="fc" id="L182">                break;</span>
             case INSTALL:
-<span class="nc" id="L136">                opts = new InstallOptions();</span>
-<span class="nc" id="L137">                optionsParser.addObject(new InstallOptions());</span>
-<span class="nc" id="L138">                break;</span>
+<span class="fc" id="L184">                opts = new InstallOptions();</span>
+<span class="fc" id="L185">                optionsParser.addObject(opts);</span>
+<span class="fc" id="L186">                break;</span>
             case PUBLISH:
-<span class="nc" id="L140">                opts = new PublishOptions();</span>
-<span class="nc" id="L141">                optionsParser.addObject(new PublishOptions());</span>
-<span class="nc" id="L142">                break;</span>
+<span class="fc" id="L188">                opts = new PublishOptions();</span>
+<span class="fc" id="L189">                optionsParser.addObject(opts);</span>
+<span class="fc" id="L190">                break;</span>
             default:
-<span class="nc" id="L144">                opts = null;</span>
+<span class="fc" id="L192">                LOG.warn(String.format(&quot;Unsupported sub command %s!&quot;, type));</span>
+<span class="fc" id="L193">                opts = null;</span>
         }
 
-<span class="nc" id="L147">        optionsParser.parse(args.getTailArguments());</span>
-<span class="nc" id="L148">        cmd.setOptions(opts);</span>
+<span class="fc" id="L196">        optionsParser.parse(args.getTailArguments());</span>
+<span class="fc" id="L197">        cmd.setOptions(opts);</span>
 
-<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (opts.isHelp()) {</span>
-<span class="nc" id="L151">            final StringBuilder errorMessage = new StringBuilder();</span>
-<span class="nc" id="L152">            optionsParser.usage(errorMessage);</span>
-<span class="nc" id="L153">            throw new ApplicationException(</span>
+<span class="pc bpc" id="L199" title="1 of 4 branches missed.">        if (null != opts &amp;&amp; opts.isHelp()) {</span>
+<span class="fc" id="L200">            final StringBuilder errorMessage = new StringBuilder();</span>
+<span class="fc" id="L201">            optionsParser.usage(errorMessage);</span>
+<span class="fc" id="L202">            throw new ApplicationException(</span>
                     ExitCodeImpl.OK,
                     errorMessage.toString(),
                     null);
         }
-
-<span class="nc" id="L159">        cmd.execute();</span>
-<span class="nc" id="L160">    }</span>
+<span class="fc" id="L207">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

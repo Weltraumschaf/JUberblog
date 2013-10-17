@@ -28,14 +28,23 @@ public class Arguments {
     private final String[] args;
 
     /**
+     * Creates empty arguments.
+     *
+     * Mostly for testing purposes.
+     */
+    Arguments() {
+<span class="fc" id="L36">        this(new String[] {});</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
      * Dedicated constructor.
      *
      * @param args must not be {@code null}, defense copied
      */
-<span class="fc" id="L35">    public Arguments(final String[] args) {</span>
-<span class="fc" id="L36">        Validate.notNull(args, &quot;Argumets must not be null!&quot;);</span>
-<span class="fc" id="L37">        this.args = args.clone();</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L44">    public Arguments(final String[] args) {</span>
+<span class="fc" id="L45">        Validate.notNull(args, &quot;Argumets must not be null!&quot;);</span>
+<span class="fc" id="L46">        this.args = args.clone();</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Get the first argument.
@@ -43,7 +52,7 @@ public class Arguments {
      * @return never {@code null}, maybe empty
      */
     public String getFirstArgument() {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        return args.length == 0 ? &quot;&quot; : args[0];</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        return args.length == 0 ? &quot;&quot; : args[0];</span>
     }
 
     /**
@@ -52,16 +61,16 @@ public class Arguments {
      * @return @return never {@code null}, maybe empty
      */
     public String[] getTailArguments() {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (args.length &lt; 2) {</span>
-<span class="fc" id="L56">            return new String[] {};</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (args.length &lt; 2) {</span>
+<span class="fc" id="L65">            return new String[] {};</span>
         }
 
-<span class="fc" id="L59">        return Arrays.copyOfRange(args, 1, args.length);</span>
+<span class="fc" id="L68">        return Arrays.copyOfRange(args, 1, args.length);</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L64">        return &quot;first: &quot; + getFirstArgument()</span>
+<span class="fc" id="L73">        return &quot;first: &quot; + getFirstArgument()</span>
                 + &quot;, tail: &quot; + Arrays.asList(getTailArguments()).toString();
     }
 

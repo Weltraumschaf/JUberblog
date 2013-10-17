@@ -12,8 +12,10 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
 import java.io.IOException;
@@ -41,52 +43,107 @@ class InstallSubCommand extends BaseSubCommand&lt;InstallOptions&gt; {
     /**
      * Log facility.
      */
-<span class="nc" id="L44">    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);</span>
-<span class="nc" id="L45">    private static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()</span>
+<span class="fc" id="L46">    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);</span>
+    /**
+     * Location of the scaffold directory with all default files and directories.
+     */
+<span class="fc" id="L50">    private static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()</span>
                                        .replace(&quot;.&quot;, Constants.DIR_SEP.toString());
-<span class="nc" id="L47">    private static final String PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();</span>
-
+    /**
+     * Prefix to strip of from resource name.
+     */
+<span class="fc" id="L55">    private static final String PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();</span>
+    /**
+     * Command line options.
+     */
     private InstallOptions options;
 
     /**
      * Dedicated constructor.
      *
-     * @param options must not be {@code null}
      * @param io must not be {@code null}
      */
     public InstallSubCommand(final IO io) {
-<span class="nc" id="L58">        super(io);</span>
-<span class="nc" id="L59">    }</span>
+<span class="fc" id="L67">        super(io);</span>
+<span class="fc" id="L68">    }</span>
 
     @Override
-    protected void run() {
-<span class="nc" id="L63">        final String target = options.getLocation();</span>
-<span class="nc" id="L64">        io.println(String.format(&quot;Install scaffold to '%s'...&quot;, target));</span>
-<span class="nc" id="L65">        final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split(&quot;!&quot;);</span>
-<span class="nc" id="L66">        final String jarFile = paths[0];</span>
-<span class="nc" id="L67">        LOG.debug(jarFile);</span>
-
-        try {
-<span class="nc" id="L70">            try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.&lt;String, String&gt;newHashMap())) {</span>
-<span class="nc" id="L71">                final String scaffold = paths[1];</span>
-<span class="nc" id="L72">                final Path dir = fs.getPath(scaffold);</span>
-<span class="nc" id="L73">                Files.walkFileTree(dir, new CopyDirectoryVisitor(new File(target).toPath(), PREFIX));</span>
-<span class="nc bnc" id="L74" title="All 8 branches missed.">            }</span>
-<span class="nc" id="L75">        } catch (IOException ex) {</span>
-<span class="nc" id="L76">            io.errorln(&quot;Can't copy scaffold: &quot; + ex.getMessage());</span>
-<span class="nc" id="L77">            io.printStackTrace(ex);</span>
-<span class="nc" id="L78">        }</span>
-<span class="nc" id="L79">    }</span>
+    protected void run() throws ApplicationException {
+<span class="nc" id="L72">        final String location = options.getLocation().trim();</span>
+<span class="nc" id="L73">        final File target = validateLocation(location);</span>
+<span class="nc" id="L74">        io.println(String.format(&quot;Install scaffold to '%s'...&quot;, location));</span>
+<span class="nc" id="L75">        copyFiles(target);</span>
+<span class="nc" id="L76">    }</span>
 
     @Override
     public void setOptions(final InstallOptions opt) {
-<span class="nc" id="L83">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
-<span class="nc" id="L84">        options = opt;</span>
-<span class="nc" id="L85">    }</span>
+<span class="fc" id="L80">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
+<span class="fc" id="L81">        options = opt;</span>
+<span class="fc" id="L82">    }</span>
 
     @Override
     public InstallOptions getOptions() {
-<span class="nc" id="L89">        return options;</span>
+<span class="fc" id="L86">        return options;</span>
+    }
+
+    /**
+     * Copy all files from scaffold to target directory.
+     *
+     * @param target must not be {@code null}
+     */
+    private void copyFiles(final File target) {
+<span class="nc" id="L95">        Validate.notNull(target, &quot;Target must not be null!&quot;);</span>
+<span class="nc" id="L96">        final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split(&quot;!&quot;);</span>
+<span class="nc" id="L97">        final String jarFile = paths[0];</span>
+
+        try {
+<span class="nc" id="L100">            try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.&lt;String, String&gt;newHashMap())) {</span>
+<span class="nc" id="L101">                final String scaffold = paths[1];</span>
+<span class="nc" id="L102">                final Path dir = fs.getPath(scaffold);</span>
+<span class="nc" id="L103">                Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), PREFIX));</span>
+<span class="nc bnc" id="L104" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L105">        } catch (IOException ex) {</span>
+<span class="nc" id="L106">            io.errorln(&quot;Can't copy scaffold: &quot; + ex.getMessage());</span>
+<span class="nc" id="L107">            io.printStackTrace(ex);</span>
+<span class="nc" id="L108">        }</span>
+<span class="nc" id="L109">    }</span>
+
+    /**
+     * Validate instalation directory.
+     *
+     * Validates that given string is not empty and is an existing directory.
+     *
+     * @param location must not be {@code null} or empty
+     * @return never {@code null}
+     * @throws ApplicationException if target does not exist or is not a directory
+     */
+    private File validateLocation(final String location) throws ApplicationException {
+<span class="nc" id="L121">        Validate.notNull(location, &quot;Location must not be null!&quot;);</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (location.isEmpty()) {</span>
+<span class="nc" id="L124">            throw new ApplicationException(</span>
+                ExitCodeImpl.MISSING_ARGUMENT,
+                &quot;Empty location given! Please specify a valid direcotry as installation location.&quot;,
+                null);
+        }
+
+<span class="nc" id="L130">        final File target = new File(location);</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (!target.exists()) {</span>
+<span class="nc" id="L133">            throw new ApplicationException(</span>
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format(&quot;Install location '%s' does not exist!&quot;, location),
+                null);
+        }
+
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if (!target.isDirectory()) {</span>
+<span class="nc" id="L140">            throw new ApplicationException(</span>
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format(&quot;Install location '%s' is not a directory!&quot;, location),
+                null);
+        }
+
+<span class="nc" id="L146">        return target;</span>
     }
 
     /**
@@ -97,11 +154,11 @@ class InstallSubCommand extends BaseSubCommand&lt;InstallOptions&gt; {
         /**
          * Log facility.
          */
-<span class="nc" id="L100">        private static final Logger LOG = Logger.getLogger(CopyDirectoryVisitor.class);</span>
+<span class="nc" id="L157">        private static final Logger LOG = Logger.getLogger(CopyDirectoryVisitor.class);</span>
         /**
          * Copy options.
          */
-<span class="nc" id="L104">        private static final StandardCopyOption COPY_OPTIONS = StandardCopyOption.REPLACE_EXISTING;</span>
+<span class="nc" id="L161">        private static final StandardCopyOption COPY_OPTIONS = StandardCopyOption.REPLACE_EXISTING;</span>
         /**
          * Target directory.
          */
@@ -118,53 +175,60 @@ class InstallSubCommand extends BaseSubCommand&lt;InstallOptions&gt; {
          * @param prefix must not be {@code null}
          */
         public CopyDirectoryVisitor(final Path targetDir, final String prefix) {
-<span class="nc" id="L121">            super();</span>
-<span class="nc" id="L122">            Validate.notNull(targetDir, &quot;Target dir must not be null!&quot;);</span>
+<span class="nc" id="L178">            super();</span>
+<span class="nc" id="L179">            Validate.notNull(targetDir, &quot;Target dir must not be null!&quot;);</span>
 
-<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (!Files.exists(targetDir)) {</span>
-<span class="nc" id="L125">                throw new IllegalArgumentException(String.format(&quot;Target '%s' does not exists!&quot;, targetDir));</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (!Files.exists(targetDir)) {</span>
+<span class="nc" id="L182">                throw new IllegalArgumentException(String.format(&quot;Target '%s' does not exists!&quot;, targetDir));</span>
             }
 
-<span class="nc bnc" id="L128" title="All 2 branches missed.">            if (!Files.isDirectory(targetDir)) {</span>
-<span class="nc" id="L129">                throw new IllegalArgumentException(String.format(&quot;Target '%s' is not a directory!&quot;, targetDir));</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (!Files.isDirectory(targetDir)) {</span>
+<span class="nc" id="L186">                throw new IllegalArgumentException(String.format(&quot;Target '%s' is not a directory!&quot;, targetDir));</span>
             }
 
-<span class="nc" id="L132">            this.targetDir = targetDir;</span>
-<span class="nc" id="L133">            Validate.notNull(prefix, &quot;Prefix must not be null!&quot;);</span>
-<span class="nc" id="L134">            this.prefix = prefix;</span>
-<span class="nc" id="L135">        }</span>
+<span class="nc" id="L189">            this.targetDir = targetDir;</span>
+<span class="nc" id="L190">            Validate.notNull(prefix, &quot;Prefix must not be null!&quot;);</span>
+<span class="nc" id="L191">            this.prefix = prefix;</span>
+<span class="nc" id="L192">        }</span>
 
         @Override
         public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-<span class="nc" id="L139">            final FileVisitResult result = super.preVisitDirectory(dir, attrs);</span>
-<span class="nc" id="L140">            final String str = dir.toString() + &quot;/&quot;;</span>
+<span class="nc" id="L196">            final FileVisitResult result = super.preVisitDirectory(dir, attrs);</span>
+<span class="nc" id="L197">            final String str = dir.toString() + &quot;/&quot;;</span>
 
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (str.equals(prefix)) {</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">            if (str.equals(prefix)) {</span>
                 // Do not create the root dir.
-<span class="nc" id="L144">                return result;</span>
+<span class="nc" id="L201">                return result;</span>
             }
 
-<span class="nc" id="L147">            final Path target = targetDir.resolve(baseName(dir));</span>
+<span class="nc" id="L204">            final Path target = targetDir.resolve(baseName(dir));</span>
 
-<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (!Files.exists(target)) {</span>
-<span class="nc" id="L150">                LOG.debug(String.format(&quot;Create directory %s...&quot;, dir));</span>
-<span class="nc" id="L151">                Files.createDirectory(target);</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (!Files.exists(target)) {</span>
+<span class="nc" id="L207">                LOG.debug(String.format(&quot;Create directory %s...&quot;, dir));</span>
+<span class="nc" id="L208">                Files.createDirectory(target);</span>
             }
 
-<span class="nc" id="L154">            return result;</span>
+<span class="nc" id="L211">            return result;</span>
         }
 
         @Override
         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-<span class="nc" id="L159">            final FileVisitResult result = super.visitFile(file, attrs);</span>
-<span class="nc" id="L160">            final Path target = targetDir.resolve(baseName(file));</span>
-<span class="nc" id="L161">            LOG.debug(String.format(&quot;Copy file %s to %s...&quot;, file, target));</span>
-<span class="nc" id="L162">            Files.copy(file, target, COPY_OPTIONS);</span>
-<span class="nc" id="L163">            return result;</span>
+<span class="nc" id="L216">            final FileVisitResult result = super.visitFile(file, attrs);</span>
+<span class="nc" id="L217">            final Path target = targetDir.resolve(baseName(file));</span>
+<span class="nc" id="L218">            LOG.debug(String.format(&quot;Copy file %s to %s...&quot;, file, target));</span>
+<span class="nc" id="L219">            Files.copy(file, target, COPY_OPTIONS);</span>
+<span class="nc" id="L220">            return result;</span>
         }
 
+        /**
+         * Strips prefix from given path.
+         *
+         * @param file must not be {@code null}
+         * @return never {@code null}
+         */
         private String baseName(final Path file) {
-<span class="nc" id="L167">            return file.toString().replace(prefix, &quot;&quot;);</span>
+<span class="nc" id="L230">            Validate.notNull(file, &quot;File must not be null!&quot;);</span>
+<span class="nc" id="L231">            return file.toString().replace(prefix, &quot;&quot;);</span>
         }
 
     }

@@ -22,32 +22,40 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-class CreateSubCommand extends CreateAndPublishCommand&lt;CreateOptions&gt;  {
+class CreateSubCommand extends CommonCreateAndPublishSubCommand&lt;CreateOptions&gt;  {
 
     /**
      * Log facility.
      */
-<span class="nc" id="L30">    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);</span>
+<span class="fc" id="L30">    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);</span>
+    /**
+     * Command line options.
+     */
     private CreateOptions options;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@code null}
+     */
     public CreateSubCommand(final IO io) {
-<span class="nc" id="L34">        super(io);</span>
-<span class="nc" id="L35">    }</span>
+<span class="fc" id="L42">        super(io);</span>
+<span class="fc" id="L43">    }</span>
 
     @Override
     public void run() {
-<span class="nc" id="L39">        LOG.debug(&quot;create&quot;);</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L47">        LOG.debug(&quot;create&quot;);</span>
+<span class="nc" id="L48">    }</span>
 
     @Override
     public void setOptions(final CreateOptions opt) {
-<span class="nc" id="L44">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
-<span class="nc" id="L45">        options = opt;</span>
-<span class="nc" id="L46">    }</span>
+<span class="fc" id="L52">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
+<span class="fc" id="L53">        options = opt;</span>
+<span class="fc" id="L54">    }</span>
 
     @Override
     public CreateOptions getOptions() {
-<span class="nc" id="L50">        return options;</span>
+<span class="fc" id="L58">        return options;</span>
     }
 
 }
