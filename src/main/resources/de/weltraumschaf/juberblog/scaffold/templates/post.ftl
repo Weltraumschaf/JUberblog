@@ -6,13 +6,13 @@
 
 <#if ${features.comments><div id="comments"></div></#if>
 
-<#if ${prevPost} or ${nextPost}>
+<#if ${prevPost} || ${nextPost}>
 <nav id="pagination">
   <#if ${prevPost}>
     <a href="${prevPost}">&laquo; previous post</a>
   </#if>
 
-  <#if ${prevPost} and ${nextPost}>
+  <#if ${prevPost} && ${nextPost}>
       &ndash;
   </#if>
 
