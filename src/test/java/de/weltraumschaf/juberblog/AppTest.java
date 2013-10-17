@@ -11,12 +11,14 @@
  */
 package de.weltraumschaf.juberblog;
 
-import com.sun.tracing.dtrace.ArgsAttributes;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
+import de.weltraumschaf.juberblog.opt.CreateOptions;
+import de.weltraumschaf.juberblog.opt.InstallOptions;
+import de.weltraumschaf.juberblog.opt.PublishOptions;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -161,38 +163,68 @@ public class AppTest {
     }
 
     @Test
-    @Ignore
     public void parseOptions_forCreateSubcommand() throws ApplicationException {
         final App sut = createSut();
-        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
-        // TODO Implement test
+        final SubCommands type = SubCommands.CREATE;
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-s", "--title", "foo"}), cmd);
+        final CreateOptions opt = (CreateOptions) cmd.getOptions();
+        assertThat(opt, is(not(nullValue())));
+        assertThat(opt.isHelp(), is(false));
+        assertThat(opt.isVerbose(), is(false));
+        assertThat(opt.isSite(), is(true));
+        assertThat(opt.getTitle(), is(equalTo("foo")));
     }
 
     @Test
-    @Ignore
     public void parseOptions_forInstallSubcommand() throws ApplicationException {
         final App sut = createSut();
-        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
-        // TODO Implement test
+        final SubCommands type = SubCommands.INSTALL;
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-l", "foo"}), cmd);
+        final InstallOptions opt = (InstallOptions) cmd.getOptions();
+        assertThat(opt, is(not(nullValue())));
+        assertThat(opt.isHelp(), is(false));
+        assertThat(opt.isVerbose(), is(false));
+        assertThat(opt.getLocation(), is(equalTo("foo")));
     }
 
     @Test
-    @Ignore
     public void parseOptions_forPublishSubcommand() throws ApplicationException {
         final App sut = createSut();
-        sut.parseOptions(SubCommands.CREATE, new Arguments(), mock(SubCommand.class));
-        // TODO Implement test
+        final SubCommands type = SubCommands.PUBLISH;
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-p", "-q", "--sites"}), cmd);
+        final PublishOptions opt = (PublishOptions) cmd.getOptions();
+        assertThat(opt, is(not(nullValue())));
+        assertThat(opt.isHelp(), is(false));
+        assertThat(opt.isVerbose(), is(false));
+        assertThat(opt.isPurge(), is(true));
+        assertThat(opt.isQuiet(), is(true));
+        assertThat(opt.isSites(), is(true));
     }
 
     @Test
-    @Ignore
+    public void parseOptions_unsupportedType() throws ApplicationException {
+        thrown.expect(NullPointerException.class);
+        final App sut = createSut();
+        sut.parseOptions(
+                SubCommands.NOT_IMPLEMENTED,
+                new Arguments(),
+                SubCommands.create(SubCommands.CREATE, mock(IO.class)));
+    }
+
+    @Test
     public void parseOptions_showHelp() {
         final App sut = createSut();
+        final SubCommands type = SubCommands.PUBLISH;
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+
         try {
-            final Arguments args = new Arguments();
-            sut.parseOptions(SubCommands.CREATE, args, null);
+            sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-h"}), cmd);
             fail("Expected exception not thrown!");
         } catch (final ApplicationException ex) {
+            assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.OK));
         }
     }
 }
