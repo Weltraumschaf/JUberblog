@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.template;
 
 import com.google.common.collect.Maps;
@@ -130,7 +129,6 @@ public class Template implements Renderable {
      * @param filter must not be {@code null}
      */
     public void addPostFilter(final Filter filter) {
-       postfilters.add(filter);
+        postfilters.add(filter);
     }
-
 }
