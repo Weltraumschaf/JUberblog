@@ -50,9 +50,9 @@ public class TemplateTest {
     @Test
     public void render_withVariables() throws IOException, URISyntaxException, TemplateException {
         final Template sut = new Template(configureTemplates(), "template.ftl");
-        sut.assignVariable("foo", "foo");
-        sut.assignVariable("bar", "bar");
-        sut.assignVariable("baz", "baz");
+        sut.assignVariable("title", "foo");
+        sut.assignVariable("encoding", "bar");
+        sut.assignVariable("description", "baz");
         assertThat(sut.render(), is(equalTo("foo\nbar\nbaz")));
     }
 

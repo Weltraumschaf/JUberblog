@@ -31,13 +31,33 @@ public class LayoutTest {
     public void render_withContent() throws IOException, URISyntaxException, TemplateException {
         final Layout sut = new Layout(configureTemplates(), "layout.ftl");
         sut.setContent("foobar");
-        assertThat(sut.render(), is(equalTo("<content>foobar</content>")));
+        assertThat(sut.render(), is(equalTo("\n\n\n<content>foobar</content>")));
+        sut.setTitle("foo");
+        sut.setEncoding("bar");
+        sut.setDescription("baz");
+        assertThat(sut.render(), is(equalTo("foo\nbar\nbaz\n<content>foobar</content>")));
+    }
+
+    @Test
+    public void render_withContentObject() throws IOException, URISyntaxException, TemplateException {
+        final Layout sut = new Layout(configureTemplates(), "layout.ftl");
+        final Template content = new Template(configureTemplates(), "template.ftl");
+        sut.setContent(content);
+        assertThat(sut.render(), is(equalTo("\n\n\n<content>\n\n</content>")));
+        sut.setTitle("foo");
+        sut.setEncoding("bar");
+        sut.setDescription("baz");
+        assertThat(sut.render(), is(equalTo("foo\nbar\nbaz\n<content>foo\nbar\nbaz</content>")));
     }
 
     @Test
     public void render_withOutContent() throws IOException, URISyntaxException, TemplateException {
         final Layout sut = new Layout(configureTemplates(), "layout.ftl");
-        assertThat(sut.render(), is(equalTo("<content></content>")));
+        assertThat(sut.render(), is(equalTo("\n\n\n<content></content>")));
+        sut.setTitle("foo");
+        sut.setEncoding("bar");
+        sut.setDescription("baz");
+        assertThat(sut.render(), is(equalTo("foo\nbar\nbaz\n<content></content>")));
     }
 
 }
