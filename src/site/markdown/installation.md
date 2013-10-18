@@ -17,5 +17,16 @@ Then build the project:
     $ git checkout stable
     $ mvn clean install
 
+## Create the Scaffold
+
+Create the initial scaffold directory for your blog data:
+
+    $ mkdir -p /where/you/want/to/save
+    $ juberblog install -l /where/you/want/to/save
+    $ cd /where/you/want/to/save
+    $ git init
+    $ git add -A
+    $ git commit -m "Initial commit."
+
 [1]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 [2]: https://maven.apache.org/download.cgi
