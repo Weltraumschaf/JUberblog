@@ -16,8 +16,8 @@ import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
-import de.weltraumschaf.juberblog.layout.PageLayout;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
+import de.weltraumschaf.juberblog.template.Layout;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateExceptionHandler;
@@ -124,7 +124,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publishSites() {
         LOG.debug("Publish sites.");
-        final PageLayout layout = new PageLayout(templateConfig, "/site.ftl");
+        final Layout layout = new Layout(templateConfig, "/site.ftl");
         publishFiles(layout, getBlogConfiguration().getDataDir() + "/sites");
     }
 
@@ -133,7 +133,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publisPosts() {
         LOG.debug("Publish posts.");
-        final PageLayout layout = new PageLayout(templateConfig, "/post.ftl");
+        final Layout layout = new Layout(templateConfig, "/post.ftl");
         publishFiles(layout, getBlogConfiguration().getDataDir() + "/posts");
 
     }
@@ -144,7 +144,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param layout must not be {@code null}
      * @param dirname must not be {@code null}
      */
-    private void publishFiles(final PageLayout layout, final String dirname) {
+    private void publishFiles(final Layout layout, final String dirname) {
         Validate.notNull(layout, "Layout must not be null!");
         Validate.notNull(dirname, "Dirname must not be null!");
         LOG.debug(String.format("Pubish files from '%s'...", dirname));
@@ -174,7 +174,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param layout must not be {@code null}
      * @param filename must not be {@code null} or empty
      */
-    private void publishFile(final PageLayout layout, final String filename) {
+    private void publishFile(final Layout layout, final String filename) {
         Validate.notNull(layout, "Layout must not be null!");
         Validate.notEmpty(filename, "File name must not be null or empty!");
         LOG.debug(String.format("Publish file '%s'...", filename));
