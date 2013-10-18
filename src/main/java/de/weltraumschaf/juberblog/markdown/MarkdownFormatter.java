@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.markdown;
 
+import de.weltraumschaf.juberblog.filter.MarkdownFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
@@ -20,8 +21,10 @@ import org.pegdown.PegDownProcessor;
 /**
  * Formats an <a href="http://daringfireball.net/projects/markdown/">Markdown</a> input stream.
  *
+ * @deprecated use {@link MarkdownFilter} instead
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
+@Deprecated
 public class MarkdownFormatter {
 
     /**
