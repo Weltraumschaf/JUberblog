@@ -9,56 +9,51 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.layout;
+
+package de.weltraumschaf.juberblog.template;
 
 import de.weltraumschaf.juberblog.Constants;
-import de.weltraumschaf.juberblog.template.Layout;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
- * Tests for {@link PageLayout}.
+ * Tests for {@link Template}.
  *
- * @deprecated use {@link Layout} instead
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-@Deprecated
-public class PageLayoutTest {
+public class TemplateTest {
 
     /**
      * Freemarker templates resource directory.
      */
-    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/layout";
+    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
 
-    @Test
-    public void renderLAyout() throws IOException, URISyntaxException, TemplateException {
-        final PageLayout layout = new PageLayout(configureTemplates(), "layout.ftl");
-        layout.setTitle("foo");
-        layout.setDescription("bar");
-        final InputStream htmlFile = getClass().getResourceAsStream(TEMPLATE_DIRECTORRY + "/layout.html");
-        assertThat(layout.render("baz"), is(equalTo(IOUtils.toString(htmlFile))));
-        IOUtils.closeQuietly(htmlFile);
-    }
-
-    private Configuration configureTemplates() throws IOException, URISyntaxException {
+    static Configuration configureTemplates() throws IOException, URISyntaxException {
         final Configuration cfg = new Configuration();
-        final File templateDir = new File(getClass().getResource(TEMPLATE_DIRECTORRY).toURI());
+        final File templateDir = new File(TemplateTest.class.getResource(TEMPLATE_DIRECTORRY).toURI());
         cfg.setDirectoryForTemplateLoading(templateDir);
         cfg.setObjectWrapper(new DefaultObjectWrapper());
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
         return cfg;
+    }
+
+    @Test
+    public void render_withVariables() throws IOException, URISyntaxException, TemplateException {
+        final Template sut = new Template(configureTemplates(), "template.ftl");
+        sut.assignVariable("foo", "foo");
+        sut.assignVariable("bar", "bar");
+        sut.assignVariable("baz", "baz");
+        assertThat(sut.render(), is(equalTo("foo\nbar\nbaz")));
     }
 
 }

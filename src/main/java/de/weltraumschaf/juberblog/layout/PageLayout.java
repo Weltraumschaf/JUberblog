@@ -23,8 +23,10 @@ import org.apache.commons.lang3.Validate;
 /**
  * Renders content into a template.
  *
+ * @deprecated use {@link Layout} instead
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
+@Deprecated
 public class PageLayout {
 
     /**
