@@ -14,6 +14,8 @@ package de.weltraumschaf.juberblog.template;
 
 import com.google.common.collect.Maps;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.filter.Filter;
+import de.weltraumschaf.juberblog.filter.FilterChain;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.ByteArrayOutputStream;
@@ -50,6 +52,10 @@ public class Template implements Renderable {
      * Encoding of rendered template string.
      */
     private final String encoding;
+    /**
+     * Applied on rendered string.
+     */
+    private final FilterChain postfilters = new FilterChain();
 
     /**
      * Initializes {@link #encoding} with {@link Constants#DEFAULT_ENCODING}.
@@ -113,7 +119,18 @@ public class Template implements Renderable {
         final freemarker.template.Template tpl = templateConfiguration.getTemplate(templateFile);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         tpl.process(templateVariables, new OutputStreamWriter(out, encoding));
-        return out.toString(Constants.DEFAULT_ENCODING.toString());
+        return postfilters.apply(out.toString(Constants.DEFAULT_ENCODING.toString()));
+    }
+
+    /**
+     * Add a filter to process template after rendering.
+     *
+     * Filters are applied in order they were added.
+     *
+     * @param filter must not be {@code null}
+     */
+    public void addPostFilter(final Filter filter) {
+       postfilters.add(filter);
     }
 
 }

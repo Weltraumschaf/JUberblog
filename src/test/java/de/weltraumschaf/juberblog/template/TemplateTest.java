@@ -9,10 +9,10 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.template;
 
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.filter.Filter;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
@@ -57,9 +57,25 @@ public class TemplateTest {
         assertThat(sut.render(), is(equalTo("foo\nbar\nbaz")));
     }
 
-    @Test public void getVariable_emptyByDefault() throws IOException, URISyntaxException, TemplateException {
+    @Test
+    public void getVariable_emptyByDefault() throws IOException, URISyntaxException, TemplateException {
         final Template sut = new Template(configureTemplates(), TEMPLATE);
         assertThat(sut.getVariable("foo"), is(equalTo((Object) "")));
     }
 
+    @Test
+    public void addPostFilter() throws IOException, URISyntaxException, TemplateException {
+        final Template sut = new Template(configureTemplates(), TEMPLATE);
+        sut.assignVariable("title", "foo");
+        sut.assignVariable("encoding", "bar");
+        sut.assignVariable("description", "baz");
+        sut.addPostFilter(new Filter() {
+
+            @Override
+            public String apply(final String input) {
+                return input + "1";
+            }
+        });
+        assertThat(sut.render(), is(equalTo("foo\nbar\nbaz1")));
+    }
 }
