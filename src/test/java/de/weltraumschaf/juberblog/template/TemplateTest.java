@@ -35,6 +35,7 @@ public class TemplateTest {
      * Freemarker templates resource directory.
      */
     private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
+    private static final String TEMPLATE = "template.ftl";
 
     static Configuration configureTemplates() throws IOException, URISyntaxException {
         final Configuration cfg = new Configuration();
@@ -49,11 +50,16 @@ public class TemplateTest {
 
     @Test
     public void render_withVariables() throws IOException, URISyntaxException, TemplateException {
-        final Template sut = new Template(configureTemplates(), "template.ftl");
+        final Template sut = new Template(configureTemplates(), TEMPLATE);
         sut.assignVariable("title", "foo");
         sut.assignVariable("encoding", "bar");
         sut.assignVariable("description", "baz");
         assertThat(sut.render(), is(equalTo("foo\nbar\nbaz")));
+    }
+
+    @Test public void getVariable_emptyByDefault() throws IOException, URISyntaxException, TemplateException {
+        final Template sut = new Template(configureTemplates(), TEMPLATE);
+        assertThat(sut.getVariable("foo"), is(equalTo((Object) "")));
     }
 
 }

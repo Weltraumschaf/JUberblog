@@ -26,10 +26,11 @@ import static org.hamcrest.Matchers.*;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class LayoutTest {
+    private static final String TEMPLATE = "layout.ftl";
 
     @Test
     public void render_withContent() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), "layout.ftl");
+        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
         sut.setContent("foobar");
         assertThat(sut.render(), is(equalTo("\n\n\n<content>foobar</content>")));
         sut.setTitle("foo");
@@ -40,7 +41,7 @@ public class LayoutTest {
 
     @Test
     public void render_withContentObject() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), "layout.ftl");
+        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
         final Template content = new Template(configureTemplates(), "template.ftl");
         sut.setContent(content);
         assertThat(sut.render(), is(equalTo("\n\n\n<content>\n\n</content>")));
@@ -52,7 +53,7 @@ public class LayoutTest {
 
     @Test
     public void render_withOutContent() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), "layout.ftl");
+        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
         assertThat(sut.render(), is(equalTo("\n\n\n<content></content>")));
         sut.setTitle("foo");
         sut.setEncoding("bar");
