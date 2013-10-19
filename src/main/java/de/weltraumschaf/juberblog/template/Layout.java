@@ -52,7 +52,7 @@ public final class Layout extends Template {
      * @param templateConfiguration must not be {@code null}
      * @param layoutTemplateFile must not be {@code null}
      */
-    public Layout(final Configuration templateConfiguration, final String layoutTemplateFile) {
+    public Layout(final Configuration templateConfiguration, final String layoutTemplateFile) throws IOException {
         super(templateConfiguration, layoutTemplateFile);
         setTitle("");
         setDescription("");

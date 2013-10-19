@@ -124,8 +124,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publishSites() {
         LOG.debug("Publish sites.");
-        final Layout layout = new Layout(templateConfig, "/site.ftl");
-        publishFiles(layout, getBlogConfiguration().getDataDir() + "/sites");
+//        final Layout layout = new Layout(templateConfig, "/site.ftl");
+//        publishFiles(layout, getBlogConfiguration().getDataDir() + "/sites");
     }
 
     /**
@@ -133,8 +133,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publisPosts() {
         LOG.debug("Publish posts.");
-        final Layout layout = new Layout(templateConfig, "/post.ftl");
-        publishFiles(layout, getBlogConfiguration().getDataDir() + "/posts");
+//        final Layout layout = new Layout(templateConfig, "/post.ftl");
+//        publishFiles(layout, getBlogConfiguration().getDataDir() + "/posts");
 
     }
 

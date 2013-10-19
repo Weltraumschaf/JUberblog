@@ -36,13 +36,9 @@ public class Template implements Renderable {
      */
     private static final Logger LOG = Logger.getLogger(Template.class);
     /**
-     * Configuration used to get template files.
+     * Rendered template.
      */
-    private final Configuration templateConfiguration;
-    /**
-     * Template file name relative to the template directory in {@link #templateConfiguration}.
-     */
-    private final String templateFile;
+    private final freemarker.template.Template template;
     /**
      * Holds the assigned variables.
      */
@@ -60,10 +56,12 @@ public class Template implements Renderable {
      * Initializes {@link #encoding} with {@link Constants#DEFAULT_ENCODING}.
      *
      *
-     * @param templateConfiguration must not be {@code null}
+     * @param templateConfiguration must not be {@code null}, file name relative to the template directory in
+     *                              {@link #templateConfiguration}
      * @param templateFile must not be {@code null} or empty
+     * @throws IOException if template can't be opened
      */
-    public Template(final Configuration templateConfiguration, final String templateFile) {
+    public Template(final Configuration templateConfiguration, final String templateFile) throws IOException {
         this(templateConfiguration, templateFile, Constants.DEFAULT_ENCODING.toString());
     }
 
@@ -71,16 +69,29 @@ public class Template implements Renderable {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null}
-     * @param templateFile must not be {@code null} or empty
+     * @param templateFile must not be {@code null}, file name relative to the template directory in
+     *                     {@link #templateConfiguration}
      * @param encoding must not be {@code null} or empty
+     * @throws IOException if template can't be opened
      */
-    public Template(final Configuration templateConfiguration, final String templateFile, final String encoding) {
+    public Template(final Configuration templateConfiguration, final String templateFile, final String encoding)
+        throws IOException {
+        this(templateConfiguration.getTemplate(templateFile), encoding);
+    }
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param template must not be {@code null}
+     * @param encoding must not be {@code null} or empty
+     * @throws IOException if template can't be opened
+     */
+    public Template(final freemarker.template.Template template, final String encoding)
+        throws IOException {
         super();
-        Validate.notNull(templateConfiguration, "Template configuration must not be null!");
-        Validate.notEmpty(templateFile, "Template file must not be null or empty!");
+        Validate.notNull(template, "Template file must not be null or empty!");
         Validate.notEmpty(encoding, "Encoding must not be null or empty!");
-        this.templateConfiguration = templateConfiguration;
-        this.templateFile = templateFile;
+        this.template = template;
         this.encoding = encoding;
     }
 
@@ -115,9 +126,8 @@ public class Template implements Renderable {
 
     @Override
     public String render() throws IOException, TemplateException {
-        final freemarker.template.Template tpl = templateConfiguration.getTemplate(templateFile);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        tpl.process(templateVariables, new OutputStreamWriter(out, encoding));
+        template.process(templateVariables, new OutputStreamWriter(out, encoding));
         return postfilters.apply(out.toString(Constants.DEFAULT_ENCODING.toString()));
     }
 
