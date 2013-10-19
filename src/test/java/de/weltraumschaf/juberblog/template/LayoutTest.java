@@ -12,7 +12,6 @@
 
 package de.weltraumschaf.juberblog.template;
 
-import static de.weltraumschaf.juberblog.template.TemplateTest.configureTemplates;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,11 +25,18 @@ import static org.hamcrest.Matchers.*;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class LayoutTest {
+    /**
+     * Freemarker templates resource directory.
+     */
+    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
+    /**
+     * Tested template.
+     */
     private static final String TEMPLATE = "layout.ftl";
 
     @Test
     public void render_withContent() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
+        final Layout sut = new Layout(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
         sut.setContent("foobar");
         assertThat(sut.render(), is(equalTo("\n\n\n<content>foobar</content>")));
         sut.setTitle("foo");
@@ -41,8 +47,8 @@ public class LayoutTest {
 
     @Test
     public void render_withContentObject() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
-        final Template content = new Template(configureTemplates(), "template.ftl");
+        final Layout sut = new Layout(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
+        final Template content = new Template(Configurations.forTests(TEMPLATE_DIRECTORRY), "template.ftl");
         sut.setContent(content);
         assertThat(sut.render(), is(equalTo("\n\n\n<content>\n\n</content>")));
         sut.setTitle("foo");
@@ -53,7 +59,7 @@ public class LayoutTest {
 
     @Test
     public void render_withOutContent() throws IOException, URISyntaxException, TemplateException {
-        final Layout sut = new Layout(configureTemplates(), TEMPLATE);
+        final Layout sut = new Layout(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
         assertThat(sut.render(), is(equalTo("\n\n\n<content></content>")));
         sut.setTitle("foo");
         sut.setEncoding("bar");

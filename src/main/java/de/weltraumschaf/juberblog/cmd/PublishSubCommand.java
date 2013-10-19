@@ -17,6 +17,7 @@ import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
+import de.weltraumschaf.juberblog.template.Configurations;
 import de.weltraumschaf.juberblog.template.Layout;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -70,27 +71,10 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     protected void init() throws ApplicationException {
         super.init();
         try {
-            templateConfig = configureTemplates();
+            templateConfig = Configurations.forProduction(TEMPLATE_DIRECTORRY);
         } catch (final IOException | URISyntaxException ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
         }
-    }
-
-    /**
-     * Configure templates and returns configuration.
-     *
-     * @return never {@code null}
-     * @throws IOException if template directory can't be read
-     * @throws URISyntaxException if template directory URI can't be created from class loader
-     */
-    private Configuration configureTemplates() throws IOException, URISyntaxException {
-        final Configuration cfg = new Configuration();
-        cfg.setDirectoryForTemplateLoading(new File(getClass().getResource(TEMPLATE_DIRECTORRY).toURI()));
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
-        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
-        return cfg;
     }
 
     @Override

@@ -35,22 +35,14 @@ public class TemplateTest {
      * Freemarker templates resource directory.
      */
     private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
+    /**
+     * Tested template.
+     */
     private static final String TEMPLATE = "template.ftl";
-
-    static Configuration configureTemplates() throws IOException, URISyntaxException {
-        final Configuration cfg = new Configuration();
-        final File templateDir = new File(TemplateTest.class.getResource(TEMPLATE_DIRECTORRY).toURI());
-        cfg.setDirectoryForTemplateLoading(templateDir);
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
-        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
-        return cfg;
-    }
 
     @Test
     public void render_withVariables() throws IOException, URISyntaxException, TemplateException {
-        final Template sut = new Template(configureTemplates(), TEMPLATE);
+        final Template sut = new Template(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
         sut.assignVariable("title", "foo");
         sut.assignVariable("encoding", "bar");
         sut.assignVariable("description", "baz");
@@ -59,13 +51,13 @@ public class TemplateTest {
 
     @Test
     public void getVariable_emptyByDefault() throws IOException, URISyntaxException, TemplateException {
-        final Template sut = new Template(configureTemplates(), TEMPLATE);
+        final Template sut = new Template(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
         assertThat(sut.getVariable("foo"), is(equalTo((Object) "")));
     }
 
     @Test
     public void addPostFilter() throws IOException, URISyntaxException, TemplateException {
-        final Template sut = new Template(configureTemplates(), TEMPLATE);
+        final Template sut = new Template(Configurations.forTests(TEMPLATE_DIRECTORRY), TEMPLATE);
         sut.assignVariable("title", "foo");
         sut.assignVariable("encoding", "bar");
         sut.assignVariable("description", "baz");
