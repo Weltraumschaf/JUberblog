@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 
 /**
  * Tests for {@link SiteFormatter}.
@@ -31,7 +32,7 @@ public class SiteFormatterTest {
     private static final String TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
     private static final String FIXTURE_PACKAGE = "/de/weltraumschaf/juberblog/formatter";
 
-    @Test
+    @Test @Ignore
     public void format() throws IOException, URISyntaxException, TemplateException {
         final SiteFormatter sut = new SiteFormatter(Configurations.forTests(TEMPLATE_DIR));
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.md");

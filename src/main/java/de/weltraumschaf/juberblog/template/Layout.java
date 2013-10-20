@@ -50,7 +50,7 @@ public final class Layout extends Template {
     /**
      * All these variables are assigned to {@link #content} if it is type of {@link Template}.
      */
-    private static final List<String> COPIED_VARIABLES = Arrays.asList(
+    private static final List<String> GLOBAL_VARIABLE_NAMES = Arrays.asList(
             TITLE, ENCODING, DESCRIPTION, BASE_URI
     );
     /**
@@ -63,12 +63,20 @@ public final class Layout extends Template {
      *
      * @param templateConfiguration must not be {@code null}
      * @param layoutTemplateFile must not be {@code null}
+     * @throws IOException if template can't be opened
      */
     public Layout(final Configuration templateConfiguration, final String layoutTemplateFile) throws IOException {
         super(templateConfiguration, layoutTemplateFile);
-        setTitle("");
-        setDescription("");
-        setEncoding("");
+        initializeVaribales();
+    }
+
+    /**
+     * Initializes all {@link #GLOBAL_VARIABLE_NAMES global varibales} with an empty string.
+     */
+    private void initializeVaribales() {
+        for (final String name : GLOBAL_VARIABLE_NAMES) {
+            assignVariable(name, "");
+        }
     }
 
     /**
@@ -140,7 +148,7 @@ public final class Layout extends Template {
      */
     private void copyLayoutVariablestoContent() {
         if (content instanceof Assignable) {
-            for (final String name : COPIED_VARIABLES) {
+            for (final String name : GLOBAL_VARIABLE_NAMES) {
                 ((Assignable) content).assignVariable(name, getVariable(name));
             }
         }
