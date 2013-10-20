@@ -14,6 +14,8 @@ package de.weltraumschaf.juberblog.template;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -41,6 +43,16 @@ public final class Layout extends Template {
      * Variable key for description.
      */
     private static final String DESCRIPTION = "description";
+    /**
+     * Variable key for base URI.
+     */
+    private static final String BASE_URI = "basetUri";
+    /**
+     * All these variables are assigned to {@link #content} if it is type of {@link Template}.
+     */
+    private static final List<String> COPIED_VARIABLES = Arrays.asList(
+            TITLE, ENCODING, DESCRIPTION, BASE_URI
+    );
     /**
      * Inner template to render content string.
      */
@@ -87,6 +99,15 @@ public final class Layout extends Template {
     }
 
     /**
+     * Assign the baseURI to the layout template.
+     *
+     * @param baseUri must not be {@code null}
+     */
+    public void setBaseUri(final String baseUri) {
+        assignVariable(BASE_URI, baseUri);
+    }
+
+    /**
      * Set the inner content template.
      *
      * @param content must not be {@code null}
@@ -118,19 +139,18 @@ public final class Layout extends Template {
      * Copies all variables assigned to the layout to the inner content template.
      */
     private void copyLayoutVariablestoContent() {
-        if (!(content instanceof Template)) {
-            return;
+        if (content instanceof Assignable) {
+            for (final String name : COPIED_VARIABLES) {
+                ((Assignable) content).assignVariable(name, getVariable(name));
+            }
         }
-
-        ((Template) content).assignVariable(TITLE, getVariable(TITLE));
-        ((Template) content).assignVariable(ENCODING, getVariable(ENCODING));
-        ((Template) content).assignVariable(DESCRIPTION, getVariable(DESCRIPTION));
     }
 
     /**
      * Used as a default template which does only contains a string.
      */
     private static final class DefaultContent implements Renderable {
+
         /**
          * String which will be used as rendered output.
          */

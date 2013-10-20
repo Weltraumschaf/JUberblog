@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Template implements Renderable {
+public class Template implements Renderable, Assignable {
 
     /**
      * Logger facility.
@@ -101,6 +101,7 @@ public class Template implements Renderable {
      * @param name must not be {@code null}
      * @param value must not be {@code null}
      */
+    @Override
     public void assignVariable(final String name, final Object value) {
         Validate.notEmpty(name, "Name must not be null or empty!");
         Validate.notNull(value, "Value must not be null!");
