@@ -14,6 +14,8 @@ package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -21,7 +23,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 
 /**
  * Tests for {@link SiteFormatter}.
@@ -32,12 +33,14 @@ public class SiteFormatterTest {
     private static final String TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
     private static final String FIXTURE_PACKAGE = "/de/weltraumschaf/juberblog/formatter";
 
-    @Test @Ignore
+    @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
         final SiteFormatter sut = new SiteFormatter(Configurations.forTests(TEMPLATE_DIR));
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.md");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.html");
-        assertThat(sut.format(markdownFile), is(equalTo(IOUtils.toString(htmlFile))));
+        final String formatedHtml = sut.format(markdownFile);
+        IOUtils.write(formatedHtml, new FileOutputStream(new File("/Users/sxs/tmp/foo.html")));
+        assertThat(formatedHtml, is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(markdownFile);
         IOUtils.closeQuietly(htmlFile);
         ;
