@@ -14,8 +14,6 @@ package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
