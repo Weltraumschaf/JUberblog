@@ -41,7 +41,6 @@ public class PostFormatterTest {
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.md");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.html");
         final String formatedHtml = sut.format(markdownFile);
-        IOUtils.write(formatedHtml, new FileOutputStream(new File("/Users/sxs/tmp/foo.html")));
         assertThat(formatedHtml, is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(markdownFile);
         IOUtils.closeQuietly(htmlFile);
