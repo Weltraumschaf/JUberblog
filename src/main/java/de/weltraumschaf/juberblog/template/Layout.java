@@ -74,9 +74,7 @@ public final class Layout extends Template {
      * Initializes all {@link #GLOBAL_VARIABLE_NAMES global varibales} with an empty string.
      */
     private void initializeVaribales() {
-        for (final String name : GLOBAL_VARIABLE_NAMES) {
-            assignVariable(name, "");
-        }
+        initializeVaribales(this, GLOBAL_VARIABLE_NAMES);
     }
 
     /**

@@ -1,28 +1,28 @@
 <article>
   <strong class="meta">Posted ${date_formatted}</strong>
-  <#if ${features.rating><div id="rating"></div></#if>
+  <#if features.rating><div id="rating"></div></#if>
   ${content}
 </article>
 
-<#if ${features.comments><div id="comments"></div></#if>
+<#if features.comments><div id="comments"></div></#if>
 
-<#if ${prevPost} || ${nextPost}>
+<#if prevPost?has_content || nextPost?has_content>
 <nav id="pagination">
-  <#if ${prevPost}>
+  <#if prevPost?has_content>
     <a href="${prevPost}">&laquo; previous post</a>
   </#if>
 
-  <#if ${prevPost} && ${nextPost}>
+  <#if prevPost?has_content && nextPost?has_content>
       &ndash;
   </#if>
 
-  <#if ${nextPost}>
+  <#if nextPost?has_content>
     <a href="${nextPost}">next post &raquo;</a>
   </#if>
 </nav>
 </#if>
 
-<#if ${features.comments}>
+<#if features.comments>
 <script id="comments-form-tpl" type="text/x-handlebars-template">
   <h4>Leave a comment</h4>
   <label for="form-comment-name">Name:</label><input id="form-comment-name" type="text"/><br/>

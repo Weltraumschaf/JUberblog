@@ -53,8 +53,15 @@ abstract class BaseFormatter implements Formatter {
     /**
      * Inner two step template.
      */
-    private final Layout content;
+    protected final Layout content;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param templateConfiguration must not be {@code null}
+     * @param contentTemplate must not be {@code null} or empty
+     * @throws IOException if template file can't be read
+     */
     public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate) throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
@@ -66,10 +73,10 @@ abstract class BaseFormatter implements Formatter {
 
     @Override
     public String format(final InputStream markdownFile) throws IOException, TemplateException {
-        final freemarker.template.Template tpl = new freemarker.template.Template("content", IOUtils.toString(markdownFile), null);
-        final Template input = new Template(tpl, Constants.DEFAULT_ENCODING.toString());
+        final Template input = new Template(IOUtils.toString(markdownFile), Constants.DEFAULT_ENCODING.toString());
         input.addPostFilter(new MarkdownFilter());
         content.setContent(input);
         return layout.render();
     }
+
 }

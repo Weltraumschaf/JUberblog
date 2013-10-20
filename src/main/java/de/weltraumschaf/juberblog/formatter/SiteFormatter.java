@@ -22,8 +22,17 @@ import java.io.IOException;
  */
 public class SiteFormatter extends BaseFormatter {
 
+    /**
+     * Site template file name.
+     */
     private static final String SITE_TEMPLATE = "site.ftl";
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param templateConfiguration must not be {@code null} or empty
+     * @throws IOException if template file can't be read
+     */
     public SiteFormatter(final Configuration templateConfiguration) throws IOException {
         super(templateConfiguration, SITE_TEMPLATE);
     }

@@ -20,6 +20,7 @@ import freemarker.template.TemplateException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
@@ -66,6 +67,17 @@ public class Template implements Renderable, Assignable {
     }
 
     /**
+     * Creates a template from an template string.
+     *
+     * @param template must not be {@code null}
+     * @param encoding must not be {@code null}
+     * @throws IOException if template can't be opened
+     */
+    public Template(final String template, final String encoding) throws IOException {
+        this(Freemarker.createTemplate(template), encoding);
+    }
+
+    /**
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null}
@@ -93,6 +105,21 @@ public class Template implements Renderable, Assignable {
         Validate.notEmpty(encoding, "Encoding must not be null or empty!");
         this.template = template;
         this.encoding = encoding;
+    }
+
+    /**
+     * Assigns for a list of names an empty string.
+     *
+     * @param assignable must not be {@code null}
+     * @param names must not be {@code null}
+     */
+    public static void initializeVaribales(final Assignable assignable, final List<String> names) {
+        Validate.notNull(assignable, "Assignable must not be null!");
+        Validate.notNull(names, "Names must not be null!");
+
+        for (final String name : names) {
+            assignable.assignVariable(name, "");
+        }
     }
 
     /**
