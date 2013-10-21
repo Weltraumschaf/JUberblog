@@ -57,8 +57,7 @@ public class Template implements Renderable, Assignable {
      * Initializes {@link #encoding} with {@link Constants#DEFAULT_ENCODING}.
      *
      *
-     * @param templateConfiguration must not be {@code null}, file name relative to the template directory in
-     *                              {@link #templateConfiguration}
+     * @param templateConfiguration must not be {@code null}
      * @param templateFile must not be {@code null} or empty
      * @throws IOException if template can't be opened
      */
@@ -81,8 +80,7 @@ public class Template implements Renderable, Assignable {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null}
-     * @param templateFile must not be {@code null}, file name relative to the template directory in
-     *                     {@link #templateConfiguration}
+     * @param templateFile must not be {@code null}
      * @param encoding must not be {@code null} or empty
      * @throws IOException if template can't be opened
      */
