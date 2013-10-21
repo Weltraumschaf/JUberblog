@@ -40,6 +40,8 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * PublishSubCommand all sites from data directory.
  *
+ * TODO Generate slug URL from headline
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
