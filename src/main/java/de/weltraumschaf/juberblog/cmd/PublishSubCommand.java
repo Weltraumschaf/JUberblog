@@ -56,7 +56,6 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * Template configuration.
      */
     private Configuration templateConfig;
-    private Directories dirs;
 
     /**
      * Dedicated constructor.
@@ -75,15 +74,13 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         } catch (final IOException | URISyntaxException ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
         }
-
-        dirs= new Directories(getBlogConfiguration());
     }
 
     @Override
     public void run() throws ApplicationException {
         watch.reset();
         watch.start();
-        LOG.debug("Start pulishing...");
+        LOG.info("Start pulishing...");
 
         if (options.isSites()) {
             try {
@@ -100,7 +97,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         }
 
         watch.stop();
-        LOG.debug(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
+        LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }
 
     @Override
@@ -118,7 +115,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * Publish sites.
      */
     private void publishSites() throws IOException {
-        LOG.debug("Publish sites.");
+        LOG.info("Publish sites...");
         final Formatter fmt = new SiteFormatter(templateConfig);
         publishFiles(fmt, getBlogConfiguration().getDataDir() + "/sites");
     }
@@ -127,7 +124,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * Publish posts.
      */
     private void publisPosts() throws IOException {
-        LOG.debug("Publish posts.");
+        LOG.info("Publish posts...");
         final Formatter fmt = new PostFormatter(templateConfig);
         publishFiles(fmt, getBlogConfiguration().getDataDir() + "/posts");
 
@@ -161,7 +158,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         LOG.debug(String.format("Read file list from '%s'...", dirname));
         final ArrayList<File> files = Lists.newArrayList();
 
-        for (final File f : dirs.getDataDir().toFile().listFiles(new MarkdownFilenamefiler())) {
+        for (final File f : getDirectories().getDataDir().toFile().listFiles(new MarkdownFilenamefiler())) {
             files.add(f);
         }
 
@@ -178,15 +175,15 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     private void publishFile(final Formatter fmt, final File file) {
         Validate.notNull(fmt, "Layout must not be null!");
         Validate.notNull(file, "File name must not be null or empty!");
-        LOG.debug(String.format("Publish file '%s'...", file));
+        LOG.info(String.format("Publish file '%s'...", file));
 
         if (publishedFileExists(file)) {
-            LOG.debug(String.format("File %s already exists.", file));
+            LOG.info(String.format("File %s already exists.", file));
 
             if (options.isPurge()) {
-                LOG.debug("Purge option is true. File will be republished.");
+                LOG.info("Purge option is true. File will be republished.");
             } else {
-                LOG.debug("Skip file.");
+                LOG.info("Skip file.");
                 return;
             }
         }
