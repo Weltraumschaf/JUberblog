@@ -48,7 +48,7 @@ public final class Directories {
     /**
      * Dedicated constructor.
      *
-     * @param config must not be {@code null}
+     * @param config must not be {@literal null}
      */
     public Directories(final BlogConfiguration config) {
         super();
@@ -59,72 +59,72 @@ public final class Directories {
     /**
      * Get the data directory path.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getDataDir() {
+    public Path data() {
         return fs.getPath(config.getDataDir());
     }
 
     /**
      * Get the directory where the sites are stored.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getSitesDir() {
-        return getDataDir().resolve(SITES_DIR);
+    public Path dataSites() {
+        return data().resolve(SITES_DIR);
     }
 
     /**
      * Get the directory where the posts are stored.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getPostsDir() {
-        return getDataDir().resolve(POSTS_DIR);
+    public Path dataPosts() {
+        return data().resolve(POSTS_DIR);
     }
 
     /**
      * Get the directory where the drafts are stored.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getDraftsDir() {
-        return getDataDir().resolve(DRAFTS_DIR);
+    public Path dataDrafts() {
+        return data().resolve(DRAFTS_DIR);
     }
 
     /**
      * Get the directory where the site drafts are stored.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getSiteDraftsDir() {
-        return getDraftsDir().resolve(SITES_DIR);
+    public Path dataDraftSites() {
+        return dataDrafts().resolve(SITES_DIR);
     }
 
     /**
      * Get the directory where the post drafts are stored.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getPostDraftsDir() {
-        return getDraftsDir().resolve(POSTS_DIR);
+    public Path dataDraftPosts() {
+        return dataDrafts().resolve(POSTS_DIR);
     }
 
     /**
      * Get the template directory path.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getTemplateDir() {
+    public Path templates() {
         return fs.getPath(config.getTemplateDir());
     }
 
     /**
      * Get the htdocs directory path.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public Path getHtdocsDir() {
+    public Path htdocs() {
         return fs.getPath(config.getHtdocs());
     }
 

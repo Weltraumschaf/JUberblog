@@ -23,7 +23,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
  *
- * @param <T> type of options
+ * @param <>> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
@@ -37,7 +37,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     /**
      * Dedicated constructor.
      *
-     * @param io must not be {@code null}
+     * @param io must not be {@literal null}
      */
     public CommonCreateAndPublishSubCommand(IO io) {
         super(io);
@@ -71,7 +71,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     /**
      * Accessor for blog configuration provided by command line argument.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     protected BlogConfiguration getBlogConfiguration() {
         Validate.notNull(blogConfiguration, "Blog configuration must not be null!");
@@ -88,7 +88,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     /**
      * Accesor for directories.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     protected Directories getDirectories() {
         Validate.notNull(directories, "Directories must not be null!");

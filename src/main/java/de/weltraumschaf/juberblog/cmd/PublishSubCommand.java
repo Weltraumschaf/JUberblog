@@ -61,7 +61,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Dedicated constructor.
      *
-     * @param io must not be {@code null}
+     * @param io must not be {@literal null}
      */
     public PublishSubCommand(final IO io) {
         super(io);
@@ -71,7 +71,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     protected void init() throws ApplicationException {
         super.init();
         try {
-            templateConfig = Configurations.forProduction(getDirectories().getTemplateDir().toString());
+            templateConfig = Configurations.forProduction(getDirectories().templates().toString());
         } catch (final IOException | URISyntaxException ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
         }
@@ -117,7 +117,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publishSites() throws IOException {
         LOG.info("Publish sites...");
-        publishFiles(new SiteFormatter(templateConfig), getDirectories().getSitesDir());
+        publishFiles(new SiteFormatter(templateConfig), getDirectories().dataSites());
     }
 
     /**
@@ -125,14 +125,14 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publisPosts() throws IOException {
         LOG.info("Publish posts...");
-        publishFiles(new PostFormatter(templateConfig), getDirectories().getPostsDir());
+        publishFiles(new PostFormatter(templateConfig), getDirectories().dataPosts());
     }
 
     /**
      * Publish all files in given directory with given layout.
      *
-     * @param fmt must not be {@code null}
-     * @param dir must not be {@code null}
+     * @param fmt must not be {@literal null}
+     * @param dir must not be {@literal null}
      */
     private void publishFiles(final Formatter fmt, final Path dir) {
         Validate.notNull(fmt, "Layout must not be null!");
@@ -148,8 +148,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Read all files from a given directory.
      *
-     * @param dir must not be {@code null}
-     * @return never {@code null} or empty
+     * @param dir must not be {@literal null}
+     * @return never {@literal null} or empty
      */
     private List<File> readFileList(final Path dir) {
         Validate.notNull(dir, "Dir must not be null!");
@@ -167,8 +167,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Publish a given file with a given layout.
      *
-     * @param fmt must not be {@code null}
-     * @param file must not be {@code null} or empty
+     * @param fmt must not be {@literal null}
+     * @param file must not be {@literal null} or empty
      */
     private void publishFile(final Formatter fmt, final File file) {
         Validate.notNull(fmt, "Layout must not be null!");
@@ -192,8 +192,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Checks if a file to be published already exists.
      *
-     * @param filename must not be {@code null} or empty
-     * @return {@code true} if file already exists, else {@code false}
+     * @param filename must not be {@literal null} or empty
+     * @return {@literal true} if file already exists, else {@literal false}
      */
     private boolean publishedFileExists(final File filename) {
         // TODO Implement if file xist check
