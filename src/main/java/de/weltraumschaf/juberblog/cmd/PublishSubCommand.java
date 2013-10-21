@@ -31,7 +31,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
@@ -157,7 +156,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir) throws ApplicationException {
+    private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir)
+        throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
         Validate.notNull(dataDir, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
