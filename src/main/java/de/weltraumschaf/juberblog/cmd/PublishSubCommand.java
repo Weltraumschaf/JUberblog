@@ -24,12 +24,17 @@ import de.weltraumschaf.juberblog.formatter.SiteFormatter;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;
@@ -84,19 +89,10 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         LOG.info("Start pulishing...");
 
         if (options.isSites()) {
-            try {
-                publishSites();
-            } catch (final IOException ex) {
-                throw new ApplicationException(ExitCodeImpl.FATAL, "Can't publish sites!", ex);
-            }
+            publishSites();
         }
 
-        try {
-            publisPosts();
-        } catch (final IOException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't publish posts!", ex);
-        }
-
+        publisPosts();
         watch.stop();
         LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }
@@ -115,33 +111,49 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Publish sites.
      */
-    private void publishSites() throws IOException {
+    private void publishSites() throws ApplicationException {
         LOG.info("Publish sites...");
-        publishFiles(new SiteFormatter(templateConfig), getDirectories().dataSites());
+        try {
+            publishFiles(new SiteFormatter(templateConfig), getDirectories().dataSites(), getDirectories().htdocsSites());
+        } catch (final IOException ex) {
+            throw new ApplicationException(
+                ExitCodeImpl.FATAL,
+                String.format("Can't publish sites: %s!", ex.getMessage()),
+                ex);
+        }
     }
 
     /**
      * Publish posts.
      */
-    private void publisPosts() throws IOException {
+    private void publisPosts() throws ApplicationException {
         LOG.info("Publish posts...");
-        publishFiles(new PostFormatter(templateConfig), getDirectories().dataPosts());
+        try {
+            publishFiles(new PostFormatter(templateConfig), getDirectories().dataPosts(), getDirectories().htdocsPosts());
+        } catch (final IOException ex) {
+            throw new ApplicationException(
+                ExitCodeImpl.FATAL,
+                String.format("Can't publish posts: %s!", ex.getMessage()),
+                ex);
+        }
     }
 
     /**
      * Publish all files in given directory with given layout.
      *
      * @param fmt must not be {@literal null}
-     * @param dir must not be {@literal null}
+     * @param dataDir must not be {@literal null}
+     * @param outputDir must not be {@literal null}
      */
-    private void publishFiles(final Formatter fmt, final Path dir) {
+    private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir) throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
-        Validate.notNull(dir, "Dirname must not be null!");
-        LOG.debug(String.format("Pubish files from '%s'...", dir));
-        final List<File> fileList = readFileList(dir);
+        Validate.notNull(dataDir, "Dirname must not be null!");
+        Validate.notNull(outputDir, "Output dir must not be null!");
+        LOG.debug(String.format("Pubish files from '%s'...", dataDir));
+        final List<File> fileList = readFileList(dataDir);
 
         for (final File file : fileList) {
-            publishFile(fmt, file);
+            publishFile(fmt, file, outputDir);
         }
     }
 
@@ -169,11 +181,13 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      *
      * @param fmt must not be {@literal null}
      * @param file must not be {@literal null} or empty
+     * @param outputDir must not be {@literal null}
      */
-    private void publishFile(final Formatter fmt, final File file) {
+    private void publishFile(final Formatter fmt, final File file, final Path outputDir) throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
         Validate.notNull(file, "File name must not be null or empty!");
-        LOG.info(String.format("Publish file '%s'...", file));
+        Validate.notNull(outputDir, "Output dir must not be null!");
+        LOG.info(String.format("Publishing file '%s'...", file));
 
         if (publishedFileExists(file)) {
             LOG.info(String.format("File %s already exists.", file));
@@ -186,7 +200,18 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
             }
         }
 
-        // TODO Publish file.
+        try {
+            final String html = fmt.format(new FileInputStream(file));
+            final Path target = outputDir.resolve(file.getName());
+            LOG.info(String.format("Write published file to '%s'.", target));
+            Files.createFile(target);
+            Files.write(target, html.getBytes(Constants.DEFAULT_ENCODING.toString()), StandardOpenOption.WRITE);
+        } catch (final IOException | TemplateException ex) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL,
+                    String.format("Error occured during publishing: %s!", ex.getMessage()),
+                    ex);
+        }
     }
 
     /**
