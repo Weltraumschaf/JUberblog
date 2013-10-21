@@ -27,6 +27,7 @@ import freemarker.template.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
@@ -116,8 +117,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publishSites() throws IOException {
         LOG.info("Publish sites...");
-        final Formatter fmt = new SiteFormatter(templateConfig);
-        publishFiles(fmt, getBlogConfiguration().getDataDir() + "/sites");
+        publishFiles(new SiteFormatter(templateConfig), getDirectories().getSitesDir());
     }
 
     /**
@@ -125,22 +125,20 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publisPosts() throws IOException {
         LOG.info("Publish posts...");
-        final Formatter fmt = new PostFormatter(templateConfig);
-        publishFiles(fmt, getBlogConfiguration().getDataDir() + "/posts");
-
+        publishFiles(new PostFormatter(templateConfig), getDirectories().getPostsDir());
     }
 
     /**
      * Publish all files in given directory with given layout.
      *
      * @param fmt must not be {@code null}
-     * @param dirname must not be {@code null}
+     * @param dir must not be {@code null}
      */
-    private void publishFiles(final Formatter fmt, final String dirname) {
+    private void publishFiles(final Formatter fmt, final Path dir) {
         Validate.notNull(fmt, "Layout must not be null!");
-        Validate.notNull(dirname, "Dirname must not be null!");
-        LOG.debug(String.format("Pubish files from '%s'...", dirname));
-        final List<File> fileList = readFileList(dirname);
+        Validate.notNull(dir, "Dirname must not be null!");
+        LOG.debug(String.format("Pubish files from '%s'...", dir));
+        final List<File> fileList = readFileList(dir);
 
         for (final File file : fileList) {
             publishFile(fmt, file);
@@ -150,15 +148,15 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Read all files from a given directory.
      *
-     * @param dirname must not be {@code null}
+     * @param dir must not be {@code null}
      * @return never {@code null} or empty
      */
-    private List<File> readFileList(final String dirname) {
-        Validate.notEmpty(dirname, "Dirname must not be null or empty");
-        LOG.debug(String.format("Read file list from '%s'...", dirname));
+    private List<File> readFileList(final Path dir) {
+        Validate.notNull(dir, "Dir must not be null!");
+        LOG.debug(String.format("Read file list from '%s'...", dir));
         final ArrayList<File> files = Lists.newArrayList();
 
-        for (final File f : getDirectories().getDataDir().toFile().listFiles(new MarkdownFilenamefiler())) {
+        for (final File f : dir.toFile().listFiles(new MarkdownFilenamefiler())) {
             files.add(f);
         }
 

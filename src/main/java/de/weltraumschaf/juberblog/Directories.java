@@ -25,6 +25,18 @@ import org.apache.commons.lang3.Validate;
 public final class Directories {
 
     /**
+     * Name of sites sub directory.
+     */
+    private static final String SITES_DIR = "sites";
+    /**
+     * Name of posts sub directory.
+     */
+    private static final String POSTS_DIR = "posts";
+    /**
+     * Name of drafts sub directory.
+     */
+    private static final String DRAFTS_DIR = "drafts";
+    /**
      * Used to get configured base directories.
      */
     private final BlogConfiguration config;
@@ -51,6 +63,51 @@ public final class Directories {
      */
     public Path getDataDir() {
         return fs.getPath(config.getDataDir());
+    }
+
+    /**
+     * Get the directory where the sites are stored.
+     *
+     * @return never {@code null}
+     */
+    public Path getSitesDir() {
+        return getDataDir().resolve(SITES_DIR);
+    }
+
+    /**
+     * Get the directory where the posts are stored.
+     *
+     * @return never {@code null}
+     */
+    public Path getPostsDir() {
+        return getDataDir().resolve(POSTS_DIR);
+    }
+
+    /**
+     * Get the directory where the drafts are stored.
+     *
+     * @return never {@code null}
+     */
+    public Path getDraftsDir() {
+        return getDataDir().resolve(DRAFTS_DIR);
+    }
+
+    /**
+     * Get the directory where the site drafts are stored.
+     *
+     * @return never {@code null}
+     */
+    public Path getSiteDraftsDir() {
+        return getDraftsDir().resolve(SITES_DIR);
+    }
+
+    /**
+     * Get the directory where the post drafts are stored.
+     *
+     * @return never {@code null}
+     */
+    public Path getPostDraftsDir() {
+        return getDraftsDir().resolve(POSTS_DIR);
     }
 
     /**
