@@ -11,6 +11,6 @@
  */
 
 /**
- * All to format Markdown files
+ * All to format Markdown files.
  */
 package de.weltraumschaf.juberblog.formatter;

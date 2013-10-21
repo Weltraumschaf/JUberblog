@@ -11,13 +11,8 @@
  */
 package de.weltraumschaf.juberblog.template;
 
-import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.Filter;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.Test;

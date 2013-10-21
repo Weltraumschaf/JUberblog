@@ -30,7 +30,6 @@ public class MarkdownFilterTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-    private final FilterChain sut = new FilterChain();
 
     @Test
     public void constructWithNullThrowsExcpetion() {

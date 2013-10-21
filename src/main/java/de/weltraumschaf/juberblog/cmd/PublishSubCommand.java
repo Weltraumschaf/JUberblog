@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
-import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.MarkdownFilenamefiler;
 import de.weltraumschaf.juberblog.formatter.Formatter;
@@ -34,7 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;
@@ -110,11 +109,17 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
 
     /**
      * Publish sites.
+     *
+     * @throws ApplicationException if IO error occurs when configure templates
      */
     private void publishSites() throws ApplicationException {
         LOG.info("Publish sites...");
+
         try {
-            publishFiles(new SiteFormatter(templateConfig), getDirectories().dataSites(), getDirectories().htdocsSites());
+            publishFiles(
+                new SiteFormatter(templateConfig),
+                getDirectories().dataSites(),
+                getDirectories().htdocsSites());
         } catch (final IOException ex) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
@@ -125,11 +130,17 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
 
     /**
      * Publish posts.
+     *
+     * @throws ApplicationException if IO error occurs when configure templates
      */
     private void publisPosts() throws ApplicationException {
         LOG.info("Publish posts...");
+
         try {
-            publishFiles(new PostFormatter(templateConfig), getDirectories().dataPosts(), getDirectories().htdocsPosts());
+            publishFiles(
+                new PostFormatter(templateConfig),
+                getDirectories().dataPosts(),
+                getDirectories().htdocsPosts());
         } catch (final IOException ex) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
@@ -144,6 +155,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param fmt must not be {@literal null}
      * @param dataDir must not be {@literal null}
      * @param outputDir must not be {@literal null}
+     * @throws ApplicationException if can't render template
      */
     private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir) throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
@@ -182,6 +194,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param fmt must not be {@literal null}
      * @param file must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
+     * @throws ApplicationException if can't render template
      */
     private void publishFile(final Formatter fmt, final File file, final Path outputDir) throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
@@ -201,7 +214,9 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         }
 
         try {
-            final String html = fmt.format(new FileInputStream(file));
+            final FileInputStream input = new FileInputStream(file);
+            final String html = fmt.format(input);
+            IOUtils.closeQuietly(input);
             final Path target = outputDir.resolve(file.getName());
             LOG.info(String.format("Write published file to '%s'.", target));
             Files.createFile(target);

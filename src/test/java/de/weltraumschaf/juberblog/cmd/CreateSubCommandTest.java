@@ -13,8 +13,8 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import org.junit.Ignore;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
+//import static org.junit.Assert.assertThat;
+//import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 
 /**

@@ -47,13 +47,13 @@ abstract class BaseFormatter implements Formatter {
      */
     private static final String LAYOUT_TEMPLATE = "layout.ftl";
     /**
-     * Outer two step template.
-     */
-    private final Layout layout;
-    /**
      * Inner two step template.
      */
     protected final Layout content;
+    /**
+     * Outer two step template.
+     */
+    private final Layout layout;
 
     /**
      * Dedicated constructor.

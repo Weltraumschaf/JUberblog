@@ -91,7 +91,7 @@ public final class Configurations {
      * @throws URISyntaxException if template directory URI can't be created from class loader
      */
     private static Configuration configureTemplates(final String templateDirectory)
-            throws IOException, URISyntaxException {
+        throws IOException, URISyntaxException {
         Validate.notEmpty(templateDirectory, "Template directory must not be nul or empty!");
         LOG.debug("Configure templates for directory " + templateDirectory);
         final Configuration cfg = new Configuration();
