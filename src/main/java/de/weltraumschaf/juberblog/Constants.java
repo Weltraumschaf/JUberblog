@@ -45,7 +45,11 @@ public enum Constants {
     /**
      * NAme of the command line script.
      */
-    COMMAND_NAME("juberblog");
+    COMMAND_NAME("juberblog"),
+    /**
+     * Location of the default templates.
+     */
+    TEMPLATE_DIR("/de/weltraumschaf/juberblog/scaffold/templates");
 
     /**
      * Major version of Freemarker template engine.
