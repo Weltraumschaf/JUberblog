@@ -178,7 +178,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     private List<File> readFileList(final Path dir) {
         Validate.notNull(dir, "Dir must not be null!");
         LOG.debug(String.format("Read file list from '%s'...", dir));
-        final ArrayList<File> files = Lists.newArrayList();
+        final List<File> files = Lists.newArrayList();
 
         for (final File f : dir.toFile().listFiles(new MarkdownFilenamefiler())) {
             files.add(f);
