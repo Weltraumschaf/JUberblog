@@ -61,7 +61,7 @@ public class Preprocessor {
     /**
      * Holds recognized data.
      */
-    private Map<String, String> data = Maps.newHashMap();
+    private final Map<String, String> data = Maps.newHashMap();
 
     /**
      * Processes the input.
@@ -113,7 +113,19 @@ public class Preprocessor {
         return Maps.newHashMap(data);
     }
 
+    /**
+     * Recognizes key value pairs.
+     *
+     * Lines with errors (no key/value or empty key) line is skipped and warning logged.
+     * Empty values are logged but not skipped.
+     *
+     * This method adds the recognized data to {@link #data}.
+     *
+     * @param preprocesorBlocks must not be {@code null}
+     */
     private void recognizedData(final List<String> preprocesorBlocks) {
+        Validate.notNull(preprocesorBlocks, "PReprocesor block must not be null!");
+
         for (final String line : preprocesorBlocks) {
             final String[] tokens = line.split(SPLIT_TOKEN);
 
@@ -134,11 +146,10 @@ public class Preprocessor {
                 continue;
             }
 
-            final String value = tokens[0].trim();
+            final String value = tokens[1].trim();
 
             if (value.isEmpty()) {
                 LOG.warn(String.format("Empty value given: '%s'! Skipping line.", line));
-                continue;
             }
 
             data.put(name, value);

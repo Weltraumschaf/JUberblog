@@ -30,7 +30,7 @@ public class PreprocessorTest {
         assertThat(sut.getData().size(), is(0));
         assertThat(sut.process("<?juberblog\n"
                 + "  key1: value1\n"
-                + "  key2: value2\n"
+                + "  key2: \n"
                 + "  // comment\n"
                 + "  key3: value3\n"
                 + "?>\n"
@@ -39,11 +39,11 @@ public class PreprocessorTest {
                 + "  key4: value4\n"
                 + "?>\n"
                 + "foobar"), is(equalTo("snafu\nfoobar")));
-//        assertThat(sut.getData().size(), is(4));
-//        assertThat(sut.getData(), hasEntry("key1", "value1"));
-//        assertThat(sut.getData(), hasEntry("key2", "value2"));
-//        assertThat(sut.getData(), hasEntry("key3", "value3"));
-//        assertThat(sut.getData(), hasEntry("key4", "value4"));
+        assertThat(sut.getData().size(), is(4));
+        assertThat(sut.getData(), hasEntry("key1", "value1"));
+        assertThat(sut.getData(), hasEntry("key2", ""));
+        assertThat(sut.getData(), hasEntry("key3", "value3"));
+        assertThat(sut.getData(), hasEntry("key4", "value4"));
     }
 
 }
