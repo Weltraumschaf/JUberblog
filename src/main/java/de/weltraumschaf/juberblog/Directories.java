@@ -88,7 +88,7 @@ public final class Directories {
      *
      * @return never {@literal null}
      */
-    public Path dataDrafts() {
+    private Path dataDrafts() {
         return data().resolve(DRAFTS_DIR);
     }
 
@@ -126,6 +126,51 @@ public final class Directories {
      */
     public Path htdocs() {
         return fs.getPath(config.getHtdocs());
+    }
+
+    /**
+     * Get the directory to where sites will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsSites() {
+        return htdocs().resolve(SITES_DIR);
+    }
+
+    /**
+     * Get the directory to where posts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsPosts() {
+        return htdocs().resolve(POSTS_DIR);
+    }
+
+    /**
+     * Get the directory to where drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    private Path htdocsDrafts() {
+        return htdocs().resolve(DRAFTS_DIR);
+    }
+
+    /**
+     * Get the directory to where site drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsDraftSites() {
+        return htdocsDrafts().resolve(SITES_DIR);
+    }
+
+    /**
+     * Get the directory to where post drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsDraftPosts() {
+        return htdocsDrafts().resolve(DRAFTS_DIR);
     }
 
 }
