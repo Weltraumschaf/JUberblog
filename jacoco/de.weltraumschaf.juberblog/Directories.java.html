@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Directories.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Directories.java</span></div><h1>Directories.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog;
+
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Provides file system for all necessary directories.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class Directories {
+
+    /**
+     * Name of sites sub directory.
+     */
+    private static final String SITES_DIR = &quot;sites&quot;;
+    /**
+     * Name of posts sub directory.
+     */
+    private static final String POSTS_DIR = &quot;posts&quot;;
+    /**
+     * Name of drafts sub directory.
+     */
+    private static final String DRAFTS_DIR = &quot;drafts&quot;;
+    /**
+     * Used to get configured base directories.
+     */
+    private final BlogConfiguration config;
+    /**
+     * A default file system.
+     */
+<span class="nc" id="L46">    private final FileSystem fs = FileSystems.getDefault();</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param config must not be {@literal null}
+     */
+    public Directories(final BlogConfiguration config) {
+<span class="nc" id="L54">        super();</span>
+<span class="nc" id="L55">        Validate.notNull(config, &quot;Config must not be null!&quot;);</span>
+<span class="nc" id="L56">        this.config = config;</span>
+<span class="nc" id="L57">    }</span>
+
+    /**
+     * Get the data directory path.
+     *
+     * @return never {@literal null}
+     */
+    public Path data() {
+<span class="nc" id="L65">        return fs.getPath(config.getDataDir());</span>
+    }
+
+    /**
+     * Get the directory where the sites are stored.
+     *
+     * @return never {@literal null}
+     */
+    public Path dataSites() {
+<span class="nc" id="L74">        return data().resolve(SITES_DIR);</span>
+    }
+
+    /**
+     * Get the directory where the posts are stored.
+     *
+     * @return never {@literal null}
+     */
+    public Path dataPosts() {
+<span class="nc" id="L83">        return data().resolve(POSTS_DIR);</span>
+    }
+
+    /**
+     * Get the directory where the drafts are stored.
+     *
+     * @return never {@literal null}
+     */
+    private Path dataDrafts() {
+<span class="nc" id="L92">        return data().resolve(DRAFTS_DIR);</span>
+    }
+
+    /**
+     * Get the directory where the site drafts are stored.
+     *
+     * @return never {@literal null}
+     */
+    public Path dataDraftSites() {
+<span class="nc" id="L101">        return dataDrafts().resolve(SITES_DIR);</span>
+    }
+
+    /**
+     * Get the directory where the post drafts are stored.
+     *
+     * @return never {@literal null}
+     */
+    public Path dataDraftPosts() {
+<span class="nc" id="L110">        return dataDrafts().resolve(POSTS_DIR);</span>
+    }
+
+    /**
+     * Get the template directory path.
+     *
+     * @return never {@literal null}
+     */
+    public Path templates() {
+<span class="nc" id="L119">        return fs.getPath(config.getTemplateDir());</span>
+    }
+
+    /**
+     * Get the htdocs directory path.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocs() {
+<span class="nc" id="L128">        return fs.getPath(config.getHtdocs());</span>
+    }
+
+    /**
+     * Get the directory to where sites will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsSites() {
+<span class="nc" id="L137">        return htdocs().resolve(SITES_DIR);</span>
+    }
+
+    /**
+     * Get the directory to where posts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsPosts() {
+<span class="nc" id="L146">        return htdocs().resolve(POSTS_DIR);</span>
+    }
+
+    /**
+     * Get the directory to where drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    private Path htdocsDrafts() {
+<span class="nc" id="L155">        return htdocs().resolve(DRAFTS_DIR);</span>
+    }
+
+    /**
+     * Get the directory to where site drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsDraftSites() {
+<span class="nc" id="L164">        return htdocsDrafts().resolve(SITES_DIR);</span>
+    }
+
+    /**
+     * Get the directory to where post drafts will be published.
+     *
+     * @return never {@literal null}
+     */
+    public Path htdocsDraftPosts() {
+<span class="nc" id="L173">        return htdocsDrafts().resolve(DRAFTS_DIR);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

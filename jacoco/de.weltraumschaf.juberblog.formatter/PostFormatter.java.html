@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PostFormatter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.formatter</a> &gt; <span class="el_source">PostFormatter.java</span></div><h1>PostFormatter.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.formatter;
+
+import com.google.common.collect.Maps;
+import de.weltraumschaf.juberblog.template.Template;
+import freemarker.template.Configuration;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Formats a blog post.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class PostFormatter extends BaseFormatter {
+
+    /**
+     * Template variable for feature switching.
+     */
+<span class="fc" id="L33">    private static final Map&lt;String, Boolean&gt; FEATURES = Maps.newHashMap();</span>
+    static {
+<span class="fc" id="L35">        FEATURES.put(&quot;rating&quot;, Boolean.FALSE);</span>
+<span class="fc" id="L36">        FEATURES.put(&quot;comments&quot;, Boolean.FALSE);</span>
+    }
+    /**
+     * Template variable name for date formatted.
+     */
+    private static final String DATE_FORMATTED = &quot;date_formatted&quot;;
+    /**
+     * Template variable name for previous post.
+     */
+    private static final String PREV_POST = &quot;prevPost&quot;;
+    /**
+     * Template variable name for next post.
+     */
+    private static final String NEXT_POST = &quot;nextPost&quot;;
+    /**
+     * Global available variable names.
+     */
+<span class="fc" id="L53">    private static final List&lt;String&gt; GLOBAL_VARIABLE_NAMES = Arrays.asList(DATE_FORMATTED, PREV_POST, NEXT_POST);</span>
+    /**
+     * Post template file name.
+     */
+    private static final String TEMPLATE = &quot;post.ftl&quot;;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param templateConfiguration must not be {@code null} or empty
+     * @throws IOException if template file can't be read
+     */
+    public PostFormatter(final Configuration templateConfiguration) throws IOException {
+<span class="fc" id="L66">        super(templateConfiguration, TEMPLATE);</span>
+<span class="fc" id="L67">        content.assignVariable(&quot;features&quot;, FEATURES);</span>
+<span class="fc" id="L68">        Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Set the date when post was formatted.
+     *
+     * @param date must not be {@code null}
+     */
+    public void setDateFormatted(final String date) {
+<span class="fc" id="L77">        Validate.notNull(date, &quot;Date must not be null&quot;);</span>
+<span class="fc" id="L78">        content.assignVariable(DATE_FORMATTED, date);</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Set the previous post URI.
+     *
+     * @param prevPost must not be {@code null}
+     */
+    public void setPrevPost(final String prevPost) {
+<span class="nc" id="L87">        Validate.notNull(prevPost, &quot;Prev post must not be null&quot;);</span>
+<span class="nc" id="L88">        content.assignVariable(PREV_POST, prevPost);</span>
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Set the next post URI.
+     *
+     * @param nextPost must not be {@code null}
+     */
+    public void setNextPost(final String nextPost) {
+<span class="nc" id="L97">        Validate.notNull(nextPost, &quot;Next post must not be null&quot;);</span>
+<span class="nc" id="L98">        content.assignVariable(NEXT_POST, nextPost);</span>
+<span class="nc" id="L99">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

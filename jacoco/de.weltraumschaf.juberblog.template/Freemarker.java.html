@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Freemarker.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.template</a> &gt; <span class="el_source">Freemarker.java</span></div><h1>Freemarker.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog.template;
+
+import java.io.IOException;
+
+/**
+ * Helper to wrap Freemarker.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+final class Freemarker {
+
+    /**
+     * Hidden for pure static class.
+     */
+    private Freemarker() {
+<span class="nc" id="L28">        super();</span>
+<span class="nc" id="L29">    }</span>
+
+    /**
+     * Creates an original Freemarker template with empty name and null configuration.
+     *
+     * @param template must not be {@code null}
+     * @return always new instance
+     * @throws IOException if any IO error happens
+     */
+    public static freemarker.template.Template createTemplate(final String template) throws IOException {
+<span class="fc" id="L39">        return new freemarker.template.Template(&quot;&quot;, template, null);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FilterChain.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.filter</a> &gt; <span class="el_source">FilterChain.java</span></div><h1>FilterChain.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog.filter;
+
+import com.google.common.collect.Lists;
+import java.util.List;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Chains single filters.
+ *
+ * Filters will be applied on input in same order like tey were added.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="fc" id="L26">public class FilterChain implements Filter {</span>
+
+    /**
+     * Holds added filters.
+     */
+<span class="fc" id="L31">    private final List&lt;Filter&gt; filters = Lists.newArrayList();</span>
+
+    /**
+     * Add an filter.
+     *
+     * Filters may be added multiple times.
+     *
+     * @param filter must not be {@code null}
+     */
+    public void add(final Filter filter) {
+<span class="fc" id="L41">        Validate.notNull(filter, &quot;Filter must not be null!&quot;);</span>
+<span class="fc" id="L42">        filters.add(filter);</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param input must not be {@code null}
+     * @return same as input if no filters added
+     */
+    @Override
+    public String apply(final String input) {
+<span class="fc" id="L53">        Validate.notNull(input, &quot;Input must not be null!&quot;);</span>
+<span class="fc" id="L54">        String processed = input;</span>
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (final Filter filter : filters) {</span>
+<span class="fc" id="L57">            processed = filter.apply(processed);</span>
+<span class="fc" id="L58">        }</span>
+
+<span class="fc" id="L60">        return processed;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

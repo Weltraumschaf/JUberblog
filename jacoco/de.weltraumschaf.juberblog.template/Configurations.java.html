@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Configurations.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.template</a> &gt; <span class="el_source">Configurations.java</span></div><h1>Configurations.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.template;
+
+import de.weltraumschaf.juberblog.Constants;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.TemplateExceptionHandler;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import org.apache.commons.lang3.Validate;
+import org.apache.log4j.Logger;
+
+/**
+ * Factory to create template configurations.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class Configurations {
+
+    /**
+     * Log facility.
+     */
+<span class="fc" id="L34">    private static final Logger LOG = Logger.getLogger(Configurations.class);</span>
+
+    /**
+     * Hidden for pure static factory.
+     */
+    private Configurations() {
+<span class="nc" id="L40">        super();</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Creates a configuration with an exception handler which logs and rethrows exceptions.
+     *
+     * @param templateDirectory must not be {@code null} or empty
+     * @return always new instance, never {@code null}
+     * @throws IOException on ani I/O error reading the template directory
+     * @throws URISyntaxException on any URI error for template directory
+     */
+    public static Configuration forTests(final String templateDirectory) throws IOException, URISyntaxException {
+<span class="fc" id="L52">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="fc" id="L53">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);</span>
+<span class="fc" id="L54">        return cfg;</span>
+    }
+
+    /**
+     * Creates a configuration with an exception handler which ignores template errors.
+     *
+     * @param templateDirectory must not be {@code null} or empty
+     * @return always new instance, never {@code null}
+     * @throws IOException on ani I/O error reading the template directory
+     * @throws URISyntaxException on any URI error for template directory
+     */
+    public static Configuration forProduction(final String templateDirectory) throws IOException, URISyntaxException {
+<span class="nc" id="L66">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="nc" id="L67">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);</span>
+<span class="nc" id="L68">        return cfg;</span>
+    }
+
+    /**
+     * Creates a configuration with an exception handler which add template errors as HTML to output.
+     *
+     * @param templateDirectory must not be {@code null} or empty
+     * @return always new instance, never {@code null}
+     * @throws IOException on ani I/O error reading the template directory
+     * @throws URISyntaxException on any URI error for template directory
+     */
+    public static Configuration forDrafts(final String templateDirectory) throws IOException, URISyntaxException {
+<span class="nc" id="L80">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="nc" id="L81">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);</span>
+<span class="nc" id="L82">        return cfg;</span>
+    }
+
+    /**
+     * Configure templates and returns configuration.
+     *
+     * @param templateDirectory must not be {@code null} or empty
+     * @return never {@code null}
+     * @throws IOException if template directory can't be read
+     * @throws URISyntaxException if template directory URI can't be created from class loader
+     */
+    private static Configuration configureTemplates(final String templateDirectory)
+        throws IOException, URISyntaxException {
+<span class="fc" id="L95">        Validate.notEmpty(templateDirectory, &quot;Template directory must not be nul or empty!&quot;);</span>
+<span class="fc" id="L96">        LOG.debug(&quot;Configure templates for directory &quot; + templateDirectory);</span>
+<span class="fc" id="L97">        final Configuration cfg = new Configuration();</span>
+<span class="fc" id="L98">        cfg.setObjectWrapper(new DefaultObjectWrapper());</span>
+<span class="fc" id="L99">        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());</span>
+<span class="fc" id="L100">        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);</span>
+
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (templateDirectory.startsWith(&quot;/de/weltraumschaf/juberblog/&quot;)) {</span>
+            // Read resources via class loader for tests.
+<span class="fc" id="L104">            cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));</span>
+        } else {
+<span class="nc" id="L106">            cfg.setDirectoryForTemplateLoading(new File(templateDirectory));</span>
+        }
+
+<span class="fc" id="L109">        return cfg;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -14,9 +14,11 @@ package de.weltraumschaf.juberblog.cmd;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
+import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
@@ -30,21 +32,26 @@ abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPublishOpt
      * Loaded from file.
      */
     private BlogConfiguration blogConfiguration;
+    /**
+     * Directories of the blog.
+     */
+    private Directories directories;
 
     /**
      * Dedicated constructor.
      *
-     * @param io must not be {@code null}
+     * @param io must not be {@literal null}
      */
     public CommonCreateAndPublishSubCommand(IO io) {
-<span class="fc" id="L40">        super(io);</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L46">        super(io);</span>
+<span class="fc" id="L47">    }</span>
 
     @Override
     protected void init() throws ApplicationException {
-<span class="nc" id="L45">        super.init();</span>
-<span class="nc" id="L46">        loadBlogConfiguration();</span>
-<span class="nc" id="L47">    }</span>
+<span class="nc" id="L51">        super.init();</span>
+<span class="nc" id="L52">        loadBlogConfiguration();</span>
+<span class="nc" id="L53">        loadDirectories();</span>
+<span class="nc" id="L54">    }</span>
 
     /**
      * Load the configuration file.
@@ -54,23 +61,41 @@ abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPublishOpt
     private void loadBlogConfiguration() throws ApplicationException {
         // TODO Argument validation.
         try {
-<span class="nc" id="L57">            blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());</span>
-<span class="nc" id="L58">            blogConfiguration.load();</span>
-<span class="nc" id="L59">        } catch (IOException | IllegalArgumentException | NullPointerException ex) {</span>
-<span class="nc" id="L60">            throw new ApplicationException(</span>
+<span class="nc" id="L64">            blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());</span>
+<span class="nc" id="L65">            blogConfiguration.load();</span>
+<span class="nc" id="L66">        } catch (IOException | IllegalArgumentException | NullPointerException ex) {</span>
+<span class="nc" id="L67">            throw new ApplicationException(</span>
                     ExitCodeImpl.CANT_LOAD_CONFIG,
                     String.format(&quot;Can't load configuration file '%s'!&quot;, getOptions().getConfigurationFile()),
                     ex);
-<span class="nc" id="L64">        }</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">    }</span>
 
     /**
      * Accessor for blog configuration provided by command line argument.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     protected BlogConfiguration getBlogConfiguration() {
-<span class="nc" id="L73">        return blogConfiguration;</span>
+<span class="nc" id="L80">        Validate.notNull(blogConfiguration, &quot;Blog configuration must not be null!&quot;);</span>
+<span class="nc" id="L81">        return blogConfiguration;</span>
+    }
+
+    /**
+     * Load directories from configuration.
+     */
+    private void loadDirectories() {
+<span class="nc" id="L88">        directories = new Directories(blogConfiguration);</span>
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Accesor for directories.
+     *
+     * @return never {@literal null}
+     */
+    protected Directories getDirectories() {
+<span class="nc" id="L97">        Validate.notNull(directories, &quot;Directories must not be null!&quot;);</span>
+<span class="nc" id="L98">        return directories;</span>
     }
 
 }

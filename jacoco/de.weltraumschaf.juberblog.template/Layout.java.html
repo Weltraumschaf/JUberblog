@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Layout.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.template</a> &gt; <span class="el_source">Layout.java</span></div><h1>Layout.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.template;
+
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Extends the {@link Template template} to provide a two step layout.
+ *
+ * Provides base variables such as title, encoding etc to the layout and inner content template.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class Layout extends Template {
+
+    /**
+     * Variable key for title.
+     */
+    private static final String TITLE = &quot;title&quot;;
+    /**
+     * Variable key for content.
+     */
+    private static final String CONTENT = &quot;content&quot;;
+    /**
+     * Variable key for encoding.
+     */
+    private static final String ENCODING = &quot;encoding&quot;;
+    /**
+     * Variable key for description.
+     */
+    private static final String DESCRIPTION = &quot;description&quot;;
+    /**
+     * Variable key for base URI.
+     */
+    private static final String BASE_URI = &quot;basetUri&quot;;
+    /**
+     * All these variables are assigned to {@link #content} if it is type of {@link Template}.
+     */
+<span class="fc" id="L53">    private static final List&lt;String&gt; GLOBAL_VARIABLE_NAMES = Arrays.asList(</span>
+            TITLE, ENCODING, DESCRIPTION, BASE_URI
+    );
+    /**
+     * Inner template to render content string.
+     */
+<span class="fc" id="L59">    private Renderable content = new DefaultContent();</span>
+
+    /**
+     * Initializes all provided template variables with empty strings as default.
+     *
+     * @param templateConfiguration must not be {@code null}
+     * @param layoutTemplateFile must not be {@code null}
+     * @throws IOException if template can't be opened
+     */
+    public Layout(final Configuration templateConfiguration, final String layoutTemplateFile) throws IOException {
+<span class="fc" id="L69">        super(templateConfiguration, layoutTemplateFile);</span>
+<span class="fc" id="L70">        initializeVaribales();</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Initializes all {@link #GLOBAL_VARIABLE_NAMES global varibales} with an empty string.
+     */
+    private void initializeVaribales() {
+<span class="fc" id="L77">        initializeVaribales(this, GLOBAL_VARIABLE_NAMES);</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Assign the title to the layout template.
+     *
+     * @param title must not be {@code null}
+     */
+    public void setTitle(final String title) {
+<span class="fc" id="L86">        assignVariable(TITLE, title);</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Assign the description to the layout template.
+     *
+     * @param description must not be {@code null}
+     */
+    public void setDescription(final String description) {
+<span class="fc" id="L95">        assignVariable(DESCRIPTION, description);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Assign the encoding to the layout template.
+     *
+     * @param encoding must not be {@code null}
+     */
+    public void setEncoding(final String encoding) {
+<span class="fc" id="L104">        assignVariable(ENCODING, encoding);</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Assign the baseURI to the layout template.
+     *
+     * @param baseUri must not be {@code null}
+     */
+    public void setBaseUri(final String baseUri) {
+<span class="nc" id="L113">        assignVariable(BASE_URI, baseUri);</span>
+<span class="nc" id="L114">    }</span>
+
+    /**
+     * Set the inner content template.
+     *
+     * @param content must not be {@code null}
+     */
+    public void setContent(final Renderable content) {
+<span class="fc" id="L122">        Validate.notNull(content, &quot;Content template must not be null!&quot;);</span>
+<span class="fc" id="L123">        this.content = content;</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Set the content string.
+     *
+     * @param content must not be {@code null}
+     */
+    public void setContent(final String content) {
+<span class="fc" id="L132">        Validate.notNull(content);</span>
+<span class="fc" id="L133">        setContent(new DefaultContent(content));</span>
+<span class="fc" id="L134">    }</span>
+
+    @Override
+    public String render() throws IOException, TemplateException {
+<span class="fc" id="L138">        copyLayoutVariablestoContent();</span>
+<span class="fc" id="L139">        assignVariable(CONTENT, content.render());</span>
+
+<span class="fc" id="L141">        return super.render();</span>
+    }
+
+    /**
+     * Copies all variables assigned to the layout to the inner content template.
+     */
+    private void copyLayoutVariablestoContent() {
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (content instanceof Assignable) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            for (final String name : GLOBAL_VARIABLE_NAMES) {</span>
+<span class="fc" id="L150">                ((Assignable) content).assignVariable(name, getVariable(name));</span>
+<span class="fc" id="L151">            }</span>
+        }
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Used as a default template which does only contains a string.
+     */
+    private static final class DefaultContent implements Renderable {
+
+        /**
+         * String which will be used as rendered output.
+         */
+        private final String content;
+
+        /**
+         * Initializes the rendered output with an empty string.
+         */
+        public DefaultContent() {
+<span class="fc" id="L169">            this(&quot;&quot;);</span>
+<span class="fc" id="L170">        }</span>
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param content must not be {@code null}
+         */
+        public DefaultContent(final String content) {
+<span class="fc" id="L178">            super();</span>
+<span class="fc" id="L179">            Validate.notNull(content, &quot;Content must not be null!&quot;);</span>
+<span class="fc" id="L180">            this.content = content;</span>
+<span class="fc" id="L181">        }</span>
+
+        @Override
+        public String render() throws IOException, TemplateException {
+<span class="fc" id="L185">            return content;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
