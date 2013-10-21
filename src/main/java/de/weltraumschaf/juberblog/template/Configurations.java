@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.template;
 
 import de.weltraumschaf.juberblog.Constants;
@@ -20,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.commons.lang3.Validate;
+import org.apache.log4j.Logger;
 
 /**
  * Factory to create template configurations.
@@ -27,6 +27,11 @@ import org.apache.commons.lang3.Validate;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Configurations {
+
+    /**
+     * Log facility.
+     */
+    private static final Logger LOG = Logger.getLogger(Configurations.class);
 
     /**
      * Hidden for pure static factory.
@@ -86,15 +91,21 @@ public final class Configurations {
      * @throws URISyntaxException if template directory URI can't be created from class loader
      */
     private static Configuration configureTemplates(final String templateDirectory)
-        throws IOException, URISyntaxException {
+            throws IOException, URISyntaxException {
         Validate.notEmpty(templateDirectory, "Template directory must not be nul or empty!");
+        LOG.debug("Configure templates for directory " + templateDirectory);
         final Configuration cfg = new Configuration();
-        cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));
         cfg.setObjectWrapper(new DefaultObjectWrapper());
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
+
+        if (templateDirectory.startsWith("de/weltraumschaf/juberblog/") || templateDirectory.startsWith("/de/weltraumschaf/juberblog/")) {
+            cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));
+        } else {
+            cfg.setDirectoryForTemplateLoading(new File(templateDirectory));
+        }
+
         return cfg;
     }
-
 
 }
