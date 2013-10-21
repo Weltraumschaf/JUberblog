@@ -14,9 +14,11 @@ package de.weltraumschaf.juberblog.cmd;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
+import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
@@ -30,6 +32,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
      * Loaded from file.
      */
     private BlogConfiguration blogConfiguration;
+    private Directories directories;
 
     /**
      * Dedicated constructor.
@@ -44,6 +47,7 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
     protected void init() throws ApplicationException {
         super.init();
         loadBlogConfiguration();
+        loadDirectories();
     }
 
     /**
@@ -70,7 +74,25 @@ abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOption
      * @return never {@code null}
      */
     protected BlogConfiguration getBlogConfiguration() {
+        Validate.notNull(blogConfiguration, "Blog configuration must not be null!");
         return blogConfiguration;
+    }
+
+    /**
+     * Load directories from configuration.
+     */
+    private void loadDirectories() {
+        directories = new Directories(blogConfiguration);
+    }
+
+    /**
+     * Accesor for directories.
+     *
+     * @return never {@code null}
+     */
+    protected Directories getDirectories() {
+        Validate.notNull(directories, "Directories must not be null!");
+        return directories;
     }
 
 }

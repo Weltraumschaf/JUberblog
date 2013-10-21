@@ -99,7 +99,8 @@ public final class Configurations {
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
 
-        if (templateDirectory.startsWith("de/weltraumschaf/juberblog/") || templateDirectory.startsWith("/de/weltraumschaf/juberblog/")) {
+        if (templateDirectory.startsWith("/de/weltraumschaf/juberblog/")) {
+            // Read resources via class loader for tests.
             cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));
         } else {
             cfg.setDirectoryForTemplateLoading(new File(templateDirectory));
