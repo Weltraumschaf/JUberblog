@@ -1,0 +1,82 @@
+/*
+ *  LICENSE
+ *
+ * "THE BEER-WARE LICENSE" (Revision 43):
+ * "Sven Strittmatter" <weltraumschaf@googlemail.com> wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
+ */
+package de.weltraumschaf.juberblog;
+
+import java.util.Map;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Contains meta data found by {@link Preprocessor} in a data file.
+ *
+ * @author Sven Strittmatter <weltraumschaf@googlemail.com>
+ */
+public class MetaData {
+
+    /**
+     * Returned by default if a property is not set.
+     */
+    private static final String DEFAULT_VALUE = "";
+    /**
+     * Navigation property key.
+     */
+    private static final String KEY_NAVI = "Navi";
+    /**
+     * Description property key.
+     */
+    private static final String KEY_DESCRIPTION = "Description";
+    /**
+     * Keywords property key.
+     */
+    private static final String KEY_KEYWORDS = "Keywords";
+    /**
+     * Data map.
+     */
+    private final Map<String, String> data;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param data must not be {@code null}
+     */
+    public MetaData(final Map<String, String> data) {
+        super();
+        Validate.notNull(data, "Data must not be null!");
+        this.data = data;
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    private String get(final String key) {
+        Validate.notEmpty(key, "Key must not be null or empty!");
+
+        if (data.containsKey(key)) {
+            return data.get(key);
+        }
+
+        return DEFAULT_VALUE;
+    }
+
+    public String getNavi() {
+        return get(KEY_NAVI);
+    }
+
+    public String getDescription() {
+        return get(KEY_DESCRIPTION);
+    }
+
+    public String getKeywords() {
+        return get(KEY_KEYWORDS);
+    }
+}
