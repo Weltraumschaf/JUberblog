@@ -36,7 +36,7 @@ public class BlogConfigurationTest {
         final String baseDir = System.getProperty("user.dir");
         final String fileName = baseDir + DIR_SEP
                 + PACKAGE.replace(".", DIR_SEP)
-                + DIR_SEP + "configuration.properties";
+                + DIR_SEP + "configuration.sample.properties";
         sut = new BlogConfiguration(fileName);
         sut.load();
     }
