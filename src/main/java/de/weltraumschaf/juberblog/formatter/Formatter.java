@@ -24,7 +24,7 @@ import java.io.InputStream;
 public interface Formatter {
 
     /**
-     * Formats the input to string.
+     * Formats the input file to string.
      *
      * @param markdownFile must not be {@code null}
      * @return never {@code null}
@@ -32,5 +32,14 @@ public interface Formatter {
      * @throws TemplateException the template produce any parse errors
      */
     String format(final InputStream markdownFile) throws IOException, TemplateException;
+    /**
+     * Formats the input string to string.
+     *
+     * @param markdown must not be {@code null}
+     * @return never {@code null}
+     * @throws IOException if markdown or any template can't be read
+     * @throws TemplateException the template produce any parse errors
+     */
+    String format(final String markdown) throws IOException, TemplateException;
 
 }

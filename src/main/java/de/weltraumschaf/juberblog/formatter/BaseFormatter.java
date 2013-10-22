@@ -73,7 +73,14 @@ abstract class BaseFormatter implements Formatter {
 
     @Override
     public String format(final InputStream markdownFile) throws IOException, TemplateException {
-        final Template input = new Template(IOUtils.toString(markdownFile), Constants.DEFAULT_ENCODING.toString());
+        Validate.notNull(markdownFile, "Markdown file must not be null!");
+        return format(IOUtils.toString(markdownFile));
+    }
+
+    @Override
+    public String format(final String markdown) throws IOException, TemplateException {
+        Validate.notNull(markdown, "Markdown string must not be null!");
+        final Template input = new Template(markdown, Constants.DEFAULT_ENCODING.toString());
         input.addPostFilter(new MarkdownFilter());
         content.setContent(input);
         return layout.render();

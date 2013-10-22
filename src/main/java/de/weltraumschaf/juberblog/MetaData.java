@@ -11,16 +11,20 @@
  */
 package de.weltraumschaf.juberblog;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
 /**
  * Contains meta data found by {@link Preprocessor} in a data file.
  *
+ * This object is immutable.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class MetaData {
 
+    public static final MetaData DEFAULT = new MetaData();
     /**
      * Returned by default if a property is not set.
      */
@@ -41,6 +45,10 @@ public class MetaData {
      * Data map.
      */
     private final Map<String, String> data;
+
+    public MetaData() {
+        this(Maps.<String, String>newHashMap());
+    }
 
     /**
      * Dedicated constructor.
