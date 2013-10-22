@@ -114,6 +114,15 @@ public class Preprocessor {
     }
 
     /**
+     * Get the {@link #getData() data} as meta data object.
+     *
+     * @return never {@code null}, always new instance
+     */
+    public MetaData getMetaData() {
+        return new MetaData(getData());
+    }
+
+    /**
      * Recognizes key value pairs.
      *
      * Lines with errors (no key/value or empty key) line is skipped and warning logged.

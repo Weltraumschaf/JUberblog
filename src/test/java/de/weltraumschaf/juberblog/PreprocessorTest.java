@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import org.junit.Test;
@@ -44,6 +43,19 @@ public class PreprocessorTest {
         assertThat(sut.getData(), hasEntry("key2", ""));
         assertThat(sut.getData(), hasEntry("key3", "value3"));
         assertThat(sut.getData(), hasEntry("key4", "value4"));
+    }
+
+    @Test
+    public void getMetaData() {
+        sut.process("<?juberblog\n"
+                + "    Navi: Projects\n"
+                + "    Description: My personal projects I'm working on\n"
+                + "    Keywords: Projects, Jenkins, Darcs\n"
+                + "?>");
+        final MetaData data = sut.getMetaData();
+        assertThat(data.getNavi(), is(equalTo("Projects")));
+        assertThat(data.getDescription(), is(equalTo("My personal projects I'm working on")));
+        assertThat(data.getKeywords(), is(equalTo("Projects, Jenkins, Darcs")));
     }
 
 }
