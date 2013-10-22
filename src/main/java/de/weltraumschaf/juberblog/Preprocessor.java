@@ -28,12 +28,12 @@ import org.apache.log4j.Logger;
  * Example:
  * <pre>
  * ...
- * <?juberblog
- * key1: value1
- * key2: value2
- * // ...
- * keyN: valueN
- * ?>
+ * &gt;?juberblog
+ *   key1: value1
+ *   key2: value2
+ *   // ...
+ *   keyN: valueN
+ * ?&lt;
  * ...
  * </pre>
  *

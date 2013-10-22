@@ -54,9 +54,10 @@ public class MetaData {
     }
 
     /**
+     * Get a key from {@link #data} which never returns {@code null}.
      *
-     * @param key
-     * @return
+     * @param key must not be {@code null} or empty
+     * @return never {@code null}, maybe empty
      */
     private String get(final String key) {
         Validate.notEmpty(key, "Key must not be null or empty!");
@@ -68,15 +69,31 @@ public class MetaData {
         return DEFAULT_VALUE;
     }
 
+    /**
+     * Get navigation data.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getNavi() {
         return get(KEY_NAVI);
     }
 
+    /**
+     * Get description data.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getDescription() {
         return get(KEY_DESCRIPTION);
     }
 
+    /**
+     * Get keywords data.
+     *
+     * @return never {@code null}, maybe empty
+     */
     public String getKeywords() {
         return get(KEY_KEYWORDS);
     }
+
 }
