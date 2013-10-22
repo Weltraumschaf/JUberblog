@@ -11,11 +11,23 @@
         - site
         - post
     - embed formatted content in layout template and format
-- Metainformation
-    - preparse block of `<?juberblog (key:value)* ?>`
 - Categories
 - RSS
 
 ## Bugs
 
-- fix help in all sub commands commands
+## Publish Sub Command
+
+- publish all posts
+    - read all data files
+    - preprocess meta data
+    - extract slug
+    - check if already published
+        - if exists publish if purge
+        - else publish file
+            - assign meta data
+            - write file
+- if sites publish all sites
+    - same as post
+- generate feed.xml
+- generate sitemap.xml
