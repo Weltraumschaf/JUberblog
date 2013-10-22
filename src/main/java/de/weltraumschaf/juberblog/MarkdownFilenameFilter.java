@@ -13,13 +13,14 @@ package de.weltraumschaf.juberblog;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Accept Markdown files.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class MarkdownFilenamefiler implements FilenameFilter {
+public class MarkdownFilenameFilter implements FilenameFilter {
 
     /**
      * File extension of Markdown files.
@@ -28,6 +29,7 @@ public class MarkdownFilenamefiler implements FilenameFilter {
 
     @Override
     public boolean accept(final File dir, final String name) {
+        Validate.notNull(name, "Name must not be null!");
         return name.endsWith(FILE_EXTENSION);
     }
 
