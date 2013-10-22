@@ -138,7 +138,7 @@ public class Preprocessor {
         for (final String line : preprocesorBlocks) {
             final String[] tokens = line.split(SPLIT_TOKEN);
 
-            if (null == tokens[0]) {
+            if (tokens.length == 0) {
                 LOG.warn(String.format("No key given: '%s'! Skipping line.", line));
                 continue;
             }
@@ -150,7 +150,7 @@ public class Preprocessor {
                 continue;
             }
 
-            if (null == tokens[1]) {
+            if (tokens.length == 1) {
                 LOG.warn(String.format("No value given: '%s'! Skipping line.", line));
                 continue;
             }

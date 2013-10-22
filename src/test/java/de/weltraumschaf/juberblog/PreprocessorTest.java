@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.Ignore;
 
 /**
  * Tests for {@link Preprocessor}.
@@ -58,4 +59,51 @@ public class PreprocessorTest {
         assertThat(data.getKeywords(), is(equalTo("Projects, Jenkins, Darcs")));
     }
 
+    @Test
+    public void recognizedData_ignoreMissingKey() {
+        sut.process("<?juberblog\n"
+                + "    Navi: Projects\n"
+                + ": My personal projects I'm working on\n"
+                + "    Keywords: Projects, Jenkins, Darcs\n"
+                + "?>");
+        assertThat(sut.getData().size(), is(2));
+        assertThat(sut.getData(), hasEntry("Navi", "Projects"));
+        assertThat(sut.getData(), hasEntry("Keywords", "Projects, Jenkins, Darcs"));
+    }
+
+    @Test
+    public void recognizedData_ignoreEmptyKey() {
+        sut.process("<?juberblog\n"
+                + "    Navi: Projects\n"
+                + "        : My personal projects I'm working on\n"
+                + "    Keywords: Projects, Jenkins, Darcs\n"
+                + "?>");
+        assertThat(sut.getData().size(), is(2));
+        assertThat(sut.getData(), hasEntry("Navi", "Projects"));
+        assertThat(sut.getData(), hasEntry("Keywords", "Projects, Jenkins, Darcs"));
+    }
+
+    @Test
+    public void recognizedData_ignoreMissingValue() {
+        sut.process("<?juberblog\n"
+                + "    Navi: Projects\n"
+                + "    Description\n"
+                + "    Keywords: Projects, Jenkins, Darcs\n"
+                + "?>");
+        assertThat(sut.getData().size(), is(2));
+        assertThat(sut.getData(), hasEntry("Navi", "Projects"));
+        assertThat(sut.getData(), hasEntry("Keywords", "Projects, Jenkins, Darcs"));
+    }
+
+    @Test
+    public void recognizedData_emptyLine() {
+        sut.process("<?juberblog\n"
+                + "    Navi: Projects\n"
+                + "    \n"
+                + "    Keywords: Projects, Jenkins, Darcs\n"
+                + "?>");
+        assertThat(sut.getData().size(), is(2));
+        assertThat(sut.getData(), hasEntry("Navi", "Projects"));
+        assertThat(sut.getData(), hasEntry("Keywords", "Projects, Jenkins, Darcs"));
+    }
 }
