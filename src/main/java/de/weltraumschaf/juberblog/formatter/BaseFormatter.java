@@ -86,4 +86,22 @@ abstract class BaseFormatter implements Formatter {
         return layout.render();
     }
 
+    @Override
+    public void setTitle(final String title) {
+        Validate.notNull(title, "Title string must not be null!");
+        layout.setTitle(title);
+    }
+
+    @Override
+    public void setEncoding(final String encoding) {
+        Validate.notNull(encoding, "Encoding string must not be null!");
+        layout.setEncoding(encoding);
+    }
+
+    @Override
+    public void setBaseUri(final String baseUri) {
+        Validate.notNull(baseUri, "BaseUri string must not be null!");
+        layout.setBaseUri(baseUri);
+    }
+
 }

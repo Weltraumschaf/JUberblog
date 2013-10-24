@@ -30,7 +30,9 @@ public class DataProcessorTest {
     public void createSut() throws IOException, URISyntaxException {
         sut = new DataProcessor(
             getClass().getResourceAsStream("/de/weltraumschaf/juberblog/cmd/data.md"),
-            new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR)));
+            new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR)),
+            "http://www.foobar.com/"
+        );
     }
 
     @Test
@@ -41,19 +43,21 @@ public class DataProcessorTest {
                 + "<!--[if IE 8]>         <html class=\"no-js lt-ie9\"> <![endif]-->\n"
                 + "<!--[if gt IE 8]><!--> <html class=\"no-js\"> <!--<![endif]-->\n"
                 + "    <head>\n"
-                + "        <title></title>\n"
+                + "        <title>The Headline</title>\n"
                 + "        <meta name=\"description\" content=\"A Java blog based on Markdown.\"/>\n"
-                + "        <meta charset=\"\"/>\n"
+                + "        <meta charset=\"UTF-8\"/>\n"
                 + "        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\"/>\n"
                 + "        <meta name=\"viewport\" content=\"width=device-width\"/>\n"
                 + "\n"
                 + "        <link rel=\"stylesheet\" type=\"text/css\"\n"
                 + "              href=\"http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,"
                 + "400italic,700,700italic|Source+Code+Pro\"/>\n"
-                + "        <link rel=\"stylesheet\" href=\"css/normalize.min.css\" type=\"text/css\"/>\n"
-                + "        <link rel=\"stylesheet\" href=\"css/main.css\" type=\"text/css\"/>\n"
-                + "        <link rel=\"stylesheet\" href=\"css/custom.css\" type=\"text/css\"/>\n"
-                + "        <link rel=\"shortcut icon\" href=\"img/favicon.ico\" type=\"image/x-icon\"/>\n"
+                + "        <link rel=\"stylesheet\" href=\"http://www.foobar.com/css/normalize.min.css\" "
+                + "type=\"text/css\"/>\n"
+                + "        <link rel=\"stylesheet\" href=\"http://www.foobar.com/css/main.css\" type=\"text/css\"/>\n"
+                + "        <link rel=\"stylesheet\" href=\"http://www.foobar.com/css/custom.css\" type=\"text/css\"/>\n"
+                + "        <link rel=\"shortcut icon\" href=\"http://www.foobar.com/img/favicon.ico\" "
+                + "type=\"image/x-icon\"/>\n"
                 + "        <style>\n"
                 + "\n"
                 + "        </style>\n"

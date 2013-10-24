@@ -31,7 +31,7 @@ public interface Formatter {
      * @throws IOException if markdown or any template can't be read
      * @throws TemplateException the template produce any parse errors
      */
-    String format(final InputStream markdownFile) throws IOException, TemplateException;
+    String format(InputStream markdownFile) throws IOException, TemplateException;
     /**
      * Formats the input string to string.
      *
@@ -40,6 +40,21 @@ public interface Formatter {
      * @throws IOException if markdown or any template can't be read
      * @throws TemplateException the template produce any parse errors
      */
-    String format(final String markdown) throws IOException, TemplateException;
+    String format(String markdown) throws IOException, TemplateException;
+    /**
+     *
+     * @param string must not be {@code null}
+     */
+    void setTitle(String string);
+    /**
+     *
+     * @param string must not be {@code null}
+     */
+    void setEncoding(String string);
+    /**
+     *
+     * @param string must not be {@code null}
+     */
+    void setBaseUri(String string);
 
 }

@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.MetaData;
 import de.weltraumschaf.juberblog.Preprocessor;
@@ -54,6 +55,10 @@ class DataProcessor {
      * Lazy computed.
      */
     private String headline;
+    /**
+     * Base URI used in templates.
+     */
+    private String baseUri;
 
     /**
      * Dedicated constructor.
@@ -61,12 +66,14 @@ class DataProcessor {
      * @param dataFile must not be {@code null}
      * @param fmt must not be {@code null}
      */
-    public DataProcessor(final InputStream dataFile, final Formatter fmt) {
+    public DataProcessor(final InputStream dataFile, final Formatter fmt, final String baseUri) {
         super();
         Validate.notNull(dataFile, "Data file must not be empty!");
         Validate.notNull(fmt, "Formatter file must not be empty!");
+        Validate.notEmpty(baseUri, "BaseUri must not be null or empty!");
         this.input = dataFile;
         this.fmt = fmt;
+        this.baseUri = baseUri;
     }
 
     /**
@@ -80,6 +87,9 @@ class DataProcessor {
         if (null == html) {
             getMetaData();
             // TOOO Assign template variables.
+            fmt.setTitle(getHeadline());
+            fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
+            fmt.setBaseUri(baseUri);
             html = fmt.format(markdown);
         }
 
