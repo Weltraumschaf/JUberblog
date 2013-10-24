@@ -28,6 +28,9 @@ import org.apache.log4j.Logger;
  */
 public final class Configurations {
 
+    /**
+     * Location of scaffold templates inside the JAR.
+     */
     public static final String SCAFFOLD_TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
 
     /**
