@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.MetaData;
 import de.weltraumschaf.juberblog.Preprocessor;
 import de.weltraumschaf.juberblog.Slug;
@@ -27,15 +28,39 @@ import org.apache.commons.lang3.Validate;
  */
 class DataProcessor {
 
-    private final InputStream input;
+
     private final Preprocessor metaDataParser = new Preprocessor();
     private final Slug slugger = new Slug();
+    private final Headline headliner = new Headline();
+    private final InputStream input;
     private final Formatter fmt;
-    private boolean hasProcessed;
-    private MetaData metaData = MetaData.DEFAULT;
-    private String slug = "";
-    private String html = "";
+    /**
+     * Lazy computed.
+     */
+    private MetaData metaData;
+    /**
+     * Lazy computed.
+     */
+    private String slug;
+    /**
+     * Lazy computed.
+     */
+    private String html;
+    /**
+     * Lazy computed.
+     */
+    private String markdown;
+    /**
+     * Lazy computed.
+     */
+    private String headline;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param dataFile must not be {@code null}
+     * @param fmt must not be {@code null}
+     */
     public DataProcessor(final InputStream dataFile, final Formatter fmt) {
         super();
         Validate.notNull(dataFile, "Data file must not be empty!");
@@ -44,41 +69,68 @@ class DataProcessor {
         this.fmt = fmt;
     }
 
-    public void process() throws IOException, TemplateException {
-        if (hasProcessed) {
-            return;
+    /**
+     * Get the processed HTML.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     * @throws TemplateException on any template error
+     */
+    public String getHtml() throws IOException, TemplateException {
+        if (null == html) {
+            getMetaData();
+            // TOOO Assign template variables.
+            html = fmt.format(markdown);
         }
 
-        final String raw = IOUtils.toString(input);
-        IOUtils.closeQuietly(input);
-        final String markdown = metaDataParser.process(raw);
-        metaData = metaDataParser.getMetaData();
-        slug = slugger.generate(markdown);
-        // TOOO Assign template variables.
-        html = fmt.format(markdown);
-        hasProcessed = true;
-    }
-
-    public String getHtml() {
-        assertProccessed();
         return html;
     }
 
-    public String getSlug() {
-        assertProccessed();
+    /**
+     * Get the processed slug.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public String getSlug() throws IOException {
+        if (null == slug) {
+            getHeadline();
+            slug = slugger.generate(headline);
+        }
+
         return slug;
     }
 
-    public MetaData getMetaData() {
-        assertProccessed();
+    /**
+     * Get the processed meta data.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public MetaData getMetaData() throws IOException {
+        if (null == metaData) {
+            final String raw = IOUtils.toString(input);
+            IOUtils.closeQuietly(input);
+            markdown = metaDataParser.process(raw);
+            metaData = metaDataParser.getMetaData();
+        }
+
         return metaData;
     }
 
-    private void assertProccessed() {
-        if (hasProcessed) {
-            return;
+    /**
+     * Get the processed headline.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public String getHeadline() throws IOException {
+        if (null == headline) {
+            getMetaData();
+            headline = headliner.find(markdown);
         }
 
-        throw new IllegalStateException("Not processed yet! Invoke #process() first.");
+        return headline;
     }
+
 }

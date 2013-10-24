@@ -61,4 +61,5 @@ public class Headline {
 
         return line.substring(begin).trim();
     }
+
 }

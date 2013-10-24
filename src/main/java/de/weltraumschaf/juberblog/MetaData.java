@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -24,7 +25,6 @@ import org.apache.commons.lang3.Validate;
  */
 public class MetaData {
 
-    public static final MetaData DEFAULT = new MetaData();
     /**
      * Returned by default if a property is not set.
      */
@@ -46,6 +46,9 @@ public class MetaData {
      */
     private final Map<String, String> data;
 
+    /**
+     * Initializes {@link #data} with an empty map.
+     */
     public MetaData() {
         this(Maps.<String, String>newHashMap());
     }
@@ -102,6 +105,21 @@ public class MetaData {
      */
     public String getKeywords() {
         return get(KEY_KEYWORDS);
+    }
+
+    @Override
+    public int hashCode() {
+        return data.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof MetaData)) {
+            return false;
+        }
+
+        final MetaData other = (MetaData) obj;
+        return data.equals(other.data);
     }
 
 }

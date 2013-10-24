@@ -28,12 +28,12 @@ import static org.junit.Assert.assertThat;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class SiteFormatterTest {
-    private static final String TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
+
     private static final String FIXTURE_PACKAGE = "/de/weltraumschaf/juberblog/formatter";
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
-        final Formatter sut = new SiteFormatter(Configurations.forTests(TEMPLATE_DIR));
+        final Formatter sut = new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.md");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.html");
         final String formatedHtml = sut.format(markdownFile);

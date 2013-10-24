@@ -29,12 +29,11 @@ import static org.junit.Assert.assertThat;
  */
 public class PostFormatterTest {
 
-    private static final String TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
     private static final String FIXTURE_PACKAGE = "/de/weltraumschaf/juberblog/formatter";
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
-        final PostFormatter sut = new PostFormatter(Configurations.forTests(TEMPLATE_DIR));
+        final PostFormatter sut = new PostFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
         sut.setDateFormatted("date");
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.md");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.html");

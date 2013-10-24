@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
  */
 public final class Configurations {
 
+    public static final String SCAFFOLD_TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
+
     /**
      * Log facility.
      */
