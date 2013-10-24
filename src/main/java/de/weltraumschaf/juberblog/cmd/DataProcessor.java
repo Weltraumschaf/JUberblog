@@ -24,6 +24,15 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
+ * Processes a data file.
+ *
+ * Processing includes:
+ * <ul>
+ * <li>meta data processing</li>
+ * <li>headline extraction</li>
+ * <li>slug generation</li>
+ * <li>format HTML</li>
+ * </ul>
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -101,7 +110,6 @@ class DataProcessor {
     public String getHtml() throws IOException, TemplateException {
         if (null == html) {
             getMetaData();
-            // TOOO Assign template variables.
             fmt.setTitle(getHeadline());
             fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
             fmt.setBaseUri(baseUri);
