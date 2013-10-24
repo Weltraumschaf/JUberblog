@@ -29,12 +29,30 @@ import org.apache.commons.lang3.Validate;
  */
 class DataProcessor {
 
-
+    /**
+     * Parses meta data.
+     */
     private final Preprocessor metaDataParser = new Preprocessor();
+    /**
+     * Generates slug.
+     */
     private final Slug slugger = new Slug();
+    /**
+     * Extracts headline.
+     */
     private final Headline headliner = new Headline();
+    /**
+     * To read data from.
+     */
     private final InputStream input;
+    /**
+     * Formats HTML.
+     */
     private final Formatter fmt;
+    /**
+     * Base URI used in templates.
+     */
+    private final String baseUri;
     /**
      * Lazy computed.
      */
@@ -55,16 +73,13 @@ class DataProcessor {
      * Lazy computed.
      */
     private String headline;
-    /**
-     * Base URI used in templates.
-     */
-    private String baseUri;
 
     /**
      * Dedicated constructor.
      *
      * @param dataFile must not be {@code null}
      * @param fmt must not be {@code null}
+     * @param baseUri must not be {@code null} or empty
      */
     public DataProcessor(final InputStream dataFile, final Formatter fmt, final String baseUri) {
         super();
@@ -90,6 +105,8 @@ class DataProcessor {
             fmt.setTitle(getHeadline());
             fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
             fmt.setBaseUri(baseUri);
+            fmt.setDescription(metaData.getDescription());
+            fmt.setKeywords(metaData.getKeywords());
             html = fmt.format(markdown);
         }
 

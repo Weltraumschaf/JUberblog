@@ -48,10 +48,14 @@ public final class Layout extends Template {
      */
     private static final String BASE_URI = "basetUri";
     /**
+     * Variable key for keywords.
+     */
+    private static final String KEYWORDS = "keywords";
+    /**
      * All these variables are assigned to {@link #content} if it is type of {@link Template}.
      */
     private static final List<String> GLOBAL_VARIABLE_NAMES = Arrays.asList(
-            TITLE, ENCODING, DESCRIPTION, BASE_URI
+            TITLE, ENCODING, DESCRIPTION, BASE_URI, KEYWORDS
     );
     /**
      * Inner template to render content string.
@@ -105,12 +109,21 @@ public final class Layout extends Template {
     }
 
     /**
-     * Assign the baseURI to the layout template.
+     * Assign the base URI to the layout template.
      *
      * @param baseUri must not be {@code null}
      */
     public void setBaseUri(final String baseUri) {
         assignVariable(BASE_URI, baseUri);
+    }
+
+    /**
+     * Assign the keyword to the layout template.
+     *
+     * @param keywords must not be {@code null}
+     */
+    public void setKeywords(final String keywords) {
+        assignVariable(KEYWORDS, keywords);
     }
 
     /**

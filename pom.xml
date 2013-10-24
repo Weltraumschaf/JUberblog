@@ -44,8 +44,8 @@
         <connection>scm:git:git://github.com/Weltraumschaf/JUberblog</connection>
         <developerConnection>scm:git:git@github.com:Weltraumschaf/JUberblog.git</developerConnection>
         <url>https://github.com/Weltraumschaf/JUberblog.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <site>
@@ -153,8 +153,18 @@
 
         <resources>
             <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
             </resource>
         </resources>
 

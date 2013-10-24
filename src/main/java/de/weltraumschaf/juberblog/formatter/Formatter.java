@@ -42,19 +42,34 @@ public interface Formatter {
      */
     String format(String markdown) throws IOException, TemplateException;
     /**
+     * Set the site title.
      *
-     * @param string must not be {@code null}
+     * @param title must not be {@code null}
      */
-    void setTitle(String string);
+    void setTitle(String title);
     /**
+     * Set the site encoding.
      *
-     * @param string must not be {@code null}
+     * @param encoding must not be {@code null}
      */
-    void setEncoding(String string);
+    void setEncoding(String encoding);
     /**
+     * Set the site base URI.
      *
-     * @param string must not be {@code null}
+     * @param baseUri must not be {@code null}
      */
-    void setBaseUri(String string);
+    void setBaseUri(String baseUri);
+    /**
+     * Set the site description.
+     *
+     * @param description must not be {@code null}
+     */
+    void setDescription(String description);
+    /**
+     * Set the site keywords.
+     *
+     * @param keywords must not be {@code null}
+     */
+    void setKeywords(String keywords);
 
 }
