@@ -34,7 +34,7 @@ public class SiteFormatterTest {
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
-        final Formatter sut = new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
+        final HtmlFormatter sut = new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.md");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.html");
         final String formatedHtml = sut.format(markdownFile);

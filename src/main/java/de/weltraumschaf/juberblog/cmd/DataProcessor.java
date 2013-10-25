@@ -16,7 +16,7 @@ import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.MetaData;
 import de.weltraumschaf.juberblog.Preprocessor;
 import de.weltraumschaf.juberblog.Slug;
-import de.weltraumschaf.juberblog.formatter.Formatter;
+import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +57,7 @@ class DataProcessor {
     /**
      * Formats HTML.
      */
-    private final Formatter fmt;
+    private final HtmlFormatter fmt;
     /**
      * Base URI used in templates.
      */
@@ -86,11 +86,11 @@ class DataProcessor {
     /**
      * Dedicated constructor.
      *
-     * @param dataFile must not be {@code null}
-     * @param fmt must not be {@code null}
-     * @param baseUri must not be {@code null} or empty
+     * @param dataFile must not be {@literal null}
+     * @param fmt must not be {@literal null}
+     * @param baseUri must not be {@literal null} or empty
      */
-    public DataProcessor(final InputStream dataFile, final Formatter fmt, final String baseUri) {
+    public DataProcessor(final InputStream dataFile, final HtmlFormatter fmt, final String baseUri) {
         super();
         Validate.notNull(dataFile, "Data file must not be empty!");
         Validate.notNull(fmt, "Formatter file must not be empty!");
@@ -103,7 +103,7 @@ class DataProcessor {
     /**
      * Get the processed HTML.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      * @throws IOException on any read error of data or template file
      * @throws TemplateException on any template error
      */
@@ -124,7 +124,7 @@ class DataProcessor {
     /**
      * Get the processed slug.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      * @throws IOException on any read error of data or template file
      */
     public String getSlug() throws IOException {
@@ -139,7 +139,7 @@ class DataProcessor {
     /**
      * Get the processed meta data.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      * @throws IOException on any read error of data or template file
      */
     public MetaData getMetaData() throws IOException {
@@ -155,7 +155,7 @@ class DataProcessor {
     /**
      * Get the processed headline.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      * @throws IOException on any read error of data or template file
      */
     public String getHeadline() throws IOException {

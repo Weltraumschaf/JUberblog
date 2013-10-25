@@ -17,59 +17,33 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Implementors read an Markdown file input stream and format it to an string.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public interface Formatter {
+public interface Formatter<T> {
 
     /**
      * Formats the input file to string.
      *
-     * @param markdownFile must not be {@code null}
-     * @return never {@code null}
+     * @param template must not be {@literal null}
+     * @return never {@literal null}
      * @throws IOException if markdown or any template can't be read
      * @throws TemplateException the template produce any parse errors
      */
-    String format(InputStream markdownFile) throws IOException, TemplateException;
+    String format(InputStream template) throws IOException, TemplateException;
     /**
      * Formats the input string to string.
      *
-     * @param markdown must not be {@code null}
-     * @return never {@code null}
+     * @param template must not be {@literal null}
+     * @return never {@literal null}
      * @throws IOException if markdown or any template can't be read
      * @throws TemplateException the template produce any parse errors
      */
-    String format(String markdown) throws IOException, TemplateException;
-    /**
-     * Set the site title.
-     *
-     * @param title must not be {@code null}
-     */
-    void setTitle(String title);
+    String format(String template) throws IOException, TemplateException;
     /**
      * Set the site encoding.
      *
-     * @param encoding must not be {@code null}
+     * @param encoding must not be {@literal null}
      */
     void setEncoding(String encoding);
-    /**
-     * Set the site base URI.
-     *
-     * @param baseUri must not be {@code null}
-     */
-    void setBaseUri(String baseUri);
-    /**
-     * Set the site description.
-     *
-     * @param description must not be {@code null}
-     */
-    void setDescription(String description);
-    /**
-     * Set the site keywords.
-     *
-     * @param keywords must not be {@code null}
-     */
-    void setKeywords(String keywords);
-
 }

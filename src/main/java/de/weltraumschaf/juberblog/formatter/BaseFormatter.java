@@ -40,7 +40,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class BaseFormatter implements Formatter {
+abstract class BaseFormatter implements HtmlFormatter {
 
     /**
      * Name of layout template.
@@ -58,8 +58,8 @@ abstract class BaseFormatter implements Formatter {
     /**
      * Dedicated constructor.
      *
-     * @param templateConfiguration must not be {@code null}
-     * @param contentTemplate must not be {@code null} or empty
+     * @param templateConfiguration must not be {@literal null}
+     * @param contentTemplate must not be {@literal null} or empty
      * @throws IOException if template file can't be read
      */
     public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate) throws IOException {

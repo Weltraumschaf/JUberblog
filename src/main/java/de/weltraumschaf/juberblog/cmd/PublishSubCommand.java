@@ -17,7 +17,7 @@ import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.MarkdownFilenameFilter;
-import de.weltraumschaf.juberblog.formatter.Formatter;
+import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import de.weltraumschaf.juberblog.formatter.PostFormatter;
 import de.weltraumschaf.juberblog.formatter.SiteFormatter;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
@@ -161,7 +161,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir)
+    private void publishFiles(final HtmlFormatter fmt, final Path dataDir, final Path outputDir)
         throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
         Validate.notNull(dataDir, "Dirname must not be null!");
@@ -200,7 +200,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFile(final Formatter fmt, final File file, final Path outputDir) throws ApplicationException {
+    private void publishFile(final HtmlFormatter fmt, final File file, final Path outputDir) throws ApplicationException {
         Validate.notNull(fmt, "Layout must not be null!");
         Validate.notNull(file, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
