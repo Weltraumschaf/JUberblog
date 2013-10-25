@@ -45,7 +45,7 @@ public class BlogConfigurationTest {
     public void getProperties() {
         assertThat(sut.getHeadline(), is(equalTo("Das Weltraumschaf")));
         assertThat(sut.getDescription(), is(equalTo("The Music Making Space Animal")));
-        assertThat(sut.getSiteUri(), is(equalTo("http://uberblog.local/")));
+        assertThat(sut.getBaseUri(), is(equalTo("http://uberblog.local/")));
         assertThat(sut.getLanguage(), is(equalTo("en")));
         assertThat(sut.getDataDir(), is(equalTo("/data")));
         assertThat(sut.getTemplateDir(), is(equalTo("/templates")));

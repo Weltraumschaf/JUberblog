@@ -23,7 +23,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
  *
- * @param <T> type of options
+ * @param <>> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {

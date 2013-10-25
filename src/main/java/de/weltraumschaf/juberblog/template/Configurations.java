@@ -31,7 +31,7 @@ public final class Configurations {
     /**
      * Location of scaffold templates inside the JAR.
      */
-    public static final String SCAFFOLD_TEMPLATE_DIR = "/de/weltraumschaf/juberblog/scaffold/templates";
+    public static final String SCAFFOLD_TEMPLATE_DIR = Constants.PACKAGE_BASE.toString() + "/scaffold/templates";
 
     /**
      * Log facility.
@@ -104,7 +104,7 @@ public final class Configurations {
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
         cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
 
-        if (templateDirectory.startsWith("/de/weltraumschaf/juberblog/")) {
+        if (templateDirectory.startsWith(Constants.PACKAGE_BASE.toString())) {
             // Read resources via class loader for tests.
             cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));
         } else {

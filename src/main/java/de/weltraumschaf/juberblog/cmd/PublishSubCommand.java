@@ -40,8 +40,6 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * PublishSubCommand all sites from data directory.
  *
- * TODO Generate slug URL from headline
- *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
@@ -164,9 +162,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         Validate.notNull(dataDir, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
         LOG.debug(String.format("Pubish files from '%s'...", dataDir));
-        final List<File> fileList = readFileList(dataDir);
 
-        for (final File file : fileList) {
+        for (final File file : readFileList(dataDir)) {
             publishFile(fmt, file, outputDir);
         }
     }
@@ -215,19 +212,26 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
             }
         }
 
+        FileInputStream input = null;
+
         try {
-            final FileInputStream input = new FileInputStream(file);
-            final String html = fmt.format(input);
-            IOUtils.closeQuietly(input);
-            final Path target = outputDir.resolve(file.getName());
+            input = new FileInputStream(file);
+            final DataProcessor processor = new DataProcessor(input, fmt, getBlogConfiguration().getBaseUri());
+            final String targetFileName = processor.getSlug() + ".html";
+            final Path target = outputDir.resolve(targetFileName);
             LOG.info(String.format("Write published file to '%s'.", target));
             Files.createFile(target);
-            Files.write(target, html.getBytes(Constants.DEFAULT_ENCODING.toString()), StandardOpenOption.WRITE);
+            Files.write(
+                target,
+                processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
+                StandardOpenOption.WRITE);
         } catch (final IOException | TemplateException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
                     String.format("Error occured during publishing: %s!", ex.getMessage()),
                     ex);
+        } finally {
+            IOUtils.closeQuietly(input);
         }
     }
 

@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.template;
 
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.Filter;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class TemplateTest {
     /**
      * Freemarker templates resource directory.
      */
-    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
+    private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     /**
      * Tested template.
      */

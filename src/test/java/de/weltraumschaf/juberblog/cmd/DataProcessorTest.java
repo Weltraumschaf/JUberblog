@@ -5,17 +5,21 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.MetaData;
 import de.weltraumschaf.juberblog.formatter.SiteFormatter;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Map;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.After;
 
 /**
  * Tests for {@link DataProcessor}.
@@ -25,14 +29,21 @@ import static org.hamcrest.Matchers.*;
 public class DataProcessorTest {
 
     private DataProcessor sut;
+    private InputStream input;
 
     @Before
     public void createSut() throws IOException, URISyntaxException {
+        input = getClass().getResourceAsStream(Constants.PACKAGE_BASE.toString() + "/cmd/data.md");
         sut = new DataProcessor(
-            getClass().getResourceAsStream("/de/weltraumschaf/juberblog/cmd/data.md"),
+            input,
             new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR)),
             "http://www.foobar.com/"
         );
+    }
+
+    @After
+    public void closeFile() {
+        IOUtils.closeQuietly(input);
     }
 
     @Test

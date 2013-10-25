@@ -45,7 +45,11 @@ public enum Constants {
     /**
      * NAme of the command line script.
      */
-    COMMAND_NAME("juberblog");
+    COMMAND_NAME("juberblog"),
+    /**
+     * Package base of whole project.
+     */
+    PACKAGE_BASE("/de/weltraumschaf/juberblog");
 
     /**
      * Major version of Freemarker template engine.

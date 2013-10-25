@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertThat;
  */
 public class PostFormatterTest {
 
-    private static final String FIXTURE_PACKAGE = "/de/weltraumschaf/juberblog/formatter";
+    private static final String FIXTURE_PACKAGE = Constants.PACKAGE_BASE.toString() + "/formatter";
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {

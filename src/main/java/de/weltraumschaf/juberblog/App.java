@@ -49,7 +49,7 @@ public class App extends InvokableAdapter {
      */
     public App(final String[] args) {
         super(args);
-        version = new Version("/de/weltraumschaf/juberblog/version.properties");
+        version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
     }
 
     /**

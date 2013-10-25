@@ -104,7 +104,7 @@ public class BlogConfiguration {
     /**
      * Dedicated constructor.
      *
-     * @param fileName must not be {@code null} or empty
+     * @param fileName must not be {@literal null} or empty
      */
     public BlogConfiguration(final String fileName) {
         super();
@@ -132,7 +132,7 @@ public class BlogConfiguration {
      * Get property with empty string as default.
      *
      * @param name must not be {code null} or empty
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     private String getProperty(final String name) {
         Validate.notEmpty(name, "Name must not be null or empty!");
@@ -142,7 +142,7 @@ public class BlogConfiguration {
     /**
      * Get the site main headline.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getHeadline() {
         return getProperty(HEADLINE);
@@ -151,7 +151,7 @@ public class BlogConfiguration {
     /**
      * Get the site main description.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getDescription() {
         return getProperty(DESCRIPTION);
@@ -160,16 +160,16 @@ public class BlogConfiguration {
     /**
      * Get the site base URI.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
-    public String getSiteUri() {
+    public String getBaseUri() {
         return getProperty(SITE_URI);
     }
 
     /**
      * Get the site language.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getLanguage() {
         return getProperty(LANGUAGE);
@@ -178,7 +178,7 @@ public class BlogConfiguration {
     /**
      * Get the data directory.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getDataDir() {
         return getProperty(DATA_DIR);
@@ -187,7 +187,7 @@ public class BlogConfiguration {
     /**
      * Get the template directory.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getTemplateDir() {
         return getProperty(TEMPLATE_DIR);
@@ -196,7 +196,7 @@ public class BlogConfiguration {
     /**
      * Get the htdocs directory.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getHtdocs() {
         return getProperty(HTDOCS);
@@ -205,7 +205,7 @@ public class BlogConfiguration {
     /**
      * Get the Twitter consumer key.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getTwitterConsumerKey() {
         return getProperty(TWITTER_CONSUMER_KEY);
@@ -214,7 +214,7 @@ public class BlogConfiguration {
     /**
      * Get the Twitter consumer secret.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getTwitterConsumerSecret() {
         return getProperty(TWITTER_CONSUMER_SECRET);
@@ -223,7 +223,7 @@ public class BlogConfiguration {
     /**
      * Get the Twitter OAuth token.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getTwitterOAuthToken() {
         return getProperty(TWITTER_OAUTH_TOKEN);
@@ -232,7 +232,7 @@ public class BlogConfiguration {
     /**
      * Get the Twitter OAuth secret.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getTwitterOAuthTokenSecret() {
         return getProperty(TWITTER_OAUTH_TOKEN_SECRET);
@@ -241,7 +241,7 @@ public class BlogConfiguration {
     /**
      * Get the Bitly username.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getBitlyUsername() {
         return getProperty(BITLY_USERNAME);
@@ -250,7 +250,7 @@ public class BlogConfiguration {
     /**
      * Get the Bitly API key.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getBitlyApikey() {
         return getProperty(BITLY_APIKEY);
@@ -259,7 +259,7 @@ public class BlogConfiguration {
     /**
      * Get the blog API URI.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public String getApiUri() {
         return getProperty(API_URI);
@@ -268,7 +268,7 @@ public class BlogConfiguration {
     /**
      * Get the if rating feature is enabled.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public boolean getFeatureRating() {
         return "true".equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;
@@ -277,7 +277,7 @@ public class BlogConfiguration {
     /**
      * Get the if comment feature is enabled.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public boolean getFeatureComments() {
         return "true".equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;

@@ -145,7 +145,6 @@ class DataProcessor {
     public MetaData getMetaData() throws IOException {
         if (null == metaData) {
             final String raw = IOUtils.toString(input);
-            IOUtils.closeQuietly(input);
             markdown = metaDataParser.process(raw);
             metaData = metaDataParser.getMetaData();
         }

@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.juberblog.template;
 
+import de.weltraumschaf.juberblog.Constants;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,7 +29,7 @@ public class LayoutTest {
     /**
      * Freemarker templates resource directory.
      */
-    private static final String TEMPLATE_DIRECTORRY = "/de/weltraumschaf/juberblog/template";
+    private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     /**
      * Tested template.
      */
