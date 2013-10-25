@@ -40,6 +40,11 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * PublishSubCommand all sites from data directory.
  *
+ * TODO
+ * - create index
+ * - create sitemap.xml
+ * - create feed xml
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
