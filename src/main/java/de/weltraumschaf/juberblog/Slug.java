@@ -50,11 +50,11 @@ public class Slug {
     /**
      * Clean slug.
      */
-    private static final String SLUGIFY_REGEX = "[\\s.:;&=<>/]";
+    private static final String SLUGIFY_REGEX = "[.:;&=<>/]";
     /**
      * Normalize.
      */
-    private static final String NORMALIZER_REGEX = "[^\\p{ASCII}]";
+    private static final String NORMALIZER_REGEX = "[^\\p{Alnum}- ]";
 
     /**
      * Generate the slug.
@@ -64,7 +64,7 @@ public class Slug {
      */
     public String generate(final String in) {
         Validate.notEmpty(in, "Input must not be null or empty!");
-        return slugify(in);
+        return squashDashes(slugify(in));
     }
 
     /**
@@ -111,8 +111,24 @@ public class Slug {
             return EMPTY;
         }
 
-        final String n = StringUtils.lowerCase(normalize(s));
-        return n.replaceAll(SLUGIFY_REGEX, EMPTY);
+        return normalize(s).replaceAll("[\\s]", "-").replaceAll(SLUGIFY_REGEX, EMPTY);
+    }
+
+    /**
+     * Squashes multiple dashes to one ({@code "---" -> "-"}.
+     *
+     * @param in must not be {@code null}
+     * @return never {@code null}
+     */
+    private String squashDashes(final String in) {
+        Validate.notNull(in, "In must not be null!");
+        String out = in;
+
+        while (out.contains("--")) {
+            out = out.replaceAll("--", "-");
+        }
+
+        return out;
     }
 
 }
