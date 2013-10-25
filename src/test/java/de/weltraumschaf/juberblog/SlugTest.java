@@ -48,6 +48,9 @@ public class SlugTest {
         assertThat(sut.generate("This is an example"), is(equalTo("This-is-an-example")));
         assertThat(sut.generate("This is-an example"), is(equalTo("This-is_-_an-example")));
         assertThat(sut.generate("This    is  an   example"), is(equalTo("This-is-an-example")));
+        assertThat(
+            sut.generate("a.b,c:d;e'f\"g/h?i[j]k\\l{m}n|o!p@q#r$s%t^u&v*w(x)y_z+1-2=3`4~5–6"),
+            is(equalTo("abcdefghijklmnopqrstuvwxyz123456")));
     }
 
 }
