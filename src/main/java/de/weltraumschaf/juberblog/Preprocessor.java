@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import com.google.common.collect.Lists;
@@ -22,8 +21,8 @@ import org.apache.log4j.Logger;
 /**
  * Parses all blocks of preprocessor code.
  *
- * Preprocessor blocks are opened by {@code <?juberblog} and closed by {@code ?>}.
- * Between these markers key value pairs are recognized. The blocks are removed.
+ * Preprocessor blocks are opened by {@code <?juberblog} and closed by {@code ?>}. Between these markers key value pairs
+ * are recognized. The blocks are removed.
  *
  * Example:
  * <pre>
@@ -40,6 +39,7 @@ import org.apache.log4j.Logger;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class Preprocessor {
+
     /**
      * Log facility.
      */
@@ -125,17 +125,38 @@ public class Preprocessor {
     /**
      * Recognizes key value pairs.
      *
-     * Lines with errors (no key/value or empty key) line is skipped and warning logged.
-     * Empty values are logged but not skipped.
-     *
      * This method adds the recognized data to {@link #data}.
      *
+     *
      * @param preprocesorBlocks must not be {@code null}
+     * @see #recognizedData(java.util.List, java.util.Map)
      */
     private void recognizedData(final List<String> preprocesorBlocks) {
-        Validate.notNull(preprocesorBlocks, "PReprocesor block must not be null!");
+        recognizedData(preprocesorBlocks, data);
+    }
+
+    /**
+     * Recognizes key value pairs.
+     *
+     * Recognized key value pairs will be added to passed map.
+     *
+     * Lines with errors (no key/value or empty key) line is skipped and warning logged. Empty values are logged but not
+     * skipped.
+     *
+     * @param preprocesorBlocks must not be {@code null}
+     * @param map must not be {@code null}
+     */
+    static void recognizedData(final List<String> preprocesorBlocks, final Map<String, String> map) {
+        Validate.notNull(preprocesorBlocks, "Preprocesor block must not be null!");
+        Validate.notNull(map, "Map block must not be null!");
 
         for (final String line : preprocesorBlocks) {
+            if (!line.contains(SPLIT_TOKEN)) {
+                LOG.warn(String.format("Malformed line '%s'! Missing split token '%s'. Use format 'key%svalue'.",
+                        line, SPLIT_TOKEN, SPLIT_TOKEN));
+                continue;
+            }
+
             final String[] tokens = line.split(SPLIT_TOKEN);
 
             if (tokens.length == 0) {
@@ -150,18 +171,20 @@ public class Preprocessor {
                 continue;
             }
 
+            final String value;
+
             if (tokens.length == 1) {
-                LOG.warn(String.format("No value given: '%s'! Skipping line.", line));
-                continue;
+                LOG.warn(String.format("No value given: '%s'! Set vlaue empty.", line));
+                value = "";
+            } else {
+                value = tokens[1].trim();
+
+                if (value.isEmpty()) {
+                    LOG.warn(String.format("Empty value given: '%s'! Set vlaue empty.", line));
+                }
             }
 
-            final String value = tokens[1].trim();
-
-            if (value.isEmpty()) {
-                LOG.warn(String.format("Empty value given: '%s'! Skipping line.", line));
-            }
-
-            data.put(name, value);
+            map.put(name, value);
         }
     }
 }
