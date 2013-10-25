@@ -11,8 +11,11 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.IO;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
@@ -110,5 +113,19 @@ public enum SubCommands {
             default:
                 throw new IllegalArgumentException(String.format("Unknown command type '%s'!", type));
         }
+    }
+
+    public static Collection<SubCommands> implemented() {
+        final List<SubCommands> cmds = Lists.newArrayList();
+
+        for (final SubCommands cmd : values()) {
+            if (cmd == NOT_IMPLEMENTED) {
+                continue;
+            }
+
+            cmds.add(cmd);
+        }
+
+        return cmds;
     }
 }

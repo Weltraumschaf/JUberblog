@@ -23,6 +23,7 @@ import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import java.io.UnsupportedEncodingException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
@@ -111,28 +112,16 @@ public class App extends InvokableAdapter {
      */
     Arguments validateArguments() throws ApplicationException {
         final Arguments args = new Arguments(getArgs());
+        final String firstArgument = args.getFirstArgument().trim();
 
-        if (args.getFirstArgument().isEmpty()) {
+        if ("-h".equals(firstArgument) || firstArgument.isEmpty()) {
             final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
             errorMesage.append(Constants.DEFAULT_NEW_LINE)
                     .append("Usage: ").append(Constants.COMMAND_NAME).append(' ');
-            boolean first = true;
-
-            for (final SubCommands cmd : SubCommands.values()) {
-                if (SubCommands.NOT_IMPLEMENTED == cmd) {
-                    continue;
-                }
-
-                if (!first) {
-                    errorMesage.append('|');
-                }
-
-                errorMesage.append(cmd.toString());
-                first = false;
-            }
-
+            errorMesage.append(StringUtils.join(SubCommands.implemented(), "|"));
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);
         }
+
         return args;
     }
 
