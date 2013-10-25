@@ -3,7 +3,7 @@
 
     <groupId>de.weltraumschaf</groupId>
     <artifactId>juberblog</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>JUberblog</name>
