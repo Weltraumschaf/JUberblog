@@ -29,13 +29,13 @@ class SiteFormatter extends BaseFormatter {
 
     /**
      * Dedicated constructor.
-     * 
+     *
      * @param templateConfiguration must not be {@code null} or empty
+     * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
     public SiteFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
         super(templateConfiguration, SITE_TEMPLATE, markdown);
     }
-
 
 }

@@ -12,7 +12,7 @@
 package de.weltraumschaf.juberblog.template;
 
 /**
- * Implementors can a variable be assigned.
+ * Implementors can a variable get assigned.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -21,10 +21,15 @@ public interface Assignable {
     /**
      * Assign any object as template variable.
      *
-     * @param name must not be {@code null}
+     * @param name must not be {@code null} or empty
      * @param value must not be {@code null}
      */
     void assignVariable(final String name, final Object value);
-
+    /**
+     * Assign any object as template variable.
+     *
+     * @param name must not be {@code null}
+     * @param value must not be {@code null}
+     */
     void assignVariable(final VarName name, final Object value);
 }

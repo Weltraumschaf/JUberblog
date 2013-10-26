@@ -138,6 +138,12 @@ public class Template implements Renderable, Assignable {
         assignVariable(name.toString(), value);
     }
 
+    /**
+     * Get a variable.
+     *
+     * @param name must not be {@code null}
+     * @return never {@code null}, maybe empty string
+     */
     protected Object getVariable(final VarName name) {
         return getVariable(name.toString());
     }
@@ -145,7 +151,7 @@ public class Template implements Renderable, Assignable {
     /**
      * Get a variable.
      *
-     * @param name must not be {@code null}
+     * @param name must not be {@code null} or empty
      * @return never {@code null}, maybe empty string
      */
     protected Object getVariable(final String name) {

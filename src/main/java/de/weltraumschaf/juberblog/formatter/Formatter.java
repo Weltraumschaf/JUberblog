@@ -15,11 +15,19 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 
 /**
+ * Implementations can format them self to an string with specific encoding.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public interface Formatter {
 
+    /**
+     * Formats the object.
+     *
+     * @return never {@code null}
+     * @throws IOException on any I/O error
+     * @throws TemplateException on any template error
+     */
     String format() throws IOException, TemplateException;
 
     /**

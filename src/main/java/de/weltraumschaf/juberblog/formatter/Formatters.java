@@ -13,7 +13,6 @@ package de.weltraumschaf.juberblog.formatter;
 
 import freemarker.template.Configuration;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Factory to create formatters.

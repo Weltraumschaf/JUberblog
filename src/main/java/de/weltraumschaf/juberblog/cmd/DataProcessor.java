@@ -84,6 +84,9 @@ class DataProcessor {
      * Lazy computed.
      */
     private String headline;
+    /**
+     * Configuration for template engine.
+     */
     private final Configuration templateConfig;
 
     /**
@@ -94,7 +97,11 @@ class DataProcessor {
      * @param baseUri must not be {@literal null} or empty
      * @param templateConfig must not be {@literal null} or empty
      */
-    public DataProcessor(final InputStream dataFile, final Formatters.Type type, final String baseUri, final Configuration templateConfig) {
+    public DataProcessor(
+        final InputStream dataFile,
+        final Formatters.Type type,
+        final String baseUri,
+        final Configuration templateConfig) {
         super();
         Validate.notNull(dataFile, "Data file must not be empty!");
         Validate.notNull(type, "Formatter file must not be empty!");

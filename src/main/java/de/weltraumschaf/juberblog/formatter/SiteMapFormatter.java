@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.commons.lang3.Validate;
 
 /**
+ * Formats a site map to a string.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -40,6 +41,13 @@ class SiteMapFormatter implements Formatter {
      */
     private final SiteMap siteMap;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param templateConfiguration must not be {@code null}
+     * @param siteMap must not be {@code null}
+     * @throws IOException on any template I/O error
+     */
     public SiteMapFormatter(final Configuration templateConfiguration, final SiteMap siteMap) throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");

@@ -51,14 +51,11 @@ class PostFormatter extends BaseFormatter {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null} or empty
+     * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public PostFormatter(final Configuration templateConfiguration, final String markdownFile) throws IOException {
-        super(templateConfiguration, TEMPLATE, markdownFile);
-        init();
-    }
-
-    private void init() {
+    public PostFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
+        super(templateConfiguration, TEMPLATE, markdown);
         content.assignVariable("features", FEATURES);
         Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);
     }

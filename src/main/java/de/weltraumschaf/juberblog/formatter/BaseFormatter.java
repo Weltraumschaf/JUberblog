@@ -18,8 +18,6 @@ import de.weltraumschaf.juberblog.template.Template;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
 /**

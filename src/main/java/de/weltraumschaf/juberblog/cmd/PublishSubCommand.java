@@ -142,7 +142,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @throws ApplicationException if can't render template
      */
     private void publishFiles(final Formatters.Type type, final Path dataDir, final Path outputDir)
-            throws ApplicationException {
+        throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(dataDir, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
@@ -180,7 +180,8 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFile(final Formatters.Type type, final File file, final Path outputDir) throws ApplicationException {
+    private void publishFile(final Formatters.Type type, final File file, final Path outputDir)
+        throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(file, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
@@ -202,7 +203,11 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         try {
             if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
                 input = new FileInputStream(file);
-                final DataProcessor processor = new DataProcessor(input, type, getBlogConfiguration().getBaseUri(), templateConfig);
+                final DataProcessor processor = new DataProcessor(
+                    input,
+                    type,
+                    getBlogConfiguration().getBaseUri(),
+                    templateConfig);
                 final String targetFileName = processor.getSlug() + ".html";
                 final Path target = outputDir.resolve(targetFileName);
                 LOG.info(String.format("Write published file to '%s'.", target));

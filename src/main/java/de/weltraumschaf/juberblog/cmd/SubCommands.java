@@ -115,6 +115,11 @@ public enum SubCommands {
         }
     }
 
+    /**
+     * Get list of all implemented sub commands.
+     *
+     * @return never {@code null}
+     */
     public static Collection<SubCommands> implemented() {
         final List<SubCommands> cmds = Lists.newArrayList();
 

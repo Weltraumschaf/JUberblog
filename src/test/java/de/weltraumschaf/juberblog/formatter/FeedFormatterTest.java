@@ -21,7 +21,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 
 /**
  * Tests for {@link FeedFormatter}.
