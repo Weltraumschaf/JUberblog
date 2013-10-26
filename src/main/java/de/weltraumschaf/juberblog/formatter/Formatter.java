@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.formatter;
 
 import freemarker.template.TemplateException;
@@ -20,26 +19,36 @@ import java.io.InputStream;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public interface Formatter<T> {
+public interface Formatter {
 
     /**
      * Formats the input file to string.
      *
-     * @param template must not be {@literal null}
-     * @return never {@literal null}
-     * @throws IOException if markdown or any template can't be read
-     * @throws TemplateException the template produce any parse errors
-     */
-    String format(InputStream template) throws IOException, TemplateException;
-    /**
-     * Formats the input string to string.
+     * FIXME Remove this method.
      *
      * @param template must not be {@literal null}
      * @return never {@literal null}
      * @throws IOException if markdown or any template can't be read
      * @throws TemplateException the template produce any parse errors
      */
+    @Deprecated
+    String format(InputStream template) throws IOException, TemplateException;
+
+    /**
+     * Formats the input string to string.
+     *
+     * FIXME Remove this method.
+     *
+     * @param template must not be {@literal null}
+     * @return never {@literal null}
+     * @throws IOException if markdown or any template can't be read
+     * @throws TemplateException the template produce any parse errors
+     */
+    @Deprecated
     String format(String template) throws IOException, TemplateException;
+
+    String format() throws IOException, TemplateException;
+
     /**
      * Set the site encoding.
      *

@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.template;
 
 /**
@@ -27,4 +26,5 @@ public interface Assignable {
      */
     void assignVariable(final String name, final Object value);
 
+    void assignVariable(final VarName name, final Object value);
 }

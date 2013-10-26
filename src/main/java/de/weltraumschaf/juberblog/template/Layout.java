@@ -28,34 +28,10 @@ import org.apache.commons.lang3.Validate;
 public final class Layout extends Template {
 
     /**
-     * Variable key for title.
-     */
-    private static final String TITLE = "title";
-    /**
-     * Variable key for content.
-     */
-    private static final String CONTENT = "content";
-    /**
-     * Variable key for encoding.
-     */
-    private static final String ENCODING = "encoding";
-    /**
-     * Variable key for description.
-     */
-    private static final String DESCRIPTION = "description";
-    /**
-     * Variable key for base URI.
-     */
-    private static final String BASE_URI = "basetUri";
-    /**
-     * Variable key for keywords.
-     */
-    private static final String KEYWORDS = "keywords";
-    /**
      * All these variables are assigned to {@link #content} if it is type of {@link Template}.
      */
-    private static final List<String> GLOBAL_VARIABLE_NAMES = Arrays.asList(
-            TITLE, ENCODING, DESCRIPTION, BASE_URI, KEYWORDS
+    private static final List<VarName> GLOBAL_VARIABLE_NAMES = Arrays.asList(
+            VarName.TITLE, VarName.ENCODING, VarName.DESCRIPTION, VarName.BASE_URI, VarName.KEYWORDS
     );
     /**
      * Inner template to render content string.
@@ -87,7 +63,7 @@ public final class Layout extends Template {
      * @param title must not be {@code null}
      */
     public void setTitle(final String title) {
-        assignVariable(TITLE, title);
+        assignVariable(VarName.TITLE, title);
     }
 
     /**
@@ -96,7 +72,7 @@ public final class Layout extends Template {
      * @param description must not be {@code null}
      */
     public void setDescription(final String description) {
-        assignVariable(DESCRIPTION, description);
+        assignVariable(VarName.DESCRIPTION, description);
     }
 
     /**
@@ -105,7 +81,7 @@ public final class Layout extends Template {
      * @param encoding must not be {@code null}
      */
     public void setEncoding(final String encoding) {
-        assignVariable(ENCODING, encoding);
+        assignVariable(VarName.ENCODING, encoding);
     }
 
     /**
@@ -114,7 +90,7 @@ public final class Layout extends Template {
      * @param baseUri must not be {@code null}
      */
     public void setBaseUri(final String baseUri) {
-        assignVariable(BASE_URI, baseUri);
+        assignVariable(VarName.BASE_URI, baseUri);
     }
 
     /**
@@ -123,7 +99,7 @@ public final class Layout extends Template {
      * @param keywords must not be {@code null}
      */
     public void setKeywords(final String keywords) {
-        assignVariable(KEYWORDS, keywords);
+        assignVariable(VarName.KEYWORDS, keywords);
     }
 
     /**
@@ -149,7 +125,7 @@ public final class Layout extends Template {
     @Override
     public String render() throws IOException, TemplateException {
         copyLayoutVariablestoContent();
-        assignVariable(CONTENT, content.render());
+        assignVariable(VarName.CONTENT, content.render());
 
         return super.render();
     }
@@ -159,7 +135,7 @@ public final class Layout extends Template {
      */
     private void copyLayoutVariablestoContent() {
         if (content instanceof Assignable) {
-            for (final String name : GLOBAL_VARIABLE_NAMES) {
+            for (final VarName name : GLOBAL_VARIABLE_NAMES) {
                 ((Assignable) content).assignVariable(name, getVariable(name));
             }
         }

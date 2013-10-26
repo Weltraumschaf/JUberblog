@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.formatter;
 
 import com.google.common.collect.Maps;
 import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,22 +36,12 @@ public class PostFormatter extends BaseFormatter {
         FEATURES.put("rating", Boolean.FALSE);
         FEATURES.put("comments", Boolean.FALSE);
     }
-    /**
-     * Template variable name for date formatted.
-     */
-    private static final String DATE_FORMATTED = "date_formatted";
-    /**
-     * Template variable name for previous post.
-     */
-    private static final String PREV_POST = "prevPost";
-    /**
-     * Template variable name for next post.
-     */
-    private static final String NEXT_POST = "nextPost";
+
     /**
      * Global available variable names.
      */
-    private static final List<String> GLOBAL_VARIABLE_NAMES = Arrays.asList(DATE_FORMATTED, PREV_POST, NEXT_POST);
+    private static final List<VarName> GLOBAL_VARIABLE_NAMES = Arrays.asList(
+        VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST);
     /**
      * Post template file name.
      */
@@ -75,7 +66,7 @@ public class PostFormatter extends BaseFormatter {
      */
     public void setDateFormatted(final String date) {
         Validate.notNull(date, "Date must not be null");
-        content.assignVariable(DATE_FORMATTED, date);
+        content.assignVariable(VarName.DATE_FORMATTED, date);
     }
 
     /**
@@ -85,7 +76,7 @@ public class PostFormatter extends BaseFormatter {
      */
     public void setPrevPost(final String prevPost) {
         Validate.notNull(prevPost, "Prev post must not be null");
-        content.assignVariable(PREV_POST, prevPost);
+        content.assignVariable(VarName.PREV_POST, prevPost);
     }
 
     /**
@@ -95,7 +86,7 @@ public class PostFormatter extends BaseFormatter {
      */
     public void setNextPost(final String nextPost) {
         Validate.notNull(nextPost, "Next post must not be null");
-        content.assignVariable(NEXT_POST, nextPost);
+        content.assignVariable(VarName.NEXT_POST, nextPost);
     }
 
 }

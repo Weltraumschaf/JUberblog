@@ -87,6 +87,11 @@ abstract class BaseFormatter implements HtmlFormatter {
     }
 
     @Override
+    public String format() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void setTitle(final String title) {
         Validate.notNull(title, "Title string must not be null!");
         layout.setTitle(title);

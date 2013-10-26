@@ -49,6 +49,11 @@ public class SiteMapFormatter implements Formatter {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public String format() throws IOException, TemplateException {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
     /**
      * http://www.sitemaps.org/schemas/sitemap/sitemap.xsd
      */

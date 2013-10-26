@@ -111,11 +111,11 @@ public class Template implements Renderable, Assignable {
      * @param assignable must not be {@code null}
      * @param names must not be {@code null}
      */
-    public static void initializeVaribales(final Assignable assignable, final List<String> names) {
+    public static void initializeVaribales(final Assignable assignable, final List<VarName> names) {
         Validate.notNull(assignable, "Assignable must not be null!");
         Validate.notNull(names, "Names must not be null!");
 
-        for (final String name : names) {
+        for (final VarName name : names) {
             assignable.assignVariable(name, "");
         }
     }
@@ -131,6 +131,15 @@ public class Template implements Renderable, Assignable {
         Validate.notEmpty(name, "Name must not be null or empty!");
         Validate.notNull(value, "Value must not be null!");
         templateVariables.put(name, value);
+    }
+
+    @Override
+    public void assignVariable(final VarName name, final Object value) {
+        assignVariable(name.toString(), value);
+    }
+
+    protected Object getVariable(final VarName name) {
+        return getVariable(name.toString());
     }
 
     /**
