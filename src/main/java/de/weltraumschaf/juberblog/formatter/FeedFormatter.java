@@ -18,7 +18,6 @@ import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
 
@@ -27,7 +26,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class FeedFormatter implements Formatter {
+class FeedFormatter implements Formatter {
 
     /**
      * Template for XML.
@@ -55,16 +54,6 @@ public class FeedFormatter implements Formatter {
         Validate.notNull(feed, "Feedmust not be null!");
         content = new Template(templateConfiguration, TEMPLATE);
         this.feed = feed;
-    }
-
-    @Override
-    public String format(InputStream template) throws IOException, TemplateException {
-        throw new UnsupportedOperationException("Will be removed.");
-    }
-
-    @Override
-    public String format(String template) throws IOException, TemplateException {
-        throw new UnsupportedOperationException("Will be removed.");
     }
 
     @Override

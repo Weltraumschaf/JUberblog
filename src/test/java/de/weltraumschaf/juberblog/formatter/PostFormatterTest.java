@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.Constants;
@@ -34,11 +33,13 @@ public class PostFormatterTest {
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
-        final PostFormatter sut = new PostFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
-        sut.setDateFormatted("date");
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.md");
+        final PostFormatter sut = new PostFormatter(
+                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
+                IOUtils.toString(markdownFile));
+        sut.setDateFormatted("date");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.html");
-        final String formatedHtml = sut.format(markdownFile);
+        final String formatedHtml = sut.format();
         assertThat(formatedHtml, is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(markdownFile);
         IOUtils.closeQuietly(htmlFile);

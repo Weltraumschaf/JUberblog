@@ -54,41 +54,37 @@ abstract class BaseFormatter implements HtmlFormatter {
      * Outer two step template.
      */
     private final Layout layout;
+    /**
+     * Markdown to format.
+     */
+    private String markdown;
 
     /**
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@literal null}
      * @param contentTemplate must not be {@literal null} or empty
+     * @param markdown  must not be {@literal null}
      * @throws IOException if template file can't be read
      */
-    public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate) throws IOException {
+    public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate, final String markdown)
+        throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
         Validate.notEmpty(contentTemplate, "Layout template must not be null or empty!");
+        Validate.notNull(markdown, "Markdown string must not be null!");
         content = new Layout(templateConfiguration, contentTemplate);
         layout = new Layout(templateConfiguration, LAYOUT_TEMPLATE);
         layout.setContent(content);
+        this.markdown = markdown;
     }
 
     @Override
-    public String format(final InputStream markdownFile) throws IOException, TemplateException {
-        Validate.notNull(markdownFile, "Markdown file must not be null!");
-        return format(IOUtils.toString(markdownFile));
-    }
-
-    @Override
-    public String format(final String markdown) throws IOException, TemplateException {
-        Validate.notNull(markdown, "Markdown string must not be null!");
+    public String format() throws IOException, TemplateException {
         final Template input = new Template(markdown, Constants.DEFAULT_ENCODING.toString());
         input.addPostFilter(new MarkdownFilter());
         content.setContent(input);
         return layout.render();
-    }
-
-    @Override
-    public String format() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

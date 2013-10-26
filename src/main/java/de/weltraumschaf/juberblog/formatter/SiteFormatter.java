@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class SiteFormatter extends BaseFormatter {
+class SiteFormatter extends BaseFormatter {
 
     /**
      * Site template file name.
@@ -29,12 +29,13 @@ public class SiteFormatter extends BaseFormatter {
 
     /**
      * Dedicated constructor.
-     *
+     * 
      * @param templateConfiguration must not be {@code null} or empty
      * @throws IOException if template file can't be read
      */
-    public SiteFormatter(final Configuration templateConfiguration) throws IOException {
-        super(templateConfiguration, SITE_TEMPLATE);
+    public SiteFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
+        super(templateConfiguration, SITE_TEMPLATE, markdown);
     }
+
 
 }

@@ -7,7 +7,7 @@ package de.weltraumschaf.juberblog.cmd;
 import com.beust.jcommander.internal.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.MetaData;
-import de.weltraumschaf.juberblog.formatter.SiteFormatter;
+import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -35,9 +35,10 @@ public class DataProcessorTest {
     public void createSut() throws IOException, URISyntaxException {
         input = getClass().getResourceAsStream(Constants.PACKAGE_BASE.toString() + "/cmd/data.md");
         sut = new DataProcessor(
-            input,
-            new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR)),
-            "http://www.foobar.com/"
+                input,
+                Formatters.Type.SITE,
+                "http://www.foobar.com/",
+                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR)
         );
     }
 

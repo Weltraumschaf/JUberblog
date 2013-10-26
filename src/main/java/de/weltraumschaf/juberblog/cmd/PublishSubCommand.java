@@ -17,9 +17,7 @@ import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.MarkdownFilenameFilter;
-import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
-import de.weltraumschaf.juberblog.formatter.PostFormatter;
-import de.weltraumschaf.juberblog.formatter.SiteFormatter;
+import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
@@ -40,10 +38,7 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * PublishSubCommand all sites from data directory.
  *
- * TODO
- * - create index
- * - create sitemap.xml
- * - create feed xml
+ * TODO - create index - create sitemap.xml - create feed xml
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -118,18 +113,10 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publishSites() throws ApplicationException {
         LOG.info("Publish sites...");
-
-        try {
-            publishFiles(
-                new SiteFormatter(templateConfig),
+        publishFiles(
+                Formatters.Type.SITE,
                 getDirectories().dataSites(),
                 getDirectories().htdocsSites());
-        } catch (final IOException ex) {
-            throw new ApplicationException(
-                ExitCodeImpl.FATAL,
-                String.format("Can't publish sites: %s!", ex.getMessage()),
-                ex);
-        }
     }
 
     /**
@@ -139,37 +126,30 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      */
     private void publisPosts() throws ApplicationException {
         LOG.info("Publish posts...");
-
-        try {
-            publishFiles(
-                new PostFormatter(templateConfig),
+        publishFiles(
+                Formatters.Type.POST,
                 getDirectories().dataPosts(),
                 getDirectories().htdocsPosts());
-        } catch (final IOException ex) {
-            throw new ApplicationException(
-                ExitCodeImpl.FATAL,
-                String.format("Can't publish posts: %s!", ex.getMessage()),
-                ex);
-        }
+
     }
 
     /**
      * Publish all files in given directory with given layout.
      *
-     * @param fmt must not be {@literal null}
+     * @param type must not be {@literal null}
      * @param dataDir must not be {@literal null}
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFiles(final HtmlFormatter fmt, final Path dataDir, final Path outputDir)
-        throws ApplicationException {
-        Validate.notNull(fmt, "Layout must not be null!");
+    private void publishFiles(final Formatters.Type type, final Path dataDir, final Path outputDir)
+            throws ApplicationException {
+        Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(dataDir, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
         LOG.debug(String.format("Pubish files from '%s'...", dataDir));
 
         for (final File file : readFileList(dataDir)) {
-            publishFile(fmt, file, outputDir);
+            publishFile(type, file, outputDir);
         }
     }
 
@@ -195,13 +175,13 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     /**
      * Publish a given file with a given layout.
      *
-     * @param fmt must not be {@literal null}
+     * @param type must not be {@literal null}
      * @param file must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFile(final HtmlFormatter fmt, final File file, final Path outputDir) throws ApplicationException {
-        Validate.notNull(fmt, "Layout must not be null!");
+    private void publishFile(final Formatters.Type type, final File file, final Path outputDir) throws ApplicationException {
+        Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(file, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
         LOG.info(String.format("Publishing file '%s'...", file));
@@ -220,16 +200,18 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         FileInputStream input = null;
 
         try {
-            input = new FileInputStream(file);
-            final DataProcessor processor = new DataProcessor(input, fmt, getBlogConfiguration().getBaseUri());
-            final String targetFileName = processor.getSlug() + ".html";
-            final Path target = outputDir.resolve(targetFileName);
-            LOG.info(String.format("Write published file to '%s'.", target));
-            Files.createFile(target);
-            Files.write(
-                target,
-                processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
-                StandardOpenOption.WRITE);
+            if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
+                input = new FileInputStream(file);
+                final DataProcessor processor = new DataProcessor(input, type, getBlogConfiguration().getBaseUri(), templateConfig);
+                final String targetFileName = processor.getSlug() + ".html";
+                final Path target = outputDir.resolve(targetFileName);
+                LOG.info(String.format("Write published file to '%s'.", target));
+                Files.createFile(target);
+                Files.write(
+                        target,
+                        processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
+                        StandardOpenOption.WRITE);
+            }
         } catch (final IOException | TemplateException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,

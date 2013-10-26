@@ -26,7 +26,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class PostFormatter extends BaseFormatter {
+class PostFormatter extends BaseFormatter {
 
     /**
      * Template variable for feature switching.
@@ -53,8 +53,12 @@ public class PostFormatter extends BaseFormatter {
      * @param templateConfiguration must not be {@code null} or empty
      * @throws IOException if template file can't be read
      */
-    public PostFormatter(final Configuration templateConfiguration) throws IOException {
-        super(templateConfiguration, TEMPLATE);
+    public PostFormatter(final Configuration templateConfiguration, final String markdownFile) throws IOException {
+        super(templateConfiguration, TEMPLATE, markdownFile);
+        init();
+    }
+
+    private void init() {
         content.assignVariable("features", FEATURES);
         Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);
     }

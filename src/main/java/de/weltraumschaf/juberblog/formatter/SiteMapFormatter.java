@@ -18,8 +18,6 @@ import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
 
@@ -27,7 +25,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class SiteMapFormatter implements Formatter {
+class SiteMapFormatter implements Formatter {
 
     /**
      * Template for XML.
@@ -42,22 +40,12 @@ public class SiteMapFormatter implements Formatter {
      */
     private final SiteMap siteMap;
 
-    public SiteMapFormatter(final Configuration templateConfiguration, SiteMap siteMap) throws IOException {
+    public SiteMapFormatter(final Configuration templateConfiguration, final SiteMap siteMap) throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
         Validate.notNull(siteMap, "SiteMap not be null!");
         content = new Template(templateConfiguration, TEMPLATE);
         this.siteMap = siteMap;
-    }
-
-    @Override
-    public String format(InputStream template) throws IOException, TemplateException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String format(String template) throws IOException, TemplateException {
-        throw new UnsupportedOperationException("Will be removed.");
     }
 
     @Override

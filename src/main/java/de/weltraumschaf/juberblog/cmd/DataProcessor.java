@@ -16,7 +16,9 @@ import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.MetaData;
 import de.weltraumschaf.juberblog.Preprocessor;
 import de.weltraumschaf.juberblog.Slug;
+import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
+import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +59,7 @@ class DataProcessor {
     /**
      * Formats HTML.
      */
-    private final HtmlFormatter fmt;
+    private final Formatters.Type type;
     /**
      * Base URI used in templates.
      */
@@ -82,22 +84,25 @@ class DataProcessor {
      * Lazy computed.
      */
     private String headline;
+    private final Configuration templateConfig;
 
     /**
      * Dedicated constructor.
      *
      * @param dataFile must not be {@literal null}
-     * @param fmt must not be {@literal null}
+     * @param type must not be {@literal null}
      * @param baseUri must not be {@literal null} or empty
+     * @param templateConfig must not be {@literal null} or empty
      */
-    public DataProcessor(final InputStream dataFile, final HtmlFormatter fmt, final String baseUri) {
+    public DataProcessor(final InputStream dataFile, final Formatters.Type type, final String baseUri, final Configuration templateConfig) {
         super();
         Validate.notNull(dataFile, "Data file must not be empty!");
-        Validate.notNull(fmt, "Formatter file must not be empty!");
+        Validate.notNull(type, "Formatter file must not be empty!");
         Validate.notEmpty(baseUri, "BaseUri must not be null or empty!");
         this.input = dataFile;
-        this.fmt = fmt;
+        this.type = type;
         this.baseUri = baseUri;
+        this.templateConfig = templateConfig;
     }
 
     /**
@@ -110,12 +115,22 @@ class DataProcessor {
     public String getHtml() throws IOException, TemplateException {
         if (null == html) {
             getMetaData();
+            final HtmlFormatter fmt;
+
+            if (type == Formatters.Type.POST) {
+                fmt = Formatters.createPostFormatter(templateConfig, markdown);
+            } else if (type == Formatters.Type.SITE) {
+                fmt = Formatters.createSiteFormatter(templateConfig, markdown);
+            } else {
+                throw new RuntimeException(); // TODO beter making!
+            }
+
             fmt.setTitle(getHeadline());
             fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
             fmt.setBaseUri(baseUri);
             fmt.setDescription(metaData.getDescription());
             fmt.setKeywords(metaData.getKeywords());
-            html = fmt.format(markdown);
+            html = fmt.format();
         }
 
         return html;

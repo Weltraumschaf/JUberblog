@@ -34,10 +34,12 @@ public class SiteFormatterTest {
 
     @Test
     public void format() throws IOException, URISyntaxException, TemplateException {
-        final HtmlFormatter sut = new SiteFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.md");
+        final HtmlFormatter sut = new SiteFormatter(
+                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
+                IOUtils.toString(markdownFile));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/site.html");
-        final String formatedHtml = sut.format(markdownFile);
+        final String formatedHtml = sut.format();
         assertThat(formatedHtml, is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(markdownFile);
         IOUtils.closeQuietly(htmlFile);
