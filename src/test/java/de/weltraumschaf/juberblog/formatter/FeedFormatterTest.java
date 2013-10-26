@@ -37,10 +37,16 @@ public class FeedFormatterTest {
             "The description.",
             "en",
             "Sat, 07 Apr 2012 00:16:23 +0200");
+    private final FeedFormatter sut;
+
+    public FeedFormatterTest() throws IOException, URISyntaxException {
+        super();
+        sut = new FeedFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), feed);
+        sut.setEncoding(Constants.DEFAULT_ENCODING.toString());
+    }
 
     @Test
     public void format_emptyItems() throws IOException, URISyntaxException, TemplateException {
-        final FeedFormatter sut = new FeedFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), feed);
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/feed_empty.html");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);
@@ -49,18 +55,16 @@ public class FeedFormatterTest {
     @Test
     public void format_oneItem() throws IOException, URISyntaxException, TemplateException {
         feed.add(new FeedFormatter.FeedItem("title1", "link1", "desc1", "date1", "dcDate1"));
-        final FeedFormatter sut = new FeedFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), feed);
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/feed_one.html");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);
     }
 
-    @Test @Ignore
+    @Test
     public void format_threeItems() throws IOException, URISyntaxException, TemplateException {
-        feed.add(new FeedFormatter.FeedItem("title1", "link1", "desc1", "date1", "dcDate1"));
-        feed.add(new FeedFormatter.FeedItem("title2", "link2", "desc2", "date2", "dcDate2"));
-        feed.add(new FeedFormatter.FeedItem("title3", "link3", "desc3", "date3", "dcDate3"));
-        final FeedFormatter sut = new FeedFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), feed);
+        feed.add(new FeedFormatter.FeedItem("title1", "link1", "description1", "date1", "dcDate1"));
+        feed.add(new FeedFormatter.FeedItem("title2", "link2", "description2", "date2", "dcDate2"));
+        feed.add(new FeedFormatter.FeedItem("title3", "link3", "description3", "date3", "dcDate3"));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/feed_three.html");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);
