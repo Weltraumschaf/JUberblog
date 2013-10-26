@@ -12,34 +12,16 @@
 
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.juberblog.opt.Options;
-
 /**
- * Command pattern.
+ * Implementors have uniform API to be executed.
  *
- * @param <T> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public interface SubCommand<T extends Options> {
+interface Command {
 
     /**
      * Executes the command.
-     *
-     * @throws ApplicationException on any executions error
      */
-    void execute() throws ApplicationException;
-    /**
-     * Set CLI options.
-     *
-     * @param opt must not be {@code null}
-     */
-    void setOptions(T opt);
-    /**
-     * Get the CLI options.
-     *
-     * @return never {@code nul}
-     */
-    T getOptions();
+    void execute();
 
 }

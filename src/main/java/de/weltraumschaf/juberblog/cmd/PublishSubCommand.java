@@ -91,6 +91,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         }
 
         publisPosts();
+        updateIndexes();
         watch.stop();
         LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }
@@ -234,8 +235,26 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
      * @return {@literal true} if file already exists, else {@literal false}
      */
     private boolean publishedFileExists(final File filename) {
-        // TODO Implement if file xist check
+        // TODO Implement if file exist check
         return false;
+    }
+
+    private void updateIndexes() {
+        updateHomeSite();
+        updateSiteMap();
+        updateFeed();
+    }
+
+    private void updateHomeSite() {
+        new HomeSiteGenerator().execute();
+    }
+
+    private void updateSiteMap() {
+        new SiteMapGenerator().execute();
+    }
+
+    private void updateFeed() {
+        new FeedGenerator().execute();
     }
 
 }
