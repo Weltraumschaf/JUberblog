@@ -12,10 +12,16 @@
 
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.juberblog.template.Configurations;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests for {@link FeedGenerator}.
@@ -24,7 +30,21 @@ import org.junit.Ignore;
  */
 public class FeedGeneratorTest {
 
-    private final FeedGenerator sut = new FeedGenerator();
+    private static final String URI = "http://www.foobar.com/";
+    @Rule
+    //CHECKSTYLE:OFF
+    public final TemporaryFolder tmp = new TemporaryFolder();
+    //CHECKSTYLE:ON
+    @Rule
+    //CHECKSTYLE:OFF
+    public final ExpectedException thrown = ExpectedException.none();
+    //CHECKSTYLE:ON
+    private final FeedGenerator sut = new FeedGenerator(
+        Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
+
+    public FeedGeneratorTest() throws IOException, URISyntaxException {
+        super();
+    }
 
     @Test @Ignore
     public void execute() {

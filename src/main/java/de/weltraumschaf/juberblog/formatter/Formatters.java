@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import freemarker.template.Configuration;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public final class Formatters {
      */
     public static Formatter createFeedFormatter(
         final Configuration templateConfiguration,
-        final FeedFormatter.Feed feed) throws IOException {
+        final Feed feed) throws IOException {
         return new FeedFormatter(templateConfiguration, feed);
     }
 

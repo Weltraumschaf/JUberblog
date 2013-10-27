@@ -52,7 +52,7 @@ class SiteMapGenerator implements Command {
     /**
      * Computed by {@link #execute()}.
      */
-    private String html = "";
+    private String xml = "";
 
     /**
      * Dedicated constructor.
@@ -69,7 +69,7 @@ class SiteMapGenerator implements Command {
     public void execute() {
         final SiteMap map = findPublishedFiles();
         try {
-            html = generaeXml(map);
+            xml = generaeXml(map);
         } catch (final IOException | TemplateException ex) {
             throw new RuntimeException(ex);
         }
@@ -128,7 +128,7 @@ class SiteMapGenerator implements Command {
      * @return never {@code null}, maybe empty until {@link #execute()} is called
      */
     public String getResult() {
-        return html;
+        return xml;
     }
 
     /**

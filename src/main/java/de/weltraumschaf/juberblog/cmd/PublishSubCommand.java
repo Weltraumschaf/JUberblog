@@ -257,7 +257,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
 
     private void updateFeed() {
         LOG.info("Update feed...");
-        new FeedGenerator().execute();
+        new FeedGenerator(templateConfig).execute();
     }
 
 }
