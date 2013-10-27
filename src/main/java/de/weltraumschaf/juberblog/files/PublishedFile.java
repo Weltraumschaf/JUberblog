@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.files;
 
+import com.google.common.base.Objects;
 import java.io.File;
 import org.apache.commons.lang3.Validate;
 
@@ -63,4 +64,22 @@ public class PublishedFile {
     public long getModificationTime() {
         return file.lastModified();
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(baseUri, file.getAbsolutePath());
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof PublishedFile)) {
+            return false;
+        }
+
+        final PublishedFile other = (PublishedFile) obj;
+        return Objects.equal(baseUri, other.baseUri)
+            && Objects.equal(file.getAbsolutePath(), other.file.getAbsolutePath());
+    }
+
+
 }

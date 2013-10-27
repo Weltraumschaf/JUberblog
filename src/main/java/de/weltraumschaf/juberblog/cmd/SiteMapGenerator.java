@@ -11,6 +11,15 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import de.weltraumschaf.juberblog.files.PublishedFile;
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.Validate;
+
 /**
  * Generates the site map XML.
  *
@@ -22,9 +31,36 @@ package de.weltraumschaf.juberblog.cmd;
  */
 class SiteMapGenerator implements Command {
 
+    /**
+     * Directories with published files.
+     */
+    private final Map<String, File> directoriesWithPublishedFiles = Maps.newHashMap();
+
     @Override
     public void execute() {
-        // TODO Implementhome site map generation.
+
+    }
+
+    /**
+     * Add directory to find published files with their base URI.
+     *
+     * @param baseUri must not be {@code nul} or empty
+     * @param directory must not be {@code null}, must be directory
+     */
+    public void addDirecotry(final String baseUri, final File directory) {
+        Validate.notEmpty(baseUri, "BaseURI must not be null or empty!");
+        Validate.notNull(directory, "Directory must not be null!");
+        Validate.isTrue(directory.isDirectory(), "Directory must be directory!");
+        directoriesWithPublishedFiles.put(baseUri, directory);
+    }
+
+    Collection<PublishedFile> findPublishedFiles() {
+        final List<PublishedFile> found= Lists.newArrayList();
+        return found;
+    }
+
+    public String getResult() {
+        return "";
     }
 
 }
