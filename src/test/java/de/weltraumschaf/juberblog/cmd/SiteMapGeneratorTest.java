@@ -11,18 +11,21 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
-import com.beust.jcommander.internal.Lists;
-import de.weltraumschaf.juberblog.files.PublishedFile;
+import de.weltraumschaf.juberblog.cmd.SiteMapGenerator.Dir;
 import de.weltraumschaf.juberblog.model.SiteMap;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
+import de.weltraumschaf.juberblog.template.Configurations;
+import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
-import org.junit.Ignore;
+import org.joda.time.DateTime;
 
 /**
  * Tests for {@link SiteMapGenerator}.
@@ -31,6 +34,7 @@ import org.junit.Ignore;
  */
 public class SiteMapGeneratorTest {
 
+    private static final String URI = "http://www.foobar.com/";
     @Rule
     //CHECKSTYLE:OFF
     public final TemporaryFolder tmp = new TemporaryFolder();
@@ -39,33 +43,31 @@ public class SiteMapGeneratorTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-    private final SiteMapGenerator sut = new SiteMapGenerator();
+    private final SiteMapGenerator sut = new SiteMapGenerator(
+            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
+
+    public SiteMapGeneratorTest() throws IOException, URISyntaxException {
+        super();
+    }
 
     @Test
-    public void addDirecotry_throwsExceptionIfBasedirIsNull() throws IOException {
+    public void addDirecotry_throwsExceptionIfDirIsNull() throws IOException {
         thrown.expect(NullPointerException.class);
-        sut.addDirecotry(null, tmp.newFolder());
+        sut.addDirecotry(null);
     }
 
     @Test
-    public void addDirecotry_throwsExceptionIfBasedirIsEmpty() throws IOException {
+    public void postsDir_throwsExceptionIfNotDirectory() throws IOException {
         thrown.expect(IllegalArgumentException.class);
-        sut.addDirecotry("", tmp.newFolder());
+        Dir.posts(tmp.newFile(), "foo");
     }
 
-    @Test
-    public void addDirecotry_throwsExceptionIfDirectoryIsNull() {
-        thrown.expect(NullPointerException.class);
-        sut.addDirecotry("foo", null);
-    }
-
-    @Test
-    public void addDirecotry_throwsExceptionIfNotDirectory() throws IOException {
+    public void sitesDir_throwsExceptionIfNotDirectory() throws IOException {
         thrown.expect(IllegalArgumentException.class);
-        sut.addDirecotry("foo", tmp.newFile());
+        Dir.sites(tmp.newFile(), "foo");
     }
 
-    private Dirs addfilesToSut() throws IOException {
+    private void addfilesToSut() throws IOException {
         final File sites = tmp.newFolder("sites");
         assertThat(new File(sites, "foo.html").createNewFile(), is(true));
         assertThat(new File(sites, "bar.html").createNewFile(), is(true));
@@ -76,70 +78,115 @@ public class SiteMapGeneratorTest {
         assertThat(new File(posts, "foo.html").createNewFile(), is(true));
         assertThat(new File(posts, "bar.html").createNewFile(), is(true));
         assertThat(new File(posts, "snafu.txt").createNewFile(), is(true));
-        sut.addDirecotry("http://www.foobar.com/sites/", sites);
-        sut.addDirecotry("http://www.foobar.com/posts/", posts);
-        return new Dirs(sites, posts);
+        sut.addDirecotry(Dir.sites(sites, URI + "sites/"));
+        sut.addDirecotry(Dir.posts(posts, URI + "posts/"));
+//        return new Dirs(sites, posts);
     }
+
+    private String today() {
+        return SiteMapGenerator.formatTimestamp(new DateTime());
+    }
+
+    @Test
+    public void formatTimestamp() {
+        assertThat(SiteMapGenerator.formatTimestamp(123456L), is(equalTo("1970-01-01")));
+        assertThat(SiteMapGenerator.formatTimestamp(1382901066000L), is(equalTo("2013-10-27")));
+    }
+
     @Test
     public void findPublishedFiles() throws IOException {
-        assertThat(sut.findPublishedFiles(), hasSize(0));
-        final Dirs dirs = addfilesToSut();
-        assertThat(sut.findPublishedFiles(), hasSize(5));
-        assertThat(sut.findPublishedFiles(), containsInAnyOrder(
-                new PublishedFile("http://www.foobar.com/sites/", new File(dirs.sites.getAbsolutePath() + "/foo.html")),
-                new PublishedFile("http://www.foobar.com/sites/", new File(dirs.sites.getAbsolutePath() + "/bar.html")),
-                new PublishedFile("http://www.foobar.com/sites/", new File(dirs.sites.getAbsolutePath() + "/baz.html")),
-                new PublishedFile("http://www.foobar.com/posts/", new File(dirs.posts.getAbsolutePath() + "/foo.html")),
-                new PublishedFile("http://www.foobar.com/posts/", new File(dirs.posts.getAbsolutePath() + "/bar.html"))
+        SiteMap map = sut.findPublishedFiles();
+        assertThat(map, is(not(nullValue())));
+        assertThat(map.getUrls(), hasSize(0));
+        addfilesToSut();
+        map = sut.findPublishedFiles();
+        assertThat(map, is(not(nullValue())));
+        assertThat(map.getUrls(), hasSize(5));
+        assertThat(map.getUrls(), containsInAnyOrder(
+            new SiteMapUrl(URI + "sites/foo.html", today(), SiteMapUrl.ChangeFrequency.WEEKLY, Dir.SITE_PRIORITY),
+            new SiteMapUrl(URI + "sites/bar.html", today(), SiteMapUrl.ChangeFrequency.WEEKLY, Dir.SITE_PRIORITY),
+            new SiteMapUrl(URI + "sites/baz.html", today(), SiteMapUrl.ChangeFrequency.WEEKLY, Dir.SITE_PRIORITY),
+            new SiteMapUrl(URI + "posts/foo.html", today(), SiteMapUrl.ChangeFrequency.DAILY, Dir.POST_PRIORITY),
+            new SiteMapUrl(URI + "posts/bar.html", today(), SiteMapUrl.ChangeFrequency.DAILY, Dir.POST_PRIORITY)
         ));
     }
 
     @Test
-    public void generateModel_throwsExceptionIfNull() throws IOException {
-        thrown.expect(NullPointerException.class);
-        assertThat(sut.generateModel(null), is(not(nullValue())));
+    public void generaeXml() throws IOException, TemplateException {
+        final SiteMap map = new SiteMap();
+        map.add(new SiteMapUrl(
+            URI + "sites/foo.html", "2013-10-27", SiteMapUrl.ChangeFrequency.WEEKLY, Dir.SITE_PRIORITY));
+        map.add(new SiteMapUrl(
+            URI + "sites/bar.html", "2013-10-27", SiteMapUrl.ChangeFrequency.WEEKLY, Dir.SITE_PRIORITY));
+        map.add(new SiteMapUrl(
+            URI + "posts/foo.html", "2013-10-27", SiteMapUrl.ChangeFrequency.DAILY, Dir.POST_PRIORITY));
+        assertThat(sut.generaeXml(map), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/sites/foo.html</loc>\n"
+            + "        <lastmod>2013-10-27</lastmod>\n"
+            + "        <changefreq>weekly</changefreq>\n"
+            + "        <priority>0.5</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/sites/bar.html</loc>\n"
+            + "        <lastmod>2013-10-27</lastmod>\n"
+            + "        <changefreq>weekly</changefreq>\n"
+            + "        <priority>0.5</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/posts/foo.html</loc>\n"
+            + "        <lastmod>2013-10-27</lastmod>\n"
+            + "        <changefreq>daily</changefreq>\n"
+            + "        <priority>1.0</priority>\n"
+            + "    </url>\n"
+            + "</urlset>")));
     }
 
     @Test
-    public void generateModel_emptyInEmptyOut() throws IOException {
-        final SiteMap model = sut.generateModel(Lists.<PublishedFile>newArrayList());
-        assertThat(model, is(not(nullValue())));
-        assertThat(model.getUrls(), is(not(nullValue())));
-        assertThat(model.getUrls(), hasSize(0));
-    }
-
-    @Test
-    public void generateModel() throws IOException {
-        addfilesToSut();
-        final SiteMap model = sut.generateModel(sut.findPublishedFiles());
-        assertThat(model, is(not(nullValue())));
-        assertThat(model.getUrls(), is(not(nullValue())));
-        assertThat(model.getUrls(), hasSize(5));
-        // TODO Not ready yet.
-    }
-
-    @Test @Ignore
     public void execute() throws IOException {
-        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"${encoding}\"?>\n"
-                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
-                + "</urlset>")));
+        assertThat(sut.getResult(), is(equalTo("")));
+        sut.execute();
+        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+            + "</urlset>")));
 
         addfilesToSut();
 
         sut.execute();
-        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"${encoding}\"?>\n"
-                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
-                + "</urlset>")));
+        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/sites/bar.html</loc>\n"
+            + "        <lastmod>" + today() + "</lastmod>\n"
+            + "        <changefreq>weekly</changefreq>\n"
+            + "        <priority>0.5</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/sites/baz.html</loc>\n"
+            + "        <lastmod>" + today() + "</lastmod>\n"
+            + "        <changefreq>weekly</changefreq>\n"
+            + "        <priority>0.5</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/sites/foo.html</loc>\n"
+            + "        <lastmod>" + today() + "</lastmod>\n"
+            + "        <changefreq>weekly</changefreq>\n"
+            + "        <priority>0.5</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/posts/bar.html</loc>\n"
+            + "        <lastmod>" + today() + "</lastmod>\n"
+            + "        <changefreq>daily</changefreq>\n"
+            + "        <priority>1.0</priority>\n"
+            + "    </url>\n"
+            + "    <url>\n"
+            + "        <loc>http://www.foobar.com/posts/foo.html</loc>\n"
+            + "        <lastmod>" + today() + "</lastmod>\n"
+            + "        <changefreq>daily</changefreq>\n"
+            + "        <priority>1.0</priority>\n"
+            + "    </url>\n"
+            + "</urlset>")));
     }
 
-    private static class Dirs {
-        public final File sites;
-        public final File posts;
-
-        public Dirs(File sites, File posts) {
-            this.sites = sites;
-            this.posts = posts;
-        }
-
-    }
 }

@@ -246,14 +246,17 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
     }
 
     private void updateHomeSite() {
+        LOG.info("Update home site...");
         new HomeSiteGenerator().execute();
     }
 
     private void updateSiteMap() {
-        new SiteMapGenerator().execute();
+        LOG.info("Update site map...");
+        new SiteMapGenerator(templateConfig).execute();
     }
 
     private void updateFeed() {
+        LOG.info("Update feed...");
         new FeedGenerator().execute();
     }
 

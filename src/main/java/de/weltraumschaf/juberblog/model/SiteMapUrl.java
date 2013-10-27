@@ -17,6 +17,8 @@ import org.apache.commons.lang3.Validate;
 
 /**
  * Models a site map URL.
+ *
+ * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class SiteMapUrl {
 
@@ -111,6 +113,16 @@ public final class SiteMapUrl {
                 && Objects.equal(lastmod, other.lastmod)
                 && Objects.equal(changefreq, other.changefreq)
                 && Objects.equal(priority, other.priority);
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+            .add("loc", loc)
+            .add("lastmod", lastmod)
+            .add("changefreq", changefreq)
+            .add("priority", priority)
+            .toString();
     }
 
     /**

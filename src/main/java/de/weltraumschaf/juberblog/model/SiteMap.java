@@ -17,7 +17,9 @@ import java.util.List;
 /**
  * Models the site map data.
  *
- * See http://www.sitemaps.org/schemas/sitemap/sitemap.xsd
+ * See www.sitemaps.org/protocol.html
+ *
+ * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class SiteMap {
 
