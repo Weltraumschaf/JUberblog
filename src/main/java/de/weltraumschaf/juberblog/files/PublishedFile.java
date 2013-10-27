@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog;
+package de.weltraumschaf.juberblog.files;
 
 import java.io.File;
 import org.apache.commons.lang3.Validate;

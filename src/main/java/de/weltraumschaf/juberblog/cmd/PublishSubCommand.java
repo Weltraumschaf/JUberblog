@@ -16,7 +16,7 @@ import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
-import de.weltraumschaf.juberblog.MarkdownFilenameFilter;
+import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import de.weltraumschaf.juberblog.template.Configurations;
@@ -165,7 +165,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions>
         LOG.debug(String.format("Read file list from '%s'...", dir));
         final List<File> files = Lists.newArrayList();
 
-        for (final File f : dir.toFile().listFiles(new MarkdownFilenameFilter())) {
+        for (final File f : dir.toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
             files.add(f);
         }
 

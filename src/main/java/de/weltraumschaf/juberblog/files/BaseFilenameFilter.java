@@ -9,28 +9,26 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog;
 
-import java.io.File;
+package de.weltraumschaf.juberblog.files;
+
 import java.io.FilenameFilter;
-import org.apache.commons.lang3.Validate;
 
 /**
- * Accept Markdown files.
+ * Common code for file name filters.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class MarkdownFilenameFilter implements FilenameFilter {
+abstract class BaseFilenameFilter implements FilenameFilter {
 
     /**
-     * File extension of Markdown files.
+     * Determine if a given name ends with an file extension (e.g. .html).
+     *
+     * @param name must not be {@code nul}
+     * @param extension must not be {@code nul}
+     * @return {@code true} if name ends with given extension, else {@code false}
      */
-    private static final String FILE_EXTENSION = ".md";
-
-    @Override
-    public boolean accept(final File dir, final String name) {
-        Validate.notNull(name, "Name must not be null!");
-        return name.endsWith(FILE_EXTENSION);
+    protected boolean hasExtension(final String name, final String extension) {
+        return name.endsWith(extension);
     }
-
 }

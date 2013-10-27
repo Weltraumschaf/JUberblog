@@ -10,8 +10,9 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog;
+package de.weltraumschaf.juberblog.files;
 
+import java.io.FilenameFilter;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -29,7 +30,7 @@ public class MarkdownFilenameFilterTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-    private final MarkdownFilenameFilter sut = new MarkdownFilenameFilter();
+    private final FilenameFilter sut = new MarkdownFilenameFilter();
 
     @Test
     public void accept_throwsExceptionIfNameIsNull() {
