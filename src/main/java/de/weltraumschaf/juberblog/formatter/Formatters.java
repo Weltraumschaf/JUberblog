@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.juberblog.model.SiteMap;
 import freemarker.template.Configuration;
 import java.io.IOException;
 
@@ -80,7 +81,7 @@ public final class Formatters {
      */
     public static Formatter createSiteMapFormatter(
         final Configuration templateConfiguration,
-        final SiteMapFormatter.SiteMap siteMap) throws IOException {
+        final SiteMap siteMap) throws IOException {
         return new SiteMapFormatter(templateConfiguration, siteMap);
     }
 
