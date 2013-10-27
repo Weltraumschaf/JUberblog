@@ -12,6 +12,8 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.model.SiteMap;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -30,7 +32,7 @@ import static org.junit.Assert.assertThat;
 public class SiteMapFormatterTest {
 
     private static final String FIXTURE_PACKAGE = Constants.PACKAGE_BASE.toString() + "/formatter";
-    private final SiteMapFormatter.SiteMap siteMap = new SiteMapFormatter.SiteMap();
+    private final SiteMap siteMap = new SiteMap();
     private final SiteMapFormatter sut;
 
     public SiteMapFormatterTest() throws IOException, URISyntaxException {
@@ -50,8 +52,8 @@ public class SiteMapFormatterTest {
 
     @Test
     public void format_oneSite() throws IOException, URISyntaxException, TemplateException {
-        siteMap.add(new SiteMapFormatter.SiteMapUrl(
-                "loc1", "lastmod1", SiteMapFormatter.ChangeFrequency.DAILY, 0.1f));
+        siteMap.add(new SiteMapUrl(
+                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, 0.1f));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/sitemap_one.xml");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);
@@ -59,12 +61,12 @@ public class SiteMapFormatterTest {
 
     @Test
     public void format_threeSites() throws IOException, URISyntaxException, TemplateException {
-        siteMap.add(new SiteMapFormatter.SiteMapUrl(
-                "loc1", "lastmod1", SiteMapFormatter.ChangeFrequency.DAILY, 0.1f));
-        siteMap.add(new SiteMapFormatter.SiteMapUrl(
-                "loc2", "lastmod2", SiteMapFormatter.ChangeFrequency.WEEKLY, 0.2f));
-        siteMap.add(new SiteMapFormatter.SiteMapUrl(
-                "loc3", "lastmod3", SiteMapFormatter.ChangeFrequency.MONTHLY, 0.3f));
+        siteMap.add(new SiteMapUrl(
+                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, 0.1f));
+        siteMap.add(new SiteMapUrl(
+                "loc2", "lastmod2", SiteMapUrl.ChangeFrequency.WEEKLY, 0.2f));
+        siteMap.add(new SiteMapUrl(
+                "loc3", "lastmod3", SiteMapUrl.ChangeFrequency.MONTHLY, 0.3f));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/sitemap_three.xml");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);

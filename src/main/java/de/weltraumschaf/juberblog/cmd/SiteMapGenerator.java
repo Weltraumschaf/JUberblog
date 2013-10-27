@@ -15,6 +15,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.files.PublishedFile;
+import de.weltraumschaf.juberblog.model.SiteMap;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -65,6 +67,17 @@ class SiteMapGenerator implements Command {
         }
 
         return found;
+    }
+
+    SiteMap generateModel(final Collection<PublishedFile> sites) {
+        Validate.notNull(sites);
+        final SiteMap map = new SiteMap();
+
+        for (final PublishedFile site : sites) {
+            map.add(new SiteMapUrl("loc", "lastmod", SiteMapUrl.ChangeFrequency.DAILY, 0.2f));
+        }
+
+        return map;
     }
 
     public String getResult() {
