@@ -19,6 +19,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -119,7 +120,7 @@ class SiteMapFormatter implements Formatter {
         /**
          * Site priority.
          */
-        private final float priority;
+        private final String priority;
 
         /**
          * Dedicated constructor.
@@ -138,7 +139,7 @@ class SiteMapFormatter implements Formatter {
             this.loc = loc;
             this.lastmod = lastmod;
             this.changefreq = changefreq.toString();
-            this.priority = priority;
+            this.priority = String.format(Locale.ENGLISH, "%.1f", priority);
         }
 
         /**
@@ -171,9 +172,11 @@ class SiteMapFormatter implements Formatter {
         /**
          * Get the priority of the site.
          *
+         * Formatted to EN decimal number with 1 digit after period.
+         *
          * @return never less than 0.0
          */
-        public float getPriority() {
+        public String getPriority() {
             return priority;
         }
 
@@ -194,7 +197,6 @@ class SiteMapFormatter implements Formatter {
                     && Objects.equal(changefreq, other.changefreq)
                     && Objects.equal(priority, other.priority);
         }
-
 
     }
 
