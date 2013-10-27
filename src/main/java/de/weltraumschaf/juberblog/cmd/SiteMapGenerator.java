@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.files.PublishedFile;
 import java.io.File;
 import java.util.Collection;
@@ -56,6 +57,13 @@ class SiteMapGenerator implements Command {
 
     Collection<PublishedFile> findPublishedFiles() {
         final List<PublishedFile> found= Lists.newArrayList();
+
+        for (final Map.Entry<String, File> entry : directoriesWithPublishedFiles.entrySet()) {
+            for (final File publishedFile : entry.getValue().listFiles(FilenameFilters.findHtmlFiles())) {
+                found.add(new PublishedFile(entry.getKey(), publishedFile));
+            }
+        }
+
         return found;
     }
 

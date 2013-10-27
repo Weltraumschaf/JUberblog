@@ -64,7 +64,7 @@ public class SiteMapGeneratorTest {
         sut.addDirecotry("foo", tmp.newFile());
     }
 
-    @Test @Ignore
+    @Test
     public void findPublishedFiles() throws IOException {
         final File sites = tmp.newFolder("sites");
         assertThat(new File(sites, "foo.html").createNewFile(), is(true));
@@ -76,11 +76,13 @@ public class SiteMapGeneratorTest {
         assertThat(new File(posts, "foo.html").createNewFile(), is(true));
         assertThat(new File(posts, "bar.html").createNewFile(), is(true));
         assertThat(new File(posts, "snafu.txt").createNewFile(), is(true));
+
+        assertThat(sut.findPublishedFiles(), hasSize(0));
         sut.addDirecotry("http://www.foobar.com/sites/", sites);
         sut.addDirecotry("http://www.foobar.com/posts/", posts);
 
         assertThat(sut.findPublishedFiles(), hasSize(5));
-        assertThat(sut.findPublishedFiles(), contains(
+        assertThat(sut.findPublishedFiles(), containsInAnyOrder(
                 new PublishedFile("http://www.foobar.com/sites/", new File(sites.getAbsolutePath() + "/foo.html")),
                 new PublishedFile("http://www.foobar.com/sites/", new File(sites.getAbsolutePath() + "/bar.html")),
                 new PublishedFile("http://www.foobar.com/sites/", new File(sites.getAbsolutePath() + "/baz.html")),

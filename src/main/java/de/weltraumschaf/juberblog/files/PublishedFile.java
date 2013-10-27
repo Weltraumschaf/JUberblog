@@ -81,5 +81,9 @@ public class PublishedFile {
             && Objects.equal(file.getAbsolutePath(), other.file.getAbsolutePath());
     }
 
+    @Override
+    public String toString() {
+        return "PublishedFile{" + "baseUri=" + baseUri + ", file=" + file + '}';
+    }
 
 }
