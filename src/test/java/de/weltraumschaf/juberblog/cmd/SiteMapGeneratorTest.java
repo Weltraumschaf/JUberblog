@@ -80,7 +80,6 @@ public class SiteMapGeneratorTest {
         assertThat(new File(posts, "snafu.txt").createNewFile(), is(true));
         sut.addDirecotry(Dir.sites(sites, URI + "sites/"));
         sut.addDirecotry(Dir.posts(posts, URI + "posts/"));
-//        return new Dirs(sites, posts);
     }
 
     private String today() {
