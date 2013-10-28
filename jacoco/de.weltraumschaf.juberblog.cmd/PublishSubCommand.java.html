@@ -16,7 +16,7 @@ import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
-import de.weltraumschaf.juberblog.MarkdownFilenamefiler;
+import de.weltraumschaf.juberblog.MarkdownFilenameFilter;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.PostFormatter;
 import de.weltraumschaf.juberblog.formatter.SiteFormatter;
@@ -40,7 +40,10 @@ import org.apache.commons.lang3.time.StopWatch;
 /**
  * PublishSubCommand all sites from data directory.
  *
- * TODO Generate slug URL from headline
+ * TODO
+ * - create index
+ * - create sitemap.xml
+ * - create feed xml
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
@@ -49,11 +52,11 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
     /**
      * Log facility.
      */
-<span class="fc" id="L52">    private static final Logger LOG = Logger.getLogger(PublishSubCommand.class);</span>
+<span class="fc" id="L55">    private static final Logger LOG = Logger.getLogger(PublishSubCommand.class);</span>
     /**
      * USed to measure publish time.
      */
-<span class="fc" id="L56">    private final StopWatch watch = new StopWatch();</span>
+<span class="fc" id="L59">    private final StopWatch watch = new StopWatch();</span>
     /**
      * Command line options.
      */
@@ -69,43 +72,43 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      * @param io must not be {@literal null}
      */
     public PublishSubCommand(final IO io) {
-<span class="fc" id="L72">        super(io);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L75">        super(io);</span>
+<span class="fc" id="L76">    }</span>
 
     @Override
     protected void init() throws ApplicationException {
-<span class="nc" id="L77">        super.init();</span>
+<span class="nc" id="L80">        super.init();</span>
         try {
-<span class="nc" id="L79">            templateConfig = Configurations.forProduction(getDirectories().templates().toString());</span>
-<span class="nc" id="L80">        } catch (final IOException | URISyntaxException ex) {</span>
-<span class="nc" id="L81">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't configure templates!&quot;, ex);</span>
-<span class="nc" id="L82">        }</span>
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L82">            templateConfig = Configurations.forProduction(getDirectories().templates().toString());</span>
+<span class="nc" id="L83">        } catch (final IOException | URISyntaxException ex) {</span>
+<span class="nc" id="L84">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't configure templates!&quot;, ex);</span>
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">    }</span>
 
     @Override
     public void run() throws ApplicationException {
-<span class="nc" id="L87">        watch.reset();</span>
-<span class="nc" id="L88">        watch.start();</span>
-<span class="nc" id="L89">        LOG.info(&quot;Start pulishing...&quot;);</span>
+<span class="nc" id="L90">        watch.reset();</span>
+<span class="nc" id="L91">        watch.start();</span>
+<span class="nc" id="L92">        LOG.info(&quot;Start pulishing...&quot;);</span>
 
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (options.isSites()) {</span>
-<span class="nc" id="L92">            publishSites();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (options.isSites()) {</span>
+<span class="nc" id="L95">            publishSites();</span>
         }
 
-<span class="nc" id="L95">        publisPosts();</span>
-<span class="nc" id="L96">        watch.stop();</span>
-<span class="nc" id="L97">        LOG.info(String.format(&quot;Publishing finished! Elapsed time: %s&quot;, watch.toString()));</span>
-<span class="nc" id="L98">    }</span>
+<span class="nc" id="L98">        publisPosts();</span>
+<span class="nc" id="L99">        watch.stop();</span>
+<span class="nc" id="L100">        LOG.info(String.format(&quot;Publishing finished! Elapsed time: %s&quot;, watch.toString()));</span>
+<span class="nc" id="L101">    }</span>
 
     @Override
     public void setOptions(final PublishOptions opt) {
-<span class="fc" id="L102">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
-<span class="fc" id="L103">        options = opt;</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L105">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
+<span class="fc" id="L106">        options = opt;</span>
+<span class="fc" id="L107">    }</span>
 
     @Override
     public PublishOptions getOptions() {
-<span class="fc" id="L108">        return options;</span>
+<span class="fc" id="L111">        return options;</span>
     }
 
     /**
@@ -114,20 +117,20 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      * @throws ApplicationException if IO error occurs when configure templates
      */
     private void publishSites() throws ApplicationException {
-<span class="nc" id="L117">        LOG.info(&quot;Publish sites...&quot;);</span>
+<span class="nc" id="L120">        LOG.info(&quot;Publish sites...&quot;);</span>
 
         try {
-<span class="nc" id="L120">            publishFiles(</span>
+<span class="nc" id="L123">            publishFiles(</span>
                 new SiteFormatter(templateConfig),
                 getDirectories().dataSites(),
                 getDirectories().htdocsSites());
-<span class="nc" id="L124">        } catch (final IOException ex) {</span>
-<span class="nc" id="L125">            throw new ApplicationException(</span>
+<span class="nc" id="L127">        } catch (final IOException ex) {</span>
+<span class="nc" id="L128">            throw new ApplicationException(</span>
                 ExitCodeImpl.FATAL,
                 String.format(&quot;Can't publish sites: %s!&quot;, ex.getMessage()),
                 ex);
-<span class="nc" id="L129">        }</span>
-<span class="nc" id="L130">    }</span>
+<span class="nc" id="L132">        }</span>
+<span class="nc" id="L133">    }</span>
 
     /**
      * Publish posts.
@@ -135,20 +138,20 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      * @throws ApplicationException if IO error occurs when configure templates
      */
     private void publisPosts() throws ApplicationException {
-<span class="nc" id="L138">        LOG.info(&quot;Publish posts...&quot;);</span>
+<span class="nc" id="L141">        LOG.info(&quot;Publish posts...&quot;);</span>
 
         try {
-<span class="nc" id="L141">            publishFiles(</span>
+<span class="nc" id="L144">            publishFiles(</span>
                 new PostFormatter(templateConfig),
                 getDirectories().dataPosts(),
                 getDirectories().htdocsPosts());
-<span class="nc" id="L145">        } catch (final IOException ex) {</span>
-<span class="nc" id="L146">            throw new ApplicationException(</span>
+<span class="nc" id="L148">        } catch (final IOException ex) {</span>
+<span class="nc" id="L149">            throw new ApplicationException(</span>
                 ExitCodeImpl.FATAL,
                 String.format(&quot;Can't publish posts: %s!&quot;, ex.getMessage()),
                 ex);
-<span class="nc" id="L150">        }</span>
-<span class="nc" id="L151">    }</span>
+<span class="nc" id="L153">        }</span>
+<span class="nc" id="L154">    }</span>
 
     /**
      * Publish all files in given directory with given layout.
@@ -160,16 +163,15 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      */
     private void publishFiles(final Formatter fmt, final Path dataDir, final Path outputDir)
         throws ApplicationException {
-<span class="nc" id="L163">        Validate.notNull(fmt, &quot;Layout must not be null!&quot;);</span>
-<span class="nc" id="L164">        Validate.notNull(dataDir, &quot;Dirname must not be null!&quot;);</span>
-<span class="nc" id="L165">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
-<span class="nc" id="L166">        LOG.debug(String.format(&quot;Pubish files from '%s'...&quot;, dataDir));</span>
-<span class="nc" id="L167">        final List&lt;File&gt; fileList = readFileList(dataDir);</span>
+<span class="nc" id="L166">        Validate.notNull(fmt, &quot;Layout must not be null!&quot;);</span>
+<span class="nc" id="L167">        Validate.notNull(dataDir, &quot;Dirname must not be null!&quot;);</span>
+<span class="nc" id="L168">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
+<span class="nc" id="L169">        LOG.debug(String.format(&quot;Pubish files from '%s'...&quot;, dataDir));</span>
 
-<span class="nc bnc" id="L169" title="All 2 branches missed.">        for (final File file : fileList) {</span>
-<span class="nc" id="L170">            publishFile(fmt, file, outputDir);</span>
-<span class="nc" id="L171">        }</span>
-<span class="nc" id="L172">    }</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for (final File file : readFileList(dataDir)) {</span>
+<span class="nc" id="L172">            publishFile(fmt, file, outputDir);</span>
+<span class="nc" id="L173">        }</span>
+<span class="nc" id="L174">    }</span>
 
     /**
      * Read all files from a given directory.
@@ -178,16 +180,16 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      * @return never {@literal null} or empty
      */
     private List&lt;File&gt; readFileList(final Path dir) {
-<span class="nc" id="L181">        Validate.notNull(dir, &quot;Dir must not be null!&quot;);</span>
-<span class="nc" id="L182">        LOG.debug(String.format(&quot;Read file list from '%s'...&quot;, dir));</span>
-<span class="nc" id="L183">        final List&lt;File&gt; files = Lists.newArrayList();</span>
+<span class="nc" id="L183">        Validate.notNull(dir, &quot;Dir must not be null!&quot;);</span>
+<span class="nc" id="L184">        LOG.debug(String.format(&quot;Read file list from '%s'...&quot;, dir));</span>
+<span class="nc" id="L185">        final List&lt;File&gt; files = Lists.newArrayList();</span>
 
-<span class="nc bnc" id="L185" title="All 2 branches missed.">        for (final File f : dir.toFile().listFiles(new MarkdownFilenamefiler())) {</span>
-<span class="nc" id="L186">            files.add(f);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        for (final File f : dir.toFile().listFiles(new MarkdownFilenameFilter())) {</span>
+<span class="nc" id="L188">            files.add(f);</span>
         }
 
-<span class="nc" id="L189">        LOG.debug(String.format(&quot;Found %d files to publish.&quot;, files.size()));</span>
-<span class="nc" id="L190">        return files;</span>
+<span class="nc" id="L191">        LOG.debug(String.format(&quot;Found %d files to publish.&quot;, files.size()));</span>
+<span class="nc" id="L192">        return files;</span>
     }
 
     /**
@@ -199,37 +201,44 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      * @throws ApplicationException if can't render template
      */
     private void publishFile(final Formatter fmt, final File file, final Path outputDir) throws ApplicationException {
-<span class="nc" id="L202">        Validate.notNull(fmt, &quot;Layout must not be null!&quot;);</span>
-<span class="nc" id="L203">        Validate.notNull(file, &quot;File name must not be null or empty!&quot;);</span>
-<span class="nc" id="L204">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
-<span class="nc" id="L205">        LOG.info(String.format(&quot;Publishing file '%s'...&quot;, file));</span>
+<span class="nc" id="L204">        Validate.notNull(fmt, &quot;Layout must not be null!&quot;);</span>
+<span class="nc" id="L205">        Validate.notNull(file, &quot;File name must not be null or empty!&quot;);</span>
+<span class="nc" id="L206">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
+<span class="nc" id="L207">        LOG.info(String.format(&quot;Publishing file '%s'...&quot;, file));</span>
 
-<span class="nc bnc" id="L207" title="All 2 branches missed.">        if (publishedFileExists(file)) {</span>
-<span class="nc" id="L208">            LOG.info(String.format(&quot;File %s already exists.&quot;, file));</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (publishedFileExists(file)) {</span>
+<span class="nc" id="L210">            LOG.info(String.format(&quot;File %s already exists.&quot;, file));</span>
 
-<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (options.isPurge()) {</span>
-<span class="nc" id="L211">                LOG.info(&quot;Purge option is true. File will be republished.&quot;);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            if (options.isPurge()) {</span>
+<span class="nc" id="L213">                LOG.info(&quot;Purge option is true. File will be republished.&quot;);</span>
             } else {
-<span class="nc" id="L213">                LOG.info(&quot;Skip file.&quot;);</span>
-<span class="nc" id="L214">                return;</span>
+<span class="nc" id="L215">                LOG.info(&quot;Skip file.&quot;);</span>
+<span class="nc" id="L216">                return;</span>
             }
         }
 
+<span class="nc" id="L220">        FileInputStream input = null;</span>
+
         try {
-<span class="nc" id="L219">            final FileInputStream input = new FileInputStream(file);</span>
-<span class="nc" id="L220">            final String html = fmt.format(input);</span>
-<span class="nc" id="L221">            IOUtils.closeQuietly(input);</span>
-<span class="nc" id="L222">            final Path target = outputDir.resolve(file.getName());</span>
-<span class="nc" id="L223">            LOG.info(String.format(&quot;Write published file to '%s'.&quot;, target));</span>
-<span class="nc" id="L224">            Files.createFile(target);</span>
-<span class="nc" id="L225">            Files.write(target, html.getBytes(Constants.DEFAULT_ENCODING.toString()), StandardOpenOption.WRITE);</span>
-<span class="nc" id="L226">        } catch (final IOException | TemplateException ex) {</span>
-<span class="nc" id="L227">            throw new ApplicationException(</span>
+<span class="nc" id="L223">            input = new FileInputStream(file);</span>
+<span class="nc" id="L224">            final DataProcessor processor = new DataProcessor(input, fmt, getBlogConfiguration().getBaseUri());</span>
+<span class="nc" id="L225">            final String targetFileName = processor.getSlug() + &quot;.html&quot;;</span>
+<span class="nc" id="L226">            final Path target = outputDir.resolve(targetFileName);</span>
+<span class="nc" id="L227">            LOG.info(String.format(&quot;Write published file to '%s'.&quot;, target));</span>
+<span class="nc" id="L228">            Files.createFile(target);</span>
+<span class="nc" id="L229">            Files.write(</span>
+                target,
+                processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
+                StandardOpenOption.WRITE);
+<span class="nc" id="L233">        } catch (final IOException | TemplateException ex) {</span>
+<span class="nc" id="L234">            throw new ApplicationException(</span>
                     ExitCodeImpl.FATAL,
                     String.format(&quot;Error occured during publishing: %s!&quot;, ex.getMessage()),
                     ex);
-<span class="nc" id="L231">        }</span>
-<span class="nc" id="L232">    }</span>
+        } finally {
+<span class="nc" id="L239">            IOUtils.closeQuietly(input);</span>
+<span class="nc" id="L240">        }</span>
+<span class="nc" id="L241">    }</span>
 
     /**
      * Checks if a file to be published already exists.
@@ -239,7 +248,7 @@ class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptio
      */
     private boolean publishedFileExists(final File filename) {
         // TODO Implement if file xist check
-<span class="nc" id="L242">        return false;</span>
+<span class="nc" id="L251">        return false;</span>
     }
 
 }

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Preprocessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Preprocessor.java</span></div><h1>Preprocessor.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.Validate;
+import org.apache.log4j.Logger;
+
+/**
+ * Parses all blocks of preprocessor code.
+ *
+ * Preprocessor blocks are opened by {@code &lt;?juberblog} and closed by {@code ?&gt;}. Between these markers key value pairs
+ * are recognized. The blocks are removed.
+ *
+ * Example:
+ * &lt;pre&gt;
+ * ...
+ * &amp;gt;?juberblog
+ *   key1: value1
+ *   key2: value2
+ *   // ...
+ *   keyN: valueN
+ * ?&amp;lt;
+ * ...
+ * &lt;/pre&gt;
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="fc" id="L41">public class Preprocessor {</span>
+
+    /**
+     * Log facility.
+     */
+<span class="fc" id="L46">    private static final Logger LOG = Logger.getLogger(Preprocessor.class);</span>
+    /**
+     * Indicates beginning of preprocessor area.
+     */
+    private static final String START_TOKEN = &quot;&lt;?juberblog&quot;;
+    /**
+     * Indicates end of preprocessor area.
+     */
+    private static final String END_TOKEN = &quot;?&gt;&quot;;
+    /**
+     * Separates key value pair.
+     *
+     * Example: {@code key &quot;:&quot; value NL}
+     */
+    private static final String SPLIT_TOKEN = &quot;:&quot;;
+    /**
+     * Holds recognized data.
+     */
+<span class="fc" id="L64">    private final Map&lt;String, String&gt; data = Maps.newHashMap();</span>
+
+    /**
+     * Processes the input.
+     *
+     * Each invocation clears the {@link #getData() recognized data}.
+     *
+     * @param in must not be {@code null}
+     * @return returns the input without the preprocessor blocks
+     */
+    public String process(final String in) {
+<span class="fc" id="L75">        Validate.notNull(in, &quot;Input must not be null!&quot;);</span>
+<span class="fc" id="L76">        data.clear();</span>
+<span class="fc" id="L77">        final List&lt;String&gt; preprocesorBuffer = Lists.newArrayList();</span>
+<span class="fc" id="L78">        final StringBuilder contentBuffer = new StringBuilder();</span>
+<span class="fc" id="L79">        boolean inside = false;</span>
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (final String line : in.split(Constants.DEFAULT_NEW_LINE.toString())) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (line.trim().startsWith(START_TOKEN)) {</span>
+<span class="fc" id="L83">                inside = true;</span>
+<span class="fc" id="L84">                continue;</span>
+            }
+
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (line.trim().startsWith(END_TOKEN)) {</span>
+<span class="fc" id="L88">                inside = false;</span>
+<span class="fc" id="L89">                continue;</span>
+            }
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (inside) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">                if (line.trim().startsWith(&quot;//&quot;)) {</span>
+<span class="fc" id="L94">                    continue; // Skip comments.</span>
+                }
+
+<span class="fc" id="L97">                preprocesorBuffer.add(line);</span>
+            } else {
+<span class="fc" id="L99">                contentBuffer.append(line).append(Constants.DEFAULT_NEW_LINE.toString());</span>
+            }
+        }
+
+<span class="fc" id="L103">        recognizedData(preprocesorBuffer);</span>
+<span class="fc" id="L104">        return contentBuffer.toString().trim();</span>
+    }
+
+    /**
+     * Returns map with key value pairs recognized after calling {@link #process(java.lang.String)}.
+     *
+     * @return never {@code null}, defense copy
+     */
+    public Map&lt;String, String&gt; getData() {
+<span class="fc" id="L113">        return Maps.newHashMap(data);</span>
+    }
+
+    /**
+     * Get the {@link #getData() data} as meta data object.
+     *
+     * @return never {@code null}, always new instance
+     */
+    public MetaData getMetaData() {
+<span class="fc" id="L122">        return new MetaData(getData());</span>
+    }
+
+    /**
+     * Recognizes key value pairs.
+     *
+     * This method adds the recognized data to {@link #data}.
+     *
+     *
+     * @param preprocesorBlocks must not be {@code null}
+     * @see #recognizedData(java.util.List, java.util.Map)
+     */
+    private void recognizedData(final List&lt;String&gt; preprocesorBlocks) {
+<span class="fc" id="L135">        recognizedData(preprocesorBlocks, data);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Recognizes key value pairs.
+     *
+     * Recognized key value pairs will be added to passed map.
+     *
+     * Lines with errors (no key/value or empty key) line is skipped and warning logged. Empty values are logged but not
+     * skipped.
+     *
+     * @param preprocesorBlocks must not be {@code null}
+     * @param map must not be {@code null}
+     */
+    static void recognizedData(final List&lt;String&gt; preprocesorBlocks, final Map&lt;String, String&gt; map) {
+<span class="fc" id="L150">        Validate.notNull(preprocesorBlocks, &quot;Preprocesor block must not be null!&quot;);</span>
+<span class="fc" id="L151">        Validate.notNull(map, &quot;Map block must not be null!&quot;);</span>
+
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for (final String line : preprocesorBlocks) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (!line.contains(SPLIT_TOKEN)) {</span>
+<span class="fc" id="L155">                LOG.warn(String.format(&quot;Malformed line '%s'! Missing split token '%s'. Use format 'key%svalue'.&quot;,</span>
+                        line, SPLIT_TOKEN, SPLIT_TOKEN));
+<span class="fc" id="L157">                continue;</span>
+            }
+
+<span class="fc" id="L160">            final String[] tokens = line.split(SPLIT_TOKEN);</span>
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (tokens.length == 0) {</span>
+<span class="fc" id="L163">                LOG.warn(String.format(&quot;No key given: '%s'! Skipping line.&quot;, line));</span>
+<span class="fc" id="L164">                continue;</span>
+            }
+
+<span class="fc" id="L167">            final String name = tokens[0].trim();</span>
+
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            if (name.isEmpty()) {</span>
+<span class="fc" id="L170">                LOG.warn(String.format(&quot;Empty key given: '%s'! Skipping line.&quot;, line));</span>
+<span class="fc" id="L171">                continue;</span>
+            }
+
+            final String value;
+
+<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (tokens.length == 1) {</span>
+<span class="fc" id="L177">                LOG.warn(String.format(&quot;No value given: '%s'! Set vlaue empty.&quot;, line));</span>
+<span class="fc" id="L178">                value = &quot;&quot;;</span>
+            } else {
+<span class="fc" id="L180">                value = tokens[1].trim();</span>
+
+<span class="fc bfc" id="L182" title="All 2 branches covered.">                if (value.isEmpty()) {</span>
+<span class="fc" id="L183">                    LOG.warn(String.format(&quot;Empty value given: '%s'! Set vlaue empty.&quot;, line));</span>
+                }
+            }
+
+<span class="fc" id="L187">            map.put(name, value);</span>
+<span class="fc" id="L188">        }</span>
+<span class="fc" id="L189">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

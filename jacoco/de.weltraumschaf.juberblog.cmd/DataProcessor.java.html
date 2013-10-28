@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DataProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd</a> &gt; <span class="el_source">DataProcessor.java</span></div><h1>DataProcessor.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.cmd;
+
+import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.Headline;
+import de.weltraumschaf.juberblog.MetaData;
+import de.weltraumschaf.juberblog.Preprocessor;
+import de.weltraumschaf.juberblog.Slug;
+import de.weltraumschaf.juberblog.formatter.Formatter;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Processes a data file.
+ *
+ * Processing includes:
+ * &lt;ul&gt;
+ * &lt;li&gt;meta data processing&lt;/li&gt;
+ * &lt;li&gt;headline extraction&lt;/li&gt;
+ * &lt;li&gt;slug generation&lt;/li&gt;
+ * &lt;li&gt;format HTML&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+class DataProcessor {
+
+    /**
+     * Parses meta data.
+     */
+<span class="fc" id="L44">    private final Preprocessor metaDataParser = new Preprocessor();</span>
+    /**
+     * Generates slug.
+     */
+<span class="fc" id="L48">    private final Slug slugger = new Slug();</span>
+    /**
+     * Extracts headline.
+     */
+<span class="fc" id="L52">    private final Headline headliner = new Headline();</span>
+    /**
+     * To read data from.
+     */
+    private final InputStream input;
+    /**
+     * Formats HTML.
+     */
+    private final Formatter fmt;
+    /**
+     * Base URI used in templates.
+     */
+    private final String baseUri;
+    /**
+     * Lazy computed.
+     */
+    private MetaData metaData;
+    /**
+     * Lazy computed.
+     */
+    private String slug;
+    /**
+     * Lazy computed.
+     */
+    private String html;
+    /**
+     * Lazy computed.
+     */
+    private String markdown;
+    /**
+     * Lazy computed.
+     */
+    private String headline;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param dataFile must not be {@code null}
+     * @param fmt must not be {@code null}
+     * @param baseUri must not be {@code null} or empty
+     */
+    public DataProcessor(final InputStream dataFile, final Formatter fmt, final String baseUri) {
+<span class="fc" id="L94">        super();</span>
+<span class="fc" id="L95">        Validate.notNull(dataFile, &quot;Data file must not be empty!&quot;);</span>
+<span class="fc" id="L96">        Validate.notNull(fmt, &quot;Formatter file must not be empty!&quot;);</span>
+<span class="fc" id="L97">        Validate.notEmpty(baseUri, &quot;BaseUri must not be null or empty!&quot;);</span>
+<span class="fc" id="L98">        this.input = dataFile;</span>
+<span class="fc" id="L99">        this.fmt = fmt;</span>
+<span class="fc" id="L100">        this.baseUri = baseUri;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Get the processed HTML.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     * @throws TemplateException on any template error
+     */
+    public String getHtml() throws IOException, TemplateException {
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        if (null == html) {</span>
+<span class="fc" id="L112">            getMetaData();</span>
+<span class="fc" id="L113">            fmt.setTitle(getHeadline());</span>
+<span class="fc" id="L114">            fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());</span>
+<span class="fc" id="L115">            fmt.setBaseUri(baseUri);</span>
+<span class="fc" id="L116">            fmt.setDescription(metaData.getDescription());</span>
+<span class="fc" id="L117">            fmt.setKeywords(metaData.getKeywords());</span>
+<span class="fc" id="L118">            html = fmt.format(markdown);</span>
+        }
+
+<span class="fc" id="L121">        return html;</span>
+    }
+
+    /**
+     * Get the processed slug.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public String getSlug() throws IOException {
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (null == slug) {</span>
+<span class="fc" id="L132">            getHeadline();</span>
+<span class="fc" id="L133">            slug = slugger.generate(headline);</span>
+        }
+
+<span class="fc" id="L136">        return slug;</span>
+    }
+
+    /**
+     * Get the processed meta data.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public MetaData getMetaData() throws IOException {
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (null == metaData) {</span>
+<span class="fc" id="L147">            final String raw = IOUtils.toString(input);</span>
+<span class="fc" id="L148">            markdown = metaDataParser.process(raw);</span>
+<span class="fc" id="L149">            metaData = metaDataParser.getMetaData();</span>
+        }
+
+<span class="fc" id="L152">        return metaData;</span>
+    }
+
+    /**
+     * Get the processed headline.
+     *
+     * @return never {@code null}
+     * @throws IOException on any read error of data or template file
+     */
+    public String getHeadline() throws IOException {
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (null == headline) {</span>
+<span class="fc" id="L163">            getMetaData();</span>
+<span class="fc" id="L164">            headline = headliner.find(markdown);</span>
+        }
+
+<span class="fc" id="L167">        return headline;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

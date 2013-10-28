@@ -29,16 +29,21 @@ import org.apache.log4j.Logger;
 public final class Configurations {
 
     /**
+     * Location of scaffold templates inside the JAR.
+     */
+<span class="fc" id="L34">    public static final String SCAFFOLD_TEMPLATE_DIR = Constants.PACKAGE_BASE.toString() + &quot;/scaffold/templates&quot;;</span>
+
+    /**
      * Log facility.
      */
-<span class="fc" id="L34">    private static final Logger LOG = Logger.getLogger(Configurations.class);</span>
+<span class="fc" id="L39">    private static final Logger LOG = Logger.getLogger(Configurations.class);</span>
 
     /**
      * Hidden for pure static factory.
      */
     private Configurations() {
-<span class="nc" id="L40">        super();</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L45">        super();</span>
+<span class="nc" id="L46">    }</span>
 
     /**
      * Creates a configuration with an exception handler which logs and rethrows exceptions.
@@ -49,9 +54,9 @@ public final class Configurations {
      * @throws URISyntaxException on any URI error for template directory
      */
     public static Configuration forTests(final String templateDirectory) throws IOException, URISyntaxException {
-<span class="fc" id="L52">        final Configuration cfg = configureTemplates(templateDirectory);</span>
-<span class="fc" id="L53">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);</span>
-<span class="fc" id="L54">        return cfg;</span>
+<span class="fc" id="L57">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="fc" id="L58">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);</span>
+<span class="fc" id="L59">        return cfg;</span>
     }
 
     /**
@@ -63,9 +68,9 @@ public final class Configurations {
      * @throws URISyntaxException on any URI error for template directory
      */
     public static Configuration forProduction(final String templateDirectory) throws IOException, URISyntaxException {
-<span class="nc" id="L66">        final Configuration cfg = configureTemplates(templateDirectory);</span>
-<span class="nc" id="L67">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);</span>
-<span class="nc" id="L68">        return cfg;</span>
+<span class="nc" id="L71">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="nc" id="L72">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);</span>
+<span class="nc" id="L73">        return cfg;</span>
     }
 
     /**
@@ -77,9 +82,9 @@ public final class Configurations {
      * @throws URISyntaxException on any URI error for template directory
      */
     public static Configuration forDrafts(final String templateDirectory) throws IOException, URISyntaxException {
-<span class="nc" id="L80">        final Configuration cfg = configureTemplates(templateDirectory);</span>
-<span class="nc" id="L81">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);</span>
-<span class="nc" id="L82">        return cfg;</span>
+<span class="nc" id="L85">        final Configuration cfg = configureTemplates(templateDirectory);</span>
+<span class="nc" id="L86">        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);</span>
+<span class="nc" id="L87">        return cfg;</span>
     }
 
     /**
@@ -92,21 +97,21 @@ public final class Configurations {
      */
     private static Configuration configureTemplates(final String templateDirectory)
         throws IOException, URISyntaxException {
-<span class="fc" id="L95">        Validate.notEmpty(templateDirectory, &quot;Template directory must not be nul or empty!&quot;);</span>
-<span class="fc" id="L96">        LOG.debug(&quot;Configure templates for directory &quot; + templateDirectory);</span>
-<span class="fc" id="L97">        final Configuration cfg = new Configuration();</span>
-<span class="fc" id="L98">        cfg.setObjectWrapper(new DefaultObjectWrapper());</span>
-<span class="fc" id="L99">        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());</span>
-<span class="fc" id="L100">        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);</span>
+<span class="fc" id="L100">        Validate.notEmpty(templateDirectory, &quot;Template directory must not be nul or empty!&quot;);</span>
+<span class="fc" id="L101">        LOG.debug(&quot;Configure templates for directory &quot; + templateDirectory);</span>
+<span class="fc" id="L102">        final Configuration cfg = new Configuration();</span>
+<span class="fc" id="L103">        cfg.setObjectWrapper(new DefaultObjectWrapper());</span>
+<span class="fc" id="L104">        cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());</span>
+<span class="fc" id="L105">        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);</span>
 
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (templateDirectory.startsWith(&quot;/de/weltraumschaf/juberblog/&quot;)) {</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (templateDirectory.startsWith(Constants.PACKAGE_BASE.toString())) {</span>
             // Read resources via class loader for tests.
-<span class="fc" id="L104">            cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));</span>
+<span class="fc" id="L109">            cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));</span>
         } else {
-<span class="nc" id="L106">            cfg.setDirectoryForTemplateLoading(new File(templateDirectory));</span>
+<span class="nc" id="L111">            cfg.setDirectoryForTemplateLoading(new File(templateDirectory));</span>
         }
 
-<span class="fc" id="L109">        return cfg;</span>
+<span class="fc" id="L114">        return cfg;</span>
     }
 
 }
