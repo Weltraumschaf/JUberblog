@@ -22,6 +22,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
@@ -95,7 +96,10 @@ class SiteMapGenerator implements Command {
         final SiteMap map = new SiteMap();
 
         for (final Dir dir : directoriesWithPublishedFiles) {
-            for (final File publishedFile : dir.getDir().listFiles(FilenameFilters.findHtmlFiles())) {
+            final File[] files = dir.getDir().listFiles(FilenameFilters.findHtmlFiles());
+            Arrays.sort(files);
+
+            for (final File publishedFile : files) {
                 final PublishedFile published = new PublishedFile(dir.getBaseUri(), publishedFile);
                 map.add(new SiteMapUrl(
                         published.getUri(),
