@@ -9,19 +9,22 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd;
 
+import com.beust.jcommander.internal.Lists;
+import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.template.Configurations;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
-import org.junit.Ignore;
+import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Tests for {@link FeedGenerator}.
@@ -39,16 +42,89 @@ public class FeedGeneratorTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-    private final FeedGenerator sut = new FeedGenerator(
-        Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
 
-    public FeedGeneratorTest() throws IOException, URISyntaxException {
-        super();
+    private String today() {
+        return FeedGenerator.formatTimestamp(new DateTime());
     }
 
-    @Test @Ignore
-    public void execute() {
+    private String todayDc() {
+        return FeedGenerator.formatDcDate(new DateTime());
+    }
+
+    @Test
+    public void formatTimestamp() {
+        assertThat(
+                FeedGenerator.formatTimestamp(new DateTime(1382995754000L)),
+                is(equalTo("Mon, 28 Oct 2013 22:29:14 +0100")));
+    }
+
+    @Test
+    public void formatDcDate() {
+        assertThat(
+                FeedGenerator.formatDcDate(new DateTime(1382995754000L)),
+                is(equalTo("2013-10-28T22:29:14+01:00")));
+    }
+
+    @Test
+    public void execute() throws IOException, URISyntaxException {
+        final List<Page> pages = Lists.newArrayList();
+        final FeedGenerator sut = new FeedGenerator(
+                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), pages);
+        assertThat(sut.getResult(), is(equalTo("")));
+        sut.setTitle("This is the title");
+        sut.setDescription("This is the description.");
+        sut.setLanguage("en");
+        sut.setLink(URI + "feed.xml");
+        sut.setLastBuildDate(new DateTime());
         sut.execute();
+        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
+                + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
+                + "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+                + "     version=\"2.0\"\n"
+                + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
+                + "    <channel>\n"
+                + "        <title>This is the title</title>\n"
+                + "        <link>" + URI + "feed.xml</link>\n"
+                + "        <description>This is the description.</description>\n"
+                + "        <language>en</language>\n"
+                + "        <lastBuildDate>" + today() + "</lastBuildDate>\n"
+                + "    </channel>\n"
+                + "</rss>")));
+        pages.add(
+            new Page("First Post", new URI(URI + "posts/First-Post.html"), "This is the content.", new DateTime()));
+        pages.add(
+            new Page("Second Post", new URI(URI + "posts/Second-Post.html"),
+                "This is the content with <strong>HTML</strong>.", new DateTime()));
+        sut.execute();
+        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
+                + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
+                + "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+                + "     version=\"2.0\"\n"
+                + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
+                + "    <channel>\n"
+                + "        <title>This is the title</title>\n"
+                + "        <link>" + URI + "feed.xml</link>\n"
+                + "        <description>This is the description.</description>\n"
+                + "        <language>en</language>\n"
+                + "        <lastBuildDate>" + today() + "</lastBuildDate>\n"
+                + "        <item>\n"
+                + "            <title>First Post</title>\n"
+                + "            <link>http://www.foobar.com/posts/First-Post.html</link>\n"
+                + "            <description>This is the content.</description>\n"
+                + "            <pubDate>" + today() + "</pubDate>\n"
+                + "            <dc:date>" + todayDc() + "</dc:date>\n"
+                + "        </item>\n"
+                + "        <item>\n"
+                + "            <title>Second Post</title>\n"
+                + "            <link>http://www.foobar.com/posts/Second-Post.html</link>\n"
+                + "            <description>This is the content with &lt;strong&gt;HTML&lt;/strong&gt;.</description>\n"
+                + "            <pubDate>" + today() + "</pubDate>\n"
+                + "            <dc:date>" + todayDc() + "</dc:date>\n"
+                + "        </item>\n"
+                + "    </channel>\n"
+                + "</rss>")));
     }
 
 }

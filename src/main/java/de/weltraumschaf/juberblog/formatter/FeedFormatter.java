@@ -51,6 +51,7 @@ class FeedFormatter implements Formatter {
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
         Validate.notNull(feed, "Feedmust not be null!");
         content = new Template(templateConfiguration, TEMPLATE);
+        content.assignVariable(VarName.ENCODING, templateConfiguration.getDefaultEncoding());
         this.feed = feed;
     }
 
