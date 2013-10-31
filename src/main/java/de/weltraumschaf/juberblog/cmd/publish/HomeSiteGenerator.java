@@ -9,19 +9,18 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.publish;
 
 /**
- * Implementors have uniform API to be executed.
+ * Generates the home site.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-interface Command {
+class HomeSiteGenerator implements Command {
 
-    /**
-     * Executes the command.
-     */
-    void execute();
+    @Override
+    public void execute() {
+        // TODO Implementhome home site generation.
+    }
 
 }

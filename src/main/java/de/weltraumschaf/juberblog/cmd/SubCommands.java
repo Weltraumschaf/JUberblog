@@ -11,6 +11,9 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
+import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.IO;

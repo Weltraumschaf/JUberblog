@@ -10,25 +10,22 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.publish;
 
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
+//import static org.junit.Assert.assertThat;
+//import static org.hamcrest.Matchers.*;
 import org.junit.Ignore;
 
 /**
- * Tests for {@link HomeSiteGenerator}.
+ * Tests for {@link PublishSubCommand}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class HomeSiteGeneratorTest {
+public class PublishSubCommandTest {
 
-    private final HomeSiteGenerator sut = new HomeSiteGenerator();
-
-    @Test @Ignore
-    public void execute() {
-        sut.execute();
+    @Test @Ignore("TODO Implement tests.")
+    public void testSomeMethod() {
     }
 
 }

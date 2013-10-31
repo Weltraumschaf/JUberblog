@@ -9,9 +9,10 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.SiteMapGenerator.Dir;
+import de.weltraumschaf.juberblog.cmd.publish.SiteMapGenerator;
+import de.weltraumschaf.juberblog.cmd.publish.SiteMapGenerator.Dir;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;

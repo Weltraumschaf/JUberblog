@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.juberblog.cmd.publish.DataProcessor;
 import com.beust.jcommander.internal.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.MetaData;

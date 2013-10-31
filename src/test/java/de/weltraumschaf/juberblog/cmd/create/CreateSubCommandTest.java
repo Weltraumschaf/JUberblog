@@ -10,19 +10,19 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.create;
 
-import org.junit.Test;
+import org.junit.Ignore;
 //import static org.junit.Assert.assertThat;
 //import static org.hamcrest.Matchers.*;
-import org.junit.Ignore;
+import org.junit.Test;
 
 /**
- * Tests for {@link InstallSubCommand}.
+ * Tests for {@link CreateSubCommand}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class InstallSubCommandTest {
+public class CreateSubCommandTest {
 
     @Test @Ignore("TODO Implement tests.")
     public void testSomeMethod() {

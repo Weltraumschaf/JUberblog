@@ -9,13 +9,14 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.cmd;
+package de.weltraumschaf.juberblog.cmd.publish;
 
 import com.google.common.collect.Lists;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
+import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
@@ -42,7 +43,7 @@ import org.apache.commons.lang3.time.StopWatch;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
+public class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
 
     /**
      * Log facility.

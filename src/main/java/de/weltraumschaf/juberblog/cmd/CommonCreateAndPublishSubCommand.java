@@ -26,7 +26,7 @@ import org.apache.commons.lang3.Validate;
  * @param <T> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
+public abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
 
     /**
      * Loaded from file.

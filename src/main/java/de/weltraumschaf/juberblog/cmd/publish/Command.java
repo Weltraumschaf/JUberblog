@@ -10,22 +10,18 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog.cmd;
-
-import org.junit.Test;
-//import static org.junit.Assert.assertThat;
-//import static org.hamcrest.Matchers.*;
-import org.junit.Ignore;
+package de.weltraumschaf.juberblog.cmd.publish;
 
 /**
- * Tests for {@link PublishSubCommand}.
+ * Implementors have uniform API to be executed.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class PublishSubCommandTest {
+interface Command {
 
-    @Test @Ignore("TODO Implement tests.")
-    public void testSomeMethod() {
-    }
+    /**
+     * Executes the command.
+     */
+    void execute();
 
 }

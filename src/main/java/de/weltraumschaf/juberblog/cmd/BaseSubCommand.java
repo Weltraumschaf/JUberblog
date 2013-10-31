@@ -24,7 +24,7 @@ import org.apache.commons.lang3.Validate;
  * @param <T> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class BaseSubCommand<T extends Options> implements SubCommand<T> {
+public abstract class BaseSubCommand<T extends Options> implements SubCommand<T> {
 
     /**
      * Used for IO.
