@@ -24,6 +24,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -65,7 +66,7 @@ public class PublisherTest {
         ));
     }
 
-    @Test
+    @Test @Ignore
     public void execute_default_noSitesNoDraftsNoPurge() throws ApplicationException {
         sut.execute();
     }
