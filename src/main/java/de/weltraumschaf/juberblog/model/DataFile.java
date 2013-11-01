@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
 import java.io.File;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Represents a data file.
@@ -31,8 +32,17 @@ import java.io.File;
  */
 public class DataFile {
 
+    /**
+     * Separates the timestamp from the beginning of the file base name.
+     */
     private static final String TIMESTAMP_SEP = ".";
+    /**
+     * Signals that the {@link #creationTime} is not initialized.
+     */
     private static final int UNITIALIZED = -1;
+    /**
+     * The original absolute file name.
+     */
     private final String filename;
     /**
      * Lazy computed.
@@ -47,19 +57,44 @@ public class DataFile {
      */
     private String slug;
 
+    /**
+     * Shorthand to create by file.
+     *
+     * Initializes {@link #filename} with {@link File#getAbsolutePath()}.
+     *
+     * @param file must not be {@code null}
+     */
     public DataFile(final File file) {
         this(file.getAbsolutePath());
     }
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param filename must not be {@code null} or empty
+     */
     public DataFile(final String filename) {
         super();
+        Validate.notEmpty(filename, "Filename must not be null or empty!");
         this.filename = filename;
     }
 
+    /**
+     * Get the absolute file name.
+     *
+     * @return never {@code null} or empty
+     */
     public String getFilename() {
         return filename;
     }
 
+    /**
+     * Get the file base name.
+     *
+     * The base name is the part after the last OS dependent directory separator.
+     *
+     * @return never {@code null}
+     */
     public String getBasename() {
         if (null == basename) {
             final int pos = filename.lastIndexOf(Constants.DIR_SEP.toString()) + 1;
@@ -69,6 +104,11 @@ public class DataFile {
         return basename;
     }
 
+    /**
+     * Get the creation time stamp extracted from the file name.
+     *
+     * @return greater -1
+     */
     public long getCreationTime() {
         if (UNITIALIZED == creationTime) {
             final String name = getBasename();
@@ -79,6 +119,13 @@ public class DataFile {
         return creationTime;
     }
 
+    /**
+     * Get the slug part of the file name.
+     *
+     * The slug part is the part between the timestamp and the file extension.
+     *
+     * @return never {@code null}
+     */
     public String getSlug() {
         if (null == slug) {
             final String name = getBasename();
@@ -109,6 +156,5 @@ public class DataFile {
         final DataFile other = (DataFile) obj;
         return filename.equals(other.getFilename());
     }
-
 
 }
