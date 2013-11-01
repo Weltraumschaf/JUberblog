@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -36,16 +37,23 @@ public class PublisherTest {
     public final TemporaryFolder tmp = new TemporaryFolder();
     private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     private static final String FIXTURES_DIRECTORY = Constants.PACKAGE_BASE.toString() + "/cmd/publish";
+    private File data;
+    private Directories dirs;
+    private Configuration templateConfig;
+    private Publisher sut;
 
-    @Test
-    public void readData() throws ApplicationException, IOException, URISyntaxException {
-        final File data = new File(getClass().getResource(FIXTURES_DIRECTORY).toURI());
-        final Directories dirs = new Directories(
+    @Before
+    public void prepareFixtures() throws URISyntaxException, IOException {
+        data = new File(getClass().getResource(FIXTURES_DIRECTORY).toURI());
+        dirs = new Directories(
                 data.getAbsolutePath(),
                 "",
                 tmp.getRoot().getAbsolutePath());
-        final Configuration templateConfig = Configurations.forTests(TEMPLATE_DIRECTORRY);
-        final Publisher sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/");
+        templateConfig = Configurations.forTests(TEMPLATE_DIRECTORRY);
+        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/");
+    }
+    @Test
+    public void readData() {
         sut.readData();
         assertThat(sut.getPostsData(), containsInAnyOrder(
                 new DataFile(data.getAbsolutePath() + "/posts/1383315520.This-is-the-First-Post.md"),
@@ -55,6 +63,11 @@ public class PublisherTest {
                 new DataFile(data.getAbsolutePath() + "/sites/1383333526.About-me.md"),
                 new DataFile(data.getAbsolutePath() + "/sites/1383333707.Projects.md")
         ));
+    }
+
+    @Test
+    public void execute_default_noSitesNoDraftsNoPurge() throws ApplicationException {
+        sut.execute();
     }
 
 }

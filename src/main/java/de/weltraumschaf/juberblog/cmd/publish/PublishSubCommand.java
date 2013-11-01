@@ -84,15 +84,12 @@ public class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishO
     @Override
     public void run() throws ApplicationException {
         watch.reset();
-        watch.start();
+        final Publisher pub = new Publisher(getDirectories(), templateConfig, getBlogConfiguration().getBaseUri());
+        pub.setPurga(getOptions().isPurge());
+        pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");
-
-        if (options.isSites()) {
-            publishSites();
-        }
-
-        publisPosts();
-        updateIndexes();
+        watch.start();
+        pub.execute();
         watch.stop();
         LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }
@@ -106,159 +103,6 @@ public class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishO
     @Override
     public PublishOptions getOptions() {
         return options;
-    }
-
-    /**
-     * Publish sites.
-     *
-     * @throws ApplicationException if IO error occurs when configure templates
-     */
-    private void publishSites() throws ApplicationException {
-        LOG.info("Publish sites...");
-        publishFiles(
-                Formatters.Type.SITE,
-                getDirectories().dataSites(),
-                getDirectories().htdocsSites());
-    }
-
-    /**
-     * Publish posts.
-     *
-     * @throws ApplicationException if IO error occurs when configure templates
-     */
-    private void publisPosts() throws ApplicationException {
-        LOG.info("Publish posts...");
-        publishFiles(
-                Formatters.Type.POST,
-                getDirectories().dataPosts(),
-                getDirectories().htdocsPosts());
-
-    }
-
-    /**
-     * Publish all files in given directory with given layout.
-     *
-     * @param type must not be {@literal null}
-     * @param dataDir must not be {@literal null}
-     * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
-     */
-    private void publishFiles(final Formatters.Type type, final Path dataDir, final Path outputDir)
-        throws ApplicationException {
-        Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(dataDir, "Dirname must not be null!");
-        Validate.notNull(outputDir, "Output dir must not be null!");
-        LOG.debug(String.format("Pubish files from '%s'...", dataDir));
-
-        for (final File file : readFileList(dataDir)) {
-            publishFile(type, file, outputDir);
-        }
-    }
-
-    /**
-     * Read all files from a given directory.
-     *
-     * @param dir must not be {@literal null}
-     * @return never {@literal null} or empty
-     */
-    private List<File> readFileList(final Path dir) {
-        Validate.notNull(dir, "Dir must not be null!");
-        LOG.debug(String.format("Read file list from '%s'...", dir));
-        final List<File> files = Lists.newArrayList();
-
-        for (final File f : dir.toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            files.add(f);
-        }
-
-        LOG.debug(String.format("Found %d files to publish.", files.size()));
-        return files;
-    }
-
-    /**
-     * Publish a given file with a given layout.
-     *
-     * @param type must not be {@literal null}
-     * @param file must not be {@literal null} or empty
-     * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
-     */
-    private void publishFile(final Formatters.Type type, final File file, final Path outputDir)
-        throws ApplicationException {
-        Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(file, "File name must not be null or empty!");
-        Validate.notNull(outputDir, "Output dir must not be null!");
-        LOG.info(String.format("Publishing file '%s'...", file));
-
-        if (publishedFileExists(file)) {
-            LOG.info(String.format("File %s already exists.", file));
-
-            if (options.isPurge()) {
-                LOG.info("Purge option is true. File will be republished.");
-            } else {
-                LOG.info("Skip file.");
-                return;
-            }
-        }
-
-        FileInputStream input = null;
-
-        try {
-            if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
-                input = new FileInputStream(file);
-                final DataProcessor processor = new DataProcessor(
-                    input,
-                    type,
-                    getBlogConfiguration().getBaseUri(),
-                    templateConfig);
-                final String targetFileName = processor.getSlug() + ".html";
-                final Path target = outputDir.resolve(targetFileName);
-                LOG.info(String.format("Write published file to '%s'.", target));
-                Files.createFile(target);
-                Files.write(
-                        target,
-                        processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
-                        StandardOpenOption.WRITE);
-            }
-        } catch (final IOException | TemplateException ex) {
-            throw new ApplicationException(
-                    ExitCodeImpl.FATAL,
-                    String.format("Error occured during publishing: %s!", ex.getMessage()),
-                    ex);
-        } finally {
-            IOUtils.closeQuietly(input);
-        }
-    }
-
-    /**
-     * Checks if a file to be published already exists.
-     *
-     * @param filename must not be {@literal null} or empty
-     * @return {@literal true} if file already exists, else {@literal false}
-     */
-    private boolean publishedFileExists(final File filename) {
-        // TODO Implement if file exist check
-        return false;
-    }
-
-    private void updateIndexes() {
-        updateHomeSite();
-        updateSiteMap();
-        updateFeed();
-    }
-
-    private void updateHomeSite() {
-        LOG.info("Update home site...");
-        new HomeSiteGenerator().execute();
-    }
-
-    private void updateSiteMap() {
-        LOG.info("Update site map...");
-        new SiteMapGenerator(templateConfig).execute();
-    }
-
-    private void updateFeed() {
-        LOG.info("Update feed...");
-//        new FeedGenerator(templateConfig).execute();
     }
 
 }
