@@ -9,8 +9,9 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd.publish;
+
+import de.weltraumschaf.commons.ApplicationException;
 
 /**
  * Implementors have uniform API to be executed.
@@ -22,6 +23,6 @@ interface Command {
     /**
      * Executes the command.
      */
-    void execute();
+    void execute() throws ApplicationException;
 
 }

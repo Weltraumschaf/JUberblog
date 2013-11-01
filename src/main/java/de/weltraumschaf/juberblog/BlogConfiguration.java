@@ -95,12 +95,17 @@ public class BlogConfiguration {
     /**
      * Used to load and parse file.
      */
-    private final Properties properties = new Properties();
+    private Properties properties = new Properties();
     /**
      * Absolute path to property file.
      */
     private final String fileName;
 
+    public BlogConfiguration(final Properties p) {
+        this("");
+        Validate.notNull(p);
+        properties = p;
+    }
     /**
      * Dedicated constructor.
      *
@@ -108,7 +113,7 @@ public class BlogConfiguration {
      */
     public BlogConfiguration(final String fileName) {
         super();
-        Validate.notEmpty(fileName, "File name must not be null or empty!");
+        Validate.notNull(fileName, "File name must not be null!");
         this.fileName = fileName;
     }
 

@@ -36,24 +36,41 @@ public final class Directories {
      * Name of drafts sub directory.
      */
     private static final String DRAFTS_DIR = "drafts";
-    /**
-     * Used to get configured base directories.
-     */
-    private final BlogConfiguration config;
+    private static final FileSystem DEFAULT_FILES_YSTEM = FileSystems.getDefault();
     /**
      * A default file system.
      */
-    private final FileSystem fs = FileSystems.getDefault();
+    private final FileSystem fs;
+    private final String dataDir;
+    private final String templateDir;
+    private final String htdocsDir;
 
     /**
-     * Dedicated constructor.
+     *
      *
      * @param config must not be {@literal null}
      */
     public Directories(final BlogConfiguration config) {
+        this(config.getDataDir(), config.getTemplateDir(), config.getHtdocs());
+    }
+
+    public Directories(final String dataDir, final String templateDir, final String htdocsDir) {
+        this(dataDir, templateDir, htdocsDir, DEFAULT_FILES_YSTEM);
+    }
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param dataDir
+     * @param templateDir
+     * @param htdocsDir
+     */
+    public Directories(final String dataDir, final String templateDir, final String htdocsDir, final FileSystem fs) {
         super();
-        Validate.notNull(config, "Config must not be null!");
-        this.config = config;
+        this.dataDir = dataDir;
+        this.templateDir = templateDir;
+        this.htdocsDir = htdocsDir;
+        this.fs = fs;
     }
 
     /**
@@ -62,7 +79,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path data() {
-        return fs.getPath(config.getDataDir());
+        return fs.getPath(dataDir);
     }
 
     /**
@@ -116,7 +133,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path templates() {
-        return fs.getPath(config.getTemplateDir());
+        return fs.getPath(templateDir);
     }
 
     /**
@@ -125,7 +142,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocs() {
-        return fs.getPath(config.getHtdocs());
+        return fs.getPath(htdocsDir);
     }
 
     /**
