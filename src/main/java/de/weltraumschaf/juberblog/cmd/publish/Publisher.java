@@ -18,6 +18,7 @@ import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
@@ -47,13 +49,49 @@ class Publisher implements Command {
     private final String baseUri;
     private boolean sites;
     private boolean purge;
-
+    private boolean dataRead;
+    private Collection<DataFile> sitesData;
+    private Collection<DataFile> postsData;
 
     public Publisher(final Directories dirs, final Configuration templateConfig, final String baseUri) {
         super();
         this.dirs = dirs;
         this.templateConfig = templateConfig;
         this.baseUri = baseUri;
+    }
+
+    void readData() {
+        List<DataFile> files = Lists.newArrayList();
+
+        for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
+            files.add(new DataFile(f));
+        }
+
+        sitesData = files;
+        files = Lists.newArrayList();
+
+        for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
+            files.add(new DataFile(f));
+        }
+
+        postsData = files;
+        dataRead = true;
+    }
+
+    Collection<DataFile> getSitesData() {
+        if (!dataRead) {
+            throw new IllegalStateException("Data never read! Invoke #readData() at least once.");
+        }
+
+        return sitesData;
+    }
+
+    Collection<DataFile> getPostsData() {
+        if (!dataRead) {
+            throw new IllegalStateException("Data never read! Invoke #readData() at least once.");
+        }
+
+        return postsData;
     }
 
     @Override

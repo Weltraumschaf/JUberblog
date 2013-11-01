@@ -17,6 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 /**
+ * Tests for {@link DataFile}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */

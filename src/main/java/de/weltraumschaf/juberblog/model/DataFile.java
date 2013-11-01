@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
+import java.io.File;
 
 /**
  * Represents a data file.
@@ -45,6 +46,10 @@ public class DataFile {
      * Lazy computed.
      */
     private String slug;
+
+    public DataFile(final File file) {
+        this(file.getAbsolutePath());
+    }
 
     public DataFile(final String filename) {
         super();
@@ -84,4 +89,26 @@ public class DataFile {
 
         return slug;
     }
+
+    @Override
+    public String toString() {
+        return filename.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return filename.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof DataFile)) {
+            return false;
+        }
+
+        final DataFile other = (DataFile) obj;
+        return filename.equals(other.getFilename());
+    }
+
+
 }
