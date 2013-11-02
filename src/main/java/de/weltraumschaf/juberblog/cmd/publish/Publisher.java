@@ -96,6 +96,7 @@ class Publisher implements Command {
 
     @Override
     public void execute() throws ApplicationException {
+        readData();
         final List<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
 
         final List<Page> publishedPosts = publisPosts();

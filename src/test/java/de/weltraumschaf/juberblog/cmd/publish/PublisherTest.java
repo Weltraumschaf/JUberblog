@@ -39,20 +39,30 @@ public class PublisherTest {
     private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     private static final String FIXTURES_DIRECTORY = Constants.PACKAGE_BASE.toString() + "/cmd/publish";
     private File data;
+    private File publishedPosts;
+    private File publishedSites;
+    private File publishedPostDrafts;
+    private File publishedDraftSites;
     private Directories dirs;
     private Configuration templateConfig;
     private Publisher sut;
 
     @Before
     public void prepareFixtures() throws URISyntaxException, IOException {
+        publishedPosts = tmp.newFolder("posts");
+        publishedSites = tmp.newFolder("sites");
+        tmp.newFolder("drafts");
+        publishedPostDrafts = tmp.newFolder("drafts/posts");
+        publishedDraftSites = tmp.newFolder("drafts/sites");
         data = new File(getClass().getResource(FIXTURES_DIRECTORY).toURI());
         dirs = new Directories(
                 data.getAbsolutePath(),
                 "",
                 tmp.getRoot().getAbsolutePath());
-        templateConfig = Configurations.forTests(TEMPLATE_DIRECTORRY);
+        templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
         sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/");
     }
+
     @Test
     public void readData() {
         sut.readData();
@@ -66,9 +76,21 @@ public class PublisherTest {
         ));
     }
 
-    @Test @Ignore
+    /*
+     Assert files:
+     - 2 posts
+     - 2 sites
+     - sitemap.xml
+     - feed.xml
+     - index.html
+     */
+    @Test
     public void execute_default_noSitesNoDraftsNoPurge() throws ApplicationException {
         sut.execute();
+        assertThat(new File(publishedPosts, "This-is-the-First-Post.html").exists(), is(true));
+        assertThat(new File(publishedPosts, "Second-Post-About-Lorem.html").exists(), is(true));
+        assertThat(new File(publishedSites, "About-me.html").exists(), is(false));
+        assertThat(new File(publishedSites, "Projects.html").exists(), is(false));
     }
 
 }
