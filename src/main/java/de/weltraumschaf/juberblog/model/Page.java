@@ -39,6 +39,7 @@ public class Page {
      * Publishing date of page.
      */
     private final DateTime publishingDate;
+    private final boolean newPublished;
 
     /**
      * Dedicated constructor.
@@ -48,7 +49,7 @@ public class Page {
      * @param description must not be {@code null}
      * @param publishingDate must not be {@code null}
      */
-    public Page(final String title, final URI link, final String description, final DateTime publishingDate) {
+    private Page(final String title, final URI link, final String description, final DateTime publishingDate, final boolean newPublished) {
         super();
         Validate.notNull(title, "Title must not be null!");
         Validate.notNull(link, "Link must not be null!");
@@ -58,6 +59,19 @@ public class Page {
         this.link = link;
         this.description = description;
         this.publishingDate = publishingDate;
+        this.newPublished = newPublished;
+    }
+
+    public static Page newPublishedPage(final String title, final URI link, final String description, final DateTime publishingDate) {
+        return new Page(title, link, description, publishingDate, true);
+    }
+
+    public static Page newExistingPage(final String title, final URI link, final String description, final DateTime publishingDate) {
+        return new Page(title, link, description, publishingDate, false);
+    }
+
+    public boolean isNewPublished() {
+        return newPublished;
     }
 
     /**
@@ -98,7 +112,7 @@ public class Page {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(title, link, description, publishingDate);
+        return Objects.hashCode(title, link, description, publishingDate, newPublished);
     }
 
     @Override
@@ -111,7 +125,8 @@ public class Page {
         return Objects.equal(title, other.title)
                 && Objects.equal(link, other.link)
                 && Objects.equal(description, other.description)
-                && Objects.equal(publishingDate, other.publishingDate);
+                && Objects.equal(publishingDate, other.publishingDate)
+                && Objects.equal(newPublished, other.newPublished);
     }
 
 }

@@ -43,12 +43,12 @@ public class FeedGeneratorTest {
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
 
-    private String today() {
-        return FeedGenerator.formatTimestamp(new DateTime());
+    private String today(final DateTime ts) {
+        return FeedGenerator.formatTimestamp(ts);
     }
 
-    private String todayDc() {
-        return FeedGenerator.formatDcDate(new DateTime());
+    private String todayDc(final DateTime ts) {
+        return FeedGenerator.formatDcDate(ts);
     }
 
     @Test
@@ -75,7 +75,8 @@ public class FeedGeneratorTest {
         sut.setDescription("This is the description.");
         sut.setLanguage("en");
         sut.setLink(URI + "feed.xml");
-        sut.setLastBuildDate(new DateTime());
+        final DateTime now = new DateTime();
+        sut.setLastBuildDate(now);
         sut.execute();
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
@@ -88,14 +89,15 @@ public class FeedGeneratorTest {
                 + "        <link>" + URI + "feed.xml</link>\n"
                 + "        <description>This is the description.</description>\n"
                 + "        <language>en</language>\n"
-                + "        <lastBuildDate>" + today() + "</lastBuildDate>\n"
+                + "        <lastBuildDate>" + today(now) + "</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>")));
         pages.add(
-            new Page("First Post", new URI(URI + "posts/First-Post.html"), "This is the content.", new DateTime()));
+            Page.newPublishedPage("First Post", new URI(URI + "posts/First-Post.html"),
+                "This is the content.", now));
         pages.add(
-            new Page("Second Post", new URI(URI + "posts/Second-Post.html"),
-                "This is the content with <strong>HTML</strong>.", new DateTime()));
+            Page.newPublishedPage("Second Post", new URI(URI + "posts/Second-Post.html"),
+                "This is the content with <strong>HTML</strong>.", now));
         sut.execute();
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
@@ -108,20 +110,20 @@ public class FeedGeneratorTest {
                 + "        <link>" + URI + "feed.xml</link>\n"
                 + "        <description>This is the description.</description>\n"
                 + "        <language>en</language>\n"
-                + "        <lastBuildDate>" + today() + "</lastBuildDate>\n"
+                + "        <lastBuildDate>" + today(now) + "</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>First Post</title>\n"
                 + "            <link>http://www.foobar.com/posts/First-Post.html</link>\n"
                 + "            <description>This is the content.</description>\n"
-                + "            <pubDate>" + today() + "</pubDate>\n"
-                + "            <dc:date>" + todayDc() + "</dc:date>\n"
+                + "            <pubDate>" + today(now) + "</pubDate>\n"
+                + "            <dc:date>" + todayDc(now) + "</dc:date>\n"
                 + "        </item>\n"
                 + "        <item>\n"
                 + "            <title>Second Post</title>\n"
                 + "            <link>http://www.foobar.com/posts/Second-Post.html</link>\n"
                 + "            <description>This is the content with &lt;strong&gt;HTML&lt;/strong&gt;.</description>\n"
-                + "            <pubDate>" + today() + "</pubDate>\n"
-                + "            <dc:date>" + todayDc() + "</dc:date>\n"
+                + "            <pubDate>" + today(now) + "</pubDate>\n"
+                + "            <dc:date>" + todayDc(now) + "</dc:date>\n"
                 + "        </item>\n"
                 + "    </channel>\n"
                 + "</rss>")));
