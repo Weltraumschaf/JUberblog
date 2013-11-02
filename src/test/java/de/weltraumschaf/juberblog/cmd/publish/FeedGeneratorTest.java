@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.FeedGenerator;
 import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.template.Configurations;

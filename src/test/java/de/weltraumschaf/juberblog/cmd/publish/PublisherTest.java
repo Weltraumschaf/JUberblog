@@ -76,6 +76,17 @@ public class PublisherTest {
         ));
     }
 
+    @Test
+    public void publishedFileExists() throws IOException {
+        final File foo = tmp.newFile("foo");
+        final File bar = tmp.newFile("bar");
+        final File baz = tmp.newFile("baz");
+        assertThat(sut.publishedFileExists(foo), is(true));
+        assertThat(sut.publishedFileExists(bar), is(true));
+        assertThat(sut.publishedFileExists(baz), is(true));
+        assertThat(sut.publishedFileExists(new File(tmp.getRoot(), "snafu")), is(false));
+    }
+
     /*
      Assert files:
      - 2 posts

@@ -18,6 +18,8 @@ import org.apache.commons.lang3.Validate;
 /**
  * Abstracts a published file.
  *
+ * XXX Consider replacement by {@link Page}.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class PublishedFile {

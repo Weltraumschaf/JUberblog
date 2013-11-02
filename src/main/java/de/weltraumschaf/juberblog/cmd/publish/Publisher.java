@@ -122,21 +122,18 @@ class Publisher implements Command {
 
     private List<Page> publishSites() throws ApplicationException {
         LOG.info("Publish sites...");
-        publishFiles(
+        return publishFiles(
                 Formatters.Type.SITE,
-                dirs.dataSites(),
+                getSitesData(),
                 dirs.htdocsSites());
-
-        return Lists.newArrayList();
     }
 
     private List<Page> publisPosts() throws ApplicationException {
         LOG.info("Publish posts...");
-        publishFiles(
+        return publishFiles(
                 Formatters.Type.POST,
-                dirs.dataPosts(),
+                getPostsData(),
                 dirs.htdocsPosts());
-        return Lists.newArrayList();
     }
 
     private void updateIndexes(final List<Page> sites, final List<Page> posts) {
@@ -149,39 +146,23 @@ class Publisher implements Command {
      * Publish all files in given directory with given layout.
      *
      * @param type must not be {@literal null}
-     * @param dataDir must not be {@literal null}
+     * @param data must not be {@literal null}
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFiles(final Formatters.Type type, final Path dataDir, final Path outputDir)
+    private List<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
         throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(dataDir, "Dirname must not be null!");
+        Validate.notNull(data, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
-        LOG.debug(String.format("Pubish files from '%s'...", dataDir));
+        LOG.debug(String.format("Pubish files from '%s'...", data));
+        final List<Page> published = Lists.newArrayList();
 
-        for (final File file : readFileList(dataDir)) {
-            publishFile(type, file, outputDir);
-        }
-    }
-
-    /**
-     * Read all files from a given directory.
-     *
-     * @param dir must not be {@literal null}
-     * @return never {@literal null} or empty
-     */
-    private List<File> readFileList(final Path dir) {
-        Validate.notNull(dir, "Dir must not be null!");
-        LOG.debug(String.format("Read file list from '%s'...", dir));
-        final List<File> files = Lists.newArrayList();
-
-        for (final File f : dir.toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            files.add(f);
+        for (final DataFile file : data) {
+            published.add(publishFile(type, file, outputDir));
         }
 
-        LOG.debug(String.format("Found %d files to publish.", files.size()));
-        return files;
+        return published;
     }
 
     /**
@@ -192,21 +173,24 @@ class Publisher implements Command {
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */
-    private void publishFile(final Formatters.Type type, final File file, final Path outputDir)
+    private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
         throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(file, "File name must not be null or empty!");
+        Validate.notNull(data, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
-        LOG.info(String.format("Publishing file '%s'...", file));
+        final String targetFileName = data.getSlug() + ".html";
+        LOG.info(String.format("Publishing file '%s'...", targetFileName));
+        final Path target = outputDir.resolve(targetFileName);
+        final Page published = null;
 
-        if (publishedFileExists(file)) {
-            LOG.info(String.format("File %s already exists.", file));
+        if (publishedFileExists(target.toFile())) {
+            LOG.info(String.format("File %s already exists.", target));
 
             if (isPurge()) {
                 LOG.info("Purge option is true. File will be republished.");
             } else {
                 LOG.info("Skip file.");
-                return;
+                return published;
             }
         }
 
@@ -214,14 +198,14 @@ class Publisher implements Command {
 
         try {
             if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
-                input = new FileInputStream(file);
+                input = new FileInputStream(new File(data.getFilename()));
                 final DataProcessor processor = new DataProcessor(
                     input,
                     type,
                     baseUri,
                     templateConfig);
-                final String targetFileName = processor.getSlug() + ".html";
-                final Path target = outputDir.resolve(targetFileName);
+
+
                 LOG.info(String.format("Write published file to '%s'.", target));
                 Files.createFile(target);
                 Files.write(
@@ -237,17 +221,18 @@ class Publisher implements Command {
         } finally {
             IOUtils.closeQuietly(input);
         }
+
+        return published;
     }
 
     /**
      * Checks if a file to be published already exists.
      *
-     * @param filename must not be {@literal null} or empty
+     * @param file must not be {@literal null}
      * @return {@literal true} if file already exists, else {@literal false}
      */
-    private boolean publishedFileExists(final File filename) {
-        // TODO Implement if file exist check
-        return false;
+    boolean publishedFileExists(final File file) {
+        return file.exists();
     }
 
     private void updateHomeSite() {
