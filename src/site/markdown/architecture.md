@@ -2,12 +2,12 @@
 
 ## Concept Publish
 
-<img alt="" src="images/concept_publish.png"/>
+<img alt="concept publish" src="images/concept_publish.png"/>
 
 ## Model
 
-<img alt="" src="images/model.png"/>
+<img alt="model" src="images/model.png"/>
 
 ## Template And Filter
 
-<img alt="" src="images/template_and_filters.png"/>
+<img alt="template and filters" src="images/template_and_filters.png"/>
