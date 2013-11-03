@@ -25,6 +25,8 @@ import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -33,6 +35,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -115,7 +118,6 @@ class Publisher implements Command {
         this.purge = purga;
     }
 
-
     private boolean isPurge() {
         return purge;
     }
@@ -151,7 +153,7 @@ class Publisher implements Command {
      * @throws ApplicationException if can't render template
      */
     private List<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
-        throws ApplicationException {
+            throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(data, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
@@ -174,14 +176,13 @@ class Publisher implements Command {
      * @throws ApplicationException if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-        throws ApplicationException {
+            throws ApplicationException {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(data, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
         final String targetFileName = data.getSlug() + ".html";
         LOG.info(String.format("Publishing file '%s'...", targetFileName));
         final Path target = outputDir.resolve(targetFileName);
-        final Page published = null;
 
         if (publishedFileExists(target.toFile())) {
             LOG.info(String.format("File %s already exists.", target));
@@ -190,7 +191,11 @@ class Publisher implements Command {
                 LOG.info("Purge option is true. File will be republished.");
             } else {
                 LOG.info("Skip file.");
-                return published;
+                try {
+                    return Page.newExistingPage("title", new URI(""), "description", new DateTime());
+                } catch (URISyntaxException ex) {
+                    throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
+                }
             }
         }
 
@@ -200,11 +205,10 @@ class Publisher implements Command {
             if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
                 input = new FileInputStream(new File(data.getFilename()));
                 final DataProcessor processor = new DataProcessor(
-                    input,
-                    type,
-                    baseUri,
-                    templateConfig);
-
+                        input,
+                        type,
+                        baseUri,
+                        templateConfig);
 
                 LOG.info(String.format("Write published file to '%s'.", target));
                 Files.createFile(target);
@@ -222,7 +226,11 @@ class Publisher implements Command {
             IOUtils.closeQuietly(input);
         }
 
-        return published;
+        try {
+            return Page.newPublishedPage("title", new URI(""), "description", new DateTime());
+        } catch (URISyntaxException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
+        }
     }
 
     /**
