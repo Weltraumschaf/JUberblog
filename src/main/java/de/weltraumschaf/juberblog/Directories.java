@@ -15,7 +15,6 @@ package de.weltraumschaf.juberblog;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Provides file system for all necessary directories.

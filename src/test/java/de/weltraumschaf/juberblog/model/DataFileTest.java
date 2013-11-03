@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.juberblog.model;
 
+import java.io.File;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -23,7 +24,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class DataFileTest {
 
-    private final DataFile sut = new DataFile("/foo/bar/1383315520.This-is-the-First-Post.md");
+    private final DataFile sut = new DataFile(new File("/foo/bar/1383315520.This-is-the-First-Post.md"));
 
     @Test
     public void getFilename() {

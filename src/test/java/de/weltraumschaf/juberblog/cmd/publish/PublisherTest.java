@@ -67,12 +67,12 @@ public class PublisherTest {
     public void readData() {
         sut.readData();
         assertThat(sut.getPostsData(), containsInAnyOrder(
-                new DataFile(data.getAbsolutePath() + "/posts/1383315520.This-is-the-First-Post.md"),
-                new DataFile(data.getAbsolutePath() + "/posts/1383315841.Second-Post-About-Lorem.md")
+                new DataFile(new File(data.getAbsolutePath() + "/posts/1383315520.This-is-the-First-Post.md")),
+                new DataFile(new File(data.getAbsolutePath() + "/posts/1383315841.Second-Post-About-Lorem.md"))
         ));
         assertThat(sut.getSitesData(), containsInAnyOrder(
-                new DataFile(data.getAbsolutePath() + "/sites/1383333526.About-me.md"),
-                new DataFile(data.getAbsolutePath() + "/sites/1383333707.Projects.md")
+                new DataFile(new File(data.getAbsolutePath() + "/sites/1383333526.About-me.md")),
+                new DataFile(new File(data.getAbsolutePath() + "/sites/1383333707.Projects.md"))
         ));
     }
 

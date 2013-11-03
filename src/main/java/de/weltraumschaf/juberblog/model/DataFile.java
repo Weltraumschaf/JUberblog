@@ -43,7 +43,7 @@ public class DataFile {
     /**
      * The original absolute file name.
      */
-    private final String filename;
+    private final File file;
     /**
      * Lazy computed.
      */
@@ -58,25 +58,14 @@ public class DataFile {
     private String slug;
 
     /**
-     * Shorthand to create by file.
-     *
-     * Initializes {@link #filename} with {@link File#getAbsolutePath()}.
-     *
-     * @param file must not be {@code null}
-     */
-    public DataFile(final File file) {
-        this(file.getAbsolutePath());
-    }
-
-    /**
      * Dedicated constructor.
      *
-     * @param filename must not be {@code null} or empty
+     * @param file must not be {@code null} or empty
      */
-    public DataFile(final String filename) {
+    public DataFile(final File file) {
         super();
-        Validate.notEmpty(filename, "Filename must not be null or empty!");
-        this.filename = filename;
+        Validate.notNull(file, "Filename must not be null or empty!");
+        this.file = file;
     }
 
     /**
@@ -85,7 +74,7 @@ public class DataFile {
      * @return never {@code null} or empty
      */
     public String getFilename() {
-        return filename;
+        return file.getAbsolutePath();
     }
 
     /**
@@ -97,8 +86,8 @@ public class DataFile {
      */
     public String getBasename() {
         if (null == basename) {
-            final int pos = filename.lastIndexOf(Constants.DIR_SEP.toString()) + 1;
-            basename = filename.substring(pos);
+            final int pos = getFilename().lastIndexOf(Constants.DIR_SEP.toString()) + 1;
+            basename = getFilename().substring(pos);
         }
 
         return basename;
@@ -139,12 +128,12 @@ public class DataFile {
 
     @Override
     public String toString() {
-        return filename.toString();
+        return file.toString();
     }
 
     @Override
     public int hashCode() {
-        return filename.hashCode();
+        return file.hashCode();
     }
 
     @Override
@@ -154,7 +143,7 @@ public class DataFile {
         }
 
         final DataFile other = (DataFile) obj;
-        return filename.equals(other.getFilename());
+        return getFilename().equals(other.getFilename());
     }
 
 }
