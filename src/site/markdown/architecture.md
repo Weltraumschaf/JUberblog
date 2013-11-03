@@ -1,6 +1,8 @@
 # Architecture
 
-## Concept Publish
+An overview of the whole architecture.
+
+## Publishing Concept 
 
 <img alt="concept publish" src="images/concept_publish.png"/>
 
@@ -47,6 +49,8 @@ Syntax:
     key_value_pair = key, ':', value ;
     key            = ALNUM { ALNUM } ;
     value          = ANY_WORD, NL ;
+
+### Rubntime Model Representation
 
 <img alt="model" src="images/model.png"/>
 
