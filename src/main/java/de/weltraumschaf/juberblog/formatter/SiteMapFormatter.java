@@ -11,16 +11,12 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import org.apache.commons.lang3.Validate;
 
 /**

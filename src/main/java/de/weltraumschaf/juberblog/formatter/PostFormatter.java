@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
-import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
@@ -32,6 +32,7 @@ class PostFormatter extends BaseFormatter {
      * Template variable for feature switching.
      */
     private static final Map<String, Boolean> FEATURES = Maps.newHashMap();
+
     static {
         FEATURES.put("rating", Boolean.FALSE);
         FEATURES.put("comments", Boolean.FALSE);
@@ -41,7 +42,7 @@ class PostFormatter extends BaseFormatter {
      * Global available variable names.
      */
     private static final List<VarName> GLOBAL_VARIABLE_NAMES = Arrays.asList(
-        VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST);
+            VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST);
     /**
      * Post template file name.
      */

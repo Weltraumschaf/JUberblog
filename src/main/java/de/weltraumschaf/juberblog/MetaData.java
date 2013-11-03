@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog;
 
-import com.google.common.collect.Maps;
+import com.beust.jcommander.internal.Maps;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 

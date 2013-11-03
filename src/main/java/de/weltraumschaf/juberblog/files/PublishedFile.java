@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.files;
 
-import com.google.common.base.Objects;
+import de.weltraumschaf.commons.guava.Objects;
 import java.io.File;
 import org.apache.commons.lang3.Validate;
 

@@ -11,27 +11,15 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import com.google.common.collect.Lists;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
-import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
-import de.weltraumschaf.juberblog.files.FilenameFilters;
-import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
-import freemarker.template.TemplateException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;

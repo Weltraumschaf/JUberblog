@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.model;
 
-import com.google.common.base.Objects;
+import de.weltraumschaf.commons.guava.Objects;
 import org.apache.commons.lang3.Validate;
 
 /**

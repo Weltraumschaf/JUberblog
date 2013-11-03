@@ -12,7 +12,7 @@
 
 package de.weltraumschaf.juberblog.filter;
 
-import com.google.common.collect.Lists;
+import de.weltraumschaf.commons.guava.Lists;
 import java.util.List;
 import org.apache.commons.lang3.Validate;
 

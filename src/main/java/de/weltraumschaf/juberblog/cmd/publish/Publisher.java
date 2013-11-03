@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import com.google.common.collect.Lists;
 import de.weltraumschaf.commons.ApplicationException;
+import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;

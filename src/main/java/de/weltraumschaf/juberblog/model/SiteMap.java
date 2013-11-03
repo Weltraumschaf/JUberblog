@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.model;
 
-import com.google.common.collect.Lists;
+import de.weltraumschaf.commons.guava.Lists;
 import java.util.List;
 
 /**

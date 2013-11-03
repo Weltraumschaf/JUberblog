@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.template;
 
-import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.Filter;
 import de.weltraumschaf.juberblog.filter.FilterChain;

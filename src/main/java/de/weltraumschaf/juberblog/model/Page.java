@@ -9,10 +9,9 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.model;
 
-import com.google.common.base.Objects;
+import de.weltraumschaf.commons.guava.Objects;
 import java.net.URI;
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
@@ -23,6 +22,7 @@ import org.joda.time.DateTime;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class Page {
+
     /**
      * Title of page.
      */

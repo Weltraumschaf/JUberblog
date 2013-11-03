@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.guava.Lists;
+import de.weltraumschaf.commons.guava.Maps;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;

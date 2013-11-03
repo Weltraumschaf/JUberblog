@@ -12,9 +12,9 @@
 package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
-import com.google.common.collect.Maps;
 import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.BaseSubCommand;
