@@ -227,16 +227,68 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>3.0.1</version>
+                    <configuration>
+                        <linkXRef>false</linkXRef>
+                        <includeTests>false</includeTests> <!-- FIXME: Make exclude properties work. -->
+                        <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                        <minimumTokens>100</minimumTokens>
+                        <targetJdk>${project.build.targetJdk}</targetJdk>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <excludeFromFailureFile>${maven.pmd.pmd-excludes}</excludeFromFailureFile>
+                                <failOnViolation>false</failOnViolation>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>cpd-check</id>
+                            <goals>
+                                <goal>cpd-check</goal>
+                            </goals>
+                            <configuration>
+                                <excludeFromFailureFile>${maven.pmd.cpd-excludes}</excludeFromFailureFile>
+                                <failOnViolation>false</failOnViolation>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>2.10</version>
+                    <configuration>
+                        <configLocation>${project.basedir}/src/main/config/checkstyle-ruleset.xml</configLocation>
+                        <suppressionsLocation>${project.basedir}/src/main/config/checkstyle-suppressions.xml</suppressionsLocation>
+                        <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                        <logViolationsToConsole>true</logViolationsToConsole>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <linkXRef>false</linkXRef>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>2.5.2</version>
+                    <configuration>
+                        <effort>Max</effort>
+                        <threshold>Default</threshold>
+                        <xmlOutput>true</xmlOutput>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <excludeFilterFile>${maven.findbugs.excludefilterfile}</excludeFilterFile>
+                        <includeFilterFile>${maven.findbugs.includefilterfile}</includeFilterFile>
+                        <!-- Optional directory to put findbugs xdoc xml report -->
+                        <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                        <xmlOutput>true</xmlOutput>
+                        <threshold>Low</threshold>
+                        <effort>Max</effort>
+                        <debug>false</debug>
+                        <relaxed>false</relaxed>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -413,66 +465,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <configuration>
-                    <linkXRef>false</linkXRef>
-                    <includeTests>false</includeTests> <!-- FIXME: Make exclude properties work. -->
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${project.build.targetJdk}</targetJdk>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <excludeFromFailureFile>${maven.pmd.pmd-excludes}</excludeFromFailureFile>
-                            <failOnViolation>false</failOnViolation>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>cpd-check</id>
-                        <goals>
-                            <goal>cpd-check</goal>
-                        </goals>
-                        <configuration>
-                            <excludeFromFailureFile>${maven.pmd.cpd-excludes}</excludeFromFailureFile>
-                            <failOnViolation>false</failOnViolation>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <configLocation>${project.basedir}/src/main/config/checkstyle-ruleset.xml</configLocation>
-                    <suppressionsLocation>${project.basedir}/src/main/config/checkstyle-suppressions.xml</suppressionsLocation>
-                    <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-                    <logViolationsToConsole>true</logViolationsToConsole>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <linkXRef>false</linkXRef>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Default</threshold>
-                    <xmlOutput>true</xmlOutput>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <excludeFilterFile>${maven.findbugs.excludefilterfile}</excludeFilterFile>
-                    <includeFilterFile>${maven.findbugs.includefilterfile}</includeFilterFile>
-                    <!-- Optional directory to put findbugs xdoc xml report -->
-                    <xmlOutputDirectory>target/site</xmlOutputDirectory>
-                    <xmlOutput>true</xmlOutput>
-                    <threshold>Low</threshold>
-                    <effort>Max</effort>
-                    <debug>false</debug>
-                    <relaxed>false</relaxed>
-                </configuration>
             </plugin>
 
             <!--
@@ -646,33 +646,10 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-checkstyle-plugin</artifactId>
-                            <configuration>
-                                <configLocation>${project.basedir}/src/main/config/checkstyle-ruleset.xml</configLocation>
-                                <suppressionsLocation>${project.basedir}/src/main/config/checkstyle-suppressions.xml</suppressionsLocation>
-                                <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-                                <logViolationsToConsole>true</logViolationsToConsole>
-                                <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                                <linkXRef>false</linkXRef>
-                            </configuration>
                         </plugin>
                         <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>findbugs-maven-plugin</artifactId>
-                            <configuration>
-                                <effort>Max</effort>
-                                <threshold>Default</threshold>
-                                <xmlOutput>true</xmlOutput>
-                                <findbugsXmlOutput>true</findbugsXmlOutput>
-                                <excludeFilterFile>${maven.findbugs.excludefilterfile}</excludeFilterFile>
-                                <includeFilterFile>${maven.findbugs.includefilterfile}</includeFilterFile>
-                                <!-- Optional directory to put findbugs xdoc xml report -->
-                                <xmlOutputDirectory>target/site</xmlOutputDirectory>
-                                <xmlOutput>true</xmlOutput>
-                                <threshold>Low</threshold>
-                                <effort>Max</effort>
-                                <debug>false</debug>
-                                <relaxed>false</relaxed>
-                            </configuration>
                         </plugin>
                     </reportPlugins>
                 </configuration>
