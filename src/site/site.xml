@@ -41,6 +41,7 @@
         <menu name="${project.name}">
             <item name="Home" href="index.html"/>
             <item name="Installation" href="installation.html"/>
+            <item name="Usage" href="usage.html"/>
             <item name="Architecture" href="architecture.html"/>
         </menu>
         <menu name="Reports" ref="reports"/>
