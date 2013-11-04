@@ -28,7 +28,7 @@ textarea {
 }
 
 h1 {
-    font-size: 1.4em;
+    font-size: 1.6em;
 }
 
 #bannerLeft h2 {
@@ -36,15 +36,15 @@ h1 {
 }
 
 h2 {
-    font-size: 1.2em;
+    font-size: 1.4em;
 }
 
 h3 {
-    font-size: 1.0em;
+    font-size: 1.2em;
 }
 
-h4 {
-    font-size: 0.8em;
+h4, p {
+    font-size: 1.0em;
 }
 
 #bodyColumn img {
