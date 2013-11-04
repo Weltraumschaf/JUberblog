@@ -9,7 +9,7 @@ tools which can do this better (such as Git for example).
 
 Long time ago (roundabout seven years) I blogged with Wordpress and programmed with PHP. View years ago I
 realized that PHP is a piece of crap. In consequence of that Wordpress is also a piece of crap. Also I
-realized that I do not need the most features of Wordpress. What I want was an easy way to write my post,
+realized that I do not need the most features of Wordpress. What I want is an easy way to write my posts,
 version them and publish them as HTML. As a programmer I'm used to use a version control system for my source
 code. So why not using it for my blog posts to? Also I'm used to write Markdown files (mostly the documentation
 of my software is written in Markdown). So why put my blog texts into tables and rows of an SQL database only
