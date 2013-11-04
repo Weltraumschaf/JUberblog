@@ -17,7 +17,7 @@
     <custom>
         <fluidoSkin>
             <leftColumnClass>span3</leftColumnClass>
-            <bodyColumnClass>span7</bodyColumnClass>
+            <bodyColumnClass>span6</bodyColumnClass>
             <topBarEnabled>false</topBarEnabled>
             <sideBarEnabled>true</sideBarEnabled>
             <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
