@@ -88,7 +88,7 @@ public class AppTest {
             assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
             assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
                     + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog create|publish|install")));
+                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
         }
     }
 
@@ -103,7 +103,7 @@ public class AppTest {
             assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
             assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
                     + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog create|publish|install")));
+                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
         }
     }
 
@@ -118,7 +118,7 @@ public class AppTest {
             assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
             assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
                     + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog create|publish|install")));
+                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
         }
     }
 
