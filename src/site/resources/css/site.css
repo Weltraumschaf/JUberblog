@@ -42,3 +42,7 @@ h3 {
 h4 {
     font-size: 0.8em;
 }
+
+#bodyColumn img {
+    border: 1px solid #222222;
+}
