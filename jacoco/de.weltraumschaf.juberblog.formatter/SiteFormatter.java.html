@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-public class SiteFormatter extends BaseFormatter {
+class SiteFormatter extends BaseFormatter {
 
     /**
      * Site template file name.
@@ -31,11 +31,12 @@ public class SiteFormatter extends BaseFormatter {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null} or empty
+     * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public SiteFormatter(final Configuration templateConfiguration) throws IOException {
-<span class="fc" id="L37">        super(templateConfiguration, SITE_TEMPLATE);</span>
-<span class="fc" id="L38">    }</span>
+    public SiteFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
+<span class="fc" id="L38">        super(templateConfiguration, SITE_TEMPLATE, markdown);</span>
+<span class="fc" id="L39">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

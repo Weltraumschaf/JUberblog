@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SiteMapUrl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.model</a> &gt; <span class="el_source">SiteMapUrl.java</span></div><h1>SiteMapUrl.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.model;
+
+import de.weltraumschaf.commons.guava.Objects;
+import java.util.Locale;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Models a site map URL.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class SiteMapUrl {
+
+    /**
+     * The location as URI.
+     */
+    private final String loc;
+    /**
+     * The last modification date.
+     */
+    private final String lastmod;
+    /**
+     * The change frequency of the content.
+     */
+    private final String changefreq;
+    /**
+     * Site priority.
+     */
+    private final String priority;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param loc must not be {@code null} or empty
+     * @param lastmod must not be {@code null} or empty
+     * @param changefreq must not be {@code null}
+     * @param priority must not be less than 0.0
+     */
+    public SiteMapUrl(String loc, String lastmod, ChangeFrequency changefreq, float priority) {
+<span class="fc" id="L51">        super();</span>
+<span class="fc" id="L52">        Validate.notEmpty(loc, &quot;Loc must not be null or empty!&quot;);</span>
+<span class="fc" id="L53">        Validate.notEmpty(lastmod, &quot;Lastmod must not be null or empty!&quot;);</span>
+<span class="fc" id="L54">        Validate.notNull(changefreq, &quot;Changefreq must not be null!&quot;);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        Validate.isTrue(priority &gt;= 0.0f, &quot;Priority must not be less than 0.0!&quot;);</span>
+<span class="fc" id="L56">        this.loc = loc;</span>
+<span class="fc" id="L57">        this.lastmod = lastmod;</span>
+<span class="fc" id="L58">        this.changefreq = changefreq.toString();</span>
+<span class="fc" id="L59">        this.priority = String.format(Locale.ENGLISH, &quot;%.1f&quot;, priority);</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Get the location URI of the site.
+     *
+     * @return never {@code null} or empty
+     */
+    public String getLoc() {
+<span class="fc" id="L68">        return loc;</span>
+    }
+
+    /**
+     * Get the last modification date of the site.
+     *
+     * @return never {@code null} or empty
+     */
+    public String getLastmod() {
+<span class="fc" id="L77">        return lastmod;</span>
+    }
+
+    /**
+     * Get the change frequency of the site.
+     *
+     * @return never {@code null}
+     */
+    public String getChangefreq() {
+<span class="fc" id="L86">        return changefreq;</span>
+    }
+
+    /**
+     * Get the priority of the site.
+     *
+     * Formatted to EN decimal number with 1 digit after period.
+     *
+     * @return never less than 0.0
+     */
+    public String getPriority() {
+<span class="fc" id="L97">        return priority;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L102">        return Objects.hashCode(loc, lastmod, changefreq, priority);</span>
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (!(obj instanceof SiteMapUrl)) {</span>
+<span class="nc" id="L108">            return false;</span>
+        }
+
+<span class="fc" id="L111">        final SiteMapUrl other = (SiteMapUrl) obj;</span>
+<span class="pc bpc" id="L112" title="3 of 8 branches missed.">        return Objects.equal(loc, other.loc)</span>
+                &amp;&amp; Objects.equal(lastmod, other.lastmod)
+                &amp;&amp; Objects.equal(changefreq, other.changefreq)
+                &amp;&amp; Objects.equal(priority, other.priority);
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L120">        return Objects.toStringHelper(this)</span>
+            .add(&quot;loc&quot;, loc)
+            .add(&quot;lastmod&quot;, lastmod)
+            .add(&quot;changefreq&quot;, changefreq)
+            .add(&quot;priority&quot;, priority)
+            .toString();
+    }
+
+    /**
+     * Available change frequencies.
+     */
+<span class="pc" id="L131">    public enum ChangeFrequency {</span>
+
+        /**
+         * Content changes always.
+         */
+<span class="fc" id="L136">        ALWAYS,</span>
+        /**
+         * Content changes hourly.
+         */
+<span class="fc" id="L140">        HOURLY,</span>
+        /**
+         * Content changes daily.
+         */
+<span class="fc" id="L144">        DAILY,</span>
+        /**
+         * Content changes weekly.
+         */
+<span class="fc" id="L148">        WEEKLY,</span>
+        /**
+         * Content changes monthly.
+         */
+<span class="fc" id="L152">        MONTHLY,</span>
+        /**
+         * Content changes yearly.
+         */
+<span class="fc" id="L156">        YEARLY,</span>
+        /**
+         * Content changes never.
+         */
+<span class="fc" id="L160">        NEVER;</span>
+
+        @Override
+        public String toString() {
+<span class="fc" id="L164">            return name().toLowerCase();</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

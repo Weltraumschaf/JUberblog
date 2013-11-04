@@ -1,6 +1,11 @@
 de.weltraumschaf.juberblog
 de.weltraumschaf.juberblog.cmd
+de.weltraumschaf.juberblog.cmd.create
+de.weltraumschaf.juberblog.cmd.install
+de.weltraumschaf.juberblog.cmd.publish
+de.weltraumschaf.juberblog.files
 de.weltraumschaf.juberblog.filter
 de.weltraumschaf.juberblog.formatter
+de.weltraumschaf.juberblog.model
 de.weltraumschaf.juberblog.opt
 de.weltraumschaf.juberblog.template

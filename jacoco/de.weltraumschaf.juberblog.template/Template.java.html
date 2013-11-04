@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.template;
 
-import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.Filter;
 import de.weltraumschaf.juberblog.filter.FilterChain;
@@ -111,11 +111,11 @@ public class Template implements Renderable, Assignable {
      * @param assignable must not be {@code null}
      * @param names must not be {@code null}
      */
-    public static void initializeVaribales(final Assignable assignable, final List&lt;String&gt; names) {
+    public static void initializeVaribales(final Assignable assignable, final List&lt;VarName&gt; names) {
 <span class="fc" id="L115">        Validate.notNull(assignable, &quot;Assignable must not be null!&quot;);</span>
 <span class="fc" id="L116">        Validate.notNull(names, &quot;Names must not be null!&quot;);</span>
 
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        for (final String name : names) {</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for (final VarName name : names) {</span>
 <span class="fc" id="L119">            assignable.assignVariable(name, &quot;&quot;);</span>
 <span class="fc" id="L120">        }</span>
 <span class="fc" id="L121">    }</span>
@@ -133,28 +133,43 @@ public class Template implements Renderable, Assignable {
 <span class="fc" id="L133">        templateVariables.put(name, value);</span>
 <span class="fc" id="L134">    }</span>
 
+    @Override
+    public void assignVariable(final VarName name, final Object value) {
+<span class="fc" id="L138">        assignVariable(name.toString(), value);</span>
+<span class="fc" id="L139">    }</span>
+
     /**
      * Get a variable.
      *
      * @param name must not be {@code null}
      * @return never {@code null}, maybe empty string
      */
-    protected Object getVariable(final String name) {
-<span class="fc" id="L143">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+    protected Object getVariable(final VarName name) {
+<span class="fc" id="L148">        return getVariable(name.toString());</span>
+    }
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (templateVariables.containsKey(name)) {</span>
-<span class="fc" id="L146">            return templateVariables.get(name);</span>
+    /**
+     * Get a variable.
+     *
+     * @param name must not be {@code null} or empty
+     * @return never {@code null}, maybe empty string
+     */
+    protected Object getVariable(final String name) {
+<span class="fc" id="L158">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (templateVariables.containsKey(name)) {</span>
+<span class="fc" id="L161">            return templateVariables.get(name);</span>
         }
 
-<span class="fc" id="L149">        LOG.warn(String.format(&quot;Wanted template variable '%s' not present! Returning empty string.&quot;, name));</span>
-<span class="fc" id="L150">        return &quot;&quot;;</span>
+<span class="fc" id="L164">        LOG.warn(String.format(&quot;Wanted template variable '%s' not present! Returning empty string.&quot;, name));</span>
+<span class="fc" id="L165">        return &quot;&quot;;</span>
     }
 
     @Override
     public String render() throws IOException, TemplateException {
-<span class="fc" id="L155">        final ByteArrayOutputStream out = new ByteArrayOutputStream();</span>
-<span class="fc" id="L156">        template.process(templateVariables, new OutputStreamWriter(out, encoding));</span>
-<span class="fc" id="L157">        return postfilters.apply(out.toString(Constants.DEFAULT_ENCODING.toString()));</span>
+<span class="fc" id="L170">        final ByteArrayOutputStream out = new ByteArrayOutputStream();</span>
+<span class="fc" id="L171">        template.process(templateVariables, new OutputStreamWriter(out, encoding));</span>
+<span class="fc" id="L172">        return postfilters.apply(out.toString(Constants.DEFAULT_ENCODING.toString()));</span>
     }
 
     /**
@@ -165,7 +180,7 @@ public class Template implements Renderable, Assignable {
      * @param filter must not be {@code null}
      */
     public void addPostFilter(final Filter filter) {
-<span class="fc" id="L168">        postfilters.add(filter);</span>
-<span class="fc" id="L169">    }</span>
+<span class="fc" id="L183">        postfilters.add(filter);</span>
+<span class="fc" id="L184">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

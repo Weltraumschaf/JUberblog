@@ -15,7 +15,6 @@ package de.weltraumschaf.juberblog;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Provides file system for all necessary directories.
@@ -36,25 +35,42 @@ public final class Directories {
      * Name of drafts sub directory.
      */
     private static final String DRAFTS_DIR = &quot;drafts&quot;;
-    /**
-     * Used to get configured base directories.
-     */
-    private final BlogConfiguration config;
+<span class="fc" id="L38">    private static final FileSystem DEFAULT_FILES_YSTEM = FileSystems.getDefault();</span>
     /**
      * A default file system.
      */
-<span class="nc" id="L46">    private final FileSystem fs = FileSystems.getDefault();</span>
+    private final FileSystem fs;
+    private final String dataDir;
+    private final String templateDir;
+    private final String htdocsDir;
 
     /**
-     * Dedicated constructor.
+     *
      *
      * @param config must not be {@literal null}
      */
     public Directories(final BlogConfiguration config) {
-<span class="nc" id="L54">        super();</span>
-<span class="nc" id="L55">        Validate.notNull(config, &quot;Config must not be null!&quot;);</span>
-<span class="nc" id="L56">        this.config = config;</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L53">        this(config.getDataDir(), config.getTemplateDir(), config.getHtdocs());</span>
+<span class="nc" id="L54">    }</span>
+
+    public Directories(final String dataDir, final String templateDir, final String htdocsDir) {
+<span class="fc" id="L57">        this(dataDir, templateDir, htdocsDir, DEFAULT_FILES_YSTEM);</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param dataDir
+     * @param templateDir
+     * @param htdocsDir
+     */
+    public Directories(final String dataDir, final String templateDir, final String htdocsDir, final FileSystem fs) {
+<span class="fc" id="L68">        super();</span>
+<span class="fc" id="L69">        this.dataDir = dataDir;</span>
+<span class="fc" id="L70">        this.templateDir = templateDir;</span>
+<span class="fc" id="L71">        this.htdocsDir = htdocsDir;</span>
+<span class="fc" id="L72">        this.fs = fs;</span>
+<span class="fc" id="L73">    }</span>
 
     /**
      * Get the data directory path.
@@ -62,7 +78,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path data() {
-<span class="nc" id="L65">        return fs.getPath(config.getDataDir());</span>
+<span class="fc" id="L81">        return fs.getPath(dataDir);</span>
     }
 
     /**
@@ -71,7 +87,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path dataSites() {
-<span class="nc" id="L74">        return data().resolve(SITES_DIR);</span>
+<span class="fc" id="L90">        return data().resolve(SITES_DIR);</span>
     }
 
     /**
@@ -80,7 +96,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path dataPosts() {
-<span class="nc" id="L83">        return data().resolve(POSTS_DIR);</span>
+<span class="fc" id="L99">        return data().resolve(POSTS_DIR);</span>
     }
 
     /**
@@ -89,7 +105,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     private Path dataDrafts() {
-<span class="nc" id="L92">        return data().resolve(DRAFTS_DIR);</span>
+<span class="nc" id="L108">        return data().resolve(DRAFTS_DIR);</span>
     }
 
     /**
@@ -98,7 +114,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path dataDraftSites() {
-<span class="nc" id="L101">        return dataDrafts().resolve(SITES_DIR);</span>
+<span class="nc" id="L117">        return dataDrafts().resolve(SITES_DIR);</span>
     }
 
     /**
@@ -107,7 +123,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path dataDraftPosts() {
-<span class="nc" id="L110">        return dataDrafts().resolve(POSTS_DIR);</span>
+<span class="nc" id="L126">        return dataDrafts().resolve(POSTS_DIR);</span>
     }
 
     /**
@@ -116,7 +132,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path templates() {
-<span class="nc" id="L119">        return fs.getPath(config.getTemplateDir());</span>
+<span class="nc" id="L135">        return fs.getPath(templateDir);</span>
     }
 
     /**
@@ -125,7 +141,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocs() {
-<span class="nc" id="L128">        return fs.getPath(config.getHtdocs());</span>
+<span class="fc" id="L144">        return fs.getPath(htdocsDir);</span>
     }
 
     /**
@@ -134,7 +150,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocsSites() {
-<span class="nc" id="L137">        return htdocs().resolve(SITES_DIR);</span>
+<span class="nc" id="L153">        return htdocs().resolve(SITES_DIR);</span>
     }
 
     /**
@@ -143,7 +159,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocsPosts() {
-<span class="nc" id="L146">        return htdocs().resolve(POSTS_DIR);</span>
+<span class="fc" id="L162">        return htdocs().resolve(POSTS_DIR);</span>
     }
 
     /**
@@ -152,7 +168,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     private Path htdocsDrafts() {
-<span class="nc" id="L155">        return htdocs().resolve(DRAFTS_DIR);</span>
+<span class="nc" id="L171">        return htdocs().resolve(DRAFTS_DIR);</span>
     }
 
     /**
@@ -161,7 +177,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocsDraftSites() {
-<span class="nc" id="L164">        return htdocsDrafts().resolve(SITES_DIR);</span>
+<span class="nc" id="L180">        return htdocsDrafts().resolve(SITES_DIR);</span>
     }
 
     /**
@@ -170,7 +186,7 @@ public final class Directories {
      * @return never {@literal null}
      */
     public Path htdocsDraftPosts() {
-<span class="nc" id="L173">        return htdocsDrafts().resolve(DRAFTS_DIR);</span>
+<span class="nc" id="L189">        return htdocsDrafts().resolve(DRAFTS_DIR);</span>
     }
 
 }

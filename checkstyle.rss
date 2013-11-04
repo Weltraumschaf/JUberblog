@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2013</copyright>
     <item>
-      <title>File: 72,
-             Errors: 3,
+      <title>File: 67,
+             Errors: 415,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.filter.MarkdownFilterTest.java">de/weltraumschaf/juberblog/filter/MarkdownFilterTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.Publisher.java">de/weltraumschaf/juberblog/cmd/publish/Publisher.java</a>
                 </td>
                 <td>
                   0
@@ -38,12 +38,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  49
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.BlogConfiguration.java">de/weltraumschaf/juberblog/BlogConfiguration.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.files.PublishedFile.java">de/weltraumschaf/juberblog/files/PublishedFile.java</a>
                 </td>
                 <td>
                   0
@@ -52,7 +52,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  8
                 </td>
               </tr>
                           <tr>
@@ -66,12 +66,12 @@
                   0
                 </td>
                 <td>
-                  1
+                  4
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.PublishSubCommandTest.java">de/weltraumschaf/juberblog/cmd/PublishSubCommandTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.BlogConfiguration.java">de/weltraumschaf/juberblog/BlogConfiguration.java</a>
                 </td>
                 <td>
                   0
@@ -80,12 +80,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  25
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.InstallOptionsTest.java">de/weltraumschaf/juberblog/opt/InstallOptionsTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.FeedGenerator.java">de/weltraumschaf/juberblog/cmd/publish/FeedGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -94,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  23
                 </td>
               </tr>
                           <tr>
@@ -108,7 +108,21 @@
                   0
                 </td>
                 <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.SiteMapGenerator.java">de/weltraumschaf/juberblog/cmd/publish/SiteMapGenerator.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
                 </td>
               </tr>
                           <tr>
@@ -122,35 +136,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.DataProcessor.java">de/weltraumschaf/juberblog/cmd/DataProcessor.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.PublishOptionsTest.java">de/weltraumschaf/juberblog/opt/PublishOptionsTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  4
                 </td>
               </tr>
                           <tr>
@@ -164,7 +150,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  16
                 </td>
               </tr>
                           <tr>
@@ -178,7 +164,35 @@
                   0
                 </td>
                 <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.FeedItem.java">de/weltraumschaf/juberblog/model/FeedItem.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.create.CreateSubCommand.java">de/weltraumschaf/juberblog/cmd/create/CreateSubCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
                 </td>
               </tr>
                           <tr>
@@ -211,7 +225,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.PublishSubCommand.java">de/weltraumschaf/juberblog/cmd/PublishSubCommand.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Preprocessor.java">de/weltraumschaf/juberblog/Preprocessor.java</a>
                 </td>
                 <td>
                   0
@@ -220,7 +234,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  15
                 </td>
               </tr>
                           <tr>
@@ -239,7 +253,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Preprocessor.java">de/weltraumschaf/juberblog/Preprocessor.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.SiteMap.java">de/weltraumschaf/juberblog/model/SiteMap.java</a>
                 </td>
                 <td>
                   0
@@ -253,21 +267,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.template.LayoutTest.java">de/weltraumschaf/juberblog/template/LayoutTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.filter.FilterChainTest.java">de/weltraumschaf/juberblog/filter/FilterChainTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.files.FilenameFilters.java">de/weltraumschaf/juberblog/files/FilenameFilters.java</a>
                 </td>
                 <td>
                   0
@@ -309,7 +309,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.InstallSubCommand.java">de/weltraumschaf/juberblog/cmd/InstallSubCommand.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand.java">de/weltraumschaf/juberblog/cmd/publish/PublishSubCommand.java</a>
                 </td>
                 <td>
                   0
@@ -318,21 +318,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.template.TemplateTest.java">de/weltraumschaf/juberblog/template/TemplateTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  9
                 </td>
               </tr>
                           <tr>
@@ -360,26 +346,40 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.CreateSubCommandTest.java">de/weltraumschaf/juberblog/cmd/CreateSubCommandTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  19
                 </td>
               </tr>
                           <tr>
                 <td>
                   <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.ExitCodeImpl.java">de/weltraumschaf/juberblog/ExitCodeImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.Command.java">de/weltraumschaf/juberblog/cmd/publish/Command.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.template.Assignable.java">de/weltraumschaf/juberblog/template/Assignable.java</a>
                 </td>
                 <td>
                   0
@@ -402,21 +402,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.template.Assignable.java">de/weltraumschaf/juberblog/template/Assignable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  4
                 </td>
               </tr>
                           <tr>
@@ -430,49 +416,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.ArgumentsTest.java">de/weltraumschaf/juberblog/ArgumentsTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.CreateSubCommand.java">de/weltraumschaf/juberblog/cmd/CreateSubCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Arguments.java">de/weltraumschaf/juberblog/Arguments.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  13
                 </td>
               </tr>
                           <tr>
@@ -486,12 +430,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  20
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.BaseSubCommandTest.java">de/weltraumschaf/juberblog/cmd/BaseSubCommandTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.Arguments.java">de/weltraumschaf/juberblog/Arguments.java</a>
                 </td>
                 <td>
                   0
@@ -500,35 +444,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.PostFormatterTest.java">de/weltraumschaf/juberblog/formatter/PostFormatterTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.SlugTest.java">de/weltraumschaf/juberblog/SlugTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  5
                 </td>
               </tr>
                           <tr>
@@ -542,7 +458,21 @@
                   0
                 </td>
                 <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.files.BaseFilenameFilter.java">de/weltraumschaf/juberblog/files/BaseFilenameFilter.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                           <tr>
@@ -556,12 +486,26 @@
                   0
                 </td>
                 <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.Formatters.java">de/weltraumschaf/juberblog/formatter/Formatters.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
                   0
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CommonOptionsTest.java">de/weltraumschaf/juberblog/opt/CommonOptionsTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.Page.java">de/weltraumschaf/juberblog/model/Page.java</a>
                 </td>
                 <td>
                   0
@@ -570,7 +514,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  15
                 </td>
               </tr>
                           <tr>
@@ -584,7 +528,21 @@
                   0
                 </td>
                 <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.SiteMapUrl.java">de/weltraumschaf/juberblog/model/SiteMapUrl.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
                 </td>
               </tr>
                           <tr>
@@ -598,7 +556,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
               </tr>
                           <tr>
@@ -626,26 +584,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  7
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.MarkdownFilenameFilterTest.java">de/weltraumschaf/juberblog/MarkdownFilenameFilterTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.PreprocessorTest.java">de/weltraumschaf/juberblog/PreprocessorTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.HomeSiteGenerator.java">de/weltraumschaf/juberblog/cmd/publish/HomeSiteGenerator.java</a>
                 </td>
                 <td>
                   0
@@ -659,7 +603,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.MarkdownFilenameFilter.java">de/weltraumschaf/juberblog/MarkdownFilenameFilter.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.HtmlFormatter.java">de/weltraumschaf/juberblog/formatter/HtmlFormatter.java</a>
                 </td>
                 <td>
                   0
@@ -673,7 +617,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateAndPublishOptionsTest.java">de/weltraumschaf/juberblog/opt/CreateAndPublishOptionsTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.install.InstallSubCommand.java">de/weltraumschaf/juberblog/cmd/install/InstallSubCommand.java</a>
                 </td>
                 <td>
                   0
@@ -682,12 +626,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  24
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.SiteFormatterTest.java">de/weltraumschaf/juberblog/formatter/SiteFormatterTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.publish.DataProcessor.java">de/weltraumschaf/juberblog/cmd/publish/DataProcessor.java</a>
                 </td>
                 <td>
                   0
@@ -696,7 +640,21 @@
                   0
                 </td>
                 <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.DataFile.java">de/weltraumschaf/juberblog/model/DataFile.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
                 </td>
               </tr>
                           <tr>
@@ -710,7 +668,21 @@
                   0
                 </td>
                 <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.template.VarName.java">de/weltraumschaf/juberblog/template/VarName.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
               </tr>
                           <tr>
@@ -724,12 +696,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.MetaDataTest.java">de/weltraumschaf/juberblog/MetaDataTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.FeedFormatter.java">de/weltraumschaf/juberblog/formatter/FeedFormatter.java</a>
                 </td>
                 <td>
                   0
@@ -738,7 +710,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  4
                 </td>
               </tr>
                           <tr>
@@ -766,7 +738,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  4
                 </td>
               </tr>
                           <tr>
@@ -813,6 +785,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.model.Feed.java">de/weltraumschaf/juberblog/model/Feed.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateAndPublishOptions.java">de/weltraumschaf/juberblog/opt/CreateAndPublishOptions.java</a>
                 </td>
                 <td>
@@ -822,7 +808,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
               </tr>
                           <tr>
@@ -836,26 +822,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.AppTest.java">de/weltraumschaf/juberblog/AppTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.HeadlineTest.java">de/weltraumschaf/juberblog/HeadlineTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.files.HtmlFilenameFilter.java">de/weltraumschaf/juberblog/files/HtmlFilenameFilter.java</a>
                 </td>
                 <td>
                   0
@@ -878,21 +850,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.BlogConfigurationTest.java">de/weltraumschaf/juberblog/BlogConfigurationTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  6
                 </td>
               </tr>
                           <tr>
@@ -911,6 +869,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.SiteMapFormatter.java">de/weltraumschaf/juberblog/formatter/SiteMapFormatter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.formatter.PostFormatter.java">de/weltraumschaf/juberblog/formatter/PostFormatter.java</a>
                 </td>
                 <td>
@@ -920,21 +892,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.SubCommandsTest.java">de/weltraumschaf/juberblog/cmd/SubCommandsTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
@@ -948,12 +906,12 @@
                   0
                 </td>
                 <td>
-                  2
+                  10
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.DataProcessorTest.java">de/weltraumschaf/juberblog/cmd/DataProcessorTest.java</a>
+                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.files.MarkdownFilenameFilter.java">de/weltraumschaf/juberblog/files/MarkdownFilenameFilter.java</a>
                 </td>
                 <td>
                   0
@@ -976,7 +934,7 @@
                   0
                 </td>
                 <td>
-                  0
+                  6
                 </td>
               </tr>
                           <tr>
@@ -1004,35 +962,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.opt.CreateOptionsTest.java">de/weltraumschaf/juberblog/opt/CreateOptionsTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://weltraumschaf.github.io/JUberblog//checkstyle.html#de.weltraumschaf.juberblog.cmd.InstallSubCommandTest.java">de/weltraumschaf/juberblog/cmd/InstallSubCommandTest.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  2
                 </td>
               </tr>
                       </tbody>

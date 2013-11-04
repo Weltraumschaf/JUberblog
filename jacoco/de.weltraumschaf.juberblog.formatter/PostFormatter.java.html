@@ -11,8 +11,9 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
-import com.google.common.collect.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,32 +26,23 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-public class PostFormatter extends BaseFormatter {
+class PostFormatter extends BaseFormatter {
 
     /**
      * Template variable for feature switching.
      */
-<span class="fc" id="L33">    private static final Map&lt;String, Boolean&gt; FEATURES = Maps.newHashMap();</span>
+<span class="fc" id="L34">    private static final Map&lt;String, Boolean&gt; FEATURES = Maps.newHashMap();</span>
+
     static {
-<span class="fc" id="L35">        FEATURES.put(&quot;rating&quot;, Boolean.FALSE);</span>
-<span class="fc" id="L36">        FEATURES.put(&quot;comments&quot;, Boolean.FALSE);</span>
+<span class="fc" id="L37">        FEATURES.put(&quot;rating&quot;, Boolean.FALSE);</span>
+<span class="fc" id="L38">        FEATURES.put(&quot;comments&quot;, Boolean.FALSE);</span>
     }
-    /**
-     * Template variable name for date formatted.
-     */
-    private static final String DATE_FORMATTED = &quot;date_formatted&quot;;
-    /**
-     * Template variable name for previous post.
-     */
-    private static final String PREV_POST = &quot;prevPost&quot;;
-    /**
-     * Template variable name for next post.
-     */
-    private static final String NEXT_POST = &quot;nextPost&quot;;
+
     /**
      * Global available variable names.
      */
-<span class="fc" id="L53">    private static final List&lt;String&gt; GLOBAL_VARIABLE_NAMES = Arrays.asList(DATE_FORMATTED, PREV_POST, NEXT_POST);</span>
+<span class="fc" id="L44">    private static final List&lt;VarName&gt; GLOBAL_VARIABLE_NAMES = Arrays.asList(</span>
+            VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST);
     /**
      * Post template file name.
      */
@@ -60,13 +52,14 @@ public class PostFormatter extends BaseFormatter {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null} or empty
+     * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public PostFormatter(final Configuration templateConfiguration) throws IOException {
-<span class="fc" id="L66">        super(templateConfiguration, TEMPLATE);</span>
-<span class="fc" id="L67">        content.assignVariable(&quot;features&quot;, FEATURES);</span>
-<span class="fc" id="L68">        Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);</span>
-<span class="fc" id="L69">    }</span>
+    public PostFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
+<span class="fc" id="L59">        super(templateConfiguration, TEMPLATE, markdown);</span>
+<span class="fc" id="L60">        content.assignVariable(&quot;features&quot;, FEATURES);</span>
+<span class="fc" id="L61">        Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);</span>
+<span class="fc" id="L62">    }</span>
 
     /**
      * Set the date when post was formatted.
@@ -74,9 +67,9 @@ public class PostFormatter extends BaseFormatter {
      * @param date must not be {@code null}
      */
     public void setDateFormatted(final String date) {
-<span class="fc" id="L77">        Validate.notNull(date, &quot;Date must not be null&quot;);</span>
-<span class="fc" id="L78">        content.assignVariable(DATE_FORMATTED, date);</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L70">        Validate.notNull(date, &quot;Date must not be null&quot;);</span>
+<span class="fc" id="L71">        content.assignVariable(VarName.DATE_FORMATTED, date);</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Set the previous post URI.
@@ -84,9 +77,9 @@ public class PostFormatter extends BaseFormatter {
      * @param prevPost must not be {@code null}
      */
     public void setPrevPost(final String prevPost) {
-<span class="nc" id="L87">        Validate.notNull(prevPost, &quot;Prev post must not be null&quot;);</span>
-<span class="nc" id="L88">        content.assignVariable(PREV_POST, prevPost);</span>
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L80">        Validate.notNull(prevPost, &quot;Prev post must not be null&quot;);</span>
+<span class="nc" id="L81">        content.assignVariable(VarName.PREV_POST, prevPost);</span>
+<span class="nc" id="L82">    }</span>
 
     /**
      * Set the next post URI.
@@ -94,9 +87,9 @@ public class PostFormatter extends BaseFormatter {
      * @param nextPost must not be {@code null}
      */
     public void setNextPost(final String nextPost) {
-<span class="nc" id="L97">        Validate.notNull(nextPost, &quot;Next post must not be null&quot;);</span>
-<span class="nc" id="L98">        content.assignVariable(NEXT_POST, nextPost);</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L90">        Validate.notNull(nextPost, &quot;Next post must not be null&quot;);</span>
+<span class="nc" id="L91">        content.assignVariable(VarName.NEXT_POST, nextPost);</span>
+<span class="nc" id="L92">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

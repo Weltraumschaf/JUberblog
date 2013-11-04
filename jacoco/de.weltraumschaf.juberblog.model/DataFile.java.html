@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DataFile.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.model</a> &gt; <span class="el_source">DataFile.java</span></div><h1>DataFile.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.model;
+
+import de.weltraumschaf.juberblog.Constants;
+import java.io.File;
+import org.apache.commons.lang3.Validate;
+
+/**
+ * Represents a data file.
+ *
+ * In JUberblog the data file is the central data storage. It is based on Markdown files with some additions. On of the
+ * additions is the the file name convention.
+ *
+ * The file names are produced by this schema:
+ * &lt;pre&gt;
+ * filename := TIMESTAMP '.' SLUG '.md' ;
+ * &lt;/pre&gt;
+ *
+ * TIMESTAMP is the Unix time stamp when the file was created. SLUG is th slugged form of the title.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class DataFile {
+
+    /**
+     * Separates the timestamp from the beginning of the file base name.
+     */
+    private static final String TIMESTAMP_SEP = &quot;.&quot;;
+    /**
+     * Signals that the {@link #creationTime} is not initialized.
+     */
+    private static final int UNITIALIZED = -1;
+    /**
+     * The original absolute file name.
+     */
+    private final File file;
+    /**
+     * Lazy computed.
+     */
+    private String basename;
+    /**
+     * Lazy computed.
+     */
+<span class="fc" id="L54">    private long creationTime = UNITIALIZED;</span>
+    /**
+     * Lazy computed.
+     */
+    private String slug;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param file must not be {@code null} or empty
+     */
+    public DataFile(final File file) {
+<span class="fc" id="L66">        super();</span>
+<span class="fc" id="L67">        Validate.notNull(file, &quot;Filename must not be null or empty!&quot;);</span>
+<span class="fc" id="L68">        this.file = file;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Get the absolute file name.
+     *
+     * @return never {@code null} or empty
+     */
+    public String getFilename() {
+<span class="fc" id="L77">        return file.getAbsolutePath();</span>
+    }
+
+    /**
+     * Get the file base name.
+     *
+     * The base name is the part after the last OS dependent directory separator.
+     *
+     * @return never {@code null}
+     */
+    public String getBasename() {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (null == basename) {</span>
+<span class="fc" id="L89">            final int pos = getFilename().lastIndexOf(Constants.DIR_SEP.toString()) + 1;</span>
+<span class="fc" id="L90">            basename = getFilename().substring(pos);</span>
+        }
+
+<span class="fc" id="L93">        return basename;</span>
+    }
+
+    /**
+     * Get the creation time stamp extracted from the file name.
+     *
+     * @return greater -1
+     */
+    public long getCreationTime() {
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (UNITIALIZED == creationTime) {</span>
+<span class="fc" id="L103">            final String name = getBasename();</span>
+<span class="fc" id="L104">            final int pos = name.indexOf(TIMESTAMP_SEP);</span>
+<span class="fc" id="L105">            creationTime = Long.valueOf(name.substring(0, pos));</span>
+        }
+
+<span class="fc" id="L108">        return creationTime;</span>
+    }
+
+    /**
+     * Get the slug part of the file name.
+     *
+     * The slug part is the part between the timestamp and the file extension.
+     *
+     * @return never {@code null}
+     */
+    public String getSlug() {
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (null == slug) {</span>
+<span class="fc" id="L120">            final String name = getBasename();</span>
+<span class="fc" id="L121">            final int start = name.indexOf(TIMESTAMP_SEP) + 1;</span>
+<span class="fc" id="L122">            final int stop = name.lastIndexOf(&quot;.&quot;);</span>
+<span class="fc" id="L123">            slug = name.substring(start, stop);</span>
+        }
+
+<span class="fc" id="L126">        return slug;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L131">        return file.toString();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L136">        return file.hashCode();</span>
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (!(obj instanceof DataFile)) {</span>
+<span class="nc" id="L142">            return false;</span>
+        }
+
+<span class="fc" id="L145">        final DataFile other = (DataFile) obj;</span>
+<span class="fc" id="L146">        return getFilename().equals(other.getFilename());</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

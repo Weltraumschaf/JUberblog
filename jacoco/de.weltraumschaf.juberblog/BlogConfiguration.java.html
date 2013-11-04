@@ -95,22 +95,27 @@ public class BlogConfiguration {
     /**
      * Used to load and parse file.
      */
-<span class="fc" id="L98">    private final Properties properties = new Properties();</span>
+<span class="fc" id="L98">    private Properties properties = new Properties();</span>
     /**
      * Absolute path to property file.
      */
     private final String fileName;
 
+    public BlogConfiguration(final Properties p) {
+<span class="nc" id="L105">        this(&quot;&quot;);</span>
+<span class="nc" id="L106">        Validate.notNull(p);</span>
+<span class="nc" id="L107">        properties = p;</span>
+<span class="nc" id="L108">    }</span>
     /**
      * Dedicated constructor.
      *
      * @param fileName must not be {@literal null} or empty
      */
     public BlogConfiguration(final String fileName) {
-<span class="fc" id="L110">        super();</span>
-<span class="fc" id="L111">        Validate.notEmpty(fileName, &quot;File name must not be null or empty!&quot;);</span>
-<span class="fc" id="L112">        this.fileName = fileName;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L115">        super();</span>
+<span class="fc" id="L116">        Validate.notNull(fileName, &quot;File name must not be null!&quot;);</span>
+<span class="fc" id="L117">        this.fileName = fileName;</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Load the properties from file.
@@ -118,15 +123,15 @@ public class BlogConfiguration {
      * @throws IOException if configuration file can not be loaded
      */
     public void load() throws IOException {
-<span class="fc" id="L121">        InputStream in = null;</span>
+<span class="fc" id="L126">        InputStream in = null;</span>
 
         try {
-<span class="fc" id="L124">            in = new FileInputStream(new File(fileName));</span>
-<span class="fc" id="L125">            properties.load(in);</span>
+<span class="fc" id="L129">            in = new FileInputStream(new File(fileName));</span>
+<span class="fc" id="L130">            properties.load(in);</span>
         } finally {
-<span class="pc" id="L127">            IOUtils.closeQuietly(in);</span>
-<span class="fc" id="L128">        }</span>
-<span class="fc" id="L129">    }</span>
+<span class="pc" id="L132">            IOUtils.closeQuietly(in);</span>
+<span class="fc" id="L133">        }</span>
+<span class="fc" id="L134">    }</span>
 
     /**
      * Get property with empty string as default.
@@ -135,8 +140,8 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     private String getProperty(final String name) {
-<span class="fc" id="L138">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
-<span class="fc" id="L139">        return properties.getProperty(name, &quot;&quot;);</span>
+<span class="fc" id="L143">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+<span class="fc" id="L144">        return properties.getProperty(name, &quot;&quot;);</span>
     }
 
     /**
@@ -145,7 +150,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHeadline() {
-<span class="fc" id="L148">        return getProperty(HEADLINE);</span>
+<span class="fc" id="L153">        return getProperty(HEADLINE);</span>
     }
 
     /**
@@ -154,7 +159,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDescription() {
-<span class="fc" id="L157">        return getProperty(DESCRIPTION);</span>
+<span class="fc" id="L162">        return getProperty(DESCRIPTION);</span>
     }
 
     /**
@@ -163,7 +168,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBaseUri() {
-<span class="fc" id="L166">        return getProperty(SITE_URI);</span>
+<span class="fc" id="L171">        return getProperty(SITE_URI);</span>
     }
 
     /**
@@ -172,7 +177,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getLanguage() {
-<span class="fc" id="L175">        return getProperty(LANGUAGE);</span>
+<span class="fc" id="L180">        return getProperty(LANGUAGE);</span>
     }
 
     /**
@@ -181,7 +186,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDataDir() {
-<span class="fc" id="L184">        return getProperty(DATA_DIR);</span>
+<span class="fc" id="L189">        return getProperty(DATA_DIR);</span>
     }
 
     /**
@@ -190,7 +195,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTemplateDir() {
-<span class="fc" id="L193">        return getProperty(TEMPLATE_DIR);</span>
+<span class="fc" id="L198">        return getProperty(TEMPLATE_DIR);</span>
     }
 
     /**
@@ -199,7 +204,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHtdocs() {
-<span class="fc" id="L202">        return getProperty(HTDOCS);</span>
+<span class="fc" id="L207">        return getProperty(HTDOCS);</span>
     }
 
     /**
@@ -208,7 +213,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterConsumerKey() {
-<span class="fc" id="L211">        return getProperty(TWITTER_CONSUMER_KEY);</span>
+<span class="fc" id="L216">        return getProperty(TWITTER_CONSUMER_KEY);</span>
     }
 
     /**
@@ -217,7 +222,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterConsumerSecret() {
-<span class="fc" id="L220">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
+<span class="fc" id="L225">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
     }
 
     /**
@@ -226,7 +231,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterOAuthToken() {
-<span class="fc" id="L229">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
+<span class="fc" id="L234">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
     }
 
     /**
@@ -235,7 +240,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterOAuthTokenSecret() {
-<span class="fc" id="L238">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
+<span class="fc" id="L243">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
     }
 
     /**
@@ -244,7 +249,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBitlyUsername() {
-<span class="fc" id="L247">        return getProperty(BITLY_USERNAME);</span>
+<span class="fc" id="L252">        return getProperty(BITLY_USERNAME);</span>
     }
 
     /**
@@ -253,7 +258,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBitlyApikey() {
-<span class="fc" id="L256">        return getProperty(BITLY_APIKEY);</span>
+<span class="fc" id="L261">        return getProperty(BITLY_APIKEY);</span>
     }
 
     /**
@@ -262,7 +267,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getApiUri() {
-<span class="fc" id="L265">        return getProperty(API_URI);</span>
+<span class="fc" id="L270">        return getProperty(API_URI);</span>
     }
 
     /**
@@ -271,7 +276,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureRating() {
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
     }
 
     /**
@@ -280,7 +285,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureComments() {
-<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
     }
 
 }

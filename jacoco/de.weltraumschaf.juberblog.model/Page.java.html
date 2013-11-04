@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Page.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.model</a> &gt; <span class="el_source">Page.java</span></div><h1>Page.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.model;
+
+import de.weltraumschaf.commons.guava.Objects;
+import java.net.URI;
+import org.apache.commons.lang3.Validate;
+import org.joda.time.DateTime;
+
+/**
+ * Immutable model to represent a HTML page.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class Page {
+
+    /**
+     * Title of page.
+     */
+    private final String title;
+    /**
+     * URI of page.
+     */
+    private final URI link;
+    /**
+     * Description of page.
+     */
+    private final String description;
+    /**
+     * Publishing date of page.
+     */
+    private final DateTime publishingDate;
+    private final boolean newPublished;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param title must not be {@code null}
+     * @param link must not be {@code null}
+     * @param description must not be {@code null}
+     * @param publishingDate must not be {@code null}
+     */
+    private Page(final String title, final URI link, final String description, final DateTime publishingDate, final boolean newPublished) {
+<span class="fc" id="L53">        super();</span>
+<span class="fc" id="L54">        Validate.notNull(title, &quot;Title must not be null!&quot;);</span>
+<span class="fc" id="L55">        Validate.notNull(link, &quot;Link must not be null!&quot;);</span>
+<span class="fc" id="L56">        Validate.notNull(description, &quot;Description must not be null!&quot;);</span>
+<span class="fc" id="L57">        Validate.notNull(publishingDate, &quot;PublishingDate must not be null!&quot;);</span>
+<span class="fc" id="L58">        this.title = title;</span>
+<span class="fc" id="L59">        this.link = link;</span>
+<span class="fc" id="L60">        this.description = description;</span>
+<span class="fc" id="L61">        this.publishingDate = publishingDate;</span>
+<span class="fc" id="L62">        this.newPublished = newPublished;</span>
+<span class="fc" id="L63">    }</span>
+
+    public static Page newPublishedPage(final String title, final URI link, final String description, final DateTime publishingDate) {
+<span class="fc" id="L66">        return new Page(title, link, description, publishingDate, true);</span>
+    }
+
+    public static Page newExistingPage(final String title, final URI link, final String description, final DateTime publishingDate) {
+<span class="nc" id="L70">        return new Page(title, link, description, publishingDate, false);</span>
+    }
+
+    public boolean isNewPublished() {
+<span class="nc" id="L74">        return newPublished;</span>
+    }
+
+    /**
+     * Get the title.
+     *
+     * @return never {@code null}
+     */
+    public String getTitle() {
+<span class="fc" id="L83">        return title;</span>
+    }
+
+    /**
+     * Get the URI.
+     *
+     * @return never {@code null}
+     */
+    public URI getLink() {
+<span class="fc" id="L92">        return link;</span>
+    }
+
+    /**
+     * Get the description.
+     *
+     * @return never {@code null}
+     */
+    public String getDescription() {
+<span class="fc" id="L101">        return description;</span>
+    }
+
+    /**
+     * Get the publishing date.
+     *
+     * @return never {@code null}
+     */
+    public DateTime getPublishingDate() {
+<span class="fc" id="L110">        return publishingDate;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L115">        return Objects.hashCode(title, link, description, publishingDate, newPublished);</span>
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (!(obj instanceof Page)) {</span>
+<span class="nc" id="L121">            return false;</span>
+        }
+
+<span class="nc" id="L124">        final Page other = (Page) obj;</span>
+<span class="nc bnc" id="L125" title="All 10 branches missed.">        return Objects.equal(title, other.title)</span>
+                &amp;&amp; Objects.equal(link, other.link)
+                &amp;&amp; Objects.equal(description, other.description)
+                &amp;&amp; Objects.equal(publishingDate, other.publishingDate)
+                &amp;&amp; Objects.equal(newPublished, other.newPublished);
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

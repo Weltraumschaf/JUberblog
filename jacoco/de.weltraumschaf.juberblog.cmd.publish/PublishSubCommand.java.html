@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PublishSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">PublishSubCommand.java</span></div><h1>PublishSubCommand.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.cmd.publish;
+
+import de.weltraumschaf.commons.ApplicationException;
+import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
+import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
+import de.weltraumschaf.juberblog.opt.PublishOptions;
+import de.weltraumschaf.juberblog.template.Configurations;
+import freemarker.template.Configuration;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import org.apache.commons.lang3.Validate;
+import org.apache.log4j.Logger;
+import org.apache.commons.lang3.time.StopWatch;
+
+/**
+ * PublishSubCommand all sites from data directory.
+ *
+ * TODO - create index - create sitemap.xml - create feed xml
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptions&gt; {
+
+    /**
+     * Log facility.
+     */
+<span class="fc" id="L39">    private static final Logger LOG = Logger.getLogger(PublishSubCommand.class);</span>
+    /**
+     * USed to measure publish time.
+     */
+<span class="fc" id="L43">    private final StopWatch watch = new StopWatch();</span>
+    /**
+     * Command line options.
+     */
+    private PublishOptions options;
+    /**
+     * Template configuration.
+     */
+    private Configuration templateConfig;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@literal null}
+     */
+    public PublishSubCommand(final IO io) {
+<span class="fc" id="L59">        super(io);</span>
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    protected void init() throws ApplicationException {
+<span class="nc" id="L64">        super.init();</span>
+        try {
+<span class="nc" id="L66">            templateConfig = Configurations.forProduction(getDirectories().templates().toString());</span>
+<span class="nc" id="L67">        } catch (final IOException | URISyntaxException ex) {</span>
+<span class="nc" id="L68">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't configure templates!&quot;, ex);</span>
+<span class="nc" id="L69">        }</span>
+<span class="nc" id="L70">    }</span>
+
+    @Override
+    public void run() throws ApplicationException {
+<span class="nc" id="L74">        watch.reset();</span>
+<span class="nc" id="L75">        final Publisher pub = new Publisher(getDirectories(), templateConfig, getBlogConfiguration().getBaseUri());</span>
+<span class="nc" id="L76">        pub.setPurga(getOptions().isPurge());</span>
+<span class="nc" id="L77">        pub.setSites(getOptions().isSites());</span>
+<span class="nc" id="L78">        LOG.info(&quot;Start pulishing...&quot;);</span>
+<span class="nc" id="L79">        watch.start();</span>
+<span class="nc" id="L80">        pub.execute();</span>
+<span class="nc" id="L81">        watch.stop();</span>
+<span class="nc" id="L82">        LOG.info(String.format(&quot;Publishing finished! Elapsed time: %s&quot;, watch.toString()));</span>
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public void setOptions(final PublishOptions opt) {
+<span class="fc" id="L87">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
+<span class="fc" id="L88">        options = opt;</span>
+<span class="fc" id="L89">    }</span>
+
+    @Override
+    public PublishOptions getOptions() {
+<span class="fc" id="L93">        return options;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

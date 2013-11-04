@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FeedGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">FeedGenerator.java</span></div><h1>FeedGenerator.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog.cmd.publish;
+
+import de.weltraumschaf.juberblog.formatter.Formatter;
+import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.model.Feed;
+import de.weltraumschaf.juberblog.model.FeedItem;
+import de.weltraumschaf.juberblog.model.Page;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.Validate;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+/**
+ * Generates the feed XML.
+ *
+ * 1. read all files in posts/ with mod date
+ * 2. generate feed object from files
+ * 3. write feed.xml
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+class FeedGenerator implements Command {
+
+    /**
+     * See http://www.joda.org/joda-time/key_format.html
+     */
+<span class="fc" id="L44">    private static final DateTimeFormatter PUBLISH_DATE_FORMAT =</span>
+        DateTimeFormat.forPattern(&quot;EEE, dd MMM yyyy HH:mm:ss Z&quot;);
+<span class="fc" id="L46">    private static final DateTimeFormatter DC_DATE_FORMAT =</span>
+        DateTimeFormat.forPattern(&quot;yyyy-MM-dd'T'HH:mm:ssZZ&quot;);
+    private final Configuration templateConfiguration;
+
+    private final List&lt;Page&gt; pages;
+    /**
+     * Feed title.
+     */
+<span class="fc" id="L54">    private String title = &quot;&quot;;</span>
+    /**
+     * Feed URI.
+     */
+<span class="fc" id="L58">    private String link = &quot;&quot;;</span>
+    /**
+     * Feed description.
+     */
+<span class="fc" id="L62">    private String description = &quot;&quot;;</span>
+    /**
+     * Feed language.
+     */
+<span class="fc" id="L66">    private String language = &quot;&quot;;</span>
+    /**
+     * Feed generation.
+     */
+<span class="fc" id="L70">    private DateTime lastBuildDate = new DateTime();</span>
+<span class="fc" id="L71">    private String xml = &quot;&quot;;</span>
+
+    public FeedGenerator(final Configuration templateConfiguration, final List&lt;Page&gt; pages) {
+<span class="fc" id="L74">        super();</span>
+<span class="fc" id="L75">        Validate.notNull(templateConfiguration, &quot;TemplateConfiguration must not be null!&quot;);</span>
+<span class="fc" id="L76">        Validate.notNull(pages, &quot;Pages must not be null!&quot;);</span>
+<span class="fc" id="L77">        this.templateConfiguration = templateConfiguration;</span>
+<span class="fc" id="L78">        this.pages = pages;</span>
+<span class="fc" id="L79">    }</span>
+
+    public void setTitle(final String title) {
+<span class="fc" id="L82">        this.title = title;</span>
+<span class="fc" id="L83">    }</span>
+
+    public void setLink(final String link) {
+<span class="fc" id="L86">        this.link = link;</span>
+<span class="fc" id="L87">    }</span>
+
+    public void setDescription(final String description) {
+<span class="fc" id="L90">        this.description = description;</span>
+<span class="fc" id="L91">    }</span>
+
+    public void setLanguage(final String language) {
+<span class="fc" id="L94">        this.language = language;</span>
+<span class="fc" id="L95">    }</span>
+
+    public void setLastBuildDate(final DateTime lastBuildDate) {
+<span class="fc" id="L98">        this.lastBuildDate = lastBuildDate;</span>
+<span class="fc" id="L99">    }</span>
+
+    @Override
+    public void execute() {
+<span class="fc" id="L103">        final Feed feed = new Feed(title, link, description, language, lastBuildDate.toString(PUBLISH_DATE_FORMAT));</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (final Page page : pages) {</span>
+<span class="fc" id="L106">            feed.add(</span>
+                new FeedItem(
+                    page.getTitle(),
+                    page.getLink().toString(),
+                    StringEscapeUtils.escapeXml(page.getDescription()),
+                    formatTimestamp(page.getPublishingDate()),
+                    formatDcDate(page.getPublishingDate())));
+<span class="fc" id="L113">        }</span>
+
+        try {
+<span class="fc" id="L116">            final Formatter fmt = Formatters.createFeedFormatter(templateConfiguration, feed);</span>
+<span class="fc" id="L117">            xml = fmt.format();</span>
+<span class="nc" id="L118">        } catch (final IOException | TemplateException ex) {</span>
+<span class="nc" id="L119">            throw new RuntimeException(ex);</span>
+<span class="fc" id="L120">        }</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Get the rendered XML string.
+     *
+     * @return never {@code null}, maybe empty until {@link #execute()} is called
+     */
+    public String getResult() {
+<span class="fc" id="L129">        return xml;</span>
+    }
+
+    /**
+     * Formates a date time according to {@link #PUBLISH_DATE_FORMAT}.
+     *
+     * @param ts must not be {@code null}
+     * @return never {@code null}
+     */
+    static String formatTimestamp(final DateTime ts) {
+<span class="fc" id="L139">        Validate.notNull(ts, &quot;Ts must not be null!&quot;);</span>
+<span class="fc" id="L140">        return ts.toString(PUBLISH_DATE_FORMAT);</span>
+    }
+
+    /**
+     * Formates a date time according to {@link #DC_DATE_FORMAT}.
+     *
+     * @param ts must not be {@code null}
+     * @return never {@code null}
+     */
+    static String formatDcDate(final DateTime ts) {
+<span class="fc" id="L150">        Validate.notNull(ts, &quot;Ts must not be null!&quot;);</span>
+<span class="fc" id="L151">        return ts.toString(DC_DATE_FORMAT);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
