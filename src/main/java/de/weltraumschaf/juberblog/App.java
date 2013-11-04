@@ -105,6 +105,20 @@ public class App extends InvokableAdapter {
     }
 
     /**
+     * Generates help message for main command.
+     *
+     * @return never {@code null} or empty
+     */
+    private String helpMessage() {
+        final StringBuilder help = new StringBuilder();
+        help.append("Usage: ")
+            .append(Constants.COMMAND_NAME)
+            .append(" [-v|--version] [-h|--help] ")
+            .append(StringUtils.join(SubCommands.implemented(), "|"));
+        return help.toString();
+    }
+
+    /**
      * Validates the command line arguments and creates the argument object.
      *
      * @return never {@code null}
@@ -114,11 +128,14 @@ public class App extends InvokableAdapter {
         final Arguments args = new Arguments(getArgs());
         final String firstArgument = args.getFirstArgument().trim();
 
-        if ("-h".equals(firstArgument) || firstArgument.isEmpty()) {
+        if ("-h".equals(firstArgument) || "--help".equals(firstArgument)) {
+            throw new ApplicationException(ExitCodeImpl.OK, helpMessage(), null);
+        } else if ("-v".equals(firstArgument) || "--version".equals(firstArgument)) {
+            throw new ApplicationException(ExitCodeImpl.OK, String.format("Version: %s", version), null);
+        } else if (firstArgument.isEmpty()) {
             final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
             errorMesage.append(Constants.DEFAULT_NEW_LINE)
-                    .append("Usage: ").append(Constants.COMMAND_NAME).append(' ');
-            errorMesage.append(StringUtils.join(SubCommands.implemented(), "|"));
+                    .append(helpMessage());
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);
         }
 
@@ -156,7 +173,7 @@ public class App extends InvokableAdapter {
      * @throws ApplicationException if help is wanted
      */
     void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd)
-        throws ApplicationException {
+            throws ApplicationException {
         Validate.notNull(type, "Type must not be null!");
         Validate.notNull(args, "Arguments must not be null!");
         Validate.notNull(cmd, "Sub command must not be null!");
