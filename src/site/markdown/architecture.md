@@ -21,11 +21,11 @@ where you save your Markdown files for the blog. You have full-blown version fea
 and so on.
 
 Ok, version is done by a VCS. What about automatic publishing of new posts? Easy going: Just
-use a system lice cron or atd and at a periodic execution which runs the publisher.
+use a system like cron or atd and at a periodic execution which runs the publisher.
 
 <img alt="concept publish" src="images/concept_publish.png"/>
 
-### a Default Setup
+### A Default Setup
 
 All above sounds very easy and simple. But for some it might be to easy. So I give here
 an idea of a default setup:
