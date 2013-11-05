@@ -7,7 +7,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.cmd.publish.DataProcessor;
 import com.beust.jcommander.internal.Maps;
 import de.weltraumschaf.juberblog.Constants;
-import de.weltraumschaf.juberblog.MetaData;
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;

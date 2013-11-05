@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Maps;
 import java.util.List;

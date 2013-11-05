@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.juberblog.model.MetaData;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import java.util.Arrays;

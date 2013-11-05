@@ -13,7 +13,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Headline;
-import de.weltraumschaf.juberblog.MetaData;
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.Preprocessor;
 import de.weltraumschaf.juberblog.Slug;
 import de.weltraumschaf.juberblog.formatter.Formatters;
