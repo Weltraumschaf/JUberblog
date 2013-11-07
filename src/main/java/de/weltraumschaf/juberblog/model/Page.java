@@ -40,6 +40,7 @@ public class Page {
      */
     private final DateTime publishingDate;
     private final boolean newPublished;
+    private DataFile file;
 
     /**
      * Dedicated constructor.
@@ -49,25 +50,27 @@ public class Page {
      * @param description must not be {@code null}
      * @param publishingDate must not be {@code null}
      */
-    private Page(final String title, final URI link, final String description, final DateTime publishingDate, final boolean newPublished) {
+    private Page(final String title, final URI link, final String description, final DateTime publishingDate, final DataFile file, final boolean newPublished) {
         super();
         Validate.notNull(title, "Title must not be null!");
         Validate.notNull(link, "Link must not be null!");
         Validate.notNull(description, "Description must not be null!");
         Validate.notNull(publishingDate, "PublishingDate must not be null!");
+        Validate.notNull(file, "file must not be null!");
         this.title = title;
         this.link = link;
         this.description = description;
         this.publishingDate = publishingDate;
         this.newPublished = newPublished;
+        this.file= file;
     }
 
-    public static Page newPublishedPage(final String title, final URI link, final String description, final DateTime publishingDate) {
-        return new Page(title, link, description, publishingDate, true);
+    public static Page newPublishedPage(final String title, final URI link, final String description, final DateTime publishingDate, final DataFile file) {
+        return new Page(title, link, description, publishingDate, file, true);
     }
 
-    public static Page newExistingPage(final String title, final URI link, final String description, final DateTime publishingDate) {
-        return new Page(title, link, description, publishingDate, false);
+    public static Page newExistingPage(final String title, final URI link, final String description, final DateTime publishingDate, final DataFile file) {
+        return new Page(title, link, description, publishingDate, file, false);
     }
 
     public boolean isNewPublished() {

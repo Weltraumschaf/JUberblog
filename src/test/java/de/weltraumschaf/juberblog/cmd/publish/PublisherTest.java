@@ -18,6 +18,7 @@ import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class PublisherTest {
     }
 
     @Test
-    public void readData() {
+    public void readData() throws FileNotFoundException {
         sut.readData();
         assertThat(sut.getPostsData(), containsInAnyOrder(
                 new DataFile(new File(data.getAbsolutePath() + "/posts/1383315520.This-is-the-First-Post.md")),

@@ -13,9 +13,14 @@
 package de.weltraumschaf.juberblog.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests for {@link DataFile}.
@@ -24,11 +29,30 @@ import static org.hamcrest.Matchers.*;
  */
 public class DataFileTest {
 
-    private final DataFile sut = new DataFile(new File("/foo/bar/1383315520.This-is-the-First-Post.md"));
+    private static final String NAME = "1383315520.This-is-the-First-Post.md";
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final TemporaryFolder tmp = new TemporaryFolder();
+    //CHECKSTYLE:ON
+
+    private DataFile sut;
+
+
+    public DataFileTest() {
+        super();
+    }
+
+    @Before
+    public void createFile() throws IOException {
+        final File file = tmp.newFile(NAME);
+        sut = new DataFile(file);
+        assertThat(file.getName(), is(equalTo(NAME)));
+    }
 
     @Test
     public void getFilename() {
-        assertThat(sut.getFilename(), is(equalTo("/foo/bar/1383315520.This-is-the-First-Post.md")));
+        assertThat(sut.getFilename(), is(equalTo(NAME)));
     }
 
     @Test

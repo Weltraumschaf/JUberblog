@@ -12,7 +12,14 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.Headline;
+import de.weltraumschaf.juberblog.Preprocessor;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -40,6 +47,7 @@ public class DataFile {
      * Signals that the {@link #creationTime} is not initialized.
      */
     private static final int UNITIALIZED = -1;
+    private final DataProcessor processor;
     /**
      * The original absolute file name.
      */
@@ -62,10 +70,11 @@ public class DataFile {
      *
      * @param file must not be {@code null} or empty
      */
-    public DataFile(final File file) {
+    public DataFile(final File file) throws FileNotFoundException {
         super();
         Validate.notNull(file, "Filename must not be null or empty!");
         this.file = file;
+        this.processor = new DataProcessor(file);
     }
 
     /**
@@ -74,7 +83,7 @@ public class DataFile {
      * @return never {@code null} or empty
      */
     public String getFilename() {
-        return file.getAbsolutePath();
+        return file.getName();
     }
 
     /**
@@ -108,6 +117,10 @@ public class DataFile {
         return creationTime;
     }
 
+    public long getModificationTime() {
+        return file.lastModified();
+    }
+
     /**
      * Get the slug part of the file name.
      *
@@ -125,6 +138,27 @@ public class DataFile {
 
         return slug;
     }
+
+    public MetaData getMetaData() throws IOException {
+        return processor.getMetaData();
+    }
+
+    public String getMarkdown() throws IOException {
+        return processor.getMarkdown();
+    }
+
+        public String getHeadline() throws IOException {
+        return processor.getHeadline();
+    }
+
+    public String getKeywords() throws IOException {
+        return getMetaData().getKeywords();
+    }
+
+    public String getDescription() throws IOException {
+        return getMetaData().getDescription();
+    }
+
 
     @Override
     public String toString() {
@@ -146,4 +180,91 @@ public class DataFile {
         return getFilename().equals(other.getFilename());
     }
 
+    private static class DataProcessor {
+
+        /**
+         * Parses meta data.
+         */
+        private final Preprocessor metaDataParser = new Preprocessor();
+        /**
+         * Extracts headline.
+         */
+        private final Headline headliner = new Headline();
+        /**
+         * To read data from.
+         */
+        private final InputStream input;
+        /**
+         * Lazy computed.
+         */
+        private MetaData metaData;
+        /**
+         * Lazy computed.
+         */
+        private String markdown;
+        /**
+         * Lazy computed.
+         */
+        private String headline;
+
+        public DataProcessor(final File file) throws FileNotFoundException {
+            this(new FileInputStream(file));
+        }
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param dataFile must not be {@literal null}
+         */
+        public DataProcessor(
+                final InputStream dataFile) {
+            super();
+            Validate.notNull(dataFile, "Data file must not be empty!");
+            this.input = dataFile;
+        }
+
+        /**
+         * Get the processed meta data.
+         *
+         * @return never {@literal null}
+         * @throws IOException on any read error of data or template file
+         */
+        public MetaData getMetaData() throws IOException {
+            if (null == metaData) {
+                readFileContent();
+            }
+
+            return metaData;
+        }
+
+        private void readFileContent() throws IOException {
+            final String raw = IOUtils.toString(input);
+            markdown = metaDataParser.process(raw);
+            metaData = metaDataParser.getMetaData();
+            IOUtils.closeQuietly(input);
+        }
+
+        public String getMarkdown() throws IOException {
+            if (null == markdown) {
+                readFileContent();
+            }
+
+            return markdown;
+        }
+
+        /**
+         * Get the processed headline.
+         *
+         * @return never {@literal null}
+         * @throws IOException on any read error of data or template file
+         */
+        public String getHeadline() throws IOException {
+            if (null == headline) {
+                getMetaData();
+                headline = headliner.find(markdown);
+            }
+
+            return headline;
+        }
+    }
 }

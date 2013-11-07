@@ -18,12 +18,13 @@ import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -63,7 +63,7 @@ class Publisher implements Command {
         this.baseUri = baseUri;
     }
 
-    void readData() {
+    void readData() throws FileNotFoundException {
         List<DataFile> files = Lists.newArrayList();
 
         for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
@@ -99,7 +99,12 @@ class Publisher implements Command {
 
     @Override
     public void execute() throws ApplicationException {
-        readData();
+        try {
+            readData();
+        } catch (FileNotFoundException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read data files: " + ex.getMessage(), ex);
+        }
+
         final List<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
 
         final List<Page> publishedPosts = publisPosts();
@@ -192,45 +197,48 @@ class Publisher implements Command {
             } else {
                 LOG.info("Skip file.");
                 try {
-                    return Page.newExistingPage("title", new URI(""), "description", new DateTime());
-                } catch (URISyntaxException ex) {
+                    return Page.newExistingPage(data.getHeadline(), createUri(data), "TODO", new DateTime(), data);
+                } catch (URISyntaxException | IOException ex) {
                     throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
                 }
             }
         }
 
-        FileInputStream input = null;
-
         try {
-            if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {
-                input = new FileInputStream(new File(data.getFilename()));
-                final DataProcessor processor = new DataProcessor(
-                        input,
-                        type,
-                        baseUri,
-                        templateConfig);
-
+                final String html = format(type, data);
                 LOG.info(String.format("Write published file to '%s'.", target));
                 Files.createFile(target);
                 Files.write(
                         target,
-                        processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
+                        html.getBytes(Constants.DEFAULT_ENCODING.toString()),
                         StandardOpenOption.WRITE);
-            }
-        } catch (final IOException | TemplateException ex) {
+                return Page.newPublishedPage(data.getHeadline(), createUri(data), html, new DateTime(), data);
+        } catch (final IOException | TemplateException | URISyntaxException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
                     String.format("Error occured during publishing: %s!", ex.getMessage()),
                     ex);
-        } finally {
-            IOUtils.closeQuietly(input);
+        }
+    }
+
+    private String format(final Formatters.Type type, final DataFile data) throws RuntimeException, TemplateException, IOException {
+        final HtmlFormatter fmt;
+
+        if (type == Formatters.Type.POST) {
+            fmt = Formatters.createPostFormatter(templateConfig, data.getMarkdown());
+        } else if (type == Formatters.Type.SITE) {
+            fmt = Formatters.createSiteFormatter(templateConfig, data.getMarkdown());
+        } else {
+            throw new RuntimeException(); // TODO beter making!
         }
 
-        try {
-            return Page.newPublishedPage("title", new URI(""), "description", new DateTime());
-        } catch (URISyntaxException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
-        }
+        fmt.setTitle(data.getHeadline());
+        fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
+        fmt.setBaseUri(baseUri);
+        fmt.setDescription(data.getDescription());
+        fmt.setKeywords(data.getKeywords());
+
+        return fmt.format();
     }
 
     /**
@@ -256,6 +264,10 @@ class Publisher implements Command {
     private void updateFeed() {
         LOG.info("Update feed...");
 //        new FeedGenerator(templateConfig).execute();
+    }
+
+    private URI createUri(DataFile data) throws URISyntaxException {
+        return new URI("");
     }
 
 }
