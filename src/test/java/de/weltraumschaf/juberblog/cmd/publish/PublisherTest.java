@@ -58,7 +58,7 @@ public class PublisherTest {
         data = new File(getClass().getResource(FIXTURES_DIRECTORY).toURI());
         dirs = new Directories(
                 data.getAbsolutePath(),
-                "",
+                "foo",
                 tmp.getRoot().getAbsolutePath());
         templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
         sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/");
