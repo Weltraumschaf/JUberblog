@@ -9,12 +9,12 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Provides file system for all necessary directories.
@@ -26,26 +26,38 @@ public final class Directories {
     /**
      * Name of sites sub directory.
      */
-    private static final String SITES_DIR = "sites";
+    private static final String SITES_DIR = Constants.SITES_DIR.toString();
     /**
      * Name of posts sub directory.
      */
-    private static final String POSTS_DIR = "posts";
+    private static final String POSTS_DIR = Constants.POSTS_DIR.toString();
     /**
      * Name of drafts sub directory.
      */
-    private static final String DRAFTS_DIR = "drafts";
+    private static final String DRAFTS_DIR = Constants.DRAFTS_DIR.toString();
+    /**
+     * Default file system.
+     */
     private static final FileSystem DEFAULT_FILES_YSTEM = FileSystems.getDefault();
     /**
-     * A default file system.
+     * File system.
      */
     private final FileSystem fs;
+    /**
+     * Data directory root.
+     */
     private final String dataDir;
+    /**
+     * Template directory root.
+     */
     private final String templateDir;
+    /**
+     * Public webroot directory root.
+     */
     private final String htdocsDir;
 
     /**
-     *
+     * Convenience constructor.
      *
      * @param config must not be {@literal null}
      */
@@ -53,6 +65,15 @@ public final class Directories {
         this(config.getDataDir(), config.getTemplateDir(), config.getHtdocs());
     }
 
+    /**
+     * Convenience constructor.
+     *
+     * Initializes {@link #fs} with {@link  #DEFAULT_FILES_YSTEM}.
+     *
+     * @param dataDir must not be {@code null} or empty
+     * @param templateDir must not be {@code null} or empty
+     * @param htdocsDir must not be {@code null} or empty
+     */
     public Directories(final String dataDir, final String templateDir, final String htdocsDir) {
         this(dataDir, templateDir, htdocsDir, DEFAULT_FILES_YSTEM);
     }
@@ -60,12 +81,17 @@ public final class Directories {
     /**
      * Dedicated constructor.
      *
-     * @param dataDir
-     * @param templateDir
-     * @param htdocsDir
+     * @param dataDir must not be {@code null} or empty
+     * @param templateDir must not be {@code null} or empty
+     * @param htdocsDir must not be {@code null} or empty
+     * @param fs must not be {@code null}
      */
     public Directories(final String dataDir, final String templateDir, final String htdocsDir, final FileSystem fs) {
         super();
+        Validate.notEmpty(dataDir, "Data must not be null or empty!");
+        Validate.notEmpty(templateDir, "TemplateDir must not be null or empty!");
+        Validate.notEmpty(htdocsDir, "HtdocsDir must not be null or empty!");
+        Validate.notNull(fs, "Fs must not be null!");
         this.dataDir = dataDir;
         this.templateDir = templateDir;
         this.htdocsDir = htdocsDir;

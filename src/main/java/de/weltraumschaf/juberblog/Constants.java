@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import freemarker.template.Version;
@@ -49,7 +48,19 @@ public enum Constants {
     /**
      * Package base of whole project.
      */
-    PACKAGE_BASE("/de/weltraumschaf/juberblog");
+    PACKAGE_BASE("/de/weltraumschaf/juberblog"),
+    /**
+     * Name of sites sub directory.
+     */
+    SITES_DIR("sites"),
+    /**
+     * Name of posts sub directory.
+     */
+    POSTS_DIR("posts"),
+    /**
+     * Name of drafts sub directory.
+     */
+    DRAFTS_DIR("drafts");
 
     /**
      * Major version of Freemarker template engine.
