@@ -22,7 +22,9 @@ interface Command {
 
     /**
      * Executes the command.
+     *
+     * @throws PublishingSubCommandExcpetion if anything goes wrong.
      */
-    void execute() throws ApplicationException;
+    void execute() throws PublishingSubCommandExcpetion;
 
 }

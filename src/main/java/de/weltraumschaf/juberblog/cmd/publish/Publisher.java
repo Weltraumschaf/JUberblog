@@ -11,11 +11,9 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
-import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
@@ -126,7 +124,7 @@ class Publisher implements Command {
     }
 
     @Override
-    public void execute() throws ApplicationException {
+    public void execute() throws PublishingSubCommandExcpetion {
         final List<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
         final List<Page> publishedPosts = publisPosts();
         updateIndexes(publishedSites, publishedPosts);
@@ -148,7 +146,7 @@ class Publisher implements Command {
         return purge;
     }
 
-    private List<Page> publishSites() throws ApplicationException {
+    private List<Page> publishSites() throws PublishingSubCommandExcpetion {
         LOG.info("Publish sites...");
         try {
             return publishFiles(
@@ -156,11 +154,11 @@ class Publisher implements Command {
                     getSitesData(),
                     dirs.htdocsSites());
         } catch (FileNotFoundException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read sites data files: " + ex.getMessage(), ex);
+            throw new PublishingSubCommandExcpetion("Can't read sites data files: " + ex.getMessage(), ex);
         }
     }
 
-    private List<Page> publisPosts() throws ApplicationException {
+    private List<Page> publisPosts() throws PublishingSubCommandExcpetion {
         LOG.info("Publish posts...");
         try {
             return publishFiles(
@@ -168,7 +166,7 @@ class Publisher implements Command {
                     getPostsData(),
                     dirs.htdocsPosts());
         } catch (FileNotFoundException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read posts data files: " + ex.getMessage(), ex);
+            throw new PublishingSubCommandExcpetion("Can't read posts data files: " + ex.getMessage(), ex);
         }
     }
 
@@ -184,10 +182,10 @@ class Publisher implements Command {
      * @param type must not be {@literal null}
      * @param data must not be {@literal null}
      * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
+     * @throws PublishingSubCommandExcpetion if can't render template
      */
     private List<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
-            throws ApplicationException {
+            throws PublishingSubCommandExcpetion {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(data, "Dirname must not be null!");
         Validate.notNull(outputDir, "Output dir must not be null!");
@@ -207,10 +205,10 @@ class Publisher implements Command {
      * @param type must not be {@literal null}
      * @param data must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
+     * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-            throws ApplicationException {
+            throws PublishingSubCommandExcpetion {
         Validate.notNull(type, "Layout must not be null!");
         Validate.notNull(data, "File name must not be null or empty!");
         Validate.notNull(outputDir, "Output dir must not be null!");
@@ -253,7 +251,7 @@ class Publisher implements Command {
                         frequencey,
                         priority);
                 } catch (URISyntaxException | IOException ex) {
-                    throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
+                    throw new PublishingSubCommandExcpetion(ex.getMessage(), ex);
                 }
             }
         }
@@ -275,8 +273,7 @@ class Publisher implements Command {
                 frequencey,
                 priority);
         } catch (final IOException | TemplateException | URISyntaxException ex) {
-            throw new ApplicationException(
-                    ExitCodeImpl.FATAL,
+            throw new PublishingSubCommandExcpetion(
                     String.format("Error occured during publishing: %s!", ex.getMessage()),
                     ex);
         }
