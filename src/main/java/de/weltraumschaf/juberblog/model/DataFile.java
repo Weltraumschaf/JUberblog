@@ -258,8 +258,7 @@ public class DataFile {
         /**
          * Convenience constructor.
          *
-         * @param file must not be {
-         * @codenull}
+         * @param file must not be {@code null}
          * @throws FileNotFoundException if file not found
          */
         public DataProcessor(final File file) throws FileNotFoundException {
