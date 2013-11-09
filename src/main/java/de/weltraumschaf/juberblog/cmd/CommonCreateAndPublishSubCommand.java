@@ -16,14 +16,13 @@ import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
-import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
-import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
 import org.apache.commons.lang3.Validate;
 
 /**
- * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
+ * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
+ * and {@link de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand}.
  *
  * @param <T> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>

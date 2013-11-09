@@ -17,7 +17,6 @@ import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.TemplateException;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
