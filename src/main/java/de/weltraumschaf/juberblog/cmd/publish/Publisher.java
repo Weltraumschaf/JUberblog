@@ -21,6 +21,7 @@ import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.File;
@@ -33,13 +34,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 /**
- * Publish all files from data direcotry.
+ * Publish all files from data directory.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -70,7 +70,7 @@ class Publisher implements Command {
      */
     private boolean purge;
     /**
-     * {@code true} if data already read.
+     * {@literal true} if data already read.
      *
      * Used for lazy load {@link #sitesData} and {@link #postsData}.
      */
@@ -217,6 +217,24 @@ class Publisher implements Command {
         final String targetFileName = data.getSlug() + ".html";
         LOG.info(String.format("Publishing file '%s'...", targetFileName));
         final Path target = outputDir.resolve(targetFileName);
+        final SiteMapUrl.ChangeFrequency frequencey;
+        final SiteMapUrl.Priority priority;
+
+        switch (type) {
+            case POST:
+                frequencey = SiteMapUrl.ChangeFrequency.DAILY;
+                priority = SiteMapUrl.Priority.POST;
+                break;
+            case SITE:
+                frequencey = SiteMapUrl.ChangeFrequency.WEEKLY;
+                priority = SiteMapUrl.Priority.SITE;
+                break;
+            default:
+                frequencey = SiteMapUrl.ChangeFrequency.MONTHLY;
+                priority = SiteMapUrl.Priority.SITE;
+                break;
+        }
+
 
         if (publishedFileExists(target.toFile())) {
             LOG.info(String.format("File %s already exists.", target));
@@ -226,7 +244,14 @@ class Publisher implements Command {
             } else {
                 LOG.info("Skip file.");
                 try {
-                    return Page.newExistingPage(data.getHeadline(), createUri(data), "TODO", new DateTime(), data);
+                    return new Page(
+                        data.getHeadline(),
+                        createUri(data),
+                        "TODO",
+                        new DateTime(),
+                        data,
+                        frequencey,
+                        priority);
                 } catch (URISyntaxException | IOException ex) {
                     throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
                 }
@@ -241,7 +266,14 @@ class Publisher implements Command {
                     target,
                     html.getBytes(Constants.DEFAULT_ENCODING.toString()),
                     StandardOpenOption.WRITE);
-            return Page.newPublishedPage(data.getHeadline(), createUri(data), html, new DateTime(), data);
+            return new Page(
+                data.getHeadline(),
+                createUri(data),
+                html,
+                new DateTime(),
+                data,
+                frequencey,
+                priority);
         } catch (final IOException | TemplateException | URISyntaxException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,

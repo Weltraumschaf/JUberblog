@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
 import java.io.IOException;
 import java.net.URI;
@@ -93,12 +94,11 @@ public class FeedGeneratorTest {
                 + "        <lastBuildDate>" + today(now) + "</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>")));
-        pages.add(
-            Page.newPublishedPage("First Post", new URI(URI + "posts/First-Post.html"),
-                "This is the content.", now, new DataFile(tmp.newFile())));
-        pages.add(
-            Page.newPublishedPage("Second Post", new URI(URI + "posts/Second-Post.html"),
-                "This is the content with <strong>HTML</strong>.", now, new DataFile(tmp.newFile())));
+        pages.add(new Page("First Post", new URI(URI + "posts/First-Post.html"), "This is the content.", now,
+                new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
+        pages.add(new Page("Second Post", new URI(URI + "posts/Second-Post.html"), "This is the content with <strong>"
+                + "HTML</strong>.", now, new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.DAILY,
+                SiteMapUrl.Priority.POST));
         sut.execute();
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"

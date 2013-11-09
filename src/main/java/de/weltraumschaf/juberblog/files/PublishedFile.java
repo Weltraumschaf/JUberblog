@@ -22,6 +22,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
+@Deprecated
 public class PublishedFile {
 
     /**

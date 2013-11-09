@@ -4,6 +4,6 @@
         <loc>loc1</loc>
         <lastmod>lastmod1</lastmod>
         <changefreq>daily</changefreq>
-        <priority>0.1</priority>
+        <priority>1.0</priority>
     </url>
 </urlset>

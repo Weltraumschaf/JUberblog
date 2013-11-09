@@ -53,7 +53,7 @@ public class SiteMapFormatterTest {
     @Test
     public void format_oneSite() throws IOException, URISyntaxException, TemplateException {
         siteMap.add(new SiteMapUrl(
-                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, 0.1f));
+                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/sitemap_one.xml");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);
@@ -62,11 +62,11 @@ public class SiteMapFormatterTest {
     @Test
     public void format_threeSites() throws IOException, URISyntaxException, TemplateException {
         siteMap.add(new SiteMapUrl(
-                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, 0.1f));
+                "loc1", "lastmod1", SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
         siteMap.add(new SiteMapUrl(
-                "loc2", "lastmod2", SiteMapUrl.ChangeFrequency.WEEKLY, 0.2f));
+                "loc2", "lastmod2", SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.POST));
         siteMap.add(new SiteMapUrl(
-                "loc3", "lastmod3", SiteMapUrl.ChangeFrequency.MONTHLY, 0.3f));
+                "loc3", "lastmod3", SiteMapUrl.ChangeFrequency.MONTHLY, SiteMapUrl.Priority.SITE));
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/sitemap_three.xml");
         assertThat(sut.format(), is(equalTo(IOUtils.toString(htmlFile))));
         IOUtils.closeQuietly(htmlFile);

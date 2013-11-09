@@ -88,8 +88,8 @@ class FeedGenerator implements Command {
     /**
      * Dedicated constructor.
      *
-     * @param templateConfiguration must not be {@code null}
-     * @param pages must not be {@code null}
+     * @param templateConfiguration must not be {@literal null}
+     * @param pages must not be {@literal null}
      */
     public FeedGenerator(final Configuration templateConfiguration, final List<Page> pages) {
         super();
@@ -102,7 +102,7 @@ class FeedGenerator implements Command {
     /**
      * Set the title.
      *
-     * @param title must not be {@code null}
+     * @param title must not be {@literal null}
      */
     public void setTitle(final String title) {
         Validate.notNull(pages, "Page must not be null!");
@@ -112,7 +112,7 @@ class FeedGenerator implements Command {
     /**
      * Set the link to to the feed.
      *
-     * @param link must not be {@code null}
+     * @param link must not be {@literal null}
      */
     public void setLink(final String link) {
         Validate.notNull(link, "Link must not be null!");
@@ -122,7 +122,7 @@ class FeedGenerator implements Command {
     /**
      * Set feed description.
      *
-     * @param description must not be {@code null}
+     * @param description must not be {@literal null}
      */
     public void setDescription(final String description) {
         Validate.notNull(description, "Description must not be null!");
@@ -132,7 +132,7 @@ class FeedGenerator implements Command {
     /**
      * Set feed language.
      *
-     * @param language must not be {@code null}
+     * @param language must not be {@literal null}
      */
     public void setLanguage(final String language) {
         Validate.notNull(language, "Language must not be null!");
@@ -142,7 +142,7 @@ class FeedGenerator implements Command {
     /**
      * Set last build date of feed.
      *
-     * @param lastBuildDate must not be {@code null}
+     * @param lastBuildDate must not be {@literal null}
      */
     public void setLastBuildDate(final DateTime lastBuildDate) {
         Validate.notNull(lastBuildDate, "LastBuildDate must not be null!");
@@ -157,7 +157,7 @@ class FeedGenerator implements Command {
             feed.add(
                 new FeedItem(
                     page.getTitle(),
-                    page.getLink().toString(),
+                    page.getUri().toString(),
                     StringEscapeUtils.escapeXml(page.getDescription()),
                     formatTimestamp(page.getPublishingDate()),
                     formatDcDate(page.getPublishingDate())));
@@ -174,7 +174,7 @@ class FeedGenerator implements Command {
     /**
      * Get the rendered XML string.
      *
-     * @return never {@code null}, maybe empty until {@link #execute()} is called
+     * @return never {@literal null}, maybe empty until {@link #execute()} is called
      */
     public String getResult() {
         return xml;
@@ -183,8 +183,8 @@ class FeedGenerator implements Command {
     /**
      * Formates a date time according to {@link #PUBLISH_DATE_FORMAT}.
      *
-     * @param ts must not be {@code null}
-     * @return never {@code null}
+     * @param ts must not be {@literal null}
+     * @return never {@literal null}
      */
     static String formatTimestamp(final DateTime ts) {
         Validate.notNull(ts, "Ts must not be null!");
@@ -194,8 +194,8 @@ class FeedGenerator implements Command {
     /**
      * Formates a date time according to {@link #DC_DATE_FORMAT}.
      *
-     * @param ts must not be {@code null}
-     * @return never {@code null}
+     * @param ts must not be {@literal null}
+     * @return never {@literal null}
      */
     static String formatDcDate(final DateTime ts) {
         Validate.notNull(ts, "Ts must not be null!");

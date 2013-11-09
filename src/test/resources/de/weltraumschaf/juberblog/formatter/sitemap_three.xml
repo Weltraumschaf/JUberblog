@@ -4,18 +4,18 @@
         <loc>loc1</loc>
         <lastmod>lastmod1</lastmod>
         <changefreq>daily</changefreq>
-        <priority>0.1</priority>
+        <priority>1.0</priority>
     </url>
     <url>
         <loc>loc2</loc>
         <lastmod>lastmod2</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
+        <priority>1.0</priority>
     </url>
     <url>
         <loc>loc3</loc>
         <lastmod>lastmod3</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.3</priority>
+        <priority>0.5</priority>
     </url>
 </urlset>

@@ -47,16 +47,16 @@ public final class SiteMapUrl {
      * @param changefreq must not be {@code null}
      * @param priority must not be less than 0.0
      */
-    public SiteMapUrl(String loc, String lastmod, ChangeFrequency changefreq, float priority) {
+    public SiteMapUrl(final String loc, final String lastmod, final ChangeFrequency changefreq, final SiteMapUrl.Priority priority) {
         super();
         Validate.notEmpty(loc, "Loc must not be null or empty!");
         Validate.notEmpty(lastmod, "Lastmod must not be null or empty!");
         Validate.notNull(changefreq, "Changefreq must not be null!");
-        Validate.isTrue(priority >= 0.0f, "Priority must not be less than 0.0!");
+        Validate.notNull(priority, "Priority must not be null!");
         this.loc = loc;
         this.lastmod = lastmod;
         this.changefreq = changefreq.toString();
-        this.priority = String.format(Locale.ENGLISH, "%.1f", priority);
+        this.priority = priority.toString();
     }
 
     /**
@@ -118,11 +118,11 @@ public final class SiteMapUrl {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("loc", loc)
-            .add("lastmod", lastmod)
-            .add("changefreq", changefreq)
-            .add("priority", priority)
-            .toString();
+                .add("loc", loc)
+                .add("lastmod", lastmod)
+                .add("changefreq", changefreq)
+                .add("priority", priority)
+                .toString();
     }
 
     /**
@@ -162,6 +162,49 @@ public final class SiteMapUrl {
         @Override
         public String toString() {
             return name().toLowerCase();
+        }
+    }
+
+    /**
+     * Priority of a site map URL.
+     */
+    public enum Priority {
+
+        /**
+         * Priority for posts.
+         */
+        POST(1.0f),
+        /**
+         * Priority for sites.
+         */
+        SITE(0.5);
+        /**
+         * Value in range [ 0.0 - 1.0 ].
+         */
+        private final double value;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param value must be in range [ 0.0 - 1.0 ]
+         */
+        private Priority(final double value) {
+            Validate.isTrue(value >= 0.0 && value <= 1.0, "Value must be in range [ 0.0 - 1.0 ]!");
+            this.value = value;
+        }
+
+        /**
+         * Get value as double.
+         *
+         * @return in range [ 0.0 - 1.0 ]
+         */
+        public double getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(Locale.ENGLISH, "%.1f", value);
         }
 
     }
