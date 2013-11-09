@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.model.DataFile;
@@ -25,7 +24,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -97,7 +95,7 @@ public class PublisherTest {
      - index.html
      */
     @Test
-    public void execute_default_noSitesNoDraftsNoPurge() throws ApplicationException {
+    public void execute_default_noSitesNoDraftsNoPurge() throws PublishingSubCommandExcpetion {
         sut.execute();
         assertThat(new File(publishedPosts, "This-is-the-First-Post.html").exists(), is(true));
         assertThat(new File(publishedPosts, "Second-Post-About-Lorem.html").exists(), is(true));

@@ -12,7 +12,6 @@
 
 package de.weltraumschaf.juberblog.model;
 
-import de.weltraumschaf.juberblog.model.MetaData;
 import com.beust.jcommander.internal.Maps;
 import java.util.Map;
 import org.junit.Test;

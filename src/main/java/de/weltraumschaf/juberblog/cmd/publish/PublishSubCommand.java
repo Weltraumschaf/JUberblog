@@ -20,6 +20,7 @@ import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;
@@ -77,7 +78,11 @@ public class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishO
         pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");
         watch.start();
-        pub.execute();
+        try {
+            pub.execute();
+        } catch (PublishingSubCommandExcpetion ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Error while publishing files: " + ex.getMessage(), ex);
+        }
         watch.stop();
         LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }

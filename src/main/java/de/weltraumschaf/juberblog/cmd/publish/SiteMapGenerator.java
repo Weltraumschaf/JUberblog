@@ -92,11 +92,11 @@ class SiteMapGenerator implements Command {
         final SiteMap map = new SiteMap();
 
         for (final Page page : pages) {
-                map.add(new SiteMapUrl(
-                        page.getUri().toString(),
-                        formatTimestamp(page.getPublishingDate()),
-                        page.getFrequencey(),
-                        page.getPriority()));
+            map.add(new SiteMapUrl(
+                    page.getUri().toString(),
+                    formatTimestamp(page.getPublishingDate()),
+                    page.getFrequencey(),
+                    page.getPriority()));
         }
 
         return map;

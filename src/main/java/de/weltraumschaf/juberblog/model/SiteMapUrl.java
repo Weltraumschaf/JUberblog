@@ -47,7 +47,11 @@ public final class SiteMapUrl {
      * @param changefreq must not be {@code null}
      * @param priority must not be less than 0.0
      */
-    public SiteMapUrl(final String loc, final String lastmod, final ChangeFrequency changefreq, final SiteMapUrl.Priority priority) {
+    public SiteMapUrl(
+        final String loc,
+        final String lastmod,
+        final ChangeFrequency changefreq,
+        final SiteMapUrl.Priority priority) {
         super();
         Validate.notEmpty(loc, "Loc must not be null or empty!");
         Validate.notEmpty(lastmod, "Lastmod must not be null or empty!");

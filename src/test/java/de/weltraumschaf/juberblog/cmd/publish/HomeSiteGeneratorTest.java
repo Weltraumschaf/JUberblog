@@ -12,7 +12,6 @@
 
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.HomeSiteGenerator;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;

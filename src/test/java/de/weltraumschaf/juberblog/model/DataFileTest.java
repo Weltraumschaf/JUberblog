@@ -13,7 +13,6 @@
 package de.weltraumschaf.juberblog.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
