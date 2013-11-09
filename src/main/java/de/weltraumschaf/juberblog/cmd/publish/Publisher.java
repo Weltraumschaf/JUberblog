@@ -205,7 +205,7 @@ class Publisher implements Command {
      * Publish a given file with a given layout.
      *
      * @param type must not be {@literal null}
-     * @param file must not be {@literal null} or empty
+     * @param data must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
      * @throws ApplicationException if can't render template
      */

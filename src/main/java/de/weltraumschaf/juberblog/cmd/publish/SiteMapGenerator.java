@@ -76,8 +76,7 @@ class SiteMapGenerator implements Command {
     /**
      * Add directory to find published files with their base URI.
      *
-     * @param baseUri must not be {@literal nul} or empty
-     * @param directory must not be {@literal null}, must be directory
+     * @param page must not be {@literal null}, must be directory
      */
     public void addPage(final Page page) {
         Validate.notNull(page, "Page must not be null!");

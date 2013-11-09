@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.model;
 
 import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.juberblog.Preprocessor;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 
