@@ -38,7 +38,6 @@ public class BlogConfigurationTest {
                 + PACKAGE.replace(".", DIR_SEP)
                 + DIR_SEP + "configuration.sample.properties";
         sut = new BlogConfiguration(fileName);
-        sut.load();
     }
 
     @Test

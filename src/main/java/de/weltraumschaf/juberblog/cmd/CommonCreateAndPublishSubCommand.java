@@ -62,7 +62,6 @@ public abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublis
         // TODO Argument validation.
         try {
             blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());
-            blogConfiguration.load();
         } catch (IOException | IllegalArgumentException | NullPointerException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.CANT_LOAD_CONFIG,

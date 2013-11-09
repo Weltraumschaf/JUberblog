@@ -173,7 +173,7 @@ public class App extends InvokableAdapter {
      * @throws ApplicationException if help is wanted
      */
     void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd)
-            throws ApplicationException {
+        throws ApplicationException {
         Validate.notNull(type, "Type must not be null!");
         Validate.notNull(args, "Arguments must not be null!");
         Validate.notNull(cmd, "Sub command must not be null!");

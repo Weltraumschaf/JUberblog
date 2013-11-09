@@ -33,11 +33,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 /**
+ * Publish all files from data direcotry.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -47,13 +49,43 @@ class Publisher implements Command {
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(Publisher.class);
+    /**
+     * Used to find data and write published files.
+     */
     private final Directories dirs;
+    /**
+     * USed for HTML generation.
+     */
     private final Configuration templateConfig;
+    /**
+     * Base URI of the blog.
+     */
     private final String baseUri;
+    /**
+     * Whether to generate sites.
+     */
     private boolean sites;
+    /**
+     * Whether to purge already generated files.
+     */
     private boolean purge;
+    /**
+     * {@code true} if data already read.
+     *
+     * Used for lazy load {@link #sitesData} and {@link #postsData}.
+     */
     private boolean dataRead;
+    /**
+     * Data about sites to publish.
+     *
+     * Lazy loaded.
+     */
     private Collection<DataFile> sitesData;
+    /**
+     * Data about posts to publish.
+     *
+     * Lazy loaded.
+     */
     private Collection<DataFile> postsData;
 
     public Publisher(final Directories dirs, final Configuration templateConfig, final String baseUri) {
@@ -64,49 +96,38 @@ class Publisher implements Command {
     }
 
     void readData() throws FileNotFoundException {
-        List<DataFile> files = Lists.newArrayList();
+        if (dataRead) {
+            return;
+        }
+
+        sitesData = Lists.newArrayList();
 
         for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            files.add(new DataFile(f));
+            sitesData.add(new DataFile(f));
         }
 
-        sitesData = files;
-        files = Lists.newArrayList();
+        postsData = Lists.newArrayList();
 
         for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            files.add(new DataFile(f));
+            postsData.add(new DataFile(f));
         }
 
-        postsData = files;
         dataRead = true;
     }
 
-    Collection<DataFile> getSitesData() {
-        if (!dataRead) {
-            throw new IllegalStateException("Data never read! Invoke #readData() at least once.");
-        }
-
+    Collection<DataFile> getSitesData() throws FileNotFoundException {
+        readData();
         return sitesData;
     }
 
-    Collection<DataFile> getPostsData() {
-        if (!dataRead) {
-            throw new IllegalStateException("Data never read! Invoke #readData() at least once.");
-        }
-
+    Collection<DataFile> getPostsData() throws FileNotFoundException {
+        readData();
         return postsData;
     }
 
     @Override
     public void execute() throws ApplicationException {
-        try {
-            readData();
-        } catch (FileNotFoundException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read data files: " + ex.getMessage(), ex);
-        }
-
         final List<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
-
         final List<Page> publishedPosts = publisPosts();
         updateIndexes(publishedSites, publishedPosts);
     }
@@ -129,18 +150,26 @@ class Publisher implements Command {
 
     private List<Page> publishSites() throws ApplicationException {
         LOG.info("Publish sites...");
-        return publishFiles(
-                Formatters.Type.SITE,
-                getSitesData(),
-                dirs.htdocsSites());
+        try {
+            return publishFiles(
+                    Formatters.Type.SITE,
+                    getSitesData(),
+                    dirs.htdocsSites());
+        } catch (FileNotFoundException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read sites data files: " + ex.getMessage(), ex);
+        }
     }
 
     private List<Page> publisPosts() throws ApplicationException {
         LOG.info("Publish posts...");
-        return publishFiles(
-                Formatters.Type.POST,
-                getPostsData(),
-                dirs.htdocsPosts());
+        try {
+            return publishFiles(
+                    Formatters.Type.POST,
+                    getPostsData(),
+                    dirs.htdocsPosts());
+        } catch (FileNotFoundException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't read posts data files: " + ex.getMessage(), ex);
+        }
     }
 
     private void updateIndexes(final List<Page> sites, final List<Page> posts) {
@@ -205,14 +234,14 @@ class Publisher implements Command {
         }
 
         try {
-                final String html = format(type, data);
-                LOG.info(String.format("Write published file to '%s'.", target));
-                Files.createFile(target);
-                Files.write(
-                        target,
-                        html.getBytes(Constants.DEFAULT_ENCODING.toString()),
-                        StandardOpenOption.WRITE);
-                return Page.newPublishedPage(data.getHeadline(), createUri(data), html, new DateTime(), data);
+            final String html = format(type, data);
+            LOG.info(String.format("Write published file to '%s'.", target));
+            Files.createFile(target);
+            Files.write(
+                    target,
+                    html.getBytes(Constants.DEFAULT_ENCODING.toString()),
+                    StandardOpenOption.WRITE);
+            return Page.newPublishedPage(data.getHeadline(), createUri(data), html, new DateTime(), data);
         } catch (final IOException | TemplateException | URISyntaxException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,

@@ -29,7 +29,11 @@ import org.apache.commons.lang3.Validate;
 public class BlogConfiguration {
 
     /**
-     * Name of blog headline  property.
+     * To signal true in configuration.
+     */
+    private static final String TRUE_PROPERY = "true";
+    /**
+     * Name of blog headline property.
      */
     private static final String HEADLINE = "headline";
     /**
@@ -95,39 +99,46 @@ public class BlogConfiguration {
     /**
      * Used to load and parse file.
      */
-    private Properties properties = new Properties();
-    /**
-     * Absolute path to property file.
-     */
-    private final String fileName;
+    private final Properties properties;
 
-    public BlogConfiguration(final Properties p) {
-        this("");
-        Validate.notNull(p);
-        properties = p;
-    }
     /**
+     * Convenience constructor to inject properties.
+     *
+     * @param filename must not be {@literal null} or empty
+     * @throws IOException if file can't be load
+     */
+    public BlogConfiguration(final String filename) throws IOException {
+        this(load(filename));
+    }
+
+    /**
+     *
      * Dedicated constructor.
      *
-     * @param fileName must not be {@literal null} or empty
+     * @param p must not be {@code null}
      */
-    public BlogConfiguration(final String fileName) {
+    public BlogConfiguration(final Properties p) {
         super();
-        Validate.notNull(fileName, "File name must not be null!");
-        this.fileName = fileName;
+        Validate.notNull(p);
+        properties = p;
     }
 
     /**
      * Load the properties from file.
      *
+     * @param filename must not be {@literal null} or empty
+     * @return never {@code null}
      * @throws IOException if configuration file can not be loaded
      */
-    public void load() throws IOException {
+    public static Properties load(final String filename) throws IOException {
+        Validate.notNull(filename, "File name must not be null!");
         InputStream in = null;
+        final Properties properties = new Properties();
 
         try {
-            in = new FileInputStream(new File(fileName));
+            in = new FileInputStream(new File(filename));
             properties.load(in);
+            return properties;
         } finally {
             IOUtils.closeQuietly(in);
         }
@@ -276,7 +287,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureRating() {
-        return "true".equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;
+        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_RATING));
     }
 
     /**
@@ -285,7 +296,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureComments() {
-        return "true".equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;
+        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_COMMENTS));
     }
 
 }
