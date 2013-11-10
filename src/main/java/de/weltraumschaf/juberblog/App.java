@@ -42,7 +42,10 @@ public class App extends InvokableAdapter {
      * Version information.
      */
     private final Version version;
-
+    /**
+     * To obtain environment variables.
+     */
+    private final Envoronments.Env env = Envoronments.defaultEnv();
     /**
      * Dedicated constructor.
      *
@@ -75,17 +78,8 @@ public class App extends InvokableAdapter {
      * @return by default {@code false} if environment is not present or false
      */
     boolean isDebug() {
-        final String debug = System.getenv(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
-
-        if (null == debug || debug.isEmpty()) {
-            return false;
-        }
-
-        if ("true".equalsIgnoreCase(debug.trim())) {
-            return true;
-        }
-
-        return false;
+        final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
+        return "true".equalsIgnoreCase(debug.trim());
     }
 
     @Override
