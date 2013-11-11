@@ -27,33 +27,58 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
+ * Represents a file's location in a file system.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class JVFSPath implements Path {
 
-    private static final String SEPARATOR = JVFSFileSystems.SEPARATOR;
-
+    /**
+     * Directory separator.
+     */
+    private static final String DIR_SEP = JVFSFileSystems.DIR_SEP;
+    /**
+     * Parent directory.
+     */
     private static final String DIR_UP = "..";
-
+    /**
+     * The directory self.
+     */
     private static final String DIR_THIS = ".";
 
     /**
-     * Internal representation
+     * Internal representation.
      */
     private final String path;
 
     /**
-     * Owning {@link ShrinkWrapFileSystem}
+     * Owning {@link ShrinkWrapFileSystem}.
      */
     private final JVFSFileSystem fileSystem;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param path must not be {@code null}
+     * @param fileSystem must not be {@code null}
+     */
     JVFSPath(final String path, final JVFSFileSystem fileSystem) {
         super();
         JVFSAssertions.notNull(path, "path");
         JVFSAssertions.notNull(fileSystem, "fileSystem");
         this.path = path;
         this.fileSystem = fileSystem;
+    }
+
+    /**
+     * Convenience constructor to create root path.
+     *
+     * Initializes {@link #path} with {@link #DIR_SEP}.
+     *
+     * @param fileSystem must not be {@code null}
+     */
+    JVFSPath(final JVFSFileSystem fileSystem) {
+        this(DIR_SEP, fileSystem);
     }
 
     @Override
@@ -63,18 +88,18 @@ class JVFSPath implements Path {
 
     @Override
     public boolean isAbsolute() {
-        return this.path.startsWith(SEPARATOR);
+        return this.path.startsWith(DIR_SEP);
     }
 
     @Override
     public Path getRoot() {
-        return this.isAbsolute() ? new JVFSPath(SEPARATOR, fileSystem) : null;
+        return this.isAbsolute() ? new JVFSPath(fileSystem) : null;
     }
 
     @Override
     public Path getFileName() {
         // Root and empty String has no file name
-        if (path.length() == 0 || path.equals(SEPARATOR)) {
+        if (path.length() == 0 || path.equals(DIR_SEP)) {
             return null;
         } else {
             final List<String> tokens = tokenize(this);
@@ -98,12 +123,12 @@ class JVFSPath implements Path {
         final StringBuffer sb = new StringBuffer();
 
         if (this.isAbsolute()) {
-            sb.append(SEPARATOR);
+            sb.append(DIR_SEP);
         }
 
         for (int i = 0; i < numTokens - 1; i++) {
             if (i >= 1) {
-                sb.append(SEPARATOR);
+                sb.append(DIR_SEP);
             }
             sb.append(tokens.get(i));
         }
@@ -116,11 +141,11 @@ class JVFSPath implements Path {
     public int getNameCount() {
         String context = this.path;
         // Kill trailing slashes
-        if (context.endsWith(SEPARATOR)) {
+        if (context.endsWith(DIR_SEP)) {
             context = context.substring(0, context.length() - 1);
         }
         // Kill preceding slashes
-        if (context.startsWith(SEPARATOR)) {
+        if (context.startsWith(DIR_SEP)) {
             context = context.substring(1);
         }
         // Root
@@ -128,7 +153,7 @@ class JVFSPath implements Path {
             return 0;
         }
         // Else count names by using the separator
-        final int pathSeparators = this.countOccurrences(context, SEPARATOR, 0);
+        final int pathSeparators = this.countOccurrences(context, DIR_SEP, 0);
         return pathSeparators + 1;
     }
 
@@ -170,7 +195,7 @@ class JVFSPath implements Path {
         }
         final StringBuilder newPathBuilder = new StringBuilder();
         for (int i = 0; i < endIndex; i++) {
-            newPathBuilder.append(SEPARATOR);
+            newPathBuilder.append(DIR_SEP);
             newPathBuilder.append(tokens.get(i));
         }
         final Path newPath = this.fromString(newPathBuilder.toString());
@@ -297,8 +322,8 @@ class JVFSPath implements Path {
 
         // Else join other to this
         final StringBuilder sb = new StringBuilder(this.path);
-        if (!this.path.endsWith(SEPARATOR)) {
-            sb.append(SEPARATOR);
+        if (!this.path.endsWith(DIR_SEP)) {
+            sb.append(DIR_SEP);
         }
         sb.append(other.toString());
 
@@ -377,7 +402,7 @@ class JVFSPath implements Path {
         }
 
         // Else construct a new absolute path and normalize it
-        final Path absolutePath = new JVFSPath(SEPARATOR + this.path, this.fileSystem);
+        final Path absolutePath = new JVFSPath(DIR_SEP + this.path, this.fileSystem);
         return absolutePath.normalize();
     }
 
@@ -461,7 +486,7 @@ class JVFSPath implements Path {
      * @return
      */
     private static List<String> tokenize(final JVFSPath path) {
-        final StringTokenizer tokenizer = new StringTokenizer(path.toString(), SEPARATOR);
+        final StringTokenizer tokenizer = new StringTokenizer(path.toString(), DIR_SEP);
         final List<String> tokens = new ArrayList<String>();
 
         while (tokenizer.hasMoreTokens()) {
@@ -503,12 +528,12 @@ class JVFSPath implements Path {
         final StringBuilder sb = new StringBuilder();
 
         if (absolute) {
-            sb.append(SEPARATOR);
+            sb.append(DIR_SEP);
         }
 
         for (int i = 0; i < path.size(); i++) {
             if (i > 0) {
-                sb.append(SEPARATOR);
+                sb.append(DIR_SEP);
             }
             sb.append(path.get(i));
         }
@@ -557,7 +582,7 @@ class JVFSPath implements Path {
 
         for (int i = 0; i < backupCount; i++) {
             sb.append(DIR_UP);
-            sb.append(SEPARATOR);
+            sb.append(DIR_SEP);
         }
 
         final int startCounter = numOtherTokens - numToTake - backupCount;
@@ -565,7 +590,7 @@ class JVFSPath implements Path {
 
         for (int i = startCounter; i <= stopCounter; i++) {
             if (i > startCounter) {
-                sb.append(SEPARATOR);
+                sb.append(DIR_SEP);
             }
             sb.append(otherTokens.get(i));
         }

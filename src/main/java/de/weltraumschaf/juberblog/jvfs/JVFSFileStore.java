@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.jvfs;
 
 import java.io.IOException;
 import java.nio.file.FileStore;
+import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.FileAttributeView;
 import java.nio.file.attribute.FileStoreAttributeView;
 
@@ -29,52 +30,57 @@ class JVFSFileStore extends FileStore {
 
     @Override
     public String name() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "jvfs";
     }
 
     @Override
     public String type() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "in-memory";
     }
 
     @Override
     public boolean isReadOnly() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
     public long getTotalSpace() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.getUsableSpace() + this.getUsedSpace();
+    }
+
+    public long getUsedSpace() {
+        return 0;
     }
 
     @Override
     public long getUsableSpace() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Runtime.getRuntime().freeMemory();
     }
 
     @Override
     public long getUnallocatedSpace() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.getUsableSpace();
     }
 
     @Override
     public boolean supportsFileAttributeView(Class<? extends FileAttributeView> type) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return BasicFileAttributeView.class.equals(type);
     }
 
     @Override
     public boolean supportsFileAttributeView(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // Only support "basic"
+        return JVFSFileSystem.FILE_ATTR_VIEW_BASIC.equals(name);
     }
 
     @Override
     public <V extends FileStoreAttributeView> V getFileStoreAttributeView(Class<V> type) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override
     public Object getAttribute(String attribute) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " does not support attributes.");
     }
 
 }

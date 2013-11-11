@@ -21,24 +21,37 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
+ * Maintains the file system specific hierarchy.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class JVFSFileSystem extends FileSystem {
 
     /**
-     * Provider which created this {@link JVFSFileSystemProvider}
+     * Contracted name of the {@link BasicFileAttributeView}.
+     */
+    static final String FILE_ATTR_VIEW_BASIC = "basic";
+
+    /**
+     * Provider which created this {@link JVFSFileSystemProvider}.
      */
     private final JVFSFileSystemProvider provider;
+
+    /**
+     * List of file stores.
+     */
     private final List<FileStore> fileStores;
     /**
-     * Whether or not this FS is open; volatile as we don't need compound operations and thus don't need full sync
+     * Whether or not this FS is open.
+     *
+     * Volatile as we don't need compound operations and thus don't need full sync.
      */
     private volatile boolean open;
 
@@ -75,13 +88,13 @@ class JVFSFileSystem extends FileSystem {
 
     @Override
     public String getSeparator() {
-        return JVFSFileSystems.SEPARATOR;
+        return JVFSFileSystems.DIR_SEP;
     }
 
     @Override
     public Iterable<Path> getRootDirectories() {
         this.checkClosed();
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Arrays.<Path>asList(new JVFSPath(this));
     }
 
     @Override
@@ -119,7 +132,7 @@ class JVFSFileSystem extends FileSystem {
         merged.append(first);
 
         for (int i = 0; i < more.length; i++) {
-            merged.append(JVFSFileSystems.SEPARATOR);
+            merged.append(JVFSFileSystems.DIR_SEP);
             merged.append(more[i]);
         }
 

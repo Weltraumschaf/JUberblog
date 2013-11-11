@@ -13,9 +13,13 @@
 /**
  * A virtual in-memory file system.
  *
- * http://jaxenter.de/artikel/javaniofile-Zeitgemaesses-Arbeiten-mit-Dateien-166848
- * http://exitcondition.alrubinger.com/2012/08/17/shrinkwrap-nio2/
- * http://arquillian.org/guides/shrinkwrap_introduction/
- * http://docs.oracle.com/javase/7/docs/technotes/guides/io/fsp/zipfilesystemprovider.html
+ * Mostly inspired by the <a href="http://arquillian.org/guides/shrinkwrap_introduction/">Shrinkwrap</a>
+ * project and therefore some code is copied from there.
+ *
+ * Resources:
+ * - http://jaxenter.de/artikel/javaniofile-Zeitgemaesses-Arbeiten-mit-Dateien-166848
+ * - http://exitcondition.alrubinger.com/2012/08/17/shrinkwrap-nio2/
+ * - http://arquillian.org/guides/shrinkwrap_introduction/
+ * - http://docs.oracle.com/javase/7/docs/technotes/guides/io/fsp/zipfilesystemprovider.html
  */
 package de.weltraumschaf.juberblog.jvfs;

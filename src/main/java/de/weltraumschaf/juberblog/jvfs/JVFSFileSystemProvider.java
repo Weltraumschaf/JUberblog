@@ -20,6 +20,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -31,24 +32,28 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Implements the I/O operations.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class JVFSFileSystemProvider extends FileSystemProvider {
 
-    /**
-     * May be {@code null}.
-     */
-    private final FileSystemProvider parent;
     private volatile JVFSFileSystem fs;
 
+    /**
+     * Dedicated constructor.
+     */
     public JVFSFileSystemProvider() {
-        this(null);
+        super();
     }
 
+    /**
+     * Constructor used by {@link FileSystems} to create default provider.
+     *
+     * @param parent is ignored at the moment
+     */
     public JVFSFileSystemProvider(final FileSystemProvider parent) {
-        super();
-        this.parent = parent;
+        this();
     }
 
     @Override

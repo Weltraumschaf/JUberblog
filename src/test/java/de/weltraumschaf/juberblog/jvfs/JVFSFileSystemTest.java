@@ -13,32 +13,34 @@
 package de.weltraumschaf.juberblog.jvfs;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static org.hamcrest.Matchers.*;
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class JVFSFileSystemTest {
 
-    public static final String PROP_NAME = "java.nio.file.spi.DefaultFileSystemProvider";
-
     @Before
     public void registerDefaultProvider() {
-        System.setProperty(PROP_NAME, "de.weltraumschaf.juberblog.jvfs.JVFSFileSystemProvider");
+        JVFSFileSystems.registerAsDefault();
     }
 
     @After
     public void unregisterDefaultProvider() {
-        System.setProperty(PROP_NAME, "");
+        JVFSFileSystems.unregisterAsDefault();
     }
 
     @Test
@@ -46,7 +48,12 @@ public class JVFSFileSystemTest {
 //        FileSystemProvider prov = JVFSFileSystems.newProvider();
 //        FileSystem fs = prov.getFileSystem(new URI("file:///"));
         final Path path = Paths.get(URI.create("file:///tmp/foobar"));
-        Files.createFile(path);
+        Files.createFile(Paths.get(URI.create("file:///tmp/foobar")));
+        final OutputStream out = Files.newOutputStream(path);
+        IOUtils.write("hello world", out);
+        IOUtils.closeQuietly(out);
+//        final InputStream in = Files.newInputStream(path);
+//        assertThat(IOUtils.toString(in), is("hello world"));
     }
 
 
