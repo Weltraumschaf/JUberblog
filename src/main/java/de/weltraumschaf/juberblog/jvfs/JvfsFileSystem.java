@@ -212,6 +212,10 @@ class JvfsFileSystem extends FileSystem {
         return attic.get(path);
     }
 
+    void add(final JvfsFileEntry entry) {
+        attic.put(entry.getPath(), entry);
+    }
+
     boolean contains(final String path) {
         checkClosed();
         return attic.containsKey(path);
@@ -261,6 +265,7 @@ class JvfsFileSystem extends FileSystem {
             entry = get(path);
         } else {
             entry = JvfsFileEntry.newFile(path);
+            add(entry);
         }
 
         return entry.getContent();
@@ -326,7 +331,8 @@ class JvfsFileSystem extends FileSystem {
             buf.append(JvfsFileSystems.DIR_SEP).append(name);
 
             if (!contains(buf.toString())) {
-                attic.put(buf.toString(), JvfsFileEntry.newDir(buf.toString()));
+                final JvfsFileEntry directory = JvfsFileEntry.newDir(buf.toString());
+                add(directory);
             }
         }
     }
@@ -354,8 +360,8 @@ class JvfsFileSystem extends FileSystem {
         assertFileExists(path);
         final JvfsFileEntry entry = get(path);
         entry.setLastModifiedTime(mtime.to(TimeUnit.SECONDS));
-        entry.setLastAccessTime (atime.to(TimeUnit.SECONDS));
-        entry.setCreationTime (ctime.to(TimeUnit.SECONDS));
+        entry.setLastAccessTime(atime.to(TimeUnit.SECONDS));
+        entry.setCreationTime(ctime.to(TimeUnit.SECONDS));
     }
 
     void copy(final String path, final String target, final CopyOption... options) throws IOException {
@@ -366,7 +372,7 @@ class JvfsFileSystem extends FileSystem {
             throw new FileAlreadyExistsException(target);
         }
 
-        attic.put(target, get(path).copy());
+        add(get(path).copy());
     }
 
     void move(final String path, final String target, final CopyOption... options) throws IOException {
@@ -378,10 +384,8 @@ class JvfsFileSystem extends FileSystem {
         }
 
         final JvfsFileEntry entry = get(path);
-        synchronized (attic) {
-            attic.remove(entry.getPath());
-            attic.put(target, entry);
-        }
+        attic.remove(entry.getPath());
+        add(entry);
     }
 
     FileStore getFileStore() {

@@ -46,13 +46,18 @@ public class JvfsFileSystemTest {
 
     @Test
     public void testSomeMethod() throws URISyntaxException, IOException {
-        final Path path = Paths.get(URI.create("file:///tmp/foobar"));
-        Files.createFile(path);
-        final OutputStream out = Files.newOutputStream(path);
+        final Path foo = Paths.get(URI.create("file:///tmp/foo"));
+        Files.createFile(foo);
+        final Path bar = Paths.get(URI.create("file:///tmp/bar"));
+        Files.createFile(bar);
+        final Path baz = Paths.get(URI.create("file:///tmp/baz"));
+        Files.createFile(baz);
+
+        final OutputStream out = Files.newOutputStream(foo);
         IOUtils.write("hello world", out);
         IOUtils.closeQuietly(out);
-//        final InputStream in = Files.newInputStream(path);
-//        assertThat(IOUtils.toString(in), is("hello world"));
+        final InputStream in = Files.newInputStream(foo);
+        assertThat(IOUtils.toString(in), is("hello world"));
     }
 
 

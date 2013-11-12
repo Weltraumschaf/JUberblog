@@ -97,11 +97,7 @@ final class JvfsSeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public void close() throws IOException {
-        if (!open) {
-            throw new IllegalStateException("Channel not open!");
-        }
-
-        open = false;
+        open = false; // Ignore already closed.
     }
 
 }
