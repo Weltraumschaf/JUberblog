@@ -32,19 +32,19 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class JVFSFileSystemProvider extends FileSystemProvider {
+public final class JvfsFileSystemProvider extends FileSystemProvider {
 
     /**
      * The one and only file system.
      */
-    private final JVFSFileSystem fileSystem;
+    private final JvfsFileSystem fileSystem;
 
     /**
      * Dedicated constructor.
      */
-    public JVFSFileSystemProvider() {
+    public JvfsFileSystemProvider() {
         super();
-        fileSystem = new JVFSFileSystem(this);
+        fileSystem = new JvfsFileSystem(this);
     }
 
     /**
@@ -52,13 +52,13 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
      *
      * @param parent is ignored at the moment
      */
-    public JVFSFileSystemProvider(final FileSystemProvider parent) {
+    public JvfsFileSystemProvider(final FileSystemProvider parent) {
         this();
     }
 
     @Override
     public String getScheme() {
-        return JVFSFileSystems.PROTOCOL;
+        return JvfsFileSystems.PROTOCOL;
     }
 
     private void checkUri(URI uri) {
@@ -74,8 +74,8 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
             throw new IllegalArgumentException("Path component is undefined!");
         }
 
-        if (!uri.getPath().equals(JVFSFileSystems.DIR_SEP)) {
-            throw new IllegalArgumentException(String.format("Path component should be '%s'", JVFSFileSystems.DIR_SEP));
+        if (!uri.getPath().equals(JvfsFileSystems.DIR_SEP)) {
+            throw new IllegalArgumentException(String.format("Path component should be '%s'", JvfsFileSystems.DIR_SEP));
         }
 
         if (uri.getQuery() != null) {
@@ -101,7 +101,7 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
 
     @Override
     public Path getPath(final URI uri) {
-        return new JVFSPath(uri.getPath(), fileSystem);
+        return new JvfsPath(uri.getPath(), fileSystem);
     }
 
     @Override
@@ -178,14 +178,16 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <V extends FileAttributeView> V getFileAttributeView(
             final Path path,
             final Class<V> type,
             final LinkOption... options) {
-        return (V) new JVFSFileAttributeView(toJvfsPath(path));
+        return (V) new JvfsFileAttributeView(toJvfsPath(path));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <A extends BasicFileAttributes> A readAttributes(
             final Path path,
             final Class<A> type,
@@ -215,20 +217,20 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
     }
 
     /**
-     * Casts given path to {@link JVFSPath}.
+     * Casts given path to {@link JvfsPath}.
      *
-     * Throws a {@link ProviderMismatchException} if given object is not instance of {@link JVFSPath}.
+     * Throws a {@link ProviderMismatchException} if given object is not instance of {@link JvfsPath}.
      *
-     * @param obj must not be {@code null}
-     * @return never {@code null}
+     * @param obj must not be {@literal null}
+     * @return never {@literal null}
      */
-    private static JVFSPath toJvfsPath(final Path obj) {
-        JVFSAssertions.notNull(obj, "obj");
+    private static JvfsPath toJvfsPath(final Path obj) {
+        JvfsAssertions.notNull(obj, "obj");
 
-        if (!(obj instanceof JVFSPath)) {
-            throw new ProviderMismatchException("Given path not of type " + JVFSPath.class.getSimpleName() + "!");
+        if (!(obj instanceof JvfsPath)) {
+            throw new ProviderMismatchException("Given path not of type " + JvfsPath.class.getSimpleName() + "!");
         }
 
-        return (JVFSPath) obj;
+        return (JvfsPath) obj;
     }
 }

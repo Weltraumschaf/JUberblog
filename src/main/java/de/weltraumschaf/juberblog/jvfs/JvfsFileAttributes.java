@@ -20,19 +20,19 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSFileAttributes implements BasicFileAttributes {
+final class JvfsFileAttributes implements BasicFileAttributes {
 
     /**
      * Wrapped file system entry.
      */
-    private final JVFSFileEntry entry;
+    private final JvfsFileEntry entry;
 
     /**
      * Dedicated constructor.
      *
      * @param entry must not be {@literal null}
      */
-    JVFSFileAttributes(final JVFSFileEntry entry) {
+    JvfsFileAttributes(final JvfsFileEntry entry) {
         super();
         assert entry != null : "entry must be specified";
         this.entry = entry;
@@ -45,7 +45,7 @@ final class JVFSFileAttributes implements BasicFileAttributes {
      * @return never {@literal null}
      */
     private static FileTime createFileTime(final long timestamp) {
-        JVFSAssertions.greaterThanEqual(timestamp, 0, "timestamp");
+        JvfsAssertions.greaterThanEqual(timestamp, 0, "timestamp");
         return FileTime.from(timestamp, TimeUnit.SECONDS);
     }
 

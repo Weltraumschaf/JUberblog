@@ -18,7 +18,7 @@ package de.weltraumschaf.juberblog.jvfs;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSAssertions {
+final class JvfsAssertions {
 
     /**
      * Format string of error message for {@link #notNull(java.lang.Object, java.lang.String)}.
@@ -49,16 +49,16 @@ final class JVFSAssertions {
     /**
      * Hidden for pure static class.
      */
-    private JVFSAssertions() {
+    private JvfsAssertions() {
         super();
     }
 
     /**
-     * Asserts that given object is not {@code null}.
+     * Asserts that given object is not {@literal null}.
      *
-     * Throws{@link NullPointerException} if given object is {@code nul}.
+     * Throws{@link NullPointerException} if given object is {@literal nul}.
      *
-     * @param o checked if {@code null}
+     * @param o checked if {@literal null}
      * @param name name of checked parameter for error message
      */
     static void notNull(final Object o, final String name) {
@@ -68,19 +68,19 @@ final class JVFSAssertions {
     }
 
     static void lessThan(final int checked, final int reference, final String name) {
-        if (checked < reference) {
+        if (checked >= reference) {
             throw new IllegalArgumentException(String.format(LESS_THAN_MESSAGE, name, reference));
         }
     }
 
     static void lessThanEqual(int checked, int reference, String name) {
-        if (checked <= reference) {
+        if (checked > reference) {
             throw new IllegalArgumentException(String.format(LESS_THAN_EQUAL_MESSAGE, name, reference));
         }
     }
 
     static void greaterThan(final int checked, final int reference, final String name) {
-        if (checked > reference) {
+        if (checked <= reference) {
             throw new IllegalArgumentException(String.format(GREATER_THAN_MESSAGE, name, reference));
         }
     }
@@ -90,7 +90,7 @@ final class JVFSAssertions {
     }
 
     static void greaterThanEqual(final long checked, final long reference, final String name) {
-        if (checked >= reference) {
+        if (checked < reference) {
             throw new IllegalArgumentException(String.format(GREATER_THAN_EQUAL_MESSAGE, name, reference));
         }
     }

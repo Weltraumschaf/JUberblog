@@ -21,12 +21,12 @@ import java.util.logging.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSFileEntry {
+final class JvfsFileEntry {
 
     /**
      * Holds the file data.
      */
-    private final SeekableByteChannel content = new JVFSSeekableByteChannel();
+    private final SeekableByteChannel content = new JvfsSeekableByteChannel();
     /**
      * Absolute path name of the file system entry.
      */
@@ -69,9 +69,9 @@ final class JVFSFileEntry {
      *
      * Hidden: Use {@link #copy()} to create a copy of an entry.
      *
-     * @param src must not be {@code null}
+     * @param src must not be {@literal null}
      */
-    private JVFSFileEntry(final JVFSFileEntry src) {
+    private JvfsFileEntry(final JvfsFileEntry src) {
         this(src.path, src.direcotry);
         this.lastModifiedTime = src.lastModifiedTime;
         this.lastAccessTime = src.lastAccessTime;
@@ -87,10 +87,10 @@ final class JVFSFileEntry {
      *
      * Hidden: Use either {@link #newDir(java.lang.String)} or {@link #newFile(java.lang.String)}.
      *
-     * @param path must not be {@code null} or empty
-     * @param direcotry {@code true} if it is a directory, else {@code false}
+     * @param path must not be {@literal null} or empty
+     * @param direcotry {@literal true} if it is a directory, else {@literal false}
      */
-    private JVFSFileEntry(final String path, final boolean direcotry) {
+    private JvfsFileEntry(final String path, final boolean direcotry) {
         super();
         assert path != null : "path must not be null";
         assert !path.isEmpty() : "path must not be empty";
@@ -104,8 +104,8 @@ final class JVFSFileEntry {
      * @param path must not be {@literal null} or empty
      * @return never {@literal null}
      */
-    public static JVFSFileEntry newDir(final String path) {
-        return new JVFSFileEntry(path, true);
+    public static JvfsFileEntry newDir(final String path) {
+        return new JvfsFileEntry(path, true);
     }
 
     /**
@@ -114,8 +114,8 @@ final class JVFSFileEntry {
      * @param path must not be {@literal null} or empty
      * @return never {@literal null}
      */
-    public static JVFSFileEntry newFile(final String path) {
-        return new JVFSFileEntry(path, false);
+    public static JvfsFileEntry newFile(final String path) {
+        return new JvfsFileEntry(path, false);
     }
 
     /**
@@ -123,8 +123,8 @@ final class JVFSFileEntry {
      *
      * @return never {@literal null}
      */
-    public JVFSFileEntry copy() {
-        return new JVFSFileEntry(this);
+    public JvfsFileEntry copy() {
+        return new JvfsFileEntry(this);
     }
 
     @Override
@@ -134,11 +134,11 @@ final class JVFSFileEntry {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof JVFSFileEntry)) {
+        if (!(obj instanceof JvfsFileEntry)) {
             return false;
         }
 
-        final JVFSFileEntry other = (JVFSFileEntry) obj;
+        final JvfsFileEntry other = (JvfsFileEntry) obj;
         return path.equals(other.path);
     }
 
@@ -150,7 +150,7 @@ final class JVFSFileEntry {
     /**
      * Get the absolute path.
      *
-     * @return never {@code null} or empty
+     * @return never {@literal null} or empty
      */
     String getPath() {
         return path;
@@ -168,7 +168,7 @@ final class JVFSFileEntry {
     /**
      * Whether the entry is hidden or not.
      *
-     * @return {@code true} if it is hidden, else {@code false}
+     * @return {@literal true} if it is hidden, else {@literal false}
      */
     boolean isHidden() {
         return hidden;
@@ -189,7 +189,7 @@ final class JVFSFileEntry {
      * @param timestamp must be non negative
      */
     void setLastModifiedTime(final long timestamp) {
-        JVFSAssertions.greaterThanEqual(timestamp, 0, "timestamp");
+        JvfsAssertions.greaterThanEqual(timestamp, 0, "timestamp");
         this.lastModifiedTime = timestamp;
     }
 
@@ -208,7 +208,7 @@ final class JVFSFileEntry {
      * @param timestamp must be non negative
      */
     void setLastAccessTime(final long timestamp) {
-        JVFSAssertions.greaterThanEqual(timestamp, 0, "timestamp");
+        JvfsAssertions.greaterThanEqual(timestamp, 0, "timestamp");
         this.lastAccessTime = timestamp;
     }
 
@@ -227,14 +227,14 @@ final class JVFSFileEntry {
      * @param timestamp must be non negative
      */
     void setCreationTime(final long timestamp) {
-        JVFSAssertions.greaterThanEqual(timestamp, 0, "timestamp");
+        JvfsAssertions.greaterThanEqual(timestamp, 0, "timestamp");
         this.creationTime = timestamp;
     }
 
     /**
      * Whether the file is readable.
      *
-     * @return {@code true} if readable, else {@code false}
+     * @return {@literal true} if readable, else {@literal false}
      */
     boolean isReadable() {
         return readable;
@@ -243,7 +243,7 @@ final class JVFSFileEntry {
     /**
      * Whether the file is writable.
      *
-     * @return {@code true} if writable, else {@code false}
+     * @return {@literal true} if writable, else {@literal false}
      */
     boolean isWritable() {
         return writable;
@@ -252,7 +252,7 @@ final class JVFSFileEntry {
     /**
      * Whether the file is executable.
      *
-     * @return {@code true} if executable, else {@code false}
+     * @return {@literal true} if executable, else {@literal false}
      */
     boolean isExecutable() {
         return executable;
@@ -295,7 +295,7 @@ final class JVFSFileEntry {
     /**
      * Get the file content as seekable byte channel.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     SeekableByteChannel getContent() {
         return content;

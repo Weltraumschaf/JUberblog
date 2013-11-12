@@ -20,7 +20,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSPathMatcher implements PathMatcher {
+final class JvfsPathMatcher implements PathMatcher {
 
     private static final String GLOB_SYNTAX = "glob";
     private static final String REGEX_SYNTAX = "regex";
@@ -30,7 +30,7 @@ final class JVFSPathMatcher implements PathMatcher {
 
     private final Pattern pattern;
 
-    private JVFSPathMatcher(final String expr) {
+    private JvfsPathMatcher(final String expr) {
         this.pattern = Pattern.compile(expr);
     }
 
@@ -61,7 +61,7 @@ final class JVFSPathMatcher implements PathMatcher {
             }
         }
 
-        return new JVFSPathMatcher(expr);
+        return new JvfsPathMatcher(expr);
     }
 
     private static boolean isGlobMeta(char c) {
@@ -83,8 +83,8 @@ final class JVFSPathMatcher implements PathMatcher {
     /**
      * Creates a regex pattern from the given glob expression.
      *
-     * @param globPattern must not be {@code null}
-     * @return never {@code null}
+     * @param globPattern must not be {@literal null}
+     * @return never {@literal null}
      */
     private static String toRegexPattern(final String globPattern) {
         boolean inGroup = false;

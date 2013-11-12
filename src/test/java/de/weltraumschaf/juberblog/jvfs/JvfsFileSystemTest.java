@@ -32,24 +32,22 @@ import org.junit.Ignore;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class JVFSFileSystemTest {
+public class JvfsFileSystemTest {
 
     @Before
     public void registerDefaultProvider() {
-        JVFSFileSystems.registerAsDefault();
+        JvfsFileSystems.registerAsDefault();
     }
 
     @After
     public void unregisterDefaultProvider() {
-        JVFSFileSystems.unregisterAsDefault();
+        JvfsFileSystems.unregisterAsDefault();
     }
 
-    @Test @Ignore
+    @Test
     public void testSomeMethod() throws URISyntaxException, IOException {
-//        FileSystemProvider prov = JVFSFileSystems.newProvider();
-//        FileSystem fs = prov.getFileSystem(new URI("file:///"));
         final Path path = Paths.get(URI.create("file:///tmp/foobar"));
-        Files.createFile(Paths.get(URI.create("file:///tmp/foobar")));
+        Files.createFile(path);
         final OutputStream out = Files.newOutputStream(path);
         IOUtils.write("hello world", out);
         IOUtils.closeQuietly(out);

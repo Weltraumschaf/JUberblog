@@ -46,12 +46,12 @@ import java.util.StringTokenizer;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class JVFSPath implements Path {
+class JvfsPath implements Path {
 
     /**
      * Directory separator.
      */
-    private static final String DIR_SEP = JVFSFileSystems.DIR_SEP;
+    private static final String DIR_SEP = JvfsFileSystems.DIR_SEP;
     /**
      * Parent directory.
      */
@@ -69,18 +69,18 @@ class JVFSPath implements Path {
     /**
      * Owning {@link ShrinkWrapFileSystem}.
      */
-    private final JVFSFileSystem jvfs;
+    private final JvfsFileSystem jvfs;
 
     /**
      * Dedicated constructor.
      *
-     * @param path must not be {@code null}
-     * @param fileSystem must not be {@code null}
+     * @param path must not be {@literal null}
+     * @param fileSystem must not be {@literal null}
      */
-    JVFSPath(final String path, final JVFSFileSystem fileSystem) {
+    JvfsPath(final String path, final JvfsFileSystem fileSystem) {
         super();
-        JVFSAssertions.notNull(path, "path");
-        JVFSAssertions.notNull(fileSystem, "fileSystem");
+        JvfsAssertions.notNull(path, "path");
+        JvfsAssertions.notNull(fileSystem, "fileSystem");
         this.path = path;
         this.jvfs = fileSystem;
     }
@@ -90,9 +90,9 @@ class JVFSPath implements Path {
      *
      * Initializes {@link #path} with {@link #DIR_SEP}.
      *
-     * @param fileSystem must not be {@code null}
+     * @param fileSystem must not be {@literal null}
      */
-    JVFSPath(final JVFSFileSystem fileSystem) {
+    JvfsPath(final JvfsFileSystem fileSystem) {
         this(DIR_SEP, fileSystem);
     }
 
@@ -108,7 +108,7 @@ class JVFSPath implements Path {
 
     @Override
     public Path getRoot() {
-        return this.isAbsolute() ? new JVFSPath(jvfs) : null;
+        return this.isAbsolute() ? new JvfsPath(jvfs) : null;
     }
 
     @Override
@@ -119,7 +119,7 @@ class JVFSPath implements Path {
         } else {
             final List<String> tokens = tokenize(this);
             // Furthest out
-            final Path fileName = new JVFSPath(tokens.get(tokens.size() - 1), this.jvfs);
+            final Path fileName = new JvfsPath(tokens.get(tokens.size() - 1), this.jvfs);
             return fileName;
         }
     }
@@ -149,7 +149,7 @@ class JVFSPath implements Path {
         }
 
         final String parentPath = sb.toString();
-        return new JVFSPath(parentPath, jvfs);
+        return new JvfsPath(parentPath, jvfs);
     }
 
     @Override
@@ -194,9 +194,9 @@ class JVFSPath implements Path {
 
     @Override
     public Path subpath(int beginIndex, int endIndex) {
-        JVFSAssertions.lessThan(beginIndex, 0, "beginIndex");
-        JVFSAssertions.lessThan(endIndex, 0, "endIndex");
-        JVFSAssertions.lessThanEqual(endIndex, beginIndex, "endIndex");
+        JvfsAssertions.lessThan(beginIndex, 0, "beginIndex");
+        JvfsAssertions.lessThan(endIndex, 0, "endIndex");
+        JvfsAssertions.lessThanEqual(endIndex, beginIndex, "endIndex");
 
         final List<String> tokens = tokenize(this);
         final int tokenCount = tokens.size();
@@ -220,24 +220,24 @@ class JVFSPath implements Path {
     /**
      * Creates a new {@link ShrinkWrapPath} instance from the specified input {@link String}.
      *
-     * @param path must not be {@code null}
-     * @return never {@code null}
+     * @param path must not be {@literal null}
+     * @return never {@literal null}
      */
     private Path fromString(final String path) {
-        JVFSAssertions.notNull(path, "path");
-        return new JVFSPath(path, jvfs);
+        JvfsAssertions.notNull(path, "path");
+        return new JvfsPath(path, jvfs);
     }
 
     @Override
     public boolean startsWith(final Path other) {
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
 
         if (this.getFileSystem() != other.getFileSystem()) {
             return false;
         }
 
         final List<String> ourTokens = tokenize(this);
-        final List<String> otherTokens = tokenize((JVFSPath) other);
+        final List<String> otherTokens = tokenize((JvfsPath) other);
 
         // Inequal roots
         if (other.isAbsolute() && !this.isAbsolute()) {
@@ -264,21 +264,21 @@ class JVFSPath implements Path {
     @Override
     public boolean startsWith(final String other) {
         // Precondition checks
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
         return this.startsWith(this.fromString(other));
     }
 
     @Override
     public boolean endsWith(final Path other) {
         // Precondition checks
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
 
         // Unequal FS? (also ensures that we can safely cast to this type later)
         if (this.getFileSystem() != other.getFileSystem()) {
             return false;
         }
         final List<String> ourTokens = tokenize(this);
-        final List<String> otherTokens = tokenize((JVFSPath) other);
+        final List<String> otherTokens = tokenize((JvfsPath) other);
 
         // Bigger than us, fails
         final int numOtherTokens = otherTokens.size();
@@ -309,19 +309,19 @@ class JVFSPath implements Path {
 
     @Override
     public boolean endsWith(final String other) {
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
         return this.endsWith(this.fromString(other));
     }
 
     @Override
     public Path normalize() {
         final String normalizedString = normalize(tokenize(this), this.isAbsolute());
-        return new JVFSPath(normalizedString, this.jvfs);
+        return new JvfsPath(normalizedString, this.jvfs);
     }
 
     @Override
     public Path resolve(final Path other) {
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
 
         if (other.isAbsolute()) {
             return other;
@@ -338,7 +338,7 @@ class JVFSPath implements Path {
         }
         sb.append(other.toString());
 
-        return new JVFSPath(sb.toString(), this.jvfs);
+        return new JvfsPath(sb.toString(), this.jvfs);
     }
 
     @Override
@@ -349,7 +349,7 @@ class JVFSPath implements Path {
 
     @Override
     public Path resolveSibling(final Path other) {
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
         Path parent = getParent();
         return (parent == null) ? other : parent.resolve(other);
     }
@@ -362,15 +362,15 @@ class JVFSPath implements Path {
 
     @Override
     public Path relativize(final Path other) {
-        JVFSAssertions.notNull(other, "other");
-        if (!(other instanceof JVFSPath)) {
+        JvfsAssertions.notNull(other, "other");
+        if (!(other instanceof JvfsPath)) {
             throw new IllegalArgumentException("Can only relativize paths of type "
-                    + JVFSPath.class.getSimpleName());
+                    + JvfsPath.class.getSimpleName());
         }
 
         // Equal paths, return empty Path
         if (this.equals(other)) {
-            return new JVFSPath("", this.jvfs);
+            return new JvfsPath("", this.jvfs);
         }
 
         // Recursive relativization
@@ -403,7 +403,7 @@ class JVFSPath implements Path {
 
     @Override
     public URI toUri() {
-        final URI root = JVFSFileSystems.getRootUri();
+        final URI root = JvfsFileSystems.getRootUri();
         // Compose a new URI location, stripping out the extra "/" root
         final String location = root.toString() + this.toString().substring(1);
         return URI.create(location);
@@ -417,7 +417,7 @@ class JVFSPath implements Path {
         }
 
         // Else construct a new absolute path and normalize it
-        final Path absolutePath = new JVFSPath(DIR_SEP + this.path, this.jvfs);
+        final Path absolutePath = new JvfsPath(DIR_SEP + this.path, this.jvfs);
         return absolutePath.normalize();
     }
 
@@ -467,7 +467,7 @@ class JVFSPath implements Path {
      */
     @Override
     public int compareTo(final Path other) {
-        JVFSAssertions.notNull(other, "other");
+        JvfsAssertions.notNull(other, "other");
         return this.toString().compareTo(other.toString());
     }
 
@@ -498,11 +498,11 @@ class JVFSPath implements Path {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof JVFSPath)) {
+        if (!(obj instanceof JvfsPath)) {
             return false;
         }
 
-        final JVFSPath other = (JVFSPath) obj;
+        final JvfsPath other = (JvfsPath) obj;
 
         if (this.jvfs != other.jvfs) {
             return false;
@@ -522,16 +522,16 @@ class JVFSPath implements Path {
     /**
      * Returns the components of this path in order from root out.
      *
-     * @param path must not be {@code null}
-     * @return never {@code null} may be empty collection
+     * @param path must not be {@literal null}
+     * @return never {@literal null} may be empty collection
      */
-    static List<String> tokenize(final JVFSPath path) {
+    static List<String> tokenize(final JvfsPath path) {
         return tokenize(path.toString());
     }
 
     static List<String> tokenize(final String path) {
         final StringTokenizer tokenizer = new StringTokenizer(path, DIR_SEP);
-        final List<String> tokens = JVFSCollections.newArrayList();
+        final List<String> tokens = JvfsCollections.newArrayList();
 
         while (tokenizer.hasMoreTokens()) {
             tokens.add(tokenizer.nextToken());
@@ -595,7 +595,7 @@ class JVFSPath implements Path {
      * @param backupCount
      * @return
      */
-    private static JVFSPath relativizeCommonRoot(final JVFSPath thisOriginal, final Path thisCurrent,
+    private static JvfsPath relativizeCommonRoot(final JvfsPath thisOriginal, final Path thisCurrent,
             final Path otherOriginal, Path otherCurrent, final int backupCount) {
         // Preconditions
         assert thisOriginal != null;
@@ -608,7 +608,7 @@ class JVFSPath implements Path {
         if (!otherCurrent.startsWith(thisCurrent)) {
             // Back up until we do
             final Path otherParent = otherCurrent.getParent();
-            final JVFSPath thisParent = (JVFSPath) thisCurrent.getParent();
+            final JvfsPath thisParent = (JvfsPath) thisCurrent.getParent();
 
             if (otherParent != null && thisParent != null) {
                 return relativizeCommonRoot(thisOriginal, thisParent, otherOriginal, otherParent, backupCount + 1);
@@ -619,7 +619,7 @@ class JVFSPath implements Path {
 
         // Common root. Now relativize that.
         final List<String> thisTokens = tokenize(thisOriginal);
-        final List<String> otherTokens = tokenize((JVFSPath) otherOriginal);
+        final List<String> otherTokens = tokenize((JvfsPath) otherOriginal);
         final int numOtherTokens = otherTokens.size();
         final int numToTake = otherTokens.size() - thisTokens.size();
         final StringBuilder sb = new StringBuilder();
@@ -639,7 +639,7 @@ class JVFSPath implements Path {
             sb.append(otherTokens.get(i));
         }
 
-        return new JVFSPath(sb.toString(), thisOriginal.jvfs);
+        return new JvfsPath(sb.toString(), thisOriginal.jvfs);
     }
 
     FileChannel newFileChannel(final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) throws IOException {
@@ -662,11 +662,11 @@ class JVFSPath implements Path {
         jvfs.delete(path);
     }
 
-    void copy(final JVFSPath target, final CopyOption... options) throws IOException {
+    void copy(final JvfsPath target, final CopyOption... options) throws IOException {
         jvfs.copy(path, target.toString(), options);
     }
 
-    void move(final JVFSPath target, final CopyOption... options) throws IOException {
+    void move(final JvfsPath target, final CopyOption... options) throws IOException {
         jvfs.move(path, target.toString(), options);
     }
 
@@ -690,8 +690,8 @@ class JVFSPath implements Path {
         jvfs.setTimes(path, mtime, atime, ctime);
     }
 
-    JVFSFileAttributes getAttributes() throws IOException {
-        final JVFSFileAttributes attrs = jvfs.getFileAttributes(path);
+    JvfsFileAttributes getAttributes() throws IOException {
+        final JvfsFileAttributes attrs = jvfs.getFileAttributes(path);
 
         if (attrs == null) {
             throw new NoSuchFileException(path);
@@ -701,12 +701,12 @@ class JVFSPath implements Path {
     }
 
     Map<String, Object> readAttributes(final String attributes, final LinkOption[] options) {
-        final JVFSFileAttributeView view = new JVFSFileAttributeView(this);
+        final JvfsFileAttributeView view = new JvfsFileAttributeView(this);
         return view.readAttributes(attributes);
     }
 
     void setAttribute(final String attribute, final Object value, final LinkOption[] options) {
-        final JVFSFileAttributeView view = new JVFSFileAttributeView(this);
+        final JvfsFileAttributeView view = new JvfsFileAttributeView(this);
         view.setAttribute(attribute, value);
     }
 }

@@ -17,7 +17,7 @@ import java.util.Iterator;
  */
 final class JvfsDirectoryStream implements DirectoryStream<Path> {
 
-    public JvfsDirectoryStream(final JVFSPath aThis, final Filter<? super Path> filter) {
+    public JvfsDirectoryStream(final JvfsPath aThis, final Filter<? super Path> filter) {
         super();
     }
 

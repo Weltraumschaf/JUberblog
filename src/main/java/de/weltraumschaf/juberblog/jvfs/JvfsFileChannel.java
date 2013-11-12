@@ -26,7 +26,7 @@ import java.nio.channels.WritableByteChannel;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSFileChannel extends FileChannel {
+final class JvfsFileChannel extends FileChannel {
 
     /**
      * Wrapped byte channel.
@@ -38,9 +38,9 @@ final class JVFSFileChannel extends FileChannel {
      *
      * @param channel must not be {@codenull}
      */
-    JVFSFileChannel(final SeekableByteChannel channel) {
+    JvfsFileChannel(final SeekableByteChannel channel) {
         super();
-        JVFSAssertions.notNull(channel, "channel");
+        JvfsAssertions.notNull(channel, "channel");
         this.channel = channel;
     }
 
@@ -51,9 +51,9 @@ final class JVFSFileChannel extends FileChannel {
 
     @Override
     public long read(final ByteBuffer[] dsts, final int offset, final int length) throws IOException {
-        JVFSAssertions.notNull(dsts, "dsts");
-        JVFSAssertions.greaterThan(offset, -1, "offset");
-        JVFSAssertions.greaterThan(length, -1, "offset");
+        JvfsAssertions.notNull(dsts, "dsts");
+        JvfsAssertions.greaterThan(offset, -1, "offset");
+        JvfsAssertions.greaterThan(length, -1, "offset");
         final int max = Math.max(dsts.length, length);
         final long start = channel.position();
 
@@ -78,9 +78,9 @@ final class JVFSFileChannel extends FileChannel {
 
     @Override
     public long write(ByteBuffer[] srcs, int offset, int length) throws IOException {
-        JVFSAssertions.notNull(srcs, "srcs");
-        JVFSAssertions.greaterThan(offset, -1, "offset");
-        JVFSAssertions.greaterThan(length, -1, "offset");
+        JvfsAssertions.notNull(srcs, "srcs");
+        JvfsAssertions.greaterThan(offset, -1, "offset");
+        JvfsAssertions.greaterThan(length, -1, "offset");
         final int max = Math.max(srcs.length, length);
         final long start = channel.position();
 

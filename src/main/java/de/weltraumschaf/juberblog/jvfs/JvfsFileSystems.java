@@ -20,7 +20,7 @@ import java.nio.file.spi.FileSystemProvider;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class JVFSFileSystems {
+public final class JvfsFileSystems {
 
     /**
      * OS dependent directory separator.
@@ -40,11 +40,15 @@ public final class JVFSFileSystems {
      * @see java.nio.file.FileSystems.DefaultFileSystemHolder.getDefaultProvider():java.nio.file.spi.FileSystemProvider
      */
     private static final String IMPLEMENTATION_PROPERTY_NAME = "java.nio.file.spi.DefaultFileSystemProvider";
+    /**
+     * Full qualified class name of provider implementation.
+     */
+    private static final String IMPLEMENTATION = "de.weltraumschaf.juberblog.jvfs.JvfsFileSystemProvider";
 
     /**
      * Hidden for pure static class.
      */
-    private JVFSFileSystems() {
+    private JvfsFileSystems() {
         super();
         throw new UnsupportedOperationException("Class with only static methods");
     }
@@ -52,16 +56,16 @@ public final class JVFSFileSystems {
     /**
      * Returns a new file system provider.
      *
-     * @return never {@code null} always new instance
+     * @return never {@literal null} always new instance
      */
     public static FileSystemProvider newProvider() {
-        return new JVFSFileSystemProvider();
+        return new JvfsFileSystemProvider();
     }
 
     /**
-     * Constructs a new {@link URI} with the form: {@code file:///}.
+     * Constructs a new {@link URI} with the form: {@literal file:///}.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     public static URI getRootUri() {
         final StringBuilder sb = new StringBuilder();
@@ -75,7 +79,7 @@ public final class JVFSFileSystems {
      * Registers the JVFS implementation of {@link FileSystemProvider} as default file system.
      */
     public static void registerAsDefault() {
-        System.setProperty(IMPLEMENTATION_PROPERTY_NAME, "de.weltraumschaf.juberblog.jvfs.JVFSFileSystemProvider");
+        System.setProperty(IMPLEMENTATION_PROPERTY_NAME, IMPLEMENTATION);
     }
 
     /**

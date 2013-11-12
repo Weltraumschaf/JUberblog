@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @author Sven.Strittmatter
  */
-final class JVFSCollections {
+final class JvfsCollections {
 
     /**
      * Default size for lists.
@@ -27,15 +27,15 @@ final class JVFSCollections {
     /**
      * Hidden for pure static factory.
      */
-    private JVFSCollections() {
+    private JvfsCollections() {
         super();
     }
 
     /**
      * Create new array list with {@link #DEFAULT_LIST_SIZE size}.
      *
-     * @param <T> type of list entries
-     * @return never {@code null}, always new instance
+     * @param <>> type of list entries
+     * @return never {@literal null}, always new instance
      */
     public static <T> List<T> newArrayList() {
         return newArrayList(DEFAULT_LIST_SIZE);
@@ -44,21 +44,21 @@ final class JVFSCollections {
     /**
      * Create new array list with given size.
      *
-     * @param <T> type of list entries
+     * @param <>> type of list entries
      * @param size must be non negative
-     * @return never {@code null}, always new instance
+     * @return never {@literal null}, always new instance
      */
     public static <T> List<T> newArrayList(final int size) {
-        JVFSAssertions.greaterThan(size, -1, "size");
+        JvfsAssertions.greaterThan(size, -1, "size");
         return new ArrayList<T>(size);
     }
 
     /**
      * Creates new hash map.
      *
-     * @param <K> type of map keys
-     * @param <V> type of map values
-     * @return never {@code null}, always new instance
+     * @param <>> type of map keys
+     * @param <>> type of map values
+     * @return never {@literal null}, always new instance
      */
     public static <K, V> Map<K, V> newHashMap() {
         return new HashMap<K, V>();
@@ -67,8 +67,8 @@ final class JVFSCollections {
     /**
      * Creates new hash set.
      * 
-     * @param <T> type of set entries
-     * @return never {@code null}, always new instance
+     * @param <>> type of set entries
+     * @return never {@literal null}, always new instance
      */
     public static <T> Set<T> newHashSet() {
         return new HashSet<T>();

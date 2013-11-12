@@ -21,12 +21,12 @@ import java.util.List;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSSeekableByteChannel implements SeekableByteChannel {
+final class JvfsSeekableByteChannel implements SeekableByteChannel {
 
     /**
      * Holds the data.
      */
-    private List<Byte> data = JVFSCollections.newArrayList();
+    private List<Byte> data = JvfsCollections.newArrayList();
     /**
      * Whether the channel is open or not.
      */
@@ -39,9 +39,9 @@ final class JVFSSeekableByteChannel implements SeekableByteChannel {
     /**
      * Dedicated constructor.
      *
-     * Initializes {@link #open} with {@code true}.
+     * Initializes {@link #open} with {@literal true}.
      */
-    JVFSSeekableByteChannel() {
+    JvfsSeekableByteChannel() {
         super();
         this.open = true;
     }
@@ -58,7 +58,7 @@ final class JVFSSeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public int write(final ByteBuffer src) throws IOException {
-        JVFSAssertions.notNull(src, "src");
+        JvfsAssertions.notNull(src, "src");
 
         while (src.hasRemaining()) {
             data.add(position, src.get());

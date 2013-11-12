@@ -22,11 +22,11 @@ import java.util.Map;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSFileAttributeView implements BasicFileAttributeView {
+final class JvfsFileAttributeView implements BasicFileAttributeView {
 
-    private final JVFSPath path;
+    private final JvfsPath path;
 
-    JVFSFileAttributeView(final JVFSPath path) {
+    JvfsFileAttributeView(final JvfsPath path) {
         super();
         assert path != null : "path must be specified";
         this.path = path;
@@ -34,7 +34,7 @@ final class JVFSFileAttributeView implements BasicFileAttributeView {
 
     @Override
     public String name() {
-        return JVFSFileSystem.FILE_ATTR_VIEW_BASIC;
+        return JvfsFileSystem.FILE_ATTR_VIEW_BASIC;
     }
 
     @Override

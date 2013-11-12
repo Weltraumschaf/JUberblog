@@ -50,7 +50,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class JVFSFileSystem extends FileSystem {
+class JvfsFileSystem extends FileSystem {
 
     /**
      * Contracted name of the {@link BasicFileAttributeView}.
@@ -58,15 +58,15 @@ class JVFSFileSystem extends FileSystem {
     static final String FILE_ATTR_VIEW_BASIC = "basic";
 
     /**
-     * Provider which created this {@link JVFSFileSystemProvider}.
+     * Provider which created this {@link JvfsFileSystemProvider}.
      */
-    private final JVFSFileSystemProvider provider;
+    private final JvfsFileSystemProvider provider;
     /**
      * Organizes the file hierarchy.
      *
      * The key is the absolute pathname of the file ({@link Entry#path}).
      */
-    private final Map<String, JVFSFileEntry> attic = JVFSCollections.newHashMap();
+    private final Map<String, JvfsFileEntry> attic = JvfsCollections.newHashMap();
     /**
      * List of file stores.
      */
@@ -83,13 +83,13 @@ class JVFSFileSystem extends FileSystem {
      *
      * @param provider must not be {@literal null}
      */
-    JVFSFileSystem(final JVFSFileSystemProvider provider) {
+    JvfsFileSystem(final JvfsFileSystemProvider provider) {
         super();
-        JVFSAssertions.notNull(provider, "provider");
+        JvfsAssertions.notNull(provider, "provider");
         this.provider = provider;
         this.open = true;
-        final FileStore store = new JVFSFileStore();
-        final List<FileStore> stores = JVFSCollections.newArrayList(1);
+        final FileStore store = new JvfsFileStore();
+        final List<FileStore> stores = JvfsCollections.newArrayList(1);
         stores.add(store);
         this.fileStores = Collections.unmodifiableList(stores);
     }
@@ -116,13 +116,13 @@ class JVFSFileSystem extends FileSystem {
 
     @Override
     public String getSeparator() {
-        return JVFSFileSystems.DIR_SEP;
+        return JvfsFileSystems.DIR_SEP;
     }
 
     @Override
     public Iterable<Path> getRootDirectories() {
         this.checkClosed();
-        return Arrays.<Path>asList(new JVFSPath(this));
+        return Arrays.<Path>asList(new JvfsPath(this));
     }
 
     @Override
@@ -134,15 +134,15 @@ class JVFSFileSystem extends FileSystem {
     @Override
     public Set<String> supportedFileAttributeViews() {
         this.checkClosed();
-        return JVFSCollections.newHashSet();
+        return JvfsCollections.newHashSet();
     }
 
     @Override
     public Path getPath(final String first, final String... more) {
         this.checkClosed();
-        JVFSAssertions.notNull(first, "first");
+        JvfsAssertions.notNull(first, "first");
         final String merged = this.merge(first, more);
-        return new JVFSPath(merged, this);
+        return new JvfsPath(merged, this);
     }
 
     /**
@@ -160,7 +160,7 @@ class JVFSFileSystem extends FileSystem {
         merged.append(first);
 
         for (final String name : more) {
-            merged.append(JVFSFileSystems.DIR_SEP);
+            merged.append(JvfsFileSystems.DIR_SEP);
             merged.append(name);
         }
 
@@ -169,7 +169,7 @@ class JVFSFileSystem extends FileSystem {
 
     @Override
     public PathMatcher getPathMatcher(final String syntaxAndPattern) {
-        return JVFSPathMatcher.newMatcher(syntaxAndPattern);
+        return JvfsPathMatcher.newMatcher(syntaxAndPattern);
     }
 
     @Override
@@ -207,7 +207,7 @@ class JVFSFileSystem extends FileSystem {
         }
     }
 
-    JVFSFileEntry get(final String path) {
+    JvfsFileEntry get(final String path) {
         checkClosed();
         return attic.get(path);
     }
@@ -249,18 +249,18 @@ class JVFSFileSystem extends FileSystem {
             }
         }
 
-        final JVFSFileEntry entry = contains(path) ? get(path) : JVFSFileEntry.newFile(path);
-        return new JVFSFileChannel(entry.getContent());
+        final JvfsFileEntry entry = contains(path) ? get(path) : JvfsFileEntry.newFile(path);
+        return new JvfsFileChannel(entry.getContent());
     }
 
     SeekableByteChannel newByteChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
         checkClosed();
-        final JVFSFileEntry entry;
+        final JvfsFileEntry entry;
 
         if (contains(path)) {
             entry = get(path);
         } else {
-            entry = JVFSFileEntry.newFile(path);
+            entry = JvfsFileEntry.newFile(path);
         }
 
         return entry.getContent();
@@ -290,7 +290,7 @@ class JVFSFileSystem extends FileSystem {
             }
         }
 
-        final JVFSFileEntry entry = get(pathname);
+        final JvfsFileEntry entry = get(pathname);
 
         if (r) {
             if (!entry.isReadable()) {
@@ -318,15 +318,15 @@ class JVFSFileSystem extends FileSystem {
     void createDirectory(final String path, final FileAttribute<?>... attrs) throws IOException {
         checkClosed();
         assertFileExists(path);
-        final List<String> names = JVFSPath.tokenize(path);
+        final List<String> names = JvfsPath.tokenize(path);
         names.remove(names.size() - 1);
         final StringBuilder buf = new StringBuilder();
 
         for (final String name : names) {
-            buf.append(JVFSFileSystems.DIR_SEP).append(name);
+            buf.append(JvfsFileSystems.DIR_SEP).append(name);
 
             if (!contains(buf.toString())) {
-                attic.put(buf.toString(), JVFSFileEntry.newDir(buf.toString()));
+                attic.put(buf.toString(), JvfsFileEntry.newDir(buf.toString()));
             }
         }
     }
@@ -334,7 +334,7 @@ class JVFSFileSystem extends FileSystem {
     void delete(final String path) throws IOException {
         checkClosed();
         assertFileExists(path);
-        final JVFSFileEntry entry = get(path);
+        final JvfsFileEntry entry = get(path);
 
         if (entry.isDirectory() && entry.isEmpty()) {
             throw new DirectoryNotEmptyException(path);
@@ -343,16 +343,16 @@ class JVFSFileSystem extends FileSystem {
         attic.remove(path);
     }
 
-    JVFSFileAttributes getFileAttributes(final String path) throws IOException {
+    JvfsFileAttributes getFileAttributes(final String path) throws IOException {
         checkClosed();
         assertFileExists(path);
-        return new JVFSFileAttributes(get(path));
+        return new JvfsFileAttributes(get(path));
     }
 
     void setTimes(final String path, final FileTime mtime, final FileTime atime, final FileTime ctime) throws IOException {
         checkClosed();
         assertFileExists(path);
-        final JVFSFileEntry entry = get(path);
+        final JvfsFileEntry entry = get(path);
         entry.setLastModifiedTime(mtime.to(TimeUnit.SECONDS));
         entry.setLastAccessTime (atime.to(TimeUnit.SECONDS));
         entry.setCreationTime (ctime.to(TimeUnit.SECONDS));
@@ -377,7 +377,7 @@ class JVFSFileSystem extends FileSystem {
             throw new FileAlreadyExistsException(target);
         }
 
-        final JVFSFileEntry entry = get(path);
+        final JvfsFileEntry entry = get(path);
         synchronized (attic) {
             attic.remove(entry.getPath());
             attic.put(target, entry);

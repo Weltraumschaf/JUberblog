@@ -22,9 +22,9 @@ import java.nio.file.attribute.FileStoreAttributeView;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class JVFSFileStore extends FileStore {
+final class JvfsFileStore extends FileStore {
 
-    JVFSFileStore() {
+    JvfsFileStore() {
         super();
     }
 
@@ -69,7 +69,7 @@ final class JVFSFileStore extends FileStore {
 
     @Override
     public boolean supportsFileAttributeView(String name) {
-        return JVFSFileSystem.FILE_ATTR_VIEW_BASIC.equals(name);
+        return JvfsFileSystem.FILE_ATTR_VIEW_BASIC.equals(name);
     }
 
     @Override
