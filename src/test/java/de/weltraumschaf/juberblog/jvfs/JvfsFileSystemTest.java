@@ -44,7 +44,7 @@ public class JvfsFileSystemTest {
         JvfsFileSystems.unregisterAsDefault();
     }
 
-    @Test
+    @Test @Ignore
     public void testSomeMethod() throws URISyntaxException, IOException {
         final Path foo = Paths.get(URI.create("file:///tmp/foo"));
         Files.createFile(foo);

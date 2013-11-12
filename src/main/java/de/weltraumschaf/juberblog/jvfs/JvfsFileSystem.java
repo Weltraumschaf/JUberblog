@@ -12,8 +12,6 @@
 package de.weltraumschaf.juberblog.jvfs;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.AccessDeniedException;
@@ -31,7 +29,6 @@ import java.nio.file.PathMatcher;
 import java.nio.file.ReadOnlyFileSystemException;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.WatchService;
-import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.UserPrincipalLookupService;
@@ -42,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Maintains the file system specific hierarchy.
@@ -213,6 +208,7 @@ class JvfsFileSystem extends FileSystem {
     }
 
     void add(final JvfsFileEntry entry) {
+        // TODO Check parent direcotries.
         attic.put(entry.getPath(), entry);
     }
 
@@ -253,7 +249,15 @@ class JvfsFileSystem extends FileSystem {
             }
         }
 
-        final JvfsFileEntry entry = contains(path) ? get(path) : JvfsFileEntry.newFile(path);
+        final JvfsFileEntry entry;
+
+        if (contains(path)) {
+            entry = get(path);
+        } else {
+            entry = JvfsFileEntry.newFile(path);
+//            add(entry);
+        }
+
         return new JvfsFileChannel(entry.getContent());
     }
 
