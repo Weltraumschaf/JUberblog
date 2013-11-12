@@ -25,11 +25,11 @@ import java.nio.channels.WritableByteChannel;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class JVFSFileChannel extends FileChannel {
+final class JVFSFileChannel extends FileChannel {
 
     private final SeekableByteChannel channel;
 
-    public JVFSFileChannel(final SeekableByteChannel channel) {
+    JVFSFileChannel(final SeekableByteChannel channel) {
         super();
         JVFSAssertions.notNull(channel, "channel");
         this.channel = channel;

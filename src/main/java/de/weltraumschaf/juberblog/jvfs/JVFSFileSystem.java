@@ -11,20 +11,27 @@
  */
 package de.weltraumschaf.juberblog.jvfs;
 
+import com.sun.nio.zipfs.ZipFileAttributes;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.AccessMode;
 import java.nio.file.ClosedFileSystemException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,7 +50,7 @@ class JVFSFileSystem extends FileSystem {
      * Provider which created this {@link JVFSFileSystemProvider}.
      */
     private final JVFSFileSystemProvider provider;
-
+    private final Map<String, Entry> attic = new HashMap<String, Entry>();
     /**
      * List of file stores.
      */
@@ -55,7 +62,7 @@ class JVFSFileSystem extends FileSystem {
      */
     private volatile boolean open;
 
-    public JVFSFileSystem(final JVFSFileSystemProvider provider) {
+    JVFSFileSystem(final JVFSFileSystemProvider provider) {
         super();
         JVFSAssertions.notNull(provider, "provider");
         this.provider = provider;
@@ -172,6 +179,127 @@ class JVFSFileSystem extends FileSystem {
         if (!this.isOpen()) {
             throw new ClosedFileSystemException();
         }
+    }
+
+    public Entry get(final String path) {
+        return attic.get(path);
+    }
+
+    public boolean contains(final String path) {
+        return attic.containsKey(path);
+    }
+
+    public void checkAccess(final Path path, final AccessMode... modes) throws NoSuchFileException, AccessDeniedException {
+        final String pathname = path.toString();
+        if (!contains(pathname)) {
+            throw new NoSuchFileException(pathname);
+        }
+
+        boolean r = false;
+        boolean w = false;
+        boolean x = false;
+        for (AccessMode mode : modes) {
+            switch (mode) {
+                case READ:
+                    r = true;
+                    break;
+                case WRITE:
+                    w = true;
+                    break;
+                case EXECUTE:
+                    x = true;
+                    break;
+                default:
+                    throw new UnsupportedOperationException();
+            }
+        }
+
+        final Entry entry = get(pathname);
+
+        if (r) {
+            if (!entry.readable) {
+                throw new AccessDeniedException(pathname);
+            }
+        }
+
+        if (w) {
+            if (isReadOnly()) {
+                throw new AccessDeniedException(pathname);
+            }
+
+            if (!entry.writeable) {
+                throw new AccessDeniedException(pathname);
+            }
+        }
+
+        if (x) {
+            if (!entry.executable) {
+                throw new AccessDeniedException(pathname);
+            }
+        }
+    }
+
+    public static final class Entry {
+
+        private final String path;
+        private final boolean direcotry;
+        private long lastModifiedTime;
+        private long lastAccessTime;
+        private long creationTime;
+        private boolean readable;
+        private boolean writeable;
+        private boolean executable;
+
+        private Entry(final String path, final boolean direcotry) {
+            super();
+            this.path = path;
+            this.direcotry = direcotry;
+        }
+
+        public static Entry newDir(final String path) {
+            return new Entry(path, true);
+        }
+
+        public static Entry newFile(final String path) {
+            return new Entry(path, false);
+        }
+
+        @Override
+        public int hashCode() {
+            return path.hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (!(obj instanceof Entry)) {
+                return false;
+            }
+
+            final Entry other = (Entry) obj;
+            return path.equals(other.path);
+        }
+
+        @Override
+        public String toString() {
+            return path;
+        }
+
+        public boolean isDirectory() {
+            return direcotry;
+        }
+
+        public long getLastModifiedTime() {
+            return lastModifiedTime;
+        }
+
+        public long getLastAccessTime() {
+            return lastAccessTime;
+        }
+
+        public long getCreationTime() {
+            return creationTime;
+        }
+
     }
 
 }

@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 
 /**
  *
@@ -43,7 +44,7 @@ public class JVFSFileSystemTest {
         JVFSFileSystems.unregisterAsDefault();
     }
 
-    @Test
+    @Test @Ignore
     public void testSomeMethod() throws URISyntaxException, IOException {
 //        FileSystemProvider prov = JVFSFileSystems.newProvider();
 //        FileSystem fs = prov.getFileSystem(new URI("file:///"));

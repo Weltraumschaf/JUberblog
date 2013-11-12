@@ -20,8 +20,8 @@ import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -36,9 +36,9 @@ import java.util.Set;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class JVFSFileSystemProvider extends FileSystemProvider {
+public final class JVFSFileSystemProvider extends FileSystemProvider {
 
-    private volatile JVFSFileSystem fs;
+    private JVFSFileSystem fileSystem;
 
     /**
      * Dedicated constructor.
@@ -63,30 +63,32 @@ public class JVFSFileSystemProvider extends FileSystemProvider {
 
     @Override
     public FileSystem newFileSystem(final URI uri, final Map<String, ?> env) throws IOException {
+        // FIXME See ZipFS.
         return new JVFSFileSystem(this);
     }
 
     @Override
     public synchronized FileSystem getFileSystem(final URI uri) {
+        // FIXME See ZipFS.
         JVFSAssertions.isEqual(uri, JVFSFileSystems.getRootUri(), "uri");
 
-        if (null == fs) {
-            fs = new JVFSFileSystem(this);
+        if (null == fileSystem) {
+            fileSystem = new JVFSFileSystem(this);
         }
 
-        return fs;
+        return fileSystem;
     }
 
     @Override
     public Path getPath(final URI uri) {
-        return new JVFSPath(uri.getPath(), fs);
+        return new JVFSPath(uri.getPath(), fileSystem);
     }
 
     /**
      * {@inheritDoc}
      *
      * @see java.nio.file.spi.FileSystemProvider#newFileChannel(java.nio.file.Path, java.util.Set,
-     *      java.nio.file.attribute.FileAttribute<?>[])
+     * java.nio.file.attribute.FileAttribute<?>[])
      */
     @Override
     public FileChannel newFileChannel(Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
@@ -139,8 +141,15 @@ public class JVFSFileSystemProvider extends FileSystemProvider {
     }
 
     @Override
-    public void checkAccess(Path path, AccessMode... modes) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void checkAccess(final Path path, final AccessMode... modes) throws IOException {
+        final JVFSFileSystem fs = getFilesystem(path);
+        final String desired = path.toString();
+
+        if (!fs.contains(desired)) {
+            throw new NoSuchFileException(desired);
+        }
+
+        fs.checkAccess(path, modes);
     }
 
     @Override
@@ -163,4 +172,17 @@ public class JVFSFileSystemProvider extends FileSystemProvider {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private JVFSFileSystem getFilesystem(final Path path) {
+        assert path != null : "Path must be specified";
+        final FileSystem fs = path.getFileSystem();
+        assert fs != null : "File system is null";
+
+        // Could be user error in this case, passing in a Path from another provider
+        if (!(fs instanceof JVFSFileSystem)) {
+            throw new IllegalArgumentException("This path is not associated with a "
+                    + JVFSFileSystem.class.getSimpleName());
+        }
+
+        return (JVFSFileSystem) fs;
+    }
 }

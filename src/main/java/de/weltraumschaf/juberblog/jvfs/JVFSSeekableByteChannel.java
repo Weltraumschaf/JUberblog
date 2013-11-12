@@ -37,7 +37,7 @@ class JVFSSeekableByteChannel implements SeekableByteChannel {
     private volatile boolean open;
     private volatile int position;
 
-    public JVFSSeekableByteChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>[] attrs) {
+    JVFSSeekableByteChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>[] attrs) {
         super();
         JVFSAssertions.notNull(path, "path");
         JVFSAssertions.notNull(options, "options");
