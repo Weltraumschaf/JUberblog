@@ -9,41 +9,40 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.jvfs;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 import java.util.List;
-import java.util.Set;
 
 /**
+ * Implementation of a seekable byte channel.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class JVFSSeekableByteChannel implements SeekableByteChannel {
+final class JVFSSeekableByteChannel implements SeekableByteChannel {
 
-    private static final int INITIAL_SIZE = 128;
-
-    private final Path path;
-    private final Set<? extends OpenOption> options;
-    private final FileAttribute<?>[] atributes;
+    /**
+     * Holds the data.
+     */
     private List<Byte> data = JVFSCollections.newArrayList();
+    /**
+     * Whether the channel is open or not.
+     */
     private volatile boolean open;
+    /**
+     * Current position in the channel.
+     */
     private volatile int position;
 
-    JVFSSeekableByteChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>[] attrs) {
+    /**
+     * Dedicated constructor.
+     *
+     * Initializes {@link #open} with {@code true}.
+     */
+    JVFSSeekableByteChannel() {
         super();
-        JVFSAssertions.notNull(path, "path");
-        JVFSAssertions.notNull(options, "options");
-        JVFSAssertions.notNull(attrs, "attrs");
-        this.path = path;
-        this.options = options;
-        this.atributes = attrs;
         this.open = true;
     }
 
@@ -76,7 +75,7 @@ class JVFSSeekableByteChannel implements SeekableByteChannel {
 
     @Override
     public SeekableByteChannel position(final long newPosition) throws IOException {
-        position= (int) newPosition;
+        position = (int) newPosition;
         return this;
     }
 

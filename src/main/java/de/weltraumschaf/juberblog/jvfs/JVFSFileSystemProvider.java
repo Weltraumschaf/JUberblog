@@ -138,16 +138,6 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
     }
 
     @Override
-    public InputStream newInputStream(final Path path, final OpenOption... options) throws IOException {
-        return toJvfsPath(path).newInputStream(options);
-    }
-
-    @Override
-    public OutputStream newOutputStream(final Path path, final OpenOption... options) throws IOException {
-        return toJvfsPath(path).newOutputStream(options);
-    }
-
-    @Override
     public void createDirectory(final Path dir, final FileAttribute<?>... attrs) throws IOException {
         toJvfsPath(dir).createDirectory(attrs);
     }
@@ -224,21 +214,15 @@ public final class JVFSFileSystemProvider extends FileSystemProvider {
         toJvfsPath(path).setAttribute(attribute, value, options);
     }
 
-    private JVFSFileSystem getFilesystem(final Path path) {
-        assert path != null : "Path must be specified";
-        final FileSystem fs = path.getFileSystem();
-        assert fs != null : "File system is null";
-
-        // Could be user error in this case, passing in a Path from another provider
-        if (!(fs instanceof JVFSFileSystem)) {
-            throw new IllegalArgumentException("This path is not associated with a "
-                    + JVFSFileSystem.class.getSimpleName());
-        }
-
-        return (JVFSFileSystem) fs;
-    }
-
-    static JVFSPath toJvfsPath(final Path obj) {
+    /**
+     * Casts given path to {@link JVFSPath}.
+     *
+     * Throws a {@link ProviderMismatchException} if given object is not instance of {@link JVFSPath}.
+     *
+     * @param obj must not be {@code null}
+     * @return never {@code null}
+     */
+    private static JVFSPath toJvfsPath(final Path obj) {
         JVFSAssertions.notNull(obj, "obj");
 
         if (!(obj instanceof JVFSPath)) {

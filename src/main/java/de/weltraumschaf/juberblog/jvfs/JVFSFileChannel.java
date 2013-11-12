@@ -22,13 +22,22 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
+ * Represents a file channel.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 final class JVFSFileChannel extends FileChannel {
 
+    /**
+     * Wrapped byte channel.
+     */
     private final SeekableByteChannel channel;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param channel must not be {@codenull}
+     */
     JVFSFileChannel(final SeekableByteChannel channel) {
         super();
         JVFSAssertions.notNull(channel, "channel");
@@ -108,7 +117,8 @@ final class JVFSFileChannel extends FileChannel {
 
     @Override
     public FileChannel truncate(long size) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        channel.truncate(size);
+        return this;
     }
 
     @Override

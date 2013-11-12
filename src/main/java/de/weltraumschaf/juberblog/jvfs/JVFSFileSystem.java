@@ -20,12 +20,16 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.AccessMode;
 import java.nio.file.ClosedFileSystemException;
 import java.nio.file.CopyOption;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.nio.file.ReadOnlyFileSystemException;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.FileAttribute;
@@ -34,11 +38,12 @@ import java.nio.file.attribute.UserPrincipalLookupService;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Maintains the file system specific hierarchy.
@@ -61,7 +66,7 @@ class JVFSFileSystem extends FileSystem {
      *
      * The key is the absolute pathname of the file ({@link Entry#path}).
      */
-    private final Map<String, Entry> attic = JVFSCollections.newHashMap();
+    private final Map<String, JVFSFileEntry> attic = JVFSCollections.newHashMap();
     /**
      * List of file stores.
      */
@@ -76,7 +81,7 @@ class JVFSFileSystem extends FileSystem {
     /**
      * Dedicated constructor.
      *
-     * @param provider must not be {@code null}
+     * @param provider must not be {@literal null}
      */
     JVFSFileSystem(final JVFSFileSystemProvider provider) {
         super();
@@ -129,7 +134,7 @@ class JVFSFileSystem extends FileSystem {
     @Override
     public Set<String> supportedFileAttributeViews() {
         this.checkClosed();
-        return new HashSet<String>();
+        return JVFSCollections.newHashSet();
     }
 
     @Override
@@ -141,41 +146,40 @@ class JVFSFileSystem extends FileSystem {
     }
 
     /**
-     * Merges the path context with a varargs String sub-contexts, returning the result
+     * Merges the path context with a varargs String sub-contexts, returning the result.
      *
-     * @param first
-     * @param more
-     * @return
+     * @param first must not be {@literal null}
+     * @param more must not be {@literal null}
+     * @return never {@literal null}
      */
-    private String merge(final String first, final String[] more) {
+    private String merge(final String first, final String... more) {
         assert first != null : "first must be specified";
         assert more != null : "more must be specified";
 
         final StringBuilder merged = new StringBuilder();
         merged.append(first);
 
-        for (int i = 0; i < more.length; i++) {
+        for (final String name : more) {
             merged.append(JVFSFileSystems.DIR_SEP);
-            merged.append(more[i]);
+            merged.append(name);
         }
 
         return merged.toString();
     }
 
     @Override
-    public PathMatcher getPathMatcher(String syntaxAndPattern) {
-        throw new UnsupportedOperationException("JVFS does not support Path Matcher operations!");
+    public PathMatcher getPathMatcher(final String syntaxAndPattern) {
+        return JVFSPathMatcher.newMatcher(syntaxAndPattern);
     }
 
     @Override
     public UserPrincipalLookupService getUserPrincipalLookupService() {
-        throw new UnsupportedOperationException("JVFS archives do not support file ownership.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public WatchService newWatchService() throws IOException {
-        throw new UnsupportedOperationException("JVFS archives do not support a "
-                + WatchService.class.getSimpleName() + ".");
+        throw new UnsupportedOperationException("JVFS archives do not support a watch services!");
     }
 
     /**
@@ -197,23 +201,79 @@ class JVFSFileSystem extends FileSystem {
         }
     }
 
-    public Entry get(final String path) {
+    private void assertFileExists(final String path) throws NoSuchFileException {
+        if (!contains(path)) {
+            throw new NoSuchFileException(path);
+        }
+    }
+
+    JVFSFileEntry get(final String path) {
+        checkClosed();
         return attic.get(path);
     }
 
-    public boolean contains(final String path) {
+    boolean contains(final String path) {
+        checkClosed();
         return attic.containsKey(path);
     }
 
-    public void checkAccess(final Path path, final AccessMode... modes) throws NoSuchFileException, AccessDeniedException {
-        final String pathname = path.toString();
-        if (!contains(pathname)) {
-            throw new NoSuchFileException(pathname);
+    FileChannel newFileChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) throws IOException {
+        checkClosed();
+        final boolean forWrite = (options.contains(StandardOpenOption.WRITE) || options.contains(StandardOpenOption.APPEND));
+
+        if (forWrite) {
+            if (isReadOnly()) {
+                throw new ReadOnlyFileSystemException();
+            }
+
+            if (contains(path)) {
+                if (options.contains(StandardOpenOption.CREATE_NEW)) {
+                    throw new FileAlreadyExistsException(path);
+                }
+
+                if (get(path).isDirectory()) {
+                    throw new FileAlreadyExistsException("directory <" + path + "> exists");
+                }
+            } else {
+                if (!options.contains(StandardOpenOption.CREATE_NEW)) {
+                    throw new NoSuchFileException(path);
+                }
+            }
+        } else {
+            if (contains(path)) {
+                if (get(path).isDirectory()) {
+                    throw new NoSuchFileException(path);
+                }
+            } else {
+                throw new NoSuchFileException(path);
+            }
         }
+
+        final JVFSFileEntry entry = contains(path) ? get(path) : JVFSFileEntry.newFile(path);
+        return new JVFSFileChannel(entry.getContent());
+    }
+
+    SeekableByteChannel newByteChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
+        checkClosed();
+        final JVFSFileEntry entry;
+
+        if (contains(path)) {
+            entry = get(path);
+        } else {
+            entry = JVFSFileEntry.newFile(path);
+        }
+
+        return entry.getContent();
+    }
+
+    void checkAccess(final String pathname, final AccessMode... modes) throws IOException {
+        checkClosed();
+        assertFileExists(pathname);
 
         boolean r = false;
         boolean w = false;
         boolean x = false;
+
         for (AccessMode mode : modes) {
             switch (mode) {
                 case READ:
@@ -230,10 +290,10 @@ class JVFSFileSystem extends FileSystem {
             }
         }
 
-        final Entry entry = get(pathname);
+        final JVFSFileEntry entry = get(pathname);
 
         if (r) {
-            if (!entry.readable) {
+            if (!entry.isReadable()) {
                 throw new AccessDeniedException(pathname);
             }
         }
@@ -243,138 +303,95 @@ class JVFSFileSystem extends FileSystem {
                 throw new AccessDeniedException(pathname);
             }
 
-            if (!entry.writeable) {
+            if (!entry.isWritable()) {
                 throw new AccessDeniedException(pathname);
             }
         }
 
         if (x) {
-            if (!entry.executable) {
+            if (!entry.isExecutable()) {
                 throw new AccessDeniedException(pathname);
             }
         }
     }
 
-    FileChannel newFileChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?> ... attrs) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    void createDirectory(final String path, final FileAttribute<?>... attrs) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+        final List<String> names = JVFSPath.tokenize(path);
+        names.remove(names.size() - 1);
+        final StringBuilder buf = new StringBuilder();
+
+        for (final String name : names) {
+            buf.append(JVFSFileSystems.DIR_SEP).append(name);
+
+            if (!contains(buf.toString())) {
+                attic.put(buf.toString(), JVFSFileEntry.newDir(buf.toString()));
+            }
+        }
     }
 
-    SeekableByteChannel newByteChannel(final String path) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    void delete(final String path) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+        final JVFSFileEntry entry = get(path);
+
+        if (entry.isDirectory() && entry.isEmpty()) {
+            throw new DirectoryNotEmptyException(path);
+        }
+
+        attic.remove(path);
     }
 
-    SeekableByteChannel newByteChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?> ... attrs) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    JVFSFileAttributes getFileAttributes(final String path) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+        return new JVFSFileAttributes(get(path));
     }
 
-    InputStream newInputStream(final String path) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    void setTimes(final String path, final FileTime mtime, final FileTime atime, final FileTime ctime) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+        final JVFSFileEntry entry = get(path);
+        entry.setLastModifiedTime(mtime.to(TimeUnit.SECONDS));
+        entry.setLastAccessTime (atime.to(TimeUnit.SECONDS));
+        entry.setCreationTime (ctime.to(TimeUnit.SECONDS));
     }
 
-    OutputStream newOutputStream(final String path, final OpenOption ... options) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    void copy(final String path, final String target, final CopyOption... options) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+
+        if (contains(target)) {
+            throw new FileAlreadyExistsException(target);
+        }
+
+        attic.put(target, get(path).copy());
     }
 
-    void createDirectory(String path, FileAttribute<?>[] attrs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    void move(final String path, final String target, final CopyOption... options) throws IOException {
+        checkClosed();
+        assertFileExists(path);
 
-    void delete(String path) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+        if (contains(target)) {
+            throw new FileAlreadyExistsException(target);
+        }
 
-    JVFSFileAttributes getFileAttributes(String path) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    void setTimes(String path, FileTime mtime, FileTime atime, FileTime ctime) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    void copy(String path, JVFSPath target, CopyOption[] options) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    void move(String path, JVFSPath target, CopyOption[] options) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final JVFSFileEntry entry = get(path);
+        synchronized (attic) {
+            attic.remove(entry.getPath());
+            attic.put(target, entry);
+        }
     }
 
     FileStore getFileStore() {
         return fileStores.get(0);
     }
 
-    boolean isHidden(String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    void checkAccess(String path, AccessMode[] modes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     * Holds the administrative data of a file entry in the virtual file system.
-     */
-    public static final class Entry {
-
-        private final String path;
-        private final boolean direcotry;
-        private long lastModifiedTime;
-        private long lastAccessTime;
-        private long creationTime;
-        private boolean readable;
-        private boolean writeable;
-        private boolean executable;
-
-        private Entry(final String path, final boolean direcotry) {
-            super();
-            this.path = path;
-            this.direcotry = direcotry;
-        }
-
-        public static Entry newDir(final String path) {
-            return new Entry(path, true);
-        }
-
-        public static Entry newFile(final String path) {
-            return new Entry(path, false);
-        }
-
-        @Override
-        public int hashCode() {
-            return path.hashCode();
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (!(obj instanceof Entry)) {
-                return false;
-            }
-
-            final Entry other = (Entry) obj;
-            return path.equals(other.path);
-        }
-
-        @Override
-        public String toString() {
-            return path;
-        }
-
-        public boolean isDirectory() {
-            return direcotry;
-        }
-
-        public long getLastModifiedTime() {
-            return lastModifiedTime;
-        }
-
-        public long getLastAccessTime() {
-            return lastAccessTime;
-        }
-
-        public long getCreationTime() {
-            return creationTime;
-        }
-
+    boolean isHidden(final String path) throws IOException {
+        checkClosed();
+        assertFileExists(path);
+        return get(path).isHidden();
     }
 
 }

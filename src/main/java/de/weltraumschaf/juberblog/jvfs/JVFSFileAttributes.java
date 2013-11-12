@@ -16,36 +16,52 @@ import java.nio.file.attribute.FileTime;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Represents the file attributes.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 final class JVFSFileAttributes implements BasicFileAttributes {
 
-    private final JVFSPath path;
+    /**
+     * Wrapped file system entry.
+     */
+    private final JVFSFileEntry entry;
 
-    JVFSFileAttributes(final JVFSPath path) {
+    /**
+     * Dedicated constructor.
+     *
+     * @param entry must not be {@literal null}
+     */
+    JVFSFileAttributes(final JVFSFileEntry entry) {
         super();
-        assert path != null : "path must be specified";
-        this.path = path;
+        assert entry != null : "entry must be specified";
+        this.entry = entry;
     }
 
+    /**
+     * Creates a file time based on a long in seconds.
+     *
+     * @param timestamp must be non negative
+     * @return never {@literal null}
+     */
     private static FileTime createFileTime(final long timestamp) {
+        JVFSAssertions.greaterThanEqual(timestamp, 0, "timestamp");
         return FileTime.from(timestamp, TimeUnit.SECONDS);
     }
 
     @Override
     public FileTime lastModifiedTime() {
-        return createFileTime(getFileSystem().get(path.toString()).getLastModifiedTime());
+        return createFileTime(entry.getLastModifiedTime());
     }
 
     @Override
     public FileTime lastAccessTime() {
-        return createFileTime(getFileSystem().get(path.toString()).getLastAccessTime());
+        return createFileTime(entry.getLastAccessTime());
     }
 
     @Override
     public FileTime creationTime() {
-        return createFileTime(getFileSystem().get(path.toString()).getCreationTime());
+        return createFileTime(entry.getCreationTime());
     }
 
     @Override
@@ -55,12 +71,12 @@ final class JVFSFileAttributes implements BasicFileAttributes {
 
     @Override
     public boolean isDirectory() {
-        return getFileSystem().get(path.toString()).isDirectory();
+        return entry.isDirectory();
     }
 
     @Override
     public boolean isSymbolicLink() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return entry.isSymbolicLink();
     }
 
     @Override
@@ -71,20 +87,12 @@ final class JVFSFileAttributes implements BasicFileAttributes {
 
     @Override
     public long size() {
-        if (this.isDirectory()) {
-            return -1L;
-        }
-
-        throw new UnsupportedOperationException("Not supported yet.");
+        return entry.size();
     }
 
     @Override
     public Object fileKey() {
-        return path.toString();
-    }
-
-    private JVFSFileSystem getFileSystem() {
-        return ((JVFSFileSystem) path.getFileSystem());
+        return entry.toString();
     }
 
 }

@@ -525,8 +525,12 @@ class JVFSPath implements Path {
      * @param path must not be {@code null}
      * @return never {@code null} may be empty collection
      */
-    private static List<String> tokenize(final JVFSPath path) {
-        final StringTokenizer tokenizer = new StringTokenizer(path.toString(), DIR_SEP);
+    static List<String> tokenize(final JVFSPath path) {
+        return tokenize(path.toString());
+    }
+
+    static List<String> tokenize(final String path) {
+        final StringTokenizer tokenizer = new StringTokenizer(path, DIR_SEP);
         final List<String> tokens = JVFSCollections.newArrayList();
 
         while (tokenizer.hasMoreTokens()) {
@@ -638,7 +642,7 @@ class JVFSPath implements Path {
         return new JVFSPath(sb.toString(), thisOriginal.jvfs);
     }
 
-    FileChannel newFileChannel(final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
+    FileChannel newFileChannel(final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) throws IOException {
         return jvfs.newFileChannel(path, options, attrs);
     }
 
@@ -650,46 +654,27 @@ class JVFSPath implements Path {
         return new JvfsDirectoryStream(this, filter);
     }
 
-    InputStream newInputStream(final OpenOption ... options) {
-        if (options.length > 0) {
-            for (OpenOption opt : options) {
-                if (opt != StandardOpenOption.READ) {
-                    throw new UnsupportedOperationException("'" + opt + "' not allowed");
-                }
-            }
-        }
-
-        return jvfs.newInputStream(path);
-    }
-
-    OutputStream newOutputStream(final OpenOption ... options) {
-        if (options.length == 0) {
-            return jvfs.newOutputStream(path, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-        }
-        return jvfs.newOutputStream(path, options);
-    }
-
-    void createDirectory(final FileAttribute<?> ... attrs) {
+    void createDirectory(final FileAttribute<?>... attrs) throws IOException {
         jvfs.createDirectory(path, attrs);
     }
 
-    void delete() {
+    void delete() throws IOException {
         jvfs.delete(path);
     }
 
-    void copy(final JVFSPath target, final CopyOption ... options) {
-        jvfs.copy(path, target, options);
+    void copy(final JVFSPath target, final CopyOption... options) throws IOException {
+        jvfs.copy(path, target.toString(), options);
     }
 
-    void move(final JVFSPath target, final CopyOption ... options) {
-        jvfs.move(path, target, options);
+    void move(final JVFSPath target, final CopyOption... options) throws IOException {
+        jvfs.move(path, target.toString(), options);
     }
 
     boolean isSameFile(final Path other) {
         return equals(other);
     }
 
-    boolean isHidden() {
+    boolean isHidden() throws IOException {
         return jvfs.isHidden(path);
     }
 
@@ -697,11 +682,11 @@ class JVFSPath implements Path {
         return jvfs.getFileStore();
     }
 
-    void checkAccess(final AccessMode ... modes) {
+    void checkAccess(final AccessMode... modes) throws IOException {
         jvfs.checkAccess(path, modes);
     }
 
-    void setTimes(final FileTime mtime, final FileTime atime, final FileTime ctime) {
+    void setTimes(final FileTime mtime, final FileTime atime, final FileTime ctime) throws IOException {
         jvfs.setTimes(path, mtime, atime, ctime);
     }
 
