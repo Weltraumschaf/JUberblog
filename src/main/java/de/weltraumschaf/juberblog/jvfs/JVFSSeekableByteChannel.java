@@ -18,7 +18,6 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +32,7 @@ class JVFSSeekableByteChannel implements SeekableByteChannel {
     private final Path path;
     private final Set<? extends OpenOption> options;
     private final FileAttribute<?>[] atributes;
-    private List<Byte> data = new ArrayList<Byte>();
+    private List<Byte> data = JVFSCollections.newArrayList();
     private volatile boolean open;
     private volatile int position;
 

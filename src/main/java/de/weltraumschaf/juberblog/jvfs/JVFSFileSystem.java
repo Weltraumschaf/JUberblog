@@ -11,21 +11,27 @@
  */
 package de.weltraumschaf.juberblog.jvfs;
 
-import com.sun.nio.zipfs.ZipFileAttributes;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.AccessMode;
 import java.nio.file.ClosedFileSystemException;
+import java.nio.file.CopyOption;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.nio.file.spi.FileSystemProvider;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,7 +56,12 @@ class JVFSFileSystem extends FileSystem {
      * Provider which created this {@link JVFSFileSystemProvider}.
      */
     private final JVFSFileSystemProvider provider;
-    private final Map<String, Entry> attic = new HashMap<String, Entry>();
+    /**
+     * Organizes the file hierarchy.
+     *
+     * The key is the absolute pathname of the file ({@link Entry#path}).
+     */
+    private final Map<String, Entry> attic = JVFSCollections.newHashMap();
     /**
      * List of file stores.
      */
@@ -62,13 +73,18 @@ class JVFSFileSystem extends FileSystem {
      */
     private volatile boolean open;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param provider must not be {@code null}
+     */
     JVFSFileSystem(final JVFSFileSystemProvider provider) {
         super();
         JVFSAssertions.notNull(provider, "provider");
         this.provider = provider;
         this.open = true;
         final FileStore store = new JVFSFileStore();
-        final List<FileStore> stores = new ArrayList<FileStore>(1);
+        final List<FileStore> stores = JVFSCollections.newArrayList(1);
         stores.add(store);
         this.fileStores = Collections.unmodifiableList(stores);
     }
@@ -239,6 +255,65 @@ class JVFSFileSystem extends FileSystem {
         }
     }
 
+    FileChannel newFileChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?> ... attrs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    SeekableByteChannel newByteChannel(final String path) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    SeekableByteChannel newByteChannel(final String path, final Set<? extends OpenOption> options, final FileAttribute<?> ... attrs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    InputStream newInputStream(final String path) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    OutputStream newOutputStream(final String path, final OpenOption ... options) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void createDirectory(String path, FileAttribute<?>[] attrs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void delete(String path) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    JVFSFileAttributes getFileAttributes(String path) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void setTimes(String path, FileTime mtime, FileTime atime, FileTime ctime) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void copy(String path, JVFSPath target, CopyOption[] options) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void move(String path, JVFSPath target, CopyOption[] options) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    FileStore getFileStore() {
+        return fileStores.get(0);
+    }
+
+    boolean isHidden(String path) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void checkAccess(String path, AccessMode[] modes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * Holds the administrative data of a file entry in the virtual file system.
+     */
     public static final class Entry {
 
         private final String path;

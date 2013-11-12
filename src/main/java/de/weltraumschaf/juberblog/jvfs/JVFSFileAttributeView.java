@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.Map;
 
 /**
  *
@@ -23,28 +24,36 @@ import java.nio.file.attribute.FileTime;
  */
 final class JVFSFileAttributeView implements BasicFileAttributeView {
 
-    private final JVFSFileAttributes attributes;
+    private final JVFSPath path;
 
-    JVFSFileAttributeView(final JVFSFileAttributes attributes) {
+    JVFSFileAttributeView(final JVFSPath path) {
         super();
-        assert attributes != null : "attributes must be specified";
-        this.attributes = attributes;
+        assert path != null : "path must be specified";
+        this.path = path;
     }
 
     @Override
     public String name() {
-        return JVFSFileAttributeView.class.getSimpleName();
+        return JVFSFileSystem.FILE_ATTR_VIEW_BASIC;
     }
 
     @Override
     public BasicFileAttributes readAttributes() throws IOException {
-        return attributes;
+        return path.getAttributes();
     }
 
     @Override
     public void setTimes(final FileTime lastModifiedTime, final FileTime lastAccessTime, final FileTime createTime)
         throws IOException {
+        path.setTimes(lastModifiedTime, lastAccessTime, createTime);
+    }
+
+    void setAttribute(final String attribute, final Object value) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    Map<String, Object> readAttributes(String attributes) {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 }

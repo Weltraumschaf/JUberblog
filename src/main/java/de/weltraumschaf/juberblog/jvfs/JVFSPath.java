@@ -13,17 +13,32 @@ package de.weltraumschaf.juberblog.jvfs;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.AccessMode;
+import java.nio.file.CopyOption;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.ArrayList;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -54,7 +69,7 @@ class JVFSPath implements Path {
     /**
      * Owning {@link ShrinkWrapFileSystem}.
      */
-    private final JVFSFileSystem fileSystem;
+    private final JVFSFileSystem jvfs;
 
     /**
      * Dedicated constructor.
@@ -67,7 +82,7 @@ class JVFSPath implements Path {
         JVFSAssertions.notNull(path, "path");
         JVFSAssertions.notNull(fileSystem, "fileSystem");
         this.path = path;
-        this.fileSystem = fileSystem;
+        this.jvfs = fileSystem;
     }
 
     /**
@@ -83,7 +98,7 @@ class JVFSPath implements Path {
 
     @Override
     public FileSystem getFileSystem() {
-        return fileSystem;
+        return jvfs;
     }
 
     @Override
@@ -93,7 +108,7 @@ class JVFSPath implements Path {
 
     @Override
     public Path getRoot() {
-        return this.isAbsolute() ? new JVFSPath(fileSystem) : null;
+        return this.isAbsolute() ? new JVFSPath(jvfs) : null;
     }
 
     @Override
@@ -104,7 +119,7 @@ class JVFSPath implements Path {
         } else {
             final List<String> tokens = tokenize(this);
             // Furthest out
-            final Path fileName = new JVFSPath(tokens.get(tokens.size() - 1), this.fileSystem);
+            final Path fileName = new JVFSPath(tokens.get(tokens.size() - 1), this.jvfs);
             return fileName;
         }
     }
@@ -134,7 +149,7 @@ class JVFSPath implements Path {
         }
 
         final String parentPath = sb.toString();
-        return new JVFSPath(parentPath, fileSystem);
+        return new JVFSPath(parentPath, jvfs);
     }
 
     @Override
@@ -159,7 +174,7 @@ class JVFSPath implements Path {
 
     /**
      * Returns the number of occurrences of the specified character in the specified {@link String}, starting at the
-     * specified offset
+     * specified offset.
      *
      * @param string
      * @param s
@@ -187,11 +202,11 @@ class JVFSPath implements Path {
         final int tokenCount = tokens.size();
         if (beginIndex >= tokenCount) {
             throw new IllegalArgumentException("Invalid begin index " + endIndex + " for " + this.toString()
-                + "; must be between 0 and " + tokenCount + " exclusive");
+                    + "; must be between 0 and " + tokenCount + " exclusive");
         }
         if (endIndex > tokenCount) {
             throw new IllegalArgumentException("Invalid end index " + endIndex + " for " + this.toString()
-                + "; must be between 0 and " + tokenCount + " inclusive");
+                    + "; must be between 0 and " + tokenCount + " inclusive");
         }
         final StringBuilder newPathBuilder = new StringBuilder();
         for (int i = 0; i < endIndex; i++) {
@@ -203,28 +218,24 @@ class JVFSPath implements Path {
     }
 
     /**
-     * Creates a new {@link ShrinkWrapPath} instance from the specified input {@link String}
+     * Creates a new {@link ShrinkWrapPath} instance from the specified input {@link String}.
      *
-     * @param path
-     * @return
+     * @param path must not be {@code null}
+     * @return never {@code null}
      */
     private Path fromString(final String path) {
         JVFSAssertions.notNull(path, "path");
-        // Delegate
-        return new JVFSPath(path, fileSystem);
+        return new JVFSPath(path, jvfs);
     }
 
     @Override
     public boolean startsWith(final Path other) {
-        // Precondition checks
         JVFSAssertions.notNull(other, "other");
 
-        // Unequal FS
         if (this.getFileSystem() != other.getFileSystem()) {
             return false;
         }
 
-        // Tokenize each
         final List<String> ourTokens = tokenize(this);
         final List<String> otherTokens = tokenize((JVFSPath) other);
 
@@ -305,7 +316,7 @@ class JVFSPath implements Path {
     @Override
     public Path normalize() {
         final String normalizedString = normalize(tokenize(this), this.isAbsolute());
-        return new JVFSPath(normalizedString, this.fileSystem);
+        return new JVFSPath(normalizedString, this.jvfs);
     }
 
     @Override
@@ -327,7 +338,7 @@ class JVFSPath implements Path {
         }
         sb.append(other.toString());
 
-        return new JVFSPath(sb.toString(), this.fileSystem);
+        return new JVFSPath(sb.toString(), this.jvfs);
     }
 
     @Override
@@ -339,7 +350,8 @@ class JVFSPath implements Path {
     @Override
     public Path resolveSibling(final Path other) {
         JVFSAssertions.notNull(other, "other");
-        return other;
+        Path parent = getParent();
+        return (parent == null) ? other : parent.resolve(other);
     }
 
     @Override
@@ -353,12 +365,12 @@ class JVFSPath implements Path {
         JVFSAssertions.notNull(other, "other");
         if (!(other instanceof JVFSPath)) {
             throw new IllegalArgumentException("Can only relativize paths of type "
-                + JVFSPath.class.getSimpleName());
+                    + JVFSPath.class.getSimpleName());
         }
 
         // Equal paths, return empty Path
         if (this.equals(other)) {
-            return new JVFSPath("", this.fileSystem);
+            return new JVFSPath("", this.jvfs);
         }
 
         // Recursive relativization
@@ -372,7 +384,10 @@ class JVFSPath implements Path {
      * java.nio.file.WatchEvent.Modifier[])
      */
     @Override
-    public WatchKey register(WatchService watcher, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifiers) throws IOException {
+    public WatchKey register(
+            final WatchService watcher,
+            final WatchEvent.Kind<?>[] events,
+            final WatchEvent.Modifier... modifiers) throws IOException {
         throw new UnsupportedOperationException("JVFS Paths do not support registration with a watch service!");
     }
 
@@ -402,23 +417,47 @@ class JVFSPath implements Path {
         }
 
         // Else construct a new absolute path and normalize it
-        final Path absolutePath = new JVFSPath(DIR_SEP + this.path, this.fileSystem);
+        final Path absolutePath = new JVFSPath(DIR_SEP + this.path, this.jvfs);
         return absolutePath.normalize();
     }
 
     @Override
-    public Path toRealPath(LinkOption... options) throws IOException {
+    public Path toRealPath(final LinkOption... options) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public File toFile() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // XXX Consider returning own implementation, because File will may be circumvent JVFS.
+        return new File(toString());
     }
 
     @Override
     public Iterator<Path> iterator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new Iterator<Path>() {
+            private int index;
+
+            @Override
+            public boolean hasNext() {
+                return (index < getNameCount());
+            }
+
+            @Override
+            public Path next() {
+                if (index < getNameCount()) {
+                    final Path result = getName(index);
+                    index++;
+                    return result;
+                } else {
+                    throw new NoSuchElementException();
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
     /**
@@ -449,7 +488,7 @@ class JVFSPath implements Path {
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{fileSystem.hashCode(), path.hashCode()});
+        return Arrays.hashCode(new Object[]{jvfs.hashCode(), path.hashCode()});
     }
 
     /**
@@ -465,7 +504,7 @@ class JVFSPath implements Path {
 
         final JVFSPath other = (JVFSPath) obj;
 
-        if (this.fileSystem != other.fileSystem) {
+        if (this.jvfs != other.jvfs) {
             return false;
         }
 
@@ -481,13 +520,14 @@ class JVFSPath implements Path {
     }
 
     /**
-     * Returns the components of this path in order from root out
+     * Returns the components of this path in order from root out.
      *
-     * @return
+     * @param path must not be {@code null}
+     * @return never {@code null} may be empty collection
      */
     private static List<String> tokenize(final JVFSPath path) {
         final StringTokenizer tokenizer = new StringTokenizer(path.toString(), DIR_SEP);
-        final List<String> tokens = new ArrayList<String>();
+        final List<String> tokens = JVFSCollections.newArrayList();
 
         while (tokenizer.hasMoreTokens()) {
             tokens.add(tokenizer.nextToken());
@@ -497,7 +537,7 @@ class JVFSPath implements Path {
     }
 
     /**
-     * Normalizes the tokenized view of the path
+     * Normalizes the tokenized view of the path.
      *
      * @param path
      * @return
@@ -552,7 +592,7 @@ class JVFSPath implements Path {
      * @return
      */
     private static JVFSPath relativizeCommonRoot(final JVFSPath thisOriginal, final Path thisCurrent,
-        final Path otherOriginal, Path otherCurrent, final int backupCount) {
+            final Path otherOriginal, Path otherCurrent, final int backupCount) {
         // Preconditions
         assert thisOriginal != null;
         assert thisCurrent != null;
@@ -595,6 +635,93 @@ class JVFSPath implements Path {
             sb.append(otherTokens.get(i));
         }
 
-        return new JVFSPath(sb.toString(), thisOriginal.fileSystem);
+        return new JVFSPath(sb.toString(), thisOriginal.jvfs);
+    }
+
+    FileChannel newFileChannel(final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
+        return jvfs.newFileChannel(path, options, attrs);
+    }
+
+    SeekableByteChannel newByteChannel(final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) {
+        return jvfs.newByteChannel(path, options, attrs);
+    }
+
+    DirectoryStream<Path> newDirectoryStream(final DirectoryStream.Filter<? super Path> filter) {
+        return new JvfsDirectoryStream(this, filter);
+    }
+
+    InputStream newInputStream(final OpenOption ... options) {
+        if (options.length > 0) {
+            for (OpenOption opt : options) {
+                if (opt != StandardOpenOption.READ) {
+                    throw new UnsupportedOperationException("'" + opt + "' not allowed");
+                }
+            }
+        }
+
+        return jvfs.newInputStream(path);
+    }
+
+    OutputStream newOutputStream(final OpenOption ... options) {
+        if (options.length == 0) {
+            return jvfs.newOutputStream(path, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+        }
+        return jvfs.newOutputStream(path, options);
+    }
+
+    void createDirectory(final FileAttribute<?> ... attrs) {
+        jvfs.createDirectory(path, attrs);
+    }
+
+    void delete() {
+        jvfs.delete(path);
+    }
+
+    void copy(final JVFSPath target, final CopyOption ... options) {
+        jvfs.copy(path, target, options);
+    }
+
+    void move(final JVFSPath target, final CopyOption ... options) {
+        jvfs.move(path, target, options);
+    }
+
+    boolean isSameFile(final Path other) {
+        return equals(other);
+    }
+
+    boolean isHidden() {
+        return jvfs.isHidden(path);
+    }
+
+    FileStore getFileStore() {
+        return jvfs.getFileStore();
+    }
+
+    void checkAccess(final AccessMode ... modes) {
+        jvfs.checkAccess(path, modes);
+    }
+
+    void setTimes(final FileTime mtime, final FileTime atime, final FileTime ctime) {
+        jvfs.setTimes(path, mtime, atime, ctime);
+    }
+
+    JVFSFileAttributes getAttributes() throws IOException {
+        final JVFSFileAttributes attrs = jvfs.getFileAttributes(path);
+
+        if (attrs == null) {
+            throw new NoSuchFileException(path);
+        }
+
+        return attrs;
+    }
+
+    Map<String, Object> readAttributes(final String attributes, final LinkOption[] options) {
+        final JVFSFileAttributeView view = new JVFSFileAttributeView(this);
+        return view.readAttributes(attributes);
+    }
+
+    void setAttribute(final String attribute, final Object value, final LinkOption[] options) {
+        final JVFSFileAttributeView view = new JVFSFileAttributeView(this);
+        view.setAttribute(attribute, value);
     }
 }
