@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
@@ -20,7 +20,6 @@ import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
 import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.time.StopWatch;

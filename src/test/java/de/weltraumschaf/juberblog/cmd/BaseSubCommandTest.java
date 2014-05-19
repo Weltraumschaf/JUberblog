@@ -12,8 +12,8 @@
 
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.opt.Options;
 import org.junit.Rule;
 import org.junit.Test;

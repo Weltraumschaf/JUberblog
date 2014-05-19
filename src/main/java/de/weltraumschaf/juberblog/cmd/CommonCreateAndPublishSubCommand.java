@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;

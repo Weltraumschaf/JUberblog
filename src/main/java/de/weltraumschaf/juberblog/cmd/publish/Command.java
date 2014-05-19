@@ -11,8 +11,6 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.ApplicationException;
-
 /**
  * Implementors have uniform API to be executed.
  *

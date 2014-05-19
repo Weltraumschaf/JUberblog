@@ -12,10 +12,10 @@
 package de.weltraumschaf.juberblog;
 
 import com.beust.jcommander.JCommander;
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.commons.IOStreams;
-import de.weltraumschaf.commons.InvokableAdapter;
-import de.weltraumschaf.commons.Version;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IOStreams;
+import de.weltraumschaf.commons.application.InvokableAdapter;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
 import de.weltraumschaf.juberblog.opt.CreateOptions;

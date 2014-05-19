@@ -11,10 +11,10 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
-import de.weltraumschaf.commons.IO;
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Maps;
 import java.util.Collection;
