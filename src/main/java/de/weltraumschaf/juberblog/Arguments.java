@@ -58,7 +58,7 @@ public class Arguments {
     /**
      * Get all arguments but the first.
      *
-     * @return @return never {@code null}, maybe empty
+     * @return never {@code null}, maybe empty
      */
     public String[] getTailArguments() {
         if (args.length < 2) {

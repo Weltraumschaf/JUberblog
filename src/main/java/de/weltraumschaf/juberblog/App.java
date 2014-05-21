@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class App extends InvokableAdapter {
+public final class App extends InvokableAdapter {
 
     /**
      * Log facility.

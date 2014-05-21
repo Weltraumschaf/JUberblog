@@ -67,8 +67,7 @@ public class Uris {
      */
     public Uris(final URI base) {
         super();
-        Validate.notNull(base, "Base must not be null!");
-        this.base = base;
+        this.base = Validate.notNull(base, "Base must not be null!");
     }
 
     /**
