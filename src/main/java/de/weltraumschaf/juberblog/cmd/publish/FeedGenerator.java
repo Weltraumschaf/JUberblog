@@ -12,6 +12,8 @@
 
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.string.StringEscape;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.Feed;
@@ -21,8 +23,6 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.List;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -36,7 +36,7 @@ import org.joda.time.format.DateTimeFormatter;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class FeedGenerator implements Command {
+final class FeedGenerator implements Command {
 
     /**
      * Publishing date format.
@@ -158,7 +158,7 @@ class FeedGenerator implements Command {
                 new FeedItem(
                     page.getTitle(),
                     page.getUri().toString(),
-                    StringEscapeUtils.escapeXml(page.getDescription()),
+                    StringEscape.escapeXml(page.getDescription()),
                     formatTimestamp(page.getPublishingDate()),
                     formatDcDate(page.getPublishingDate())));
         }

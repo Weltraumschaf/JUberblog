@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.guava.Lists;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
@@ -32,7 +33,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 

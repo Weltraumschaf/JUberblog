@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.MarkdownFilter;
 import de.weltraumschaf.juberblog.template.Layout;
@@ -18,7 +19,6 @@ import de.weltraumschaf.juberblog.template.Template;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Implements the base of all formatters.

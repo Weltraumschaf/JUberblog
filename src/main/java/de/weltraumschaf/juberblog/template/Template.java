@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.template;
 
 import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.filter.Filter;
 import de.weltraumschaf.juberblog.filter.FilterChain;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**

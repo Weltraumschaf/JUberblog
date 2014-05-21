@@ -11,13 +11,13 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Formats a site map to a string.

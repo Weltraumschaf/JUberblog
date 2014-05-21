@@ -11,15 +11,15 @@
  */
 package de.weltraumschaf.juberblog.files;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.io.File;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Accept Markdown files.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class MarkdownFilenameFilter extends BaseFilenameFilter {
+final class MarkdownFilenameFilter extends BaseFilenameFilter {
 
     /**
      * File extension of Markdown files.

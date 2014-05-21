@@ -13,9 +13,9 @@
 package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  {
+public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  {
 
     /**
      * Log facility.

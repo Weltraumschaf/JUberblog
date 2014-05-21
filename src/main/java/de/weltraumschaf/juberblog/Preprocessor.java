@@ -13,10 +13,10 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.model.MetaData;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Preprocessor {
+public final class Preprocessor {
 
     /**
      * Log facility.

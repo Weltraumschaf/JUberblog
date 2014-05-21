@@ -12,8 +12,8 @@
 package de.weltraumschaf.juberblog.model;
 
 import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.commons.validate.Validate;
 import java.util.Map;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Contains meta data found by {@link de.weltraumschaf.juberblog.Preprocessor} in a data file.

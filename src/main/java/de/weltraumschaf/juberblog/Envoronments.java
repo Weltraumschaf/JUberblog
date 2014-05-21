@@ -12,7 +12,7 @@
 
 package de.weltraumschaf.juberblog;
 
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Provides instances to access environment variables.

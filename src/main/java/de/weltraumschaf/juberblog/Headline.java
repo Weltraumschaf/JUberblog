@@ -12,14 +12,14 @@
 
 package de.weltraumschaf.juberblog;
 
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Parses the first headline of a given Markdown string.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Headline {
+public final class Headline {
 
     /**
      * Markdown head lines start with this character.

@@ -12,8 +12,8 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.commons.guava.Objects;
+import de.weltraumschaf.commons.validate.Validate;
 import java.util.Locale;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Models a site map URL.

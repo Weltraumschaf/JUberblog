@@ -12,15 +12,15 @@
 
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.util.Arrays;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Abstraction for CLI arguments.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Arguments {
+public final class Arguments {
 
     /**
      * The arguments.

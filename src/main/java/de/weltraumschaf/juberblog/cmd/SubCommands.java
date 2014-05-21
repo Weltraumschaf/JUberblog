@@ -17,10 +17,10 @@ import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Available sub commands.

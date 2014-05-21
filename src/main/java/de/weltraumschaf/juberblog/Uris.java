@@ -12,16 +12,16 @@
 
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Provides URIs based on a base URI.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Uris {
+public final class Uris {
 
     /**
      * Name of sites sub directory.

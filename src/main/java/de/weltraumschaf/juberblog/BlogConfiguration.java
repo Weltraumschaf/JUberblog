@@ -11,13 +11,13 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Blog configuration.
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class BlogConfiguration {
+public final class BlogConfiguration {
 
     /**
      * To signal true in configuration.

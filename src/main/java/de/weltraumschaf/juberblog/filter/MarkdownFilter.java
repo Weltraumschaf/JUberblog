@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.filter;
 
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 import org.pegdown.PegDownProcessor;
 
 /**

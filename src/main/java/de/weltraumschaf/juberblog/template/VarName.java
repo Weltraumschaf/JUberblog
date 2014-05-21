@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.template;
 
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Common template variable names.

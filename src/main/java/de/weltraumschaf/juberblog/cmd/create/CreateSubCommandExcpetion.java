@@ -12,14 +12,14 @@
 
 package de.weltraumschaf.juberblog.cmd.create;
 
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * If anything goes wrong during publishing.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class CreateSubCommandExcpetion extends Exception {
+public final class CreateSubCommandExcpetion extends Exception {
 
     /**
      * Convenience constructor.

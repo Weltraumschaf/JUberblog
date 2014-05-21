@@ -12,7 +12,7 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.commons.guava.Objects;
-import org.apache.commons.lang3.Validate;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Models a RSS feed item.

@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.template;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -18,7 +19,6 @@ import freemarker.template.TemplateExceptionHandler;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**

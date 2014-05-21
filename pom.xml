@@ -89,7 +89,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
-        <dependency.commons.version>1.0.0-alpha</dependency.commons.version>
+        <dependency.commons.version>1.0.0-SNAPSHOT</dependency.commons.version>
     </properties>
 
     <prerequisites>
@@ -105,6 +105,16 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>guava</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>string</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>validate</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>
         <dependency>

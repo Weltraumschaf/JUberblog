@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.model;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.Preprocessor;
@@ -20,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Represents a data file.

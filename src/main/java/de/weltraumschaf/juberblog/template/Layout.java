@@ -11,12 +11,12 @@
  */
 package de.weltraumschaf.juberblog.template;
 
+import de.weltraumschaf.commons.validate.Validate;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Extends the {@link Template template} to provide a two step layout.

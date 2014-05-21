@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import freemarker.template.Version;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Contains global constants.

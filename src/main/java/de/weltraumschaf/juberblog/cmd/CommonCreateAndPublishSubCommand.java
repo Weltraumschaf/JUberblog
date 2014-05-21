@@ -13,12 +13,12 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import java.io.IOException;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
