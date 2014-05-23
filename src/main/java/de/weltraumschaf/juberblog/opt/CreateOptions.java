@@ -21,15 +21,30 @@ import com.beust.jcommander.Parameter;
 public class CreateOptions extends CreateAndPublishOptions {
 
     /**
+     * Draft flag.
+     */
+    @Parameter(names = {"-d", "--draft" }, description = "Create site/post as draft.")
+    private boolean draft;
+
+    /**
      * Site flag.
      */
-    @Parameter(names = {"-s", "--site" }, description = "Create site draft.")
+    @Parameter(names = {"-s", "--site" }, description = "Create site.")
     private boolean site;
     /**
      * Title argument.
      */
     @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
     private String title = "";
+
+    /**
+     * Whether to create a draft.
+     *
+     * @return {@code true} for draft, {@code false} for not
+     */
+    public boolean isDraft() {
+        return draft;
+    }
 
     /**
      * Whether to create a site or a post.

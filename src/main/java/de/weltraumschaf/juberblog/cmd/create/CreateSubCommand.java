@@ -45,7 +45,11 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
 
     @Override
     public void run() {
-        LOG.debug("create");
+        if (options.isSite()) {
+            createSite();
+        } else {
+            createPost();
+        }
     }
 
     @Override
@@ -57,6 +61,26 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
     @Override
     public CreateOptions getOptions() {
         return options;
+    }
+
+    private void createSite() {
+        final String title = options.getTitle();
+
+        if (options.isDraft()) {
+            io.println(String.format("Create site draft '%s'...", title));
+        } else {
+            io.println(String.format("Create site '%s'...", title));
+        }
+    }
+
+    private void createPost() {
+        final String title = options.getTitle();
+
+        if (options.isDraft()) {
+            io.println(String.format("Create post draft '%s'...", title));
+        } else {
+            io.println(String.format("Create post '%s'...", title));
+        }
     }
 
 }
