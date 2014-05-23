@@ -54,7 +54,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     /**
      * Prefix to strip of from resource name.
      */
-    private static final String PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();
+    private static final String STRIPPED_PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();
     /**
      * Command line options.
      */
@@ -102,7 +102,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
                 final String scaffold = paths[1];
                 final Path dir = fs.getPath(scaffold);
-                Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), PREFIX));
+                Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX));
             }
         } catch (IOException ex) {
             io.errorln("Can't copy scaffold: " + ex.getMessage());
@@ -174,9 +174,9 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
          * Dedicated constructor.
          *
          * @param targetDir must not be {@code null}, must be directory, must exist
-         * @param prefix must not be {@code null}
+         * @param prefixToStrip must not be {@code null}
          */
-        public CopyDirectoryVisitor(final Path targetDir, final String prefix) {
+        public CopyDirectoryVisitor(final Path targetDir, final String prefixToStrip) {
             super();
             Validate.notNull(targetDir, "Target dir must not be null!");
 
@@ -189,8 +189,8 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             }
 
             this.targetDir = targetDir;
-            Validate.notNull(prefix, "Prefix must not be null!");
-            this.prefix = prefix;
+            Validate.notNull(prefixToStrip, "Prefix must not be null!");
+            this.prefix = prefixToStrip;
         }
 
         @Override
