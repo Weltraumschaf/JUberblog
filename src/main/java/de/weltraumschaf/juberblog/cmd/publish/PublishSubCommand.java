@@ -25,9 +25,11 @@ import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
 
 /**
- * PublishSubCommand all sites from data directory.
+ * Publish all sites/posts from data directory.
  *
- * TODO - create index - create sitemap.xml - create feed xml
+ * TODO create index
+ * TODO create sitemap.xml
+ * TODO create feed xml
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -77,11 +79,13 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
         pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");
         watch.start();
+
         try {
             pub.execute();
         } catch (PublishingSubCommandExcpetion ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Error while publishing files: " + ex.getMessage(), ex);
         }
+
         watch.stop();
         LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }

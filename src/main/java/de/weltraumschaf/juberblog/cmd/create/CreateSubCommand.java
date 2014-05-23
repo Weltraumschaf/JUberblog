@@ -19,7 +19,7 @@ import de.weltraumschaf.juberblog.opt.CreateOptions;
 import org.apache.log4j.Logger;
 
 /**
- * Creates a post or site draft.
+ * Creates a post or site optionally as draft.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
