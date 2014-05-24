@@ -13,7 +13,6 @@ package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
@@ -40,12 +39,12 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
+final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
 
     /**
      * Log facility.
      */
-    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
+    private static final Logger LOG = Logger.getLogger(InstallSubCommand.class);
     /**
      * Location of the scaffold directory with all default files and directories.
      */

@@ -41,7 +41,7 @@ import org.joda.time.DateTime;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class Publisher implements Command {
+final class Publisher implements Command {
 
     /**
      * Log facility.

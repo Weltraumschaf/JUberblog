@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  {
+final class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  {
 
     /**
      * Log facility.
