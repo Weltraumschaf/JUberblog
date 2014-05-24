@@ -12,9 +12,12 @@
 package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.string.StringEscape;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.time.TimeProvider;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -113,7 +116,14 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private String createFileNameFromTitle(final String title) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    String createFileNameFromTitle(final String title, final TimeProvider time) {
+        final StringBuilder buffer = new StringBuilder();
+
+        buffer.append(Validate.notNull(time).nowAsString())
+              .append('_')
+              .append(StringEscape.escapeFileName(Validate.notEmpty(title)))
+              .append(".md");
+
+        return buffer.toString();
     }
 }
