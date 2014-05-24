@@ -55,7 +55,7 @@ abstract class BaseFormatter implements HtmlFormatter {
     /**
      * Markdown to format.
      */
-    private String markdown;
+    private final String markdown;
 
     /**
      * Dedicated constructor.

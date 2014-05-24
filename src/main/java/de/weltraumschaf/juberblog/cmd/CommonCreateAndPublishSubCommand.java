@@ -18,7 +18,10 @@ import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
+import de.weltraumschaf.juberblog.template.Configurations;
+import freemarker.template.Configuration;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
@@ -41,6 +44,10 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      * Command line options.
      */
     private O options;
+    /**
+     * Template configuration.
+     */
+    private Configuration templateConfig;
 
     /**
      * Dedicated constructor.
@@ -56,6 +63,12 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
         super.init();
         loadBlogConfiguration();
         loadDirectories();
+
+        try {
+            templateConfig = Configurations.forProduction(getDirectories().templates().toString());
+        } catch (final IOException | URISyntaxException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
+        }
     }
 
     /**
@@ -81,7 +94,6 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      * @return never {@literal null}
      */
     protected BlogConfiguration getBlogConfiguration() {
-        Validate.notNull(blogConfiguration, "Blog configuration must not be null!");
         return blogConfiguration;
     }
 
@@ -112,6 +124,10 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
     @Override
     public O getOptions() {
         return options;
+    }
+
+    protected Configuration getTemplateConfig() {
+        return templateConfig;
     }
 
 }

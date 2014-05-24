@@ -18,10 +18,6 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
-import de.weltraumschaf.juberblog.template.Configurations;
-import freemarker.template.Configuration;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
 
 /**
@@ -47,10 +43,6 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
      * Command line options.
      */
     private PublishOptions options;
-    /**
-     * Template configuration.
-     */
-    private Configuration templateConfig;
 
     /**
      * Dedicated constructor.
@@ -62,19 +54,9 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
     }
 
     @Override
-    protected void init() throws ApplicationException {
-        super.init();
-        try {
-            templateConfig = Configurations.forProduction(getDirectories().templates().toString());
-        } catch (final IOException | URISyntaxException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
-        }
-    }
-
-    @Override
     public void run() throws ApplicationException {
         watch.reset();
-        final Publisher pub = new Publisher(getDirectories(), templateConfig, getBlogConfiguration().getBaseUri());
+        final Publisher pub = new Publisher(getDirectories(), getTemplateConfig(), getBlogConfiguration().getBaseUri());
         pub.setPurge(getOptions().isPurge());
         pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");

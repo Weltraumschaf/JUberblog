@@ -9,13 +9,15 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
+import de.weltraumschaf.juberblog.template.Template;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.apache.log4j.Logger;
 
 /**
@@ -23,8 +25,12 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions>  {
+public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<CreateOptions> {
 
+    /**
+     * Template for XML.
+     */
+    private static final String TEMPLATE = "post_or_site.md.ftl";
     /**
      * Log facility.
      */
@@ -41,31 +47,73 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
 
     @Override
     public void run() {
-        if (getOptions().isSite()) {
-            createSite();
-        } else {
-            createPost();
+        final String title = getOptions().getTitle().trim();
+
+        if (title.isEmpty()) {
+            io.errorln("Empty title not allowed!");
+            return; // TODO Throw application exception with exit code.
         }
+
+        try {
+            final Template tpl = new Template(getTemplateConfig(), TEMPLATE);
+            tpl.assignVariable("title", title);
+            final String content = tpl.render();
+
+            if (getOptions().isSite()) {
+                createSite(content);
+            } else {
+                createPost(content);
+            }
+        } catch (final IOException ex) {
+            io.errorln("Can't read template to create post/site!");
+            return; // TODO Throw application exception with exit code.
+        } catch (final TemplateException ex) {
+            io.errorln("Can't render template to create post/site!");
+            return; // TODO Throw application exception with exit code.
+        }
+
+        io.println("Done :)");
     }
 
-    private void createSite() {
+    private void createSite(final String content) {
         final String title = getOptions().getTitle();
+        final Path baseDir;
 
         if (getOptions().isDraft()) {
             io.println(String.format("Create site draft '%s'...", title));
+            baseDir = getDirectories().dataDraftSites();
         } else {
             io.println(String.format("Create site '%s'...", title));
+            baseDir = getDirectories().dataSites();
         }
+
+        createFile(createFileName(baseDir, title), content);
     }
 
-    private void createPost() {
+    private void createPost(final String content) {
         final String title = getOptions().getTitle();
+        final Path baseDir;
 
         if (getOptions().isDraft()) {
             io.println(String.format("Create post draft '%s'...", title));
+            baseDir = getDirectories().dataDraftPosts();
         } else {
             io.println(String.format("Create post '%s'...", title));
+            baseDir = getDirectories().dataPosts();
         }
+
+        createFile(createFileName(baseDir, title), content);
     }
 
+    private void createFile(final Path fileName, final String content) {
+        io.println(String.format("Write file '%s'...", fileName));
+    }
+
+    private Path createFileName(final Path Path, final String title) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private String createFileNameFromTitle(final String title) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
