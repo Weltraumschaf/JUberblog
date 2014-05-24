@@ -29,10 +29,6 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      * Log facility.
      */
     private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
-    /**
-     * Command line options.
-     */
-    private CreateOptions options;
 
     /**
      * Dedicated constructor.
@@ -45,28 +41,17 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
 
     @Override
     public void run() {
-        if (options.isSite()) {
+        if (getOptions().isSite()) {
             createSite();
         } else {
             createPost();
         }
     }
 
-    @Override
-    public void setOptions(final CreateOptions opt) {
-        Validate.notNull(opt, "Options must not be null!");
-        options = opt;
-    }
-
-    @Override
-    public CreateOptions getOptions() {
-        return options;
-    }
-
     private void createSite() {
-        final String title = options.getTitle();
+        final String title = getOptions().getTitle();
 
-        if (options.isDraft()) {
+        if (getOptions().isDraft()) {
             io.println(String.format("Create site draft '%s'...", title));
         } else {
             io.println(String.format("Create site '%s'...", title));
@@ -74,9 +59,9 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
     }
 
     private void createPost() {
-        final String title = options.getTitle();
+        final String title = getOptions().getTitle();
 
-        if (options.isDraft()) {
+        if (getOptions().isDraft()) {
             io.println(String.format("Create post draft '%s'...", title));
         } else {
             io.println(String.format("Create post '%s'...", title));

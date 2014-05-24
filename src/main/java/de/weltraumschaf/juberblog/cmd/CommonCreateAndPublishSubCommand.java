@@ -24,10 +24,10 @@ import java.io.IOException;
  * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
  * and {@link de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand}.
  *
- * @param <T> type of options
+ * @param <O> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublishOptions> extends BaseSubCommand<T> {
+public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublishOptions> extends BaseSubCommand<O> {
 
     /**
      * Loaded from file.
@@ -37,6 +37,10 @@ public abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublis
      * Directories of the blog.
      */
     private Directories directories;
+    /**
+     * Command line options.
+     */
+    private O options;
 
     /**
      * Dedicated constructor.
@@ -96,6 +100,18 @@ public abstract class CommonCreateAndPublishSubCommand<T extends CreateAndPublis
     protected Directories getDirectories() {
         Validate.notNull(directories, "Directories must not be null!");
         return directories;
+    }
+
+
+    @Override
+    public void setOptions(final O opt) {
+        Validate.notNull(opt, "Options must not be null!");
+        options = opt;
+    }
+
+    @Override
+    public O getOptions() {
+        return options;
     }
 
 }
