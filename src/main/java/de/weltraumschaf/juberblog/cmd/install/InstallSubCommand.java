@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
+public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
 
     /**
      * Log facility.

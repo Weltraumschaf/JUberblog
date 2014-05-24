@@ -12,9 +12,9 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
-import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
