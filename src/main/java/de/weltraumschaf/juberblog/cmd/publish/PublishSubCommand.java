@@ -75,7 +75,7 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
     public void run() throws ApplicationException {
         watch.reset();
         final Publisher pub = new Publisher(getDirectories(), templateConfig, getBlogConfiguration().getBaseUri());
-        pub.setPurga(getOptions().isPurge());
+        pub.setPurge(getOptions().isPurge());
         pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");
         watch.start();

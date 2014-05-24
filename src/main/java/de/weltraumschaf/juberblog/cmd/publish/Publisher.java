@@ -138,7 +138,7 @@ final class Publisher implements Command {
         return sites;
     }
 
-    public void setPurga(boolean purga) {
+    public void setPurge(boolean purga) {
         this.purge = purga;
     }
 
