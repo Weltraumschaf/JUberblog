@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 public class CreateAndPublishOptionsTest extends CommonOptionsTest {
 
     public CreateAndPublishOptionsTest() {
-        super(new CreateAndPublishOptions() { });
+        super(new CreateAndPublishOptions(false, false, ""){ });
     }
 
     protected CreateAndPublishOptionsTest(CommonOptions sut) {

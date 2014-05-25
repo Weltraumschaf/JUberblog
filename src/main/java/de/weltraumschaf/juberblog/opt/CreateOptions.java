@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Options for create commands.
@@ -35,7 +36,18 @@ public class CreateOptions extends CreateAndPublishOptions {
      * Title argument.
      */
     @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
-    private String title = "";
+    private String title;
+
+    public CreateOptions() {
+        this(false, false, "", false, false, "");
+    }
+
+    public CreateOptions(final boolean help, final boolean verbose, final String configurationFile, final boolean draft, final boolean site, final String title) {
+        super(help, verbose, configurationFile);
+        this.draft = draft;
+        this.site = site;
+        this.title = Validate.notNull(title, "Parameter 'title' must not be null!");
+    }
 
     /**
      * Whether to create a draft.

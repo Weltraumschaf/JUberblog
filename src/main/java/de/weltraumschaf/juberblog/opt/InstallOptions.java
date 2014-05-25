@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Options for install commands.
@@ -24,7 +25,17 @@ public class InstallOptions extends CommonOptions {
      * Where to install the blog scaffold.
      */
     @Parameter(names = {"-l", "--location" }, description = "Install location of the blog scaffold.")
-    private String location = "";
+    private String location;
+
+    public InstallOptions() {
+        this(false, false, "");
+    }
+
+    public InstallOptions(final boolean help, final boolean verbose, final String location) {
+        super(help, verbose);
+        this.location = Validate.notNull(location, "Parameter 'location' must not be null!");
+    }
+
 
     /**
      * Get install locations.

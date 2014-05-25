@@ -33,8 +33,7 @@ public class CommonOptionsTest {
     protected final CommonOptions sut;
 
     public CommonOptionsTest() {
-        this(new CommonOptions() {
-        });
+        this(new CommonOptions(false, false) {});
     }
 
     protected CommonOptionsTest(final CommonOptions sut) {

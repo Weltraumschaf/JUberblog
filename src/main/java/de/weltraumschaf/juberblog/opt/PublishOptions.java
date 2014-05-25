@@ -23,18 +23,29 @@ public class PublishOptions extends CreateAndPublishOptions {
     /**
      * Purge flag.
      */
-    @Parameter(names = {"-p", "--purge" }, description = "Regenerate all blog posts and sites.")
+    @Parameter(names = {"-p", "--purge"}, description = "Regenerate all blog posts and sites.")
     private boolean purge;
     /**
      * Quiet flag.
      */
-    @Parameter(names = {"-q", "--quiet" }, description = "Be quiet and don't post to social networks.")
+    @Parameter(names = {"-q", "--quiet"}, description = "Be quiet and don't post to social networks.")
     private boolean quiet;
     /**
      * Site flag.
      */
-    @Parameter(names = {"-s", "--sites" }, description = "Publish sites.")
+    @Parameter(names = {"-s", "--sites"}, description = "Publish sites.")
     private boolean sites;
+
+    public PublishOptions() {
+        this(false, false, "", false, false, false);
+    }
+
+    public PublishOptions(final boolean help, final boolean verbose, final String configurationFile, final boolean purge, final boolean quiet, final boolean sites) {
+        super(help, verbose, configurationFile);
+        this.purge = purge;
+        this.quiet = quiet;
+        this.sites = sites;
+    }
 
     /**
      * Whether to purge all published files.
@@ -66,7 +77,7 @@ public class PublishOptions extends CreateAndPublishOptions {
     @Override
     public String toString() {
         return "PublishOptions{" + super.toString()
-            + ", purge: " + purge + ", quiet: " + quiet + ", sites: " + sites  + '}';
+                + ", purge: " + purge + ", quiet: " + quiet + ", sites: " + sites + '}';
     }
 
 }

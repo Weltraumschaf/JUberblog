@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Common options for create and publish commands.
@@ -26,6 +27,11 @@ public abstract class CreateAndPublishOptions extends CommonOptions {
      */
     @Parameter(names = {"-c", "--config" }, description = "Config file to use.")
     private String configurationFile = "";
+
+    public CreateAndPublishOptions(boolean help, boolean verbose, final String configurationFile) {
+        super(help, verbose);
+        this.configurationFile = Validate.notNull(configurationFile, "Parameter 'configurationFile' must not be null!");
+    }
 
     /**
      * Get configuration file.

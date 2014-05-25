@@ -48,12 +48,14 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     /**
      * Location of the scaffold directory with all default files and directories.
      */
-    private static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()
-                                       .replace(".", Constants.DIR_SEP.toString());
+    static final String SCAFFOLD = Constants.SCAFFOLD_PACKAGE.toString()
+            .replace(".", Constants.DIR_SEP.toString());
     /**
      * Prefix to strip of from resource name.
      */
     private static final String STRIPPED_PREFIX = Constants.DIR_SEP.toString() + SCAFFOLD + Constants.DIR_SEP.toString();
+    private SourceJarProvider srcJar = new DefaultSourceJarProvider();
+
     /**
      * Command line options.
      */
@@ -68,8 +70,16 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         super(io);
     }
 
+    void setSrcJar(final SourceJarProvider srcJar) {
+        this.srcJar = Validate.notNull(srcJar);
+    }
+
     @Override
     protected void run() throws ApplicationException {
+        if (getOptions().isHelp()) {
+            return;
+        }
+
         final String location = options.getLocation().trim();
         final File target = validateLocation(location);
         io.println(String.format("Install scaffold to '%s'...", location));
@@ -94,19 +104,23 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
      */
     private void copyFiles(final File target) {
         Validate.notNull(target, "Target must not be null!");
-        final String[] paths = getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString().split("!");
-        final String jarFile = paths[0];
+        final SourceJar src = SourceJar.newSourceJar(srcJar.getAbsolutePath());
 
         try {
-            try (FileSystem fs = FileSystems.newFileSystem(URI.create(jarFile), Maps.<String, String>newHashMap())) {
-                final String scaffold = paths[1];
+            try (FileSystem fs = createJarFileSystem(URI.create(src.getJarLocation()))) {
+                final String scaffold = src.getResourceLocation();
                 final Path dir = fs.getPath(scaffold);
-                Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX));
+                Files.walkFileTree(dir,
+                        new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, getOptions().isVerbose()));
             }
         } catch (IOException ex) {
             io.errorln("Can't copy scaffold: " + ex.getMessage());
             io.printStackTrace(ex);
         }
+    }
+
+    private FileSystem createJarFileSystem(final URI jarFileLocation) throws IOException {
+        return FileSystems.newFileSystem(jarFileLocation, Maps.<String, String>newHashMap());
     }
 
     /**
@@ -123,25 +137,25 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
 
         if (location.isEmpty()) {
             throw new ApplicationException(
-                ExitCodeImpl.MISSING_ARGUMENT,
-                "Empty location given! Please specify a valid direcotry as installation location.",
-                null);
+                    ExitCodeImpl.MISSING_ARGUMENT,
+                    "Empty location given! Please specify a valid direcotry as installation location.",
+                    null);
         }
 
         final File target = new File(location);
 
         if (!target.exists()) {
             throw new ApplicationException(
-                ExitCodeImpl.BAD_ARGUMENT,
-                String.format("Install location '%s' does not exist!", location),
-                null);
+                    ExitCodeImpl.BAD_ARGUMENT,
+                    String.format("Install location '%s' does not exist!", location),
+                    null);
         }
 
         if (!target.isDirectory()) {
             throw new ApplicationException(
-                ExitCodeImpl.BAD_ARGUMENT,
-                String.format("Install location '%s' is not a directory!", location),
-                null);
+                    ExitCodeImpl.BAD_ARGUMENT,
+                    String.format("Install location '%s' is not a directory!", location),
+                    null);
         }
 
         return target;
@@ -168,6 +182,8 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
          * Path prefix removed from package source file name.
          */
         private final String prefix;
+        private final IO io;
+        private final boolean verbose;
 
         /**
          * Dedicated constructor.
@@ -175,7 +191,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
          * @param targetDir must not be {@code null}, must be directory, must exist
          * @param prefixToStrip must not be {@code null}
          */
-        public CopyDirectoryVisitor(final Path targetDir, final String prefixToStrip) {
+        public CopyDirectoryVisitor(final Path targetDir, final String prefixToStrip, final IO io, final boolean verbose) {
             super();
             Validate.notNull(targetDir, "Target dir must not be null!");
 
@@ -190,6 +206,8 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             this.targetDir = targetDir;
             Validate.notNull(prefixToStrip, "Prefix must not be null!");
             this.prefix = prefixToStrip;
+            this.io = Validate.notNull(io);
+            this.verbose = verbose;
         }
 
         @Override
@@ -205,7 +223,10 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             final Path target = targetDir.resolve(baseName(dir));
 
             if (!Files.exists(target)) {
-                LOG.debug(String.format("Create directory %s...", dir));
+                if (verbose) {
+                    io.println(String.format("Create directory %s", target));
+                }
+
                 Files.createDirectory(target);
             }
 
@@ -216,8 +237,13 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
             final FileVisitResult result = super.visitFile(file, attrs);
             final Path target = targetDir.resolve(baseName(file));
-            LOG.debug(String.format("Copy file %s to %s...", file, target));
+
+            if (verbose) {
+                io.println(String.format("Copy file %s to %s", file, target));
+            }
+
             Files.copy(file, target, COPY_OPTIONS);
+
             return result;
         }
 
@@ -232,5 +258,57 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
             return file.toString().replace(prefix, "");
         }
 
+    }
+
+    /**
+     * Produces something like {@literal jar:file:/Users/sxs/src/java/JUberblog/bin/juberblog.jar!/de/weltraumschaf/juberblog/scaffold}.
+     */
+    interface SourceJarProvider {
+        String getAbsolutePath();
+    }
+
+    private static final class DefaultSourceJarProvider implements SourceJarProvider {
+
+        @Override
+        public String getAbsolutePath() {
+            return getClass().getResource(Constants.DIR_SEP.toString() + SCAFFOLD).toString();
+        }
+    }
+
+    static final class SourceJar {
+        private final String jarLocation;
+        private final String resourceLocation;
+
+        SourceJar(final String jarLocation, final String resourceLocation) {
+            super();
+            this.jarLocation = Validate.notEmpty(jarLocation);
+            this.resourceLocation = Validate.notEmpty(resourceLocation);
+        }
+
+        String getJarLocation() {
+            return jarLocation;
+        }
+
+        String getResourceLocation() {
+            return resourceLocation;
+        }
+
+        static SourceJar newSourceJar(final String path) {
+            Validate.notEmpty(path, "Parameter 'path' must not be null or empty!");
+
+            if (!path.contains("!")) {
+                throw new IllegalArgumentException("Path does not contain '!'!");
+            }
+
+            final String[] paths = path.split("!");
+
+            if (paths.length < 2) {
+                throw new IllegalArgumentException("The string after the '!' must not be null or empty!");
+            }
+
+            return new SourceJar(
+                Validate.notEmpty(paths[0], "The string before the '!' must not be null or empty!"),
+                Validate.notEmpty(paths[1], "The string after the '!' must not be null or empty!"));
+        }
     }
 }

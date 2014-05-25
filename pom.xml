@@ -114,6 +114,12 @@
         </dependency>
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>testing</artifactId>
+            <version>${dependency.commons.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>time</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>

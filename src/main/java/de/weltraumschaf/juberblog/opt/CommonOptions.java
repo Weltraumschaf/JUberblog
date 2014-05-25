@@ -19,7 +19,7 @@ import com.beust.jcommander.Parameter;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class CommonOptions implements Options {
+public abstract class CommonOptions implements Options {
 
     /**
      * Help flag.
@@ -31,6 +31,18 @@ abstract class CommonOptions implements Options {
      */
     @Parameter(names = {"-v", "--verbose" }, description = "Tell you more.")
     private boolean verbose;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     */
+    public CommonOptions(final boolean help, final boolean verbose) {
+        super();
+        this.help = help;
+        this.verbose = verbose;
+    }
 
     @Override
     public boolean isHelp() {
