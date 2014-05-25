@@ -14,12 +14,14 @@ package de.weltraumschaf.juberblog.cmd.create;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.time.TimeProvider;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.apache.log4j.Logger;
 
@@ -78,7 +80,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         io.println("Done :)");
     }
 
-    private void createSite(final String content) {
+    private void createSite(final String content) throws IOException {
         final String title = getOptions().getTitle();
         final Path baseDir;
 
@@ -90,10 +92,10 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
             baseDir = getDirectories().dataSites();
         }
 
-        createFile(createFileName(baseDir, title), content);
+        writeFile(createPath(baseDir, title, null), content);
     }
 
-    private void createPost(final String content) {
+    private void createPost(final String content) throws IOException {
         final String title = getOptions().getTitle();
         final Path baseDir;
 
@@ -105,15 +107,16 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
             baseDir = getDirectories().dataPosts();
         }
 
-        createFile(createFileName(baseDir, title), content);
+        writeFile(createPath(baseDir, title, null), content);
     }
 
-    private void createFile(final Path fileName, final String content) {
+    void writeFile(final Path fileName, final String content) throws IOException {
         io.println(String.format("Write file '%s'...", fileName));
+        Files.write(fileName, content.getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
 
-    private Path createFileName(final Path Path, final String title) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    Path createPath(final Path baseDir, final String title, final TimeProvider time) {
+        return baseDir.resolve(createFileNameFromTitle(title, time));
     }
 
     String createFileNameFromTitle(final String title, final TimeProvider time) {
