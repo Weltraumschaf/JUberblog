@@ -13,8 +13,10 @@
 package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.time.TimeProvider;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -89,7 +91,7 @@ public class CreateSubCommandTest {
 
         sut.writeFile(fileName, content);
 
-        final Collection<String> readedLines = Files.readAllLines(fileName);
+        final Collection<String> readedLines = Files.readAllLines(fileName, Charset.forName(Constants.DEFAULT_ENCODING.toString()));
         assertThat(readedLines, both(hasSize(1)).and(contains((Object)content)));
     }
 }
