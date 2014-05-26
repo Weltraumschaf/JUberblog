@@ -13,7 +13,7 @@ package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.application.IOStreams;
+import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -49,6 +49,10 @@ public class InstallSubCommandTest {
     @Rule
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
+    //CHECKSTYLE:ON
+    @Rule
+    //CHECKSTYLE:OFF
+    public final CapturedOutput output = new CapturedOutput();
     //CHECKSTYLE:ON
 
     private static final String THIS_CLASS_FILE_NAME = "/de/weltraumschaf/juberblog/cmd/install/InstallSubCommandTest.class";
@@ -127,16 +131,6 @@ public class InstallSubCommandTest {
 
         thrown.expect(ApplicationException.class);
         thrown.expectMessage("Empty location given! Please specify a valid direcotry as installation location.");
-
-        sut.execute();
-    }
-
-    @Test
-    @Ignore
-    public void execute_withHelpOption() throws ApplicationException {
-        final InstallOptions options = new InstallOptions(true, false, tmp.getRoot().getAbsolutePath());
-        assertThat(options.isHelp(), is(true));
-        sut.setOptions(options);
 
         sut.execute();
     }
