@@ -49,6 +49,7 @@ public class InstallSubCommandTest {
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
+
     @Rule
     //CHECKSTYLE:OFF
     public final CapturedOutput output = new CapturedOutput();
@@ -303,64 +304,16 @@ public class InstallSubCommandTest {
         }
     }
 
-    @Test
-    public void SourceJar_newSourceJar_nullAsPath() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("Parameter 'path' must not be null or empty!");
-
-        InstallSubCommand.JarResource.newSourceJar(null);
-    }
-
-    @Test
-    public void SourceJar_newSourceJar_emptyAsPath() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Parameter 'path' must not be null or empty!");
-
-        InstallSubCommand.JarResource.newSourceJar("");
-    }
-
-    @Test
-    public void SourceJar_newSourceJar_noBangInPath() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Path does not contain '!'!");
-
-        InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz");
-    }
-
-    @Test
-    public void SourceJar_newSourceJar_emptyBeforeBangInPath() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The string before the '!' must not be null or empty!");
-
-        InstallSubCommand.JarResource.newSourceJar("!/foo/bar/baz");
-    }
-
-    @Test
-    public void SourceJar_newSourceJar_emptyAfterBangInPath() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The string after the '!' must not be null or empty!");
-
-        InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz!");
-    }
-
-    @Test
-    public void SourceJar_newSourceJar() {
-        final InstallSubCommand.JarResource src = InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz!/snafu/bla/blub");
-
-        assertThat(src.getJarLocation(), is(equalTo("/foo/bar/baz")));
-        assertThat(src.getResourceLocation(), is(equalTo("/snafu/bla/blub")));
-    }
-
-    private InstallSubCommand.SourceJarProvider createJarProvider() {
+    private Scaffold.SourceJarProvider createJarProvider() {
 
         final URL uri = getClass().getResource(THIS_CLASS_FILE_NAME);
         final String baseDir = uri.toString().replace(TARGET_DIR_TO_REMOVE + THIS_CLASS_FILE_NAME, "");
 
-        return new InstallSubCommand.SourceJarProvider() {
+        return new Scaffold.SourceJarProvider() {
 
             @Override
             public String getAbsolutePath() {
-                return String.format("jar:%s%s!/%s", baseDir, FIXTURE_JAR, InstallSubCommand.SCAFFOLD);
+                return String.format("jar:%s%s!/%s", baseDir, FIXTURE_JAR, Scaffold.RESOURCE_LOCATION);
             }
 
         };
