@@ -55,9 +55,6 @@ public class InstallSubCommandTest {
     public final CapturedOutput output = new CapturedOutput();
     //CHECKSTYLE:ON
 
-    private static final String THIS_CLASS_FILE_NAME = "/de/weltraumschaf/juberblog/cmd/install/InstallSubCommandTest.class";
-    private static final String TARGET_DIR_TO_REMOVE = "/target/test-classes";
-    private static final String FIXTURE_JAR = "/src/test/resources/de/weltraumschaf/juberblog/cmd/install/scaffold-fixture.jar";
     private static final Collection<String> EXPECTED_FILES = Arrays.asList(
             "configuration/configuration.sample.properties",
             "data/drafts/posts/README",
@@ -138,8 +135,7 @@ public class InstallSubCommandTest {
     @Test
     public void execute_withLocationAndVerboseOption() throws ApplicationException {
         final InstallOptions options = createOptionsWithDir(false, true);
-
-        sut.setSrcJar(createJarProvider());
+        sut.setSrcJar(TestingSourceJarProvider.newProvider());
         sut.setOptions(options);
 
         sut.execute();
@@ -289,8 +285,7 @@ public class InstallSubCommandTest {
     @Test
     public void execute_withLocation() throws ApplicationException {
         final InstallOptions options = createOptionsWithDir(false, false);
-
-        sut.setSrcJar(createJarProvider());
+        sut.setSrcJar(TestingSourceJarProvider.newProvider());
         sut.setOptions(options);
 
         sut.execute();
@@ -302,21 +297,6 @@ public class InstallSubCommandTest {
         for (final String path : EXPECTED_FILES) {
             assertThat(installedFiles.contains(new File(tmp.getRoot(), path)), is(true));
         }
-    }
-
-    private Scaffold.SourceJarProvider createJarProvider() {
-
-        final URL uri = getClass().getResource(THIS_CLASS_FILE_NAME);
-        final String baseDir = uri.toString().replace(TARGET_DIR_TO_REMOVE + THIS_CLASS_FILE_NAME, "");
-
-        return new Scaffold.SourceJarProvider() {
-
-            @Override
-            public String getAbsolutePath() {
-                return String.format("jar:%s%s!/%s", baseDir, FIXTURE_JAR, Scaffold.RESOURCE_LOCATION);
-            }
-
-        };
     }
 
     private InstallOptions createOptionsWithDir(final boolean help, final boolean verbose) {
