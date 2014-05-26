@@ -20,12 +20,12 @@ import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.time.Time;
 import de.weltraumschaf.juberblog.time.TimeProvider;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.apache.log4j.Logger;
 
 /**
  * Creates a post or site optionally as draft.
@@ -37,11 +37,8 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
     /**
      * Template for XML.
      */
-    private static final String TEMPLATE = "post_or_site.md.ftl";
-    /**
-     * Log facility.
-     */
-    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);
+    private static final String TEMPLATE = "create/post_or_site.md.ftl";
+    private TimeProvider time = Time.newProvider();
 
     /**
      * Dedicated constructor.
@@ -59,13 +56,8 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
     }
 
     @Override
-    public void run() {
+    public void run() throws ApplicationException {
         final String title = getOptions().getTitle().trim();
-
-        if (title.isEmpty()) {
-            io.errorln("Empty title not allowed!");
-            return; // TODO Throw application exception with exit code.
-        }
 
         try {
             final Template tpl = new Template(getTemplateConfig(), TEMPLATE);
@@ -78,14 +70,18 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
                 createPost(content);
             }
         } catch (final IOException ex) {
-            io.errorln("Can't read template to create post/site!");
-            return; // TODO Throw application exception with exit code.
+            throw new ApplicationException(
+                ExitCodeImpl.FATAL, "Can't read template to create post/site! (" + ex.getMessage() + ')', ex);
         } catch (final TemplateException ex) {
-            io.errorln("Can't render template to create post/site!");
-            return; // TODO Throw application exception with exit code.
+            throw new ApplicationException(
+                ExitCodeImpl.FATAL, "Can't render template to create post/site! (" + ex.getMessage() + ')', ex);
         }
 
         io.println("Done :)");
+    }
+
+    public void setTime(final TimeProvider time) {
+        this.time = Validate.notNull(time, "time");
     }
 
     private void createSite(final String content) throws IOException {
@@ -100,7 +96,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
             baseDir = getDirectories().dataSites();
         }
 
-        writeFile(createPath(baseDir, title, null), content);
+        writeFile(createPath(baseDir, title), content);
     }
 
     private void createPost(final String content) throws IOException {
@@ -115,7 +111,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
             baseDir = getDirectories().dataPosts();
         }
 
-        writeFile(createPath(baseDir, title, null), content);
+        writeFile(createPath(baseDir, title), content);
     }
 
     void writeFile(final Path fileName, final String content) throws IOException {
@@ -123,14 +119,14 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         Files.write(fileName, content.getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
 
-    Path createPath(final Path baseDir, final String title, final TimeProvider time) {
-        return baseDir.resolve(createFileNameFromTitle(title, time));
+    Path createPath(final Path baseDir, final String title) {
+        return baseDir.resolve(createFileNameFromTitle(title));
     }
 
-    String createFileNameFromTitle(final String title, final TimeProvider time) {
+    String createFileNameFromTitle(final String title) {
         final StringBuilder buffer = new StringBuilder();
 
-        buffer.append(Validate.notNull(time).nowAsString())
+        buffer.append(time.nowAsString())
               .append('_')
               .append(StringEscape.escapeFileName(Validate.notEmpty(title)))
               .append(".md");

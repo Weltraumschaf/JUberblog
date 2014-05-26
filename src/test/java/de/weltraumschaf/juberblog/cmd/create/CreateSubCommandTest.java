@@ -15,7 +15,6 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.cmd.install.Scaffold;
-import de.weltraumschaf.juberblog.cmd.install.ScaffoldTest;
 import de.weltraumschaf.juberblog.cmd.install.TestingSourceJarProvider;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.time.TimeProvider;
@@ -31,7 +30,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -59,39 +58,39 @@ public class CreateSubCommandTest {
     private final TimeProvider time = mock(TimeProvider.class);
     private final CreateSubCommand sut = new CreateSubCommand(mock(IO.class));
 
-    @Test(expected = NullPointerException.class)
-    public void createFileNameFromTitle_timeIsNull() {
-        sut.createFileNameFromTitle("foobar", null);
+    @Before
+    public void injectTimeProvider() {
+        sut.setTime(time);
     }
 
     @Test(expected = NullPointerException.class)
     public void createFileNameFromTitle_titleIsNull() {
-        sut.createFileNameFromTitle(null, time);
+        sut.createFileNameFromTitle(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createFileNameFromTitle_titleIsEmpty() {
-        sut.createFileNameFromTitle("", time);
+        sut.createFileNameFromTitle("");
     }
 
     @Test
     public void createFileNameFromTitle() {
         when(time.nowAsString()).thenReturn("1234");
 
-        assertThat(sut.createFileNameFromTitle("This is the title", time),
+        assertThat(sut.createFileNameFromTitle("This is the title"),
                 is(equalTo("1234_This_is_the_title.md")));
     }
 
     @Test(expected = NullPointerException.class)
     public void createPath_baseDirIsNull() {
-        sut.createPath(null, "foobar", time);
+        sut.createPath(null, "foobar");
     }
 
     @Test
     public void createPath() {
         when(time.nowAsString()).thenReturn("1234");
 
-        assertThat(sut.createPath(Paths.get("a"), "This is the title", time),
+        assertThat(sut.createPath(Paths.get("a"), "This is the title"),
                 is(equalTo(Paths.get("a", "1234_This_is_the_title.md"))));
     }
 
@@ -145,11 +144,9 @@ public class CreateSubCommandTest {
     }
 
     @Test
-    @Ignore
     public void execute_createPost() throws ApplicationException, IOException {
         createScaffold();
-
-        final CreateOptions options = new CreateOptions();
+        when(time.nowAsString()).thenReturn("1234");
         sut.setOptions(
             new CreateOptions(
                 false,
@@ -158,7 +155,13 @@ public class CreateSubCommandTest {
                 false,
                 false,
                 "title"));
+
         sut.execute();
+
+        final Path post = tmp.getRoot().toPath().resolve("data/posts/1234_title.md");
+        assertThat(Files.exists(post), is(true));
+        final String content = new String(Files.readAllBytes(post), "utf-8");
+        assertThat(content, is(equalTo("<?juberblog\n    Navi:\n    Description:\n    Keywords:\n?>\n## title")));
     }
 
     private void createScaffold() throws IOException {

@@ -23,7 +23,7 @@ public final class Time {
         throw new UnsupportedOperationException("Do not call by reflection!");
     }
 
-    public TimeProvider newProvider() {
+    public static TimeProvider newProvider() {
         return new DefaultProvider();
     }
 }
