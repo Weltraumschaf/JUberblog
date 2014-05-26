@@ -104,7 +104,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
      */
     private void copyFiles(final File target) {
         Validate.notNull(target, "Target must not be null!");
-        final SourceJar src = SourceJar.newSourceJar(srcJar.getAbsolutePath());
+        final JarResource src = JarResource.newSourceJar(srcJar.getAbsolutePath());
 
         try {
             try (FileSystem fs = createJarFileSystem(URI.create(src.getJarLocation()))) {
@@ -261,12 +261,20 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     }
 
     /**
-     * Produces something like {@literal jar:file:/Users/sxs/src/java/JUberblog/bin/juberblog.jar!/de/weltraumschaf/juberblog/scaffold}.
+     * Provides the {@link #SCAFFOLD scaffold resource path} inside an JAR file.
      */
     interface SourceJarProvider {
+        /**
+         * Produces something like Produces something like {@literal jar:file:/home/foo/JUberblog/bin/juberblog.jar!/de/weltraumschaf/juberblog/scaffold}.
+         *
+         * @return never {@code null} or empty
+         */
         String getAbsolutePath();
     }
 
+    /**
+     * Default provider which gives the final jar's path.
+     */
     private static final class DefaultSourceJarProvider implements SourceJarProvider {
 
         @Override
@@ -275,25 +283,60 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         }
     }
 
-    static final class SourceJar {
+    /**
+     * A JAR resource consists of the absolute path of the JAR file and the location of the resource inside the JAR.
+     */
+    static final class JarResource {
+        /**
+         * Location of the JAR file.
+         */
         private final String jarLocation;
+        /**
+         * Location of resource inside JAR file.
+         */
         private final String resourceLocation;
 
-        SourceJar(final String jarLocation, final String resourceLocation) {
+        /**
+         * Dedicated constructor.
+         *
+         * @param jarLocation must not be {@code null} or empty
+         * @param resourceLocation must not be {@code null} or empty
+         */
+        JarResource(final String jarLocation, final String resourceLocation) {
             super();
             this.jarLocation = Validate.notEmpty(jarLocation);
             this.resourceLocation = Validate.notEmpty(resourceLocation);
         }
 
+        /**
+         * Get the JAR file location.
+         *
+         * @return never {@code null} or empty
+         */
         String getJarLocation() {
             return jarLocation;
         }
 
+        /**
+         * Get the resource location inside JAR.
+         *
+         * @return never {@code null} or empty
+         */
         String getResourceLocation() {
             return resourceLocation;
         }
 
-        static SourceJar newSourceJar(final String path) {
+        /**
+         * Create a resource from a given path.
+         * <p>
+         * A path should have the format:
+         * {@literal jar:file/path/to/jar/file.jar!/package/in/the/jar/File.class}.
+         * </p>
+         *
+         * @param path must not be {@code null} or empty
+         * @return never {@code null}
+         */
+        static JarResource newSourceJar(final String path) {
             Validate.notEmpty(path, "Parameter 'path' must not be null or empty!");
 
             if (!path.contains("!")) {
@@ -306,7 +349,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
                 throw new IllegalArgumentException("The string after the '!' must not be null or empty!");
             }
 
-            return new SourceJar(
+            return new JarResource(
                 Validate.notEmpty(paths[0], "The string before the '!' must not be null or empty!"),
                 Validate.notEmpty(paths[1], "The string after the '!' must not be null or empty!"));
         }

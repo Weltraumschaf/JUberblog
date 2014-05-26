@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -309,7 +308,7 @@ public class InstallSubCommandTest {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("Parameter 'path' must not be null or empty!");
 
-        InstallSubCommand.SourceJar.newSourceJar(null);
+        InstallSubCommand.JarResource.newSourceJar(null);
     }
 
     @Test
@@ -317,7 +316,7 @@ public class InstallSubCommandTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Parameter 'path' must not be null or empty!");
 
-        InstallSubCommand.SourceJar.newSourceJar("");
+        InstallSubCommand.JarResource.newSourceJar("");
     }
 
     @Test
@@ -325,7 +324,7 @@ public class InstallSubCommandTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Path does not contain '!'!");
 
-        InstallSubCommand.SourceJar.newSourceJar("/foo/bar/baz");
+        InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz");
     }
 
     @Test
@@ -333,7 +332,7 @@ public class InstallSubCommandTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The string before the '!' must not be null or empty!");
 
-        InstallSubCommand.SourceJar.newSourceJar("!/foo/bar/baz");
+        InstallSubCommand.JarResource.newSourceJar("!/foo/bar/baz");
     }
 
     @Test
@@ -341,12 +340,12 @@ public class InstallSubCommandTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The string after the '!' must not be null or empty!");
 
-        InstallSubCommand.SourceJar.newSourceJar("/foo/bar/baz!");
+        InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz!");
     }
 
     @Test
     public void SourceJar_newSourceJar() {
-        final InstallSubCommand.SourceJar src = InstallSubCommand.SourceJar.newSourceJar("/foo/bar/baz!/snafu/bla/blub");
+        final InstallSubCommand.JarResource src = InstallSubCommand.JarResource.newSourceJar("/foo/bar/baz!/snafu/bla/blub");
 
         assertThat(src.getJarLocation(), is(equalTo("/foo/bar/baz")));
         assertThat(src.getResourceLocation(), is(equalTo("/snafu/bla/blub")));
