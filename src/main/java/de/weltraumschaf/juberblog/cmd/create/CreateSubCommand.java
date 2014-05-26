@@ -139,7 +139,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
     }
 
     private void validateArguments() throws ApplicationException {
-        if (!getOptions().getTitle().isEmpty()) {
+        if (getOptions().getTitle().isEmpty()) {
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title arguemnt given!");
         }
     }

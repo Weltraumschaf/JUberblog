@@ -127,24 +127,37 @@ public class CreateSubCommandTest {
     }
 
     @Test
-//    @Ignore
     public void execute_notitleGiven() throws ApplicationException, IOException {
         createScaffold();
         // TODO test exit code.
         thrown.expect(ApplicationException.class);
         thrown.expectMessage("No title arguemnt given!");
 
-        sut.setOptions(new CreateOptions(false, false, tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties", false, false, "title"));
+        sut.setOptions(
+            new CreateOptions(
+                false,
+                false,
+                tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties",
+                false,
+                false,
+                ""));
         sut.execute();
     }
 
     @Test
     @Ignore
-    public void execute() throws ApplicationException, IOException {
+    public void execute_createPost() throws ApplicationException, IOException {
         createScaffold();
 
         final CreateOptions options = new CreateOptions();
-        sut.setOptions(options);
+        sut.setOptions(
+            new CreateOptions(
+                false,
+                false,
+                tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties",
+                false,
+                false,
+                "title"));
         sut.execute();
     }
 
