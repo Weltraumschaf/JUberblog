@@ -11,10 +11,12 @@
  */
 package de.weltraumschaf.juberblog.cmd.create;
 
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.template.Template;
@@ -48,6 +50,12 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      */
     public CreateSubCommand(final IO io) {
         super(io);
+    }
+
+    @Override
+    protected void init() throws ApplicationException {
+        super.init();
+        validateArguments();
     }
 
     @Override
@@ -128,5 +136,11 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
               .append(".md");
 
         return buffer.toString();
+    }
+
+    private void validateArguments() throws ApplicationException {
+        if (!getOptions().getTitle().isEmpty()) {
+            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title arguemnt given!");
+        }
     }
 }

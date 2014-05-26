@@ -19,7 +19,7 @@ import java.net.URL;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class TestingSourceJarProvider {
+public final class TestingSourceJarProvider {
 
     /**
      * Absolute class file name.
@@ -41,7 +41,7 @@ final class TestingSourceJarProvider {
      *
      * @return never {@code null}
      */
-    static Scaffold.SourceJarProvider newProvider() {
+    public static Scaffold.SourceJarProvider newProvider() {
         final URL uri = TestingSourceJarProvider.class.getResource(THIS_CLASS_FILE_NAME);
         final String baseDir = uri.toString().replace(TARGET_DIR_TO_REMOVE + THIS_CLASS_FILE_NAME, "");
 

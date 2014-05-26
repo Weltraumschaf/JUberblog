@@ -15,6 +15,9 @@ package de.weltraumschaf.juberblog.cmd.create;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.cmd.install.Scaffold;
+import de.weltraumschaf.juberblog.cmd.install.ScaffoldTest;
+import de.weltraumschaf.juberblog.cmd.install.TestingSourceJarProvider;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.time.TimeProvider;
 import java.io.IOException;
@@ -32,6 +35,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,6 +50,11 @@ public class CreateSubCommandTest {
     @Rule
     //CHECKSTYLE:OFF
     public final TemporaryFolder tmp = new TemporaryFolder();
+    //CHECKSTYLE:ON
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
 
     private final TimeProvider time = mock(TimeProvider.class);
@@ -99,10 +108,50 @@ public class CreateSubCommandTest {
     }
 
     @Test
+    public void execute_noConfigFileGiven() throws ApplicationException {
+        // TODO test exit code.
+        thrown.expect(ApplicationException.class);
+        thrown.expectMessage("No config file argument given!");
+
+        sut.setOptions(new CreateOptions());
+        sut.execute();
+    }
+
+    @Test
+    public void execute_unreadableConfigFileGiven() throws ApplicationException {
+        // TODO test exit code.
+        thrown.expect(ApplicationException.class);
+        thrown.expectMessage("Can't read config file '/foo/bar/baz'!");
+
+        sut.setOptions(new CreateOptions(false, false, "/foo/bar/baz", false, false, "title"));
+        sut.execute();
+    }
+
+    @Test
     @Ignore
-    public void execute() throws ApplicationException {
+    public void execute_notitleGiven() throws ApplicationException, IOException {
+        createScaffold();
+        // TODO test exit code.
+        thrown.expect(ApplicationException.class);
+        thrown.expectMessage("No title arguemnt given!");
+
+        sut.setOptions(new CreateOptions(false, false, tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties", false, false, "title"));
+        sut.execute();
+    }
+
+    @Test
+    @Ignore
+    public void execute() throws ApplicationException, IOException {
+        createScaffold();
+
         final CreateOptions options = new CreateOptions();
         sut.setOptions(options);
         sut.execute();
+    }
+
+    private void createScaffold() throws IOException {
+        final Scaffold scaffold = new Scaffold(mock(IO.class));
+        scaffold.setSrcJar(TestingSourceJarProvider.newProvider());
+        scaffold.copyFiles(tmp.getRoot());
     }
 }

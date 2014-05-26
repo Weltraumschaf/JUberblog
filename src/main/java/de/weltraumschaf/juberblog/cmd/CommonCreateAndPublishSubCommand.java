@@ -22,6 +22,9 @@ import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
@@ -61,6 +64,7 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
     @Override
     protected void init() throws ApplicationException {
         super.init();
+        validateArguments();
         loadBlogConfiguration();
         loadDirectories();
 
@@ -77,7 +81,6 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      * @throws ApplicationException if configuration file can't be loaded
      */
     private void loadBlogConfiguration() throws ApplicationException {
-        // TODO Argument validation.
         try {
             blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());
         } catch (IOException | IllegalArgumentException | NullPointerException ex) {
@@ -128,6 +131,20 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
 
     protected Configuration getTemplateConfig() {
         return templateConfig;
+    }
+
+    private void validateArguments() throws ApplicationException {
+        if (getOptions().getConfigurationFile().isEmpty()) {
+            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No config file argument given!");
+        }
+
+        final Path configFile = Paths.get(getOptions().getConfigurationFile());
+
+        if (!Files.isReadable(configFile)) {
+            throw new ApplicationException(
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format("Can't read config file '%s'!", getOptions().getConfigurationFile()));
+        }
     }
 
 }

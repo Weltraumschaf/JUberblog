@@ -32,7 +32,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class Scaffold {
+public final class Scaffold {
 
     /**
      * Location of the scaffold directory with all default files and directories.
@@ -63,7 +63,7 @@ final class Scaffold {
      * @param io must not be {@code null}
      * @param verbose {@code true} to print verbose messages, else {@code false}
      */
-    Scaffold(final IO io) {
+    public Scaffold(final IO io) {
         super();
         this.io = Validate.notNull(io, "Parameter 'io' mut not be null!");
     }
@@ -82,7 +82,7 @@ final class Scaffold {
      *
      * @param srcJar must not be {@code null}
      */
-    void setSrcJar(final SourceJarProvider srcJar) {
+    public void setSrcJar(final SourceJarProvider srcJar) {
         this.srcJar = Validate.notNull(srcJar);
     }
 
@@ -91,7 +91,7 @@ final class Scaffold {
      *
      * @param target must not be {@code null}
      */
-    void copyFiles(final File target) throws IOException {
+    public void copyFiles(final File target) throws IOException {
         Validate.notNull(target, "Target must not be null!");
         final JarResource src = JarResource.newSourceJar(srcJar.getAbsolutePath());
 
@@ -217,7 +217,7 @@ final class Scaffold {
     /**
      * Provides the {@link #RESOURCE_LOCATION scaffold resource path} inside an JAR file.
      */
-    interface SourceJarProvider {
+    public interface SourceJarProvider {
 
         /**
          * Produces something like Produces something like
