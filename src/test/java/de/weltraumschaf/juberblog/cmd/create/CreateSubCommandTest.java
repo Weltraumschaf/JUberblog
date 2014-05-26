@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.ApplicationException;
@@ -104,7 +103,7 @@ public class CreateSubCommandTest {
         sut.writeFile(fileName, content);
 
         final Collection<String> readedLines = Files.readAllLines(fileName, Charset.forName(Constants.DEFAULT_ENCODING.toString()));
-        assertThat(readedLines, both(hasSize(1)).and(contains((Object)content)));
+        assertThat(readedLines, both(hasSize(1)).and(contains((Object) content)));
     }
 
     @Test
@@ -128,7 +127,7 @@ public class CreateSubCommandTest {
     }
 
     @Test
-    @Ignore
+//    @Ignore
     public void execute_notitleGiven() throws ApplicationException, IOException {
         createScaffold();
         // TODO test exit code.
@@ -153,5 +152,13 @@ public class CreateSubCommandTest {
         final Scaffold scaffold = new Scaffold(mock(IO.class));
         scaffold.setSrcJar(TestingSourceJarProvider.newProvider());
         scaffold.copyFiles(tmp.getRoot());
+
+        final Path config = tmp.getRoot().toPath().resolve("configuration/configuration.sample.properties");
+        final String root = tmp.getRoot().getAbsolutePath();
+        final String content = new String(Files.readAllBytes(config), "utf-8")
+                .replace("/data", root + "/data")
+                .replace("/templates", root + "/templates")
+                .replace("/public", root + "/public");
+        Files.write(config, content.getBytes("utf-8"));
     }
 }
