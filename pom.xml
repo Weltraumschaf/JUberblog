@@ -89,7 +89,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
-        <dependency.commons.version>1.0.0-alpha</dependency.commons.version>
+        <dependency.commons.version>1.0.0-SNAPSHOT</dependency.commons.version>
     </properties>
 
     <prerequisites>
