@@ -55,7 +55,13 @@ public class CreateOptions extends CreateAndPublishOptions {
      * @param site {@code true} to create a site, {@code false} to create a post
      * @param title must not be {@code null}
      */
-    public CreateOptions(final boolean help, final boolean verbose, final String configurationFile, final boolean draft, final boolean site, final String title) {
+    public CreateOptions(
+        final boolean help,
+        final boolean verbose,
+        final String configurationFile,
+        final boolean draft,
+        final boolean site,
+        final String title) {
         super(help, verbose, configurationFile);
         this.draft = draft;
         this.site = site;

@@ -139,7 +139,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      *
      * @param fileName must not be {@code null}
      * @param content must not be {@code null} or empty
-     * @throws IOException
+     * @throws IOException if file can't be written
      */
     void writeFile(final Path fileName, final String content) throws IOException {
         io.println(String.format("Write file '%s'...", fileName));

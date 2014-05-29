@@ -144,8 +144,14 @@ public final class Scaffold {
          *
          * @param targetDir must not be {@code null}, must be directory, must exist
          * @param prefixToStrip must not be {@code null}
+         * @param io used for verbose out
+         * @param verbose whether to be verbose or not
          */
-        public CopyDirectoryVisitor(final Path targetDir, final String prefixToStrip, final IO io, final boolean verbose) {
+        public CopyDirectoryVisitor(
+            final Path targetDir,
+            final String prefixToStrip,
+            final IO io,
+            final boolean verbose) {
             super();
             Validate.notNull(targetDir, "Target dir must not be null!");
 
