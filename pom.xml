@@ -18,7 +18,7 @@
 
     <groupId>de.weltraumschaf</groupId>
     <artifactId>juberblog</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>JUberblog</name>
@@ -59,7 +59,7 @@
         <connection>scm:git:git://github.com/Weltraumschaf/JUberblog</connection>
         <developerConnection>scm:git:git@github.com:Weltraumschaf/JUberblog.git</developerConnection>
         <url>https://github.com/Weltraumschaf/JUberblog.git</url>
-        <tag>0.2.4</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
