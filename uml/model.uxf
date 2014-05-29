@@ -4,8 +4,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>20</x>
-      <y>20</y>
+      <x>30</x>
+      <y>30</y>
       <w>230</w>
       <h>120</h>
     </coordinates>
@@ -22,8 +22,8 @@ isNewPublished(): boolean</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>300</x>
-      <y>20</y>
+      <x>310</x>
+      <y>30</y>
       <w>180</w>
       <h>100</h>
     </coordinates>
@@ -39,8 +39,8 @@ getSlug(): String</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>220</x>
-      <y>40</y>
+      <x>230</x>
+      <y>50</y>
       <w>100</w>
       <h>50</h>
     </coordinates>
@@ -50,19 +50,19 @@ getSlug(): String</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>540</x>
+      <x>550</x>
       <y>40</y>
-      <w>100</w>
-      <h>30</h>
+      <w>170</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>java.io.File</panel_attributes>
+    <panel_attributes>markdown: java.io.File</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>450</x>
-      <y>20</y>
+      <x>460</x>
+      <y>30</y>
       <w>110</w>
       <h>50</h>
     </coordinates>
@@ -72,8 +72,8 @@ getSlug(): String</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>540</x>
-      <y>90</y>
+      <x>550</x>
+      <y>100</y>
       <w>170</w>
       <h>80</h>
     </coordinates>
@@ -88,12 +88,34 @@ getNavi(): String</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>450</x>
-      <y>70</y>
+      <x>460</x>
+      <y>80</y>
       <w>110</w>
-      <h>50</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>30;30;90;30</additional_attributes>
+    <additional_attributes>30;30;90;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>60</x>
+      <y>190</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>html: java.io.File</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>110</x>
+      <y>120</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
   </element>
 </diagram>

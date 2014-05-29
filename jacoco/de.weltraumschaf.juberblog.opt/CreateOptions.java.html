@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">CreateOptions.java</span></div><h1>CreateOptions.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">CreateOptions.java</span></div><h1>CreateOptions.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -12,24 +12,70 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Options for create commands.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="fc" id="L21">public class CreateOptions extends CreateAndPublishOptions {</span>
+public class CreateOptions extends CreateAndPublishOptions {
+
+    /**
+     * Draft flag.
+     */
+    @Parameter(names = {&quot;-d&quot;, &quot;--draft&quot; }, description = &quot;Create site/post as draft.&quot;)
+    private boolean draft;
 
     /**
      * Site flag.
      */
-    @Parameter(names = {&quot;-s&quot;, &quot;--site&quot; }, description = &quot;Create site draft.&quot;)
+    @Parameter(names = {&quot;-s&quot;, &quot;--site&quot; }, description = &quot;Create site.&quot;)
     private boolean site;
     /**
      * Title argument.
      */
-<span class="fc" id="L31">    @Parameter(names = {&quot;-t&quot;, &quot;--title&quot; }, description = &quot;Title of the blog post.&quot;)</span>
-    private String title = &quot;&quot;;
+    @Parameter(names = {&quot;-t&quot;, &quot;--title&quot; }, description = &quot;Title of the blog post.&quot;)
+    private String title;
+
+    /**
+     * Default constructor.
+     */
+    public CreateOptions() {
+<span class="fc" id="L45">        this(false, false, &quot;&quot;, false, false, &quot;&quot;);</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param configurationFile must not be {@code null}
+     * @param draft whether to create a draft or not
+     * @param site {@code true} to create a site, {@code false} to create a post
+     * @param title must not be {@code null}
+     */
+    public CreateOptions(
+        final boolean help,
+        final boolean verbose,
+        final String configurationFile,
+        final boolean draft,
+        final boolean site,
+        final String title) {
+<span class="fc" id="L65">        super(help, verbose, configurationFile);</span>
+<span class="fc" id="L66">        this.draft = draft;</span>
+<span class="fc" id="L67">        this.site = site;</span>
+<span class="fc" id="L68">        this.title = Validate.notNull(title, &quot;Parameter 'title' must not be null!&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Whether to create a draft.
+     *
+     * @return {@code true} for draft, {@code false} for not
+     */
+    public boolean isDraft() {
+<span class="fc" id="L77">        return draft;</span>
+    }
 
     /**
      * Whether to create a site or a post.
@@ -37,7 +83,7 @@ import com.beust.jcommander.Parameter;
      * @return {@code true} for site, {@code false} for post
      */
     public boolean isSite() {
-<span class="fc" id="L40">        return site;</span>
+<span class="fc" id="L86">        return site;</span>
     }
 
     /**
@@ -46,13 +92,13 @@ import com.beust.jcommander.Parameter;
      * @return never {@code null}, maybe empty
      */
     public String getTitle() {
-<span class="fc" id="L49">        return title;</span>
+<span class="fc" id="L95">        return title;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L54">        return &quot;CreateOptions{&quot; + super.toString() + &quot;, site: &quot; + site + &quot;, title: &quot; + title + '}';</span>
+<span class="fc" id="L100">        return &quot;CreateOptions{&quot; + super.toString() + &quot;, site: &quot; + site + &quot;, title: &quot; + title + '}';</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

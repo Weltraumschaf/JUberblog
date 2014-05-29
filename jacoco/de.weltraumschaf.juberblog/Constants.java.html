@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Constants.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Constants.java</span></div><h1>Constants.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -9,47 +9,58 @@
  *
  * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
  */
-
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import freemarker.template.Version;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Contains global constants.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="pc" id="L23">public enum Constants {</span>
+<span class="pc" id="L22">public enum Constants {</span>
 
     /**
      * Used default string encoding.
      */
-<span class="fc" id="L28">    DEFAULT_ENCODING(&quot;UTF-8&quot;),</span>
+<span class="fc" id="L27">    DEFAULT_ENCODING(&quot;UTF-8&quot;),</span>
     /**
      * Used default new line separator.
      */
-<span class="fc" id="L32">    DEFAULT_NEW_LINE(String.format(&quot;%n&quot;)),</span>
+<span class="fc" id="L31">    DEFAULT_NEW_LINE(String.format(&quot;%n&quot;)),</span>
     /**
      * System dependent file separator.
      */
-<span class="fc" id="L36">    DIR_SEP(System.getProperty(&quot;file.separator&quot;)),</span>
+<span class="fc" id="L35">    DIR_SEP(System.getProperty(&quot;file.separator&quot;)),</span>
     /**
      * Location of scaffold directory.
      */
-<span class="fc" id="L40">    SCAFFOLD_PACKAGE(&quot;de.weltraumschaf.juberblog.scaffold&quot;),</span>
+<span class="fc" id="L39">    SCAFFOLD_PACKAGE(&quot;de.weltraumschaf.juberblog.scaffold&quot;),</span>
     /**
      * Name of environment variable to enable debug mode.
      */
-<span class="fc" id="L44">    ENVIRONMENT_VARIABLE_DEBUG(&quot;JUBERBLOG_DEBUG&quot;),</span>
+<span class="fc" id="L43">    ENVIRONMENT_VARIABLE_DEBUG(&quot;JUBERBLOG_DEBUG&quot;),</span>
     /**
      * NAme of the command line script.
      */
-<span class="fc" id="L48">    COMMAND_NAME(&quot;juberblog&quot;),</span>
+<span class="fc" id="L47">    COMMAND_NAME(&quot;juberblog&quot;),</span>
     /**
      * Package base of whole project.
      */
-<span class="fc" id="L52">    PACKAGE_BASE(&quot;/de/weltraumschaf/juberblog&quot;);</span>
+<span class="fc" id="L51">    PACKAGE_BASE(&quot;/de/weltraumschaf/juberblog&quot;),</span>
+    /**
+     * Name of sites sub directory.
+     */
+<span class="fc" id="L55">    SITES_DIR(&quot;sites&quot;),</span>
+    /**
+     * Name of posts sub directory.
+     */
+<span class="fc" id="L59">    POSTS_DIR(&quot;posts&quot;),</span>
+    /**
+     * Name of drafts sub directory.
+     */
+<span class="fc" id="L63">    DRAFTS_DIR(&quot;drafts&quot;);</span>
 
     /**
      * Major version of Freemarker template engine.
@@ -67,7 +78,7 @@ import org.apache.commons.lang3.Validate;
      * Used Freemarker version.
      */
     //CHECKSTYLE:OFF Must be declared after private numbers.
-<span class="fc" id="L70">    public static final Version FREEMARKER_VERSION = new Version(</span>
+<span class="fc" id="L81">    public static final Version FREEMARKER_VERSION = new Version(</span>
             FREEMARKER_MAJOR_VERSION,
             FREEMARKER_MINOR_VERSION,
             FREEMARKER_MINI_VERSION);
@@ -83,10 +94,10 @@ import org.apache.commons.lang3.Validate;
      *
      * @param value must not be {@code null}
      */
-<span class="fc" id="L86">    private Constants(final String value) {</span>
-<span class="fc" id="L87">        Validate.notNull(value, &quot;Value must not be null!&quot;);</span>
-<span class="fc" id="L88">        this.value = value;</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L97">    private Constants(final String value) {</span>
+<span class="fc" id="L98">        Validate.notNull(value, &quot;Value must not be null!&quot;);</span>
+<span class="fc" id="L99">        this.value = value;</span>
+<span class="fc" id="L100">    }</span>
 
     /**
      * Get the constant value as string.
@@ -95,8 +106,8 @@ import org.apache.commons.lang3.Validate;
      */
     @Override
     public String toString() {
-<span class="fc" id="L98">        return value;</span>
+<span class="fc" id="L109">        return value;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

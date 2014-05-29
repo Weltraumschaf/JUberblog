@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BlogConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">BlogConfiguration.java</span></div><h1>BlogConfiguration.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BlogConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">BlogConfiguration.java</span></div><h1>BlogConfiguration.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -11,13 +11,13 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Blog configuration.
@@ -26,10 +26,14 @@ import org.apache.commons.lang3.Validate;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-public class BlogConfiguration {
+public final class BlogConfiguration {
 
     /**
-     * Name of blog headline  property.
+     * To signal true in configuration.
+     */
+    private static final String TRUE_PROPERY = &quot;true&quot;;
+    /**
+     * Name of blog headline property.
      */
     private static final String HEADLINE = &quot;headline&quot;;
     /**
@@ -95,43 +99,50 @@ public class BlogConfiguration {
     /**
      * Used to load and parse file.
      */
-<span class="fc" id="L98">    private Properties properties = new Properties();</span>
-    /**
-     * Absolute path to property file.
-     */
-    private final String fileName;
+    private final Properties properties;
 
-    public BlogConfiguration(final Properties p) {
-<span class="nc" id="L105">        this(&quot;&quot;);</span>
-<span class="nc" id="L106">        Validate.notNull(p);</span>
-<span class="nc" id="L107">        properties = p;</span>
-<span class="nc" id="L108">    }</span>
     /**
+     * Convenience constructor to inject properties.
+     *
+     * @param filename must not be {@literal null} or empty
+     * @throws IOException if file can't be load
+     */
+    public BlogConfiguration(final String filename) throws IOException {
+<span class="fc" id="L111">        this(load(filename));</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     *
      * Dedicated constructor.
      *
-     * @param fileName must not be {@literal null} or empty
+     * @param p must not be {@code null}
      */
-    public BlogConfiguration(final String fileName) {
-<span class="fc" id="L115">        super();</span>
-<span class="fc" id="L116">        Validate.notNull(fileName, &quot;File name must not be null!&quot;);</span>
-<span class="fc" id="L117">        this.fileName = fileName;</span>
-<span class="fc" id="L118">    }</span>
+    public BlogConfiguration(final Properties p) {
+<span class="fc" id="L121">        super();</span>
+<span class="fc" id="L122">        Validate.notNull(p);</span>
+<span class="fc" id="L123">        properties = p;</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Load the properties from file.
      *
+     * @param filename must not be {@literal null} or empty
+     * @return never {@code null}
      * @throws IOException if configuration file can not be loaded
      */
-    public void load() throws IOException {
-<span class="fc" id="L126">        InputStream in = null;</span>
+    public static Properties load(final String filename) throws IOException {
+<span class="fc" id="L134">        Validate.notNull(filename, &quot;File name must not be null!&quot;);</span>
+<span class="fc" id="L135">        InputStream in = null;</span>
+<span class="fc" id="L136">        final Properties properties = new Properties();</span>
 
         try {
-<span class="fc" id="L129">            in = new FileInputStream(new File(fileName));</span>
-<span class="fc" id="L130">            properties.load(in);</span>
+<span class="fc" id="L139">            in = new FileInputStream(new File(filename));</span>
+<span class="fc" id="L140">            properties.load(in);</span>
+<span class="fc" id="L141">            return properties;</span>
         } finally {
-<span class="pc" id="L132">            IOUtils.closeQuietly(in);</span>
-<span class="fc" id="L133">        }</span>
-<span class="fc" id="L134">    }</span>
+<span class="pc" id="L143">            IOUtils.closeQuietly(in);</span>
+        }
+    }
 
     /**
      * Get property with empty string as default.
@@ -140,8 +151,8 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     private String getProperty(final String name) {
-<span class="fc" id="L143">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
-<span class="fc" id="L144">        return properties.getProperty(name, &quot;&quot;);</span>
+<span class="fc" id="L154">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+<span class="fc" id="L155">        return properties.getProperty(name, &quot;&quot;);</span>
     }
 
     /**
@@ -150,7 +161,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHeadline() {
-<span class="fc" id="L153">        return getProperty(HEADLINE);</span>
+<span class="fc" id="L164">        return getProperty(HEADLINE);</span>
     }
 
     /**
@@ -159,7 +170,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDescription() {
-<span class="fc" id="L162">        return getProperty(DESCRIPTION);</span>
+<span class="fc" id="L173">        return getProperty(DESCRIPTION);</span>
     }
 
     /**
@@ -168,7 +179,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBaseUri() {
-<span class="fc" id="L171">        return getProperty(SITE_URI);</span>
+<span class="fc" id="L182">        return getProperty(SITE_URI);</span>
     }
 
     /**
@@ -177,7 +188,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getLanguage() {
-<span class="fc" id="L180">        return getProperty(LANGUAGE);</span>
+<span class="fc" id="L191">        return getProperty(LANGUAGE);</span>
     }
 
     /**
@@ -186,7 +197,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDataDir() {
-<span class="fc" id="L189">        return getProperty(DATA_DIR);</span>
+<span class="fc" id="L200">        return getProperty(DATA_DIR);</span>
     }
 
     /**
@@ -195,7 +206,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTemplateDir() {
-<span class="fc" id="L198">        return getProperty(TEMPLATE_DIR);</span>
+<span class="fc" id="L209">        return getProperty(TEMPLATE_DIR);</span>
     }
 
     /**
@@ -204,7 +215,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHtdocs() {
-<span class="fc" id="L207">        return getProperty(HTDOCS);</span>
+<span class="fc" id="L218">        return getProperty(HTDOCS);</span>
     }
 
     /**
@@ -213,7 +224,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterConsumerKey() {
-<span class="fc" id="L216">        return getProperty(TWITTER_CONSUMER_KEY);</span>
+<span class="fc" id="L227">        return getProperty(TWITTER_CONSUMER_KEY);</span>
     }
 
     /**
@@ -222,7 +233,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterConsumerSecret() {
-<span class="fc" id="L225">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
+<span class="fc" id="L236">        return getProperty(TWITTER_CONSUMER_SECRET);</span>
     }
 
     /**
@@ -231,7 +242,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterOAuthToken() {
-<span class="fc" id="L234">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
+<span class="fc" id="L245">        return getProperty(TWITTER_OAUTH_TOKEN);</span>
     }
 
     /**
@@ -240,7 +251,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTwitterOAuthTokenSecret() {
-<span class="fc" id="L243">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
+<span class="fc" id="L254">        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);</span>
     }
 
     /**
@@ -249,7 +260,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBitlyUsername() {
-<span class="fc" id="L252">        return getProperty(BITLY_USERNAME);</span>
+<span class="fc" id="L263">        return getProperty(BITLY_USERNAME);</span>
     }
 
     /**
@@ -258,7 +269,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getBitlyApikey() {
-<span class="fc" id="L261">        return getProperty(BITLY_APIKEY);</span>
+<span class="fc" id="L272">        return getProperty(BITLY_APIKEY);</span>
     }
 
     /**
@@ -267,7 +278,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getApiUri() {
-<span class="fc" id="L270">        return getProperty(API_URI);</span>
+<span class="fc" id="L281">        return getProperty(API_URI);</span>
     }
 
     /**
@@ -276,7 +287,7 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureRating() {
-<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_RATING)) ? true : false;</span>
+<span class="fc" id="L290">        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_RATING));</span>
     }
 
     /**
@@ -285,8 +296,8 @@ public class BlogConfiguration {
      * @return never {@literal null}
      */
     public boolean getFeatureComments() {
-<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        return &quot;true&quot;.equalsIgnoreCase(getProperty(FEATURE_COMMENTS)) ? true : false;</span>
+<span class="fc" id="L299">        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_COMMENTS));</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommonCreateAndPublishSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd</a> &gt; <span class="el_source">CommonCreateAndPublishSubCommand.java</span></div><h1>CommonCreateAndPublishSubCommand.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommonCreateAndPublishSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd</a> &gt; <span class="el_source">CommonCreateAndPublishSubCommand.java</span></div><h1>CommonCreateAndPublishSubCommand.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -11,22 +11,29 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.commons.ApplicationException;
-import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
+import de.weltraumschaf.juberblog.template.Configurations;
+import freemarker.template.Configuration;
 import java.io.IOException;
-import org.apache.commons.lang3.Validate;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
- * Common functionality for {@link CreateSubCommand} and {@link PublishSubCommand}.
+ * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
+ * and {@link de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand}.
  *
- * @param &lt;T&gt; type of options
+ * @param &lt;O&gt; type of options
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPublishOptions&gt; extends BaseSubCommand&lt;T&gt; {
+public abstract class CommonCreateAndPublishSubCommand&lt;O extends CreateAndPublishOptions&gt; extends BaseSubCommand&lt;O&gt; {
 
     /**
      * Loaded from file.
@@ -36,6 +43,14 @@ public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPub
      * Directories of the blog.
      */
     private Directories directories;
+    /**
+     * Command line options.
+     */
+    private O options;
+    /**
+     * Template configuration.
+     */
+    private Configuration templateConfig;
 
     /**
      * Dedicated constructor.
@@ -43,15 +58,22 @@ public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPub
      * @param io must not be {@literal null}
      */
     public CommonCreateAndPublishSubCommand(IO io) {
-<span class="fc" id="L46">        super(io);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L61">        super(io);</span>
+<span class="fc" id="L62">    }</span>
 
     @Override
     protected void init() throws ApplicationException {
-<span class="nc" id="L51">        super.init();</span>
-<span class="nc" id="L52">        loadBlogConfiguration();</span>
-<span class="nc" id="L53">        loadDirectories();</span>
-<span class="nc" id="L54">    }</span>
+<span class="fc" id="L66">        super.init();</span>
+<span class="fc" id="L67">        validateArguments();</span>
+<span class="fc" id="L68">        loadBlogConfiguration();</span>
+<span class="fc" id="L69">        loadDirectories();</span>
+
+        try {
+<span class="fc" id="L72">            templateConfig = Configurations.forProduction(getDirectories().templates().toString());</span>
+<span class="nc" id="L73">        } catch (final IOException | URISyntaxException ex) {</span>
+<span class="nc" id="L74">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't configure templates!&quot;, ex);</span>
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">    }</span>
 
     /**
      * Load the configuration file.
@@ -59,17 +81,15 @@ public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPub
      * @throws ApplicationException if configuration file can't be loaded
      */
     private void loadBlogConfiguration() throws ApplicationException {
-        // TODO Argument validation.
         try {
-<span class="nc" id="L64">            blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());</span>
-<span class="nc" id="L65">            blogConfiguration.load();</span>
-<span class="nc" id="L66">        } catch (IOException | IllegalArgumentException | NullPointerException ex) {</span>
-<span class="nc" id="L67">            throw new ApplicationException(</span>
+<span class="fc" id="L85">            blogConfiguration = new BlogConfiguration(getOptions().getConfigurationFile());</span>
+<span class="nc" id="L86">        } catch (IOException | IllegalArgumentException | NullPointerException ex) {</span>
+<span class="nc" id="L87">            throw new ApplicationException(</span>
                     ExitCodeImpl.CANT_LOAD_CONFIG,
                     String.format(&quot;Can't load configuration file '%s'!&quot;, getOptions().getConfigurationFile()),
                     ex);
-<span class="nc" id="L71">        }</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L91">        }</span>
+<span class="fc" id="L92">    }</span>
 
     /**
      * Accessor for blog configuration provided by command line argument.
@@ -77,16 +97,15 @@ public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPub
      * @return never {@literal null}
      */
     protected BlogConfiguration getBlogConfiguration() {
-<span class="nc" id="L80">        Validate.notNull(blogConfiguration, &quot;Blog configuration must not be null!&quot;);</span>
-<span class="nc" id="L81">        return blogConfiguration;</span>
+<span class="nc" id="L100">        return blogConfiguration;</span>
     }
 
     /**
      * Load directories from configuration.
      */
     private void loadDirectories() {
-<span class="nc" id="L88">        directories = new Directories(blogConfiguration);</span>
-<span class="nc" id="L89">    }</span>
+<span class="fc" id="L107">        directories = new Directories(blogConfiguration);</span>
+<span class="fc" id="L108">    }</span>
 
     /**
      * Accesor for directories.
@@ -94,9 +113,50 @@ public abstract class CommonCreateAndPublishSubCommand&lt;T extends CreateAndPub
      * @return never {@literal null}
      */
     protected Directories getDirectories() {
-<span class="nc" id="L97">        Validate.notNull(directories, &quot;Directories must not be null!&quot;);</span>
-<span class="nc" id="L98">        return directories;</span>
+<span class="fc" id="L116">        Validate.notNull(directories, &quot;Directories must not be null!&quot;);</span>
+<span class="fc" id="L117">        return directories;</span>
     }
 
+
+    @Override
+    public void setOptions(final O opt) {
+<span class="fc" id="L123">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
+<span class="fc" id="L124">        options = opt;</span>
+<span class="fc" id="L125">    }</span>
+
+    @Override
+    public O getOptions() {
+<span class="fc" id="L129">        return options;</span>
+    }
+
+    /**
+     * Accesor for template configuration.
+     *
+     * @return never {@literal null}
+     */
+    protected Configuration getTemplateConfig() {
+<span class="fc" id="L138">        return templateConfig;</span>
+    }
+
+    /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if no configuration file was given,
+     *                              or if it is not readable
+     */
+    private void validateArguments() throws ApplicationException {
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (getOptions().getConfigurationFile().isEmpty()) {</span>
+<span class="fc" id="L149">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, &quot;No config file argument given!&quot;);</span>
+        }
+
+<span class="fc" id="L152">        final Path configFile = Paths.get(getOptions().getConfigurationFile());</span>
+
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (!Files.isReadable(configFile)) {</span>
+<span class="fc" id="L155">            throw new ApplicationException(</span>
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format(&quot;Can't read config file '%s'!&quot;, getOptions().getConfigurationFile()));
+        }
+<span class="fc" id="L159">    }</span>
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

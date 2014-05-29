@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Envoronments.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Envoronments.java</span></div><h1>Envoronments.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog;
+
+import de.weltraumschaf.commons.validate.Validate;
+
+/**
+ * Provides instances to access environment variables.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class Envoronments {
+
+    /**
+     * Hidden for static factory.
+     */
+    private Envoronments() {
+<span class="nc" id="L28">        super();</span>
+<span class="nc" id="L29">    }</span>
+
+    /**
+     * Get a default implementation.
+     *
+     * @return never {@code null}, always new instance
+     */
+    public static Env defaultEnv() {
+<span class="fc" id="L37">        return new DefaultEnv();</span>
+    }
+
+    /**
+     * Implementations provide access to read environment variables.
+     */
+    public interface Env {
+        /**
+         * Get a environment variable.
+         *
+         * @param name must not be {@code null} or empty
+         * @return never {@code null}, maybe empty
+         */
+        String get(String name);
+    }
+
+    /**
+     * Default implementation which uses {@link System#getenv(java.lang.String)}.
+     */
+<span class="fc" id="L56">    private static final class DefaultEnv implements Env {</span>
+
+        @Override
+        public String get(final String name) {
+<span class="fc" id="L60">            Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
+<span class="fc" id="L61">            final String var = System.getenv(name);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            return var == null ? &quot;&quot; : var;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

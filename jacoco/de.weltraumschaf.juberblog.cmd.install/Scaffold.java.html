@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Scaffold.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.install</a> &gt; <span class="el_source">Scaffold.java</span></div><h1>Scaffold.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+package de.weltraumschaf.juberblog.cmd.install;
+
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Constants;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+
+/**
+ * This class installs the the scaffold file structure to a given directory.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+public final class Scaffold {
+
+    /**
+     * Location of the scaffold directory with all default files and directories.
+     */
+<span class="fc" id="L40">    static final String RESOURCE_LOCATION = Constants.SCAFFOLD_PACKAGE.toString()</span>
+            .replace(&quot;.&quot;, Constants.DIR_SEP.toString());
+    /**
+     * Prefix to strip of from resource name.
+     */
+<span class="fc" id="L45">    private static final String STRIPPED_PREFIX = Constants.DIR_SEP.toString()</span>
+            + RESOURCE_LOCATION + Constants.DIR_SEP.toString();
+    /**
+     * Used for CLI IO.
+     */
+    private final IO io;
+    /**
+     * Whether to print verbose messages to IO.
+     */
+    private boolean verbose;
+    /**
+     * Provides the source JAR file location.
+     */
+<span class="fc" id="L58">    private SourceJarProvider srcJar = new DefaultSourceJarProvider();</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param io must not be {@code null}
+     */
+    public Scaffold(final IO io) {
+<span class="fc" id="L66">        super();</span>
+<span class="fc" id="L67">        this.io = Validate.notNull(io, &quot;Parameter 'io' mut not be null!&quot;);</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Whether to be verbose or not.
+     *
+     * @param verbose {@code true} for verbose output, else {@code false}
+     */
+    void setVerbose(boolean verbose) {
+<span class="fc" id="L76">        this.verbose = verbose;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Injection point for a custom provider.
+     *
+     * @param srcJar must not be {@code null}
+     */
+    public void setSrcJar(final SourceJarProvider srcJar) {
+<span class="fc" id="L85">        this.srcJar = Validate.notNull(srcJar);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Copy all files from scaffold to target directory.
+     *
+     * @param target must not be {@code null}
+     * @throws IOException if scaffold files can't be copied
+     */
+    public void copyFiles(final File target) throws IOException {
+<span class="fc" id="L95">        Validate.notNull(target, &quot;Target must not be null!&quot;);</span>
+<span class="fc" id="L96">        final JarResource src = JarResource.newSourceJar(srcJar.getAbsolutePath());</span>
+
+<span class="pc" id="L98">        try (FileSystem fs = createJarFileSystem(URI.create(src.getJarLocation()))) {</span>
+<span class="fc" id="L99">            final String scaffold = src.getResourceLocation();</span>
+<span class="fc" id="L100">            final Path dir = fs.getPath(scaffold);</span>
+<span class="fc" id="L101">            Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, verbose));</span>
+<span class="pc bpc" id="L102" title="6 of 8 branches missed.">        }</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Creates a file system for a given JAR file.
+     *
+     * @param jarFileLocation must not be {@code null}
+     * @return never {@code null}
+     * @throws IOException if file system can't be opened
+     */
+    private FileSystem createJarFileSystem(final URI jarFileLocation) throws IOException {
+<span class="fc" id="L113">        return FileSystems.newFileSystem(Validate.notNull(jarFileLocation), Maps.&lt;String, String&gt;newHashMap());</span>
+    }
+
+    /**
+     * Visitor to copy the scaffold directory.
+     */
+    private static class CopyDirectoryVisitor extends SimpleFileVisitor&lt;Path&gt; {
+
+        /**
+         * Copy options.
+         */
+<span class="fc" id="L124">        private static final StandardCopyOption COPY_OPTIONS = StandardCopyOption.REPLACE_EXISTING;</span>
+        /**
+         * Target directory.
+         */
+        private final Path targetDir;
+        /**
+         * Path prefix removed from package source file name.
+         */
+        private final String prefix;
+        /**
+         * Used for CLI IO.
+         */
+        private final IO io;
+        /**
+         * Whether to print verbose messages to IO.
+         */
+        private final boolean verbose;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param targetDir must not be {@code null}, must be directory, must exist
+         * @param prefixToStrip must not be {@code null}
+         * @param io used for verbose out
+         * @param verbose whether to be verbose or not
+         */
+        public CopyDirectoryVisitor(
+            final Path targetDir,
+            final String prefixToStrip,
+            final IO io,
+            final boolean verbose) {
+<span class="fc" id="L155">            super();</span>
+<span class="fc" id="L156">            Validate.notNull(targetDir, &quot;Target dir must not be null!&quot;);</span>
+
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">            if (!Files.exists(targetDir)) {</span>
+<span class="nc" id="L159">                throw new IllegalArgumentException(String.format(&quot;Target '%s' does not exists!&quot;, targetDir));</span>
+            }
+
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            if (!Files.isDirectory(targetDir)) {</span>
+<span class="nc" id="L163">                throw new IllegalArgumentException(String.format(&quot;Target '%s' is not a directory!&quot;, targetDir));</span>
+            }
+
+<span class="fc" id="L166">            this.targetDir = targetDir;</span>
+<span class="fc" id="L167">            Validate.notNull(prefixToStrip, &quot;Prefix must not be null!&quot;);</span>
+<span class="fc" id="L168">            this.prefix = prefixToStrip;</span>
+<span class="fc" id="L169">            this.io = Validate.notNull(io);</span>
+<span class="fc" id="L170">            this.verbose = verbose;</span>
+<span class="fc" id="L171">        }</span>
+
+        @Override
+        public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+<span class="fc" id="L175">            final FileVisitResult result = super.preVisitDirectory(dir, attrs);</span>
+<span class="fc" id="L176">            final String str = dir.toString() + &quot;/&quot;;</span>
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            if (str.equals(prefix)) {</span>
+                // Do not create the root dir.
+<span class="fc" id="L180">                return result;</span>
+            }
+
+<span class="fc" id="L183">            final Path target = targetDir.resolve(baseName(dir));</span>
+
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">            if (!Files.exists(target)) {</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">                if (verbose) {</span>
+<span class="fc" id="L187">                    io.println(String.format(&quot;Create directory %s&quot;, target));</span>
+                }
+
+<span class="fc" id="L190">                Files.createDirectory(target);</span>
+            }
+
+<span class="fc" id="L193">            return result;</span>
+        }
+
+        @Override
+        public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+<span class="fc" id="L198">            final FileVisitResult result = super.visitFile(file, attrs);</span>
+<span class="fc" id="L199">            final Path target = targetDir.resolve(baseName(file));</span>
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            if (verbose) {</span>
+<span class="fc" id="L202">                io.println(String.format(&quot;Copy file %s to %s&quot;, file, target));</span>
+            }
+
+<span class="fc" id="L205">            Files.copy(file, target, COPY_OPTIONS);</span>
+
+<span class="fc" id="L207">            return result;</span>
+        }
+
+        /**
+         * Strips prefix from given path.
+         *
+         * @param file must not be {@code null}
+         * @return never {@code null}
+         */
+        private String baseName(final Path file) {
+<span class="fc" id="L217">            Validate.notNull(file, &quot;File must not be null!&quot;);</span>
+<span class="fc" id="L218">            return file.toString().replace(prefix, &quot;&quot;);</span>
+        }
+
+    }
+
+    /**
+     * Provides the {@link #RESOURCE_LOCATION scaffold resource path} inside an JAR file.
+     */
+    public interface SourceJarProvider {
+
+        /**
+         * Produces something like Produces something like
+         * {@literal jar:file:/home/foo/JUberblog/bin/juberblog.jar!/de/weltraumschaf/juberblog/scaffold}.
+         *
+         * @return never {@code null} or empty
+         */
+        String getAbsolutePath();
+    }
+
+    /**
+     * Default provider which gives the final jar's path.
+     */
+<span class="fc" id="L240">    private static final class DefaultSourceJarProvider implements SourceJarProvider {</span>
+
+        @Override
+        public String getAbsolutePath() {
+<span class="nc" id="L244">            return getClass().getResource(Constants.DIR_SEP.toString() + RESOURCE_LOCATION).toString();</span>
+        }
+    }
+
+    /**
+     * A JAR resource consists of the absolute path of the JAR file and the location of the resource inside the JAR.
+     */
+    static final class JarResource {
+
+        /**
+         * Location of the JAR file.
+         */
+        private final String jarLocation;
+        /**
+         * Location of resource inside JAR file.
+         */
+        private final String resourceLocation;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param jarLocation must not be {@code null} or empty
+         * @param resourceLocation must not be {@code null} or empty
+         */
+        JarResource(final String jarLocation, final String resourceLocation) {
+<span class="fc" id="L269">            super();</span>
+<span class="fc" id="L270">            this.jarLocation = Validate.notEmpty(jarLocation);</span>
+<span class="fc" id="L271">            this.resourceLocation = Validate.notEmpty(resourceLocation);</span>
+<span class="fc" id="L272">        }</span>
+
+        /**
+         * Get the JAR file location.
+         *
+         * @return never {@code null} or empty
+         */
+        String getJarLocation() {
+<span class="fc" id="L280">            return jarLocation;</span>
+        }
+
+        /**
+         * Get the resource location inside JAR.
+         *
+         * @return never {@code null} or empty
+         */
+        String getResourceLocation() {
+<span class="fc" id="L289">            return resourceLocation;</span>
+        }
+
+        /**
+         * Create a resource from a given path.
+         * &lt;p&gt;
+         * A path should have the format: {@literal jar:file/path/to/jar/file.jar!/package/in/the/jar/File.class}.
+         * &lt;/p&gt;
+         *
+         * @param path must not be {@code null} or empty
+         * @return never {@code null}
+         */
+        static JarResource newSourceJar(final String path) {
+<span class="fc" id="L302">            Validate.notEmpty(path, &quot;Parameter 'path' must not be null or empty!&quot;);</span>
+
+<span class="fc bfc" id="L304" title="All 2 branches covered.">            if (!path.contains(&quot;!&quot;)) {</span>
+<span class="fc" id="L305">                throw new IllegalArgumentException(&quot;Path does not contain '!'!&quot;);</span>
+            }
+
+<span class="fc" id="L308">            final String[] paths = path.split(&quot;!&quot;);</span>
+
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            if (paths.length &lt; 2) {</span>
+<span class="fc" id="L311">                throw new IllegalArgumentException(&quot;The string after the '!' must not be null or empty!&quot;);</span>
+            }
+
+<span class="fc" id="L314">            return new JarResource(</span>
+                    Validate.notEmpty(paths[0], &quot;The string before the '!' must not be null or empty!&quot;),
+                    Validate.notEmpty(paths[1], &quot;The string after the '!' must not be null or empty!&quot;));
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

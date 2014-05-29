@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateAndPublishOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">CreateAndPublishOptions.java</span></div><h1>CreateAndPublishOptions.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateAndPublishOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">CreateAndPublishOptions.java</span></div><h1>CreateAndPublishOptions.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -13,19 +13,32 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Common options for create and publish commands.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="fc" id="L22">public abstract class CreateAndPublishOptions extends CommonOptions {</span>
+public abstract class CreateAndPublishOptions extends CommonOptions {
 
     /**
      * Configuration file argument.
      */
-<span class="fc" id="L27">    @Parameter(names = {&quot;-c&quot;, &quot;--config&quot; }, description = &quot;Config file to use.&quot;)</span>
+<span class="fc" id="L28">    @Parameter(names = {&quot;-c&quot;, &quot;--config&quot; }, description = &quot;Config file to use.&quot;)</span>
     private String configurationFile = &quot;&quot;;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param configurationFile must not be {@code null}
+     */
+    public CreateAndPublishOptions(boolean help, boolean verbose, final String configurationFile) {
+<span class="fc" id="L39">        super(help, verbose);</span>
+<span class="fc" id="L40">        this.configurationFile = Validate.notNull(configurationFile, &quot;Parameter 'configurationFile' must not be null!&quot;);</span>
+<span class="fc" id="L41">    }</span>
 
     /**
      * Get configuration file.
@@ -33,13 +46,13 @@ import com.beust.jcommander.Parameter;
      * @return never {@code null}, maybe empty
      */
     public String getConfigurationFile() {
-<span class="fc" id="L36">        return configurationFile;</span>
+<span class="fc" id="L49">        return configurationFile;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L41">        return super.toString() + &quot;, configurationFile: &quot; + configurationFile;</span>
+<span class="fc" id="L54">        return super.toString() + &quot;, configurationFile: &quot; + configurationFile;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

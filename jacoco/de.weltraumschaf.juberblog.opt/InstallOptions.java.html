@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InstallOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">InstallOptions.java</span></div><h1>InstallOptions.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>InstallOptions.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.opt</a> &gt; <span class="el_source">InstallOptions.java</span></div><h1>InstallOptions.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -12,19 +12,40 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
+import de.weltraumschaf.commons.validate.Validate;
 
 /**
  * Options for install commands.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="fc" id="L21">public class InstallOptions extends CommonOptions {</span>
+public class InstallOptions extends CommonOptions {
 
     /**
      * Where to install the blog scaffold.
      */
-<span class="fc" id="L26">    @Parameter(names = {&quot;-l&quot;, &quot;--location&quot; }, description = &quot;Install location of the blog scaffold.&quot;)</span>
-    private String location = &quot;&quot;;
+    @Parameter(names = {&quot;-l&quot;, &quot;--location&quot; }, description = &quot;Install location of the blog scaffold.&quot;)
+    private String location;
+
+    /**
+     * Default constructor.
+     */
+    public InstallOptions() {
+<span class="fc" id="L34">        this(false, false, &quot;&quot;);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param location must not be {@code null}
+     */
+    public InstallOptions(final boolean help, final boolean verbose, final String location) {
+<span class="fc" id="L45">        super(help, verbose);</span>
+<span class="fc" id="L46">        this.location = Validate.notNull(location, &quot;Parameter 'location' must not be null!&quot;);</span>
+<span class="fc" id="L47">    }</span>
+
 
     /**
      * Get install locations.
@@ -32,13 +53,13 @@ import com.beust.jcommander.Parameter;
      * @return never {@code null}, maybe empty
      */
     public String getLocation() {
-<span class="fc" id="L35">        return location;</span>
+<span class="fc" id="L56">        return location;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L40">        return &quot;InstallOptions{&quot; + super.toString() + &quot;, location: &quot; + location + '}';</span>
+<span class="fc" id="L61">        return &quot;InstallOptions{&quot; + super.toString() + &quot;, location: &quot; + location + '}';</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

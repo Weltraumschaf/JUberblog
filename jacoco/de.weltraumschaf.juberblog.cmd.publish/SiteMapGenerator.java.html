@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SiteMapGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">SiteMapGenerator.java</span></div><h1>SiteMapGenerator.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SiteMapGenerator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">SiteMapGenerator.java</span></div><h1>SiteMapGenerator.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -12,19 +12,16 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.guava.Lists;
-import de.weltraumschaf.juberblog.files.FilenameFilters;
-import de.weltraumschaf.juberblog.files.PublishedFile;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -34,18 +31,18 @@ import org.joda.time.format.DateTimeFormatter;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-class SiteMapGenerator implements Command {
+final class SiteMapGenerator implements Command {
 
     /**
      * Format string for %gt;lastmod&amp;lt; tag.
      *
      * See http://www.joda.org/joda-time/key_format.html
      */
-<span class="fc" id="L44">    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern(&quot;yyyy-MM-dd&quot;);</span>
+<span class="fc" id="L41">    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern(&quot;yyyy-MM-dd&quot;);</span>
     /**
      * Directories with published files.
      */
-<span class="fc" id="L48">    private final List&lt;Dir&gt; directoriesWithPublishedFiles = Lists.newArrayList();</span>
+<span class="fc" id="L45">    private final List&lt;Page&gt; pages = Lists.newArrayList();</span>
     /**
      * used to render XML.
      */
@@ -53,248 +50,100 @@ class SiteMapGenerator implements Command {
     /**
      * Computed by {@link #execute()}.
      */
-<span class="fc" id="L56">    private String xml = &quot;&quot;;</span>
+<span class="fc" id="L53">    private String xml = &quot;&quot;;</span>
 
     /**
      * Dedicated constructor.
      *
-     * @param templateConfiguration must not be {@code null}
+     * @param templateConfiguration must not be {@literal null}
      */
     public SiteMapGenerator(final Configuration templateConfiguration) {
-<span class="fc" id="L64">        super();</span>
-<span class="fc" id="L65">        Validate.notNull(templateConfiguration);</span>
-<span class="fc" id="L66">        this.templateConfiguration = templateConfiguration;</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L61">        super();</span>
+<span class="fc" id="L62">        Validate.notNull(templateConfiguration);</span>
+<span class="fc" id="L63">        this.templateConfiguration = templateConfiguration;</span>
+<span class="fc" id="L64">    }</span>
 
     @Override
     public void execute() {
-<span class="fc" id="L71">        final SiteMap map = findPublishedFiles();</span>
+<span class="fc" id="L68">        final SiteMap map = findPublishedFiles();</span>
         try {
-<span class="fc" id="L73">            xml = generaeXml(map);</span>
-<span class="nc" id="L74">        } catch (final IOException | TemplateException ex) {</span>
-<span class="nc" id="L75">            throw new RuntimeException(ex);</span>
-<span class="fc" id="L76">        }</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L70">            xml = generaeXml(map);</span>
+<span class="nc" id="L71">        } catch (final IOException | TemplateException ex) {</span>
+<span class="nc" id="L72">            throw new RuntimeException(ex);</span>
+<span class="fc" id="L73">        }</span>
+<span class="fc" id="L74">    }</span>
 
     /**
      * Add directory to find published files with their base URI.
      *
-     * @param baseUri must not be {@literal nul} or empty
-     * @param directory must not be {@literal null}, must be directory
+     * @param page must not be {@literal null}, must be directory
      */
-    public void addDirecotry(final Dir dir) {
-<span class="fc" id="L86">        Validate.notNull(dir, &quot;Dir must not be null!&quot;);</span>
-<span class="fc" id="L87">        directoriesWithPublishedFiles.add(dir);</span>
-<span class="fc" id="L88">    }</span>
+    public void addPage(final Page page) {
+<span class="fc" id="L82">        Validate.notNull(page, &quot;Page must not be null!&quot;);</span>
+<span class="fc" id="L83">        pages.add(page);</span>
+<span class="fc" id="L84">    }</span>
 
     /**
-     * Find published files for all {@link #directoriesWithPublishedFiles firecotries}.
+     * Find published files for all {@link #pages firecotries}.
      *
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     SiteMap findPublishedFiles() {
-<span class="fc" id="L96">        final SiteMap map = new SiteMap();</span>
+<span class="fc" id="L92">        final SiteMap map = new SiteMap();</span>
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (final Dir dir : directoriesWithPublishedFiles) {</span>
-<span class="fc" id="L99">            final File[] files = dir.getDir().listFiles(FilenameFilters.findHtmlFiles());</span>
-<span class="fc" id="L100">            Arrays.sort(files);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (final Page page : pages) {</span>
+<span class="fc" id="L95">            map.add(new SiteMapUrl(</span>
+                    page.getUri().toString(),
+                    formatTimestamp(page.getPublishingDate()),
+                    page.getFrequencey(),
+                    page.getPriority()));
+<span class="fc" id="L100">        }</span>
 
-<span class="fc bfc" id="L102" title="All 2 branches covered.">            for (final File publishedFile : files) {</span>
-<span class="fc" id="L103">                final PublishedFile published = new PublishedFile(dir.getBaseUri(), publishedFile);</span>
-<span class="fc" id="L104">                map.add(new SiteMapUrl(</span>
-                        published.getUri(),
-                        formatTimestamp(published.getModificationTime()),
-                        dir.getFrequencey(),
-                        dir.getPriority()));
-            }
-<span class="fc" id="L110">        }</span>
-
-<span class="fc" id="L112">        return map;</span>
+<span class="fc" id="L102">        return map;</span>
     }
 
     /**
      *
-     * @param map must not be {@code null}
-     * @return never {@code null}
+     * @param map must not be {@literal null}
+     * @return never {@literal null}
      * @throws IOException on any I/O error
      * @throws TemplateException on any template error
      */
     String generaeXml(final SiteMap map) throws IOException, TemplateException {
-<span class="fc" id="L123">        Validate.notNull(map, &quot;Map must not be null!&quot;);</span>
-<span class="fc" id="L124">        final Formatter fmt = Formatters.createSiteMapFormatter(templateConfiguration, map);</span>
-<span class="fc" id="L125">        fmt.setEncoding(templateConfiguration.getDefaultEncoding());</span>
-<span class="fc" id="L126">        return fmt.format();</span>
+<span class="fc" id="L113">        Validate.notNull(map, &quot;Map must not be null!&quot;);</span>
+<span class="fc" id="L114">        final Formatter fmt = Formatters.createSiteMapFormatter(templateConfiguration, map);</span>
+<span class="fc" id="L115">        fmt.setEncoding(templateConfiguration.getDefaultEncoding());</span>
+<span class="fc" id="L116">        return fmt.format();</span>
     }
 
     /**
      * Get the rendered XML string.
      *
-     * @return never {@code null}, maybe empty until {@link #execute()} is called
+     * @return never {@literal null}, maybe empty until {@link #execute()} is called
      */
     public String getResult() {
-<span class="fc" id="L135">        return xml;</span>
+<span class="fc" id="L125">        return xml;</span>
     }
 
     /**
      * Formates a date time according to {@link #DATE_FORMAT}.
      *
-     * @param ts must not be {@code null}
-     * @return never {@code null}
+     * @param ts must not be {@literal null}
+     * @return never {@literal null}
      */
     static String formatTimestamp(final DateTime ts) {
-<span class="fc" id="L145">        return ts.toString(DATE_FORMAT);</span>
+<span class="fc" id="L135">        return ts.toString(DATE_FORMAT);</span>
     }
 
     /**
      * Formates a unix timestamp according to {@link #DATE_FORMAT}.
      *
      * @param ts any valid unix time stamp
-     * @return never {@code null}
+     * @return never {@literal null}
      */
     static String formatTimestamp(final long ts) {
-<span class="fc" id="L155">        return formatTimestamp(new DateTime(ts));</span>
+<span class="fc" id="L145">        return formatTimestamp(new DateTime(ts));</span>
     }
 
-    /**
-     * A directory to scan for published files.
-     */
-    public static abstract class Dir {
-        /** Priority for posts. */
-        public static final float POST_PRIORITY = 1.0f;
-        /** Priority for sites. */
-        public static final float SITE_PRIORITY = 0.5f;
-        /**
-         * Change frequency for all published files in the directory.
-         */
-        private final SiteMapUrl.ChangeFrequency frequencey;
-        /**
-         * Priority for all published files in the directory.
-         */
-        private final float priority;
-        /**
-         * Directory to scan for published files.
-         */
-        private final File dir;
-        /**
-         * Base URI for all published sites in {@link #dir direcotry}.
-         */
-        private final String baseUri;
-
-        /**
-         * Dedicated constructor.
-         *
-         * @param frequencey mist not be {@code null}
-         * @param priority [0.0 - 1.0]
-         * @param dir must not be {@code null} and must be a directory
-         * @param baseUri must not be {@code null}
-         */
-        Dir(final SiteMapUrl.ChangeFrequency frequencey, final float priority, final File dir, final String baseUri) {
-<span class="fc" id="L192">            super();</span>
-<span class="fc" id="L193">            Validate.notNull(frequencey, &quot;Frequencey must not be null!&quot;);</span>
-<span class="pc bpc" id="L194" title="2 of 4 branches missed.">            Validate.isTrue(priority &gt;= 0.0f &amp;&amp; priority &lt;= 1.0f, &quot;Priority must be in range [0.0 - 1.0]!&quot;);</span>
-<span class="fc" id="L195">            Validate.notNull(dir, &quot;Dir must not be null!&quot;);</span>
-<span class="fc" id="L196">            Validate.isTrue(dir.isDirectory(), &quot;Diry must be directory!&quot;);</span>
-<span class="fc" id="L197">            Validate.notNull(baseUri, &quot;BaseUri must not be null!&quot;);</span>
-<span class="fc" id="L198">            this.frequencey = frequencey;</span>
-<span class="fc" id="L199">            this.priority = priority;</span>
-<span class="fc" id="L200">            this.dir = dir;</span>
-<span class="fc" id="L201">            this.baseUri = baseUri;</span>
-<span class="fc" id="L202">        }</span>
-
-        /**
-         * Create a directory containing posts.
-         *
-         * @param dir must not be {@code null} and must be a directory
-         * @param baseUri must not be {@code null}
-         * @return never {@code null}, always new instance
-         */
-        public static Dir posts(final File dir, final String baseUri) {
-<span class="fc" id="L212">            return new Posts(dir, baseUri);</span>
-        }
-
-        /**
-         * Create a directory containing sites.
-         *
-         * @param dir must not be {@code null} and must be a directory
-         * @param baseUri must not be {@code null}
-         * @return never {@code null}, always new instance
-         */
-        public static Dir sites(final File dir, final String baseUri) {
-<span class="fc" id="L223">            return new Sites(dir, baseUri);</span>
-        }
-
-        /**
-         * Get the change frequency.
-         *
-         * @return never {@code null}
-         */
-        public SiteMapUrl.ChangeFrequency getFrequencey() {
-<span class="fc" id="L232">            return frequencey;</span>
-        }
-
-        /**
-         * Get the priority.
-         *
-         * @return [0.0 - 1.0]
-         */
-        public float getPriority() {
-<span class="fc" id="L241">            return priority;</span>
-        }
-
-        /**
-         * Get the directory.
-         *
-         * @return never {@code null}
-         */
-        public File getDir() {
-<span class="fc" id="L250">            return dir;</span>
-        }
-
-        /**
-         * Get the base URI.
-         *
-         * @return never {@code null}
-         */
-        public String getBaseUri() {
-<span class="fc" id="L259">            return baseUri;</span>
-        }
-
-    }
-
-    /**
-     * Posts directory.
-     */
-    static final class Posts extends Dir {
-
-        /**
-         * Initializes {@link Dir#frequencey} with {@link SiteMapUrl.ChangeFrequency#DAILY}
-         * and {@link Dir#priority} with {@link Dir#POST_PRIORITY}.
-         *
-         * @param dir must not be {@code null} and must be a directory
-         * @param baseUri must not be {@code null}
-         */
-        Posts(final File dir, final String baseUri) {
-<span class="fc" id="L277">            super(SiteMapUrl.ChangeFrequency.DAILY, POST_PRIORITY, dir, baseUri);</span>
-<span class="fc" id="L278">        }</span>
-
-    }
-
-    /**
-     * Sites directory.
-     */
-    static final class Sites extends Dir {
-
-        /**
-         * Initializes {@link Dir#frequencey} with {@link SiteMapUrl.ChangeFrequency#WEEKLY}
-         * and {@link Dir#priority} with {@link Dir#SITE_PRIORITY}.
-         *
-         * @param dir must not be {@code null} and must be a directory
-         * @param baseUri must not be {@code null}
-         */
-        Sites(final File dir, final String baseUri) {
-<span class="fc" id="L295">            super(SiteMapUrl.ChangeFrequency.WEEKLY, SITE_PRIORITY, dir, baseUri);</span>
-<span class="fc" id="L296">        }</span>
-
-    }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

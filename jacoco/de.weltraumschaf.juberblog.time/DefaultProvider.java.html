@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DefaultProvider.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.time</a> &gt; <span class="el_source">DefaultProvider.java</span></div><h1>DefaultProvider.java</h1><pre class="source lang-java linenums">/*
+ *  LICENSE
+ *
+ * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
+ * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
+ * As long as you retain this notice you can do whatever you want with
+ * this stuff. If we meet some day, and you think this stuff is worth it,
+ * you can buy me a non alcohol-free beer in return.
+ *
+ * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
+ */
+
+package de.weltraumschaf.juberblog.time;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+
+/**
+ * Joda Time based default implementation.
+ *
+ * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ */
+<span class="fc" id="L24">final class DefaultProvider implements TimeProvider {</span>
+
+    /**
+     * Length of the year in string representation.
+     */
+    private static final int LENGTH_HEAR = 4;
+    /**
+     * Length of all other time pats in string representation.
+     */
+    private static final int LENGTH_OTHERS = 2;
+    /**
+     * Formatter for {@literal yyyy-mm-ddThh.mm.ss}.
+     */
+<span class="fc" id="L37">    private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()</span>
+                .appendYear(LENGTH_HEAR, LENGTH_HEAR)
+                .appendLiteral('-')
+                .appendMonthOfYear(LENGTH_OTHERS)
+                .appendLiteral('-')
+                .appendDayOfMonth(LENGTH_OTHERS)
+                .appendLiteral('T')
+                .appendHourOfDay(LENGTH_OTHERS)
+                .appendLiteral('.')
+                .appendMinuteOfHour(LENGTH_OTHERS)
+                .appendLiteral('.')
+                .appendSecondOfDay(LENGTH_OTHERS)
+                .toFormatter();
+
+    @Override
+    public String nowAsString() {
+<span class="nc" id="L53">        return new DateTime().toString(formatter);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

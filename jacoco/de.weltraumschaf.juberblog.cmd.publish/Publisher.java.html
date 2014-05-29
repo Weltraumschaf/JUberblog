@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Publisher.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">Publisher.java</span></div><h1>Publisher.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Publisher.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">Publisher.java</span></div><h1>Publisher.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -11,19 +11,20 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.ApplicationException;
 import de.weltraumschaf.commons.guava.Lists;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
-import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.files.FilenameFilters;
 import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,117 +33,212 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 /**
+ * Publish all files from data directory.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-class Publisher implements Command {
+final class Publisher implements Command {
 
     /**
      * Log facility.
      */
 <span class="fc" id="L49">    private static final Logger LOG = Logger.getLogger(Publisher.class);</span>
+    /**
+     * Used to find data and write published files.
+     */
     private final Directories dirs;
+    /**
+     * USed for HTML generation.
+     */
     private final Configuration templateConfig;
+    /**
+     * Base URI of the blog.
+     */
     private final String baseUri;
+    /**
+     * Whether to generate sites.
+     */
     private boolean sites;
+    /**
+     * Whether to purge already generated files.
+     */
     private boolean purge;
+    /**
+     * {@code true} if data already read.
+     *
+     * Used for lazy load {@link #sitesData} and {@link #postsData}.
+     */
     private boolean dataRead;
+    /**
+     * Data about sites to publish.
+     *
+     * Lazy loaded.
+     */
     private Collection&lt;DataFile&gt; sitesData;
+    /**
+     * Data about posts to publish.
+     *
+     * Lazy loaded.
+     */
     private Collection&lt;DataFile&gt; postsData;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param dirs must not be {@code null}
+     * @param templateConfig must not be {@code null}
+     * @param baseUri must not be {@code null} or empty
+     */
     public Publisher(final Directories dirs, final Configuration templateConfig, final String baseUri) {
-<span class="fc" id="L60">        super();</span>
-<span class="fc" id="L61">        this.dirs = dirs;</span>
-<span class="fc" id="L62">        this.templateConfig = templateConfig;</span>
-<span class="fc" id="L63">        this.baseUri = baseUri;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L97">        super();</span>
+<span class="fc" id="L98">        this.dirs = Validate.notNull(dirs, &quot;dirs&quot;);</span>
+<span class="fc" id="L99">        this.templateConfig = Validate.notNull(templateConfig, &quot;templateConfig&quot;);</span>
+<span class="fc" id="L100">        this.baseUri = Validate.notEmpty(baseUri, &quot;baseUri&quot;);</span>
+<span class="fc" id="L101">    }</span>
 
-    void readData() {
-<span class="fc" id="L67">        List&lt;DataFile&gt; files = Lists.newArrayList();</span>
-
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {</span>
-<span class="fc" id="L70">            files.add(new DataFile(f));</span>
+    /**
+     * Read the data to publish.
+     *
+     * @throws FileNotFoundException if data files can't be read
+     */
+    void readData() throws FileNotFoundException {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (dataRead) {</span>
+<span class="fc" id="L110">            return;</span>
         }
 
-<span class="fc" id="L73">        sitesData = files;</span>
-<span class="fc" id="L74">        files = Lists.newArrayList();</span>
+<span class="fc" id="L113">        sitesData = Lists.newArrayList();</span>
 
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {</span>
-<span class="fc" id="L77">            files.add(new DataFile(f));</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {</span>
+<span class="fc" id="L116">            sitesData.add(new DataFile(f));</span>
         }
 
-<span class="fc" id="L80">        postsData = files;</span>
-<span class="fc" id="L81">        dataRead = true;</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L119">        postsData = Lists.newArrayList();</span>
 
-    Collection&lt;DataFile&gt; getSitesData() {
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (!dataRead) {</span>
-<span class="nc" id="L86">            throw new IllegalStateException(&quot;Data never read! Invoke #readData() at least once.&quot;);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {</span>
+<span class="fc" id="L122">            postsData.add(new DataFile(f));</span>
         }
 
-<span class="fc" id="L89">        return sitesData;</span>
+<span class="fc" id="L125">        dataRead = true;</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Get the data for sites to publish.
+     *
+     * @return never {@code null}
+     * @throws FileNotFoundException if data files can't be read
+     */
+    Collection&lt;DataFile&gt; getSitesData() throws FileNotFoundException {
+<span class="fc" id="L135">        readData();</span>
+<span class="fc" id="L136">        return sitesData;</span>
     }
 
-    Collection&lt;DataFile&gt; getPostsData() {
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (!dataRead) {</span>
-<span class="nc" id="L94">            throw new IllegalStateException(&quot;Data never read! Invoke #readData() at least once.&quot;);</span>
-        }
-
-<span class="fc" id="L97">        return postsData;</span>
+    /**
+     * Get the data for posts to publish.
+     *
+     * @return never {@code null}
+     * @throws FileNotFoundException if data files can't be read
+     */
+    Collection&lt;DataFile&gt; getPostsData() throws FileNotFoundException {
+<span class="fc" id="L146">        readData();</span>
+<span class="fc" id="L147">        return postsData;</span>
     }
 
     @Override
-    public void execute() throws ApplicationException {
-<span class="fc" id="L102">        readData();</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        final List&lt;Page&gt; publishedSites = isSites() ? publishSites() : Lists.&lt;Page&gt;newArrayList();</span>
+    public void execute() throws PublishingSubCommandExcpetion {
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        final Collection&lt;Page&gt; publishedSites = isSites() ? publishSites() : Lists.&lt;Page&gt;newArrayList();</span>
+<span class="fc" id="L153">        final Collection&lt;Page&gt; publishedPosts = publisPosts();</span>
+<span class="fc" id="L154">        updateIndexes(publishedSites, publishedPosts);</span>
+<span class="fc" id="L155">    }</span>
 
-<span class="fc" id="L105">        final List&lt;Page&gt; publishedPosts = publisPosts();</span>
-<span class="fc" id="L106">        updateIndexes(publishedSites, publishedPosts);</span>
-<span class="fc" id="L107">    }</span>
-
+    /**
+     * Whether to publish sites or not.
+     *
+     * @param sites {@code true} to publish sites
+     */
     public void setSites(boolean sites) {
-<span class="nc" id="L110">        this.sites = sites;</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L163">        this.sites = sites;</span>
+<span class="nc" id="L164">    }</span>
 
+    /**
+     * Whether to publish sites or not.
+     *
+     * @return {@code true} for publish sites
+     */
     private boolean isSites() {
-<span class="fc" id="L114">        return sites;</span>
+<span class="fc" id="L172">        return sites;</span>
     }
 
-    public void setPurga(boolean purga) {
-<span class="nc" id="L118">        this.purge = purga;</span>
-<span class="nc" id="L119">    }</span>
+    /**
+     * Whether to purge published files or not.
+     *
+     * @param purge {@code true} to purge files
+     */
+    public void setPurge(boolean purge) {
+<span class="nc" id="L181">        this.purge = purge;</span>
+<span class="nc" id="L182">    }</span>
 
+    /**
+     * Whether to purge published files or not.
+     *
+     * @return {@code true} for purge files
+     */
     private boolean isPurge() {
-<span class="nc" id="L122">        return purge;</span>
+<span class="nc" id="L190">        return purge;</span>
     }
 
-    private List&lt;Page&gt; publishSites() throws ApplicationException {
-<span class="nc" id="L126">        LOG.info(&quot;Publish sites...&quot;);</span>
-<span class="nc" id="L127">        return publishFiles(</span>
-                Formatters.Type.SITE,
-                getSitesData(),
-                dirs.htdocsSites());
+    /**
+     * Publish sites.
+     *
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if site data files can't be read
+     */
+    private Collection&lt;Page&gt; publishSites() throws PublishingSubCommandExcpetion {
+<span class="nc" id="L200">        LOG.info(&quot;Publish sites...&quot;);</span>
+
+        try {
+<span class="nc" id="L203">            return publishFiles(</span>
+                    Formatters.Type.SITE,
+                    getSitesData(),
+                    dirs.htdocsSites());
+<span class="nc" id="L207">        } catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L208">            throw new PublishingSubCommandExcpetion(&quot;Can't read sites data files: &quot; + ex.getMessage(), ex);</span>
+        }
     }
 
-    private List&lt;Page&gt; publisPosts() throws ApplicationException {
-<span class="fc" id="L134">        LOG.info(&quot;Publish posts...&quot;);</span>
-<span class="fc" id="L135">        return publishFiles(</span>
-                Formatters.Type.POST,
-                getPostsData(),
-                dirs.htdocsPosts());
+    /**
+     * Publish posts.
+     *
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if site data files can't be read
+     */
+    private Collection&lt;Page&gt; publisPosts() throws PublishingSubCommandExcpetion {
+<span class="fc" id="L219">        LOG.info(&quot;Publish posts...&quot;);</span>
+
+        try {
+<span class="fc" id="L222">            return publishFiles(</span>
+                    Formatters.Type.POST,
+                    getPostsData(),
+                    dirs.htdocsPosts());
+<span class="nc" id="L226">        } catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L227">            throw new PublishingSubCommandExcpetion(&quot;Can't read posts data files: &quot; + ex.getMessage(), ex);</span>
+        }
     }
 
-    private void updateIndexes(final List&lt;Page&gt; sites, final List&lt;Page&gt; posts) {
-<span class="fc" id="L142">        updateHomeSite();</span>
-<span class="fc" id="L143">        updateSiteMap();</span>
-<span class="fc" id="L144">        updateFeed();</span>
-<span class="fc" id="L145">    }</span>
+    /**
+     * Update indexes.
+     *
+     * @param sites must not be {@code null}
+     * @param posts must not be {@code null}
+     */
+    private void updateIndexes(final Collection&lt;Page&gt; sites, final Collection&lt;Page&gt; posts) {
+<span class="fc" id="L238">        updateHomeSite();</span>
+<span class="fc" id="L239">        updateSiteMap();</span>
+<span class="fc" id="L240">        updateFeed();</span>
+<span class="fc" id="L241">    }</span>
 
     /**
      * Publish all files in given directory with given layout.
@@ -150,87 +246,135 @@ class Publisher implements Command {
      * @param type must not be {@literal null}
      * @param data must not be {@literal null}
      * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if can't render template
      */
-    private List&lt;Page&gt; publishFiles(final Formatters.Type type, final Collection&lt;DataFile&gt; data, final Path outputDir)
-            throws ApplicationException {
-<span class="fc" id="L157">        Validate.notNull(type, &quot;Layout must not be null!&quot;);</span>
-<span class="fc" id="L158">        Validate.notNull(data, &quot;Dirname must not be null!&quot;);</span>
-<span class="fc" id="L159">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
-<span class="fc" id="L160">        LOG.debug(String.format(&quot;Pubish files from '%s'...&quot;, data));</span>
-<span class="fc" id="L161">        final List&lt;Page&gt; published = Lists.newArrayList();</span>
+    private Collection&lt;Page&gt; publishFiles(
+        final Formatters.Type type,
+        final Collection&lt;DataFile&gt; data,
+        final Path outputDir)
+        throws PublishingSubCommandExcpetion {
+<span class="fc" id="L257">        Validate.notNull(type, &quot;type&quot;);</span>
+<span class="fc" id="L258">        Validate.notNull(data, &quot;data&quot;);</span>
+<span class="fc" id="L259">        Validate.notNull(outputDir, &quot;outputDir&quot;);</span>
+<span class="fc" id="L260">        LOG.debug(String.format(&quot;Pubish files from '%s'...&quot;, data));</span>
+<span class="fc" id="L261">        final List&lt;Page&gt; published = Lists.newArrayList();</span>
 
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        for (final DataFile file : data) {</span>
-<span class="fc" id="L164">            published.add(publishFile(type, file, outputDir));</span>
-<span class="fc" id="L165">        }</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        for (final DataFile file : data) {</span>
+<span class="fc" id="L264">            published.add(publishFile(type, file, outputDir));</span>
+<span class="fc" id="L265">        }</span>
 
-<span class="fc" id="L167">        return published;</span>
+<span class="fc" id="L267">        return published;</span>
     }
 
     /**
      * Publish a given file with a given layout.
      *
      * @param type must not be {@literal null}
-     * @param file must not be {@literal null} or empty
+     * @param data must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
-     * @throws ApplicationException if can't render template
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-            throws ApplicationException {
-<span class="fc" id="L180">        Validate.notNull(type, &quot;Layout must not be null!&quot;);</span>
-<span class="fc" id="L181">        Validate.notNull(data, &quot;File name must not be null or empty!&quot;);</span>
-<span class="fc" id="L182">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
-<span class="fc" id="L183">        final String targetFileName = data.getSlug() + &quot;.html&quot;;</span>
-<span class="fc" id="L184">        LOG.info(String.format(&quot;Publishing file '%s'...&quot;, targetFileName));</span>
-<span class="fc" id="L185">        final Path target = outputDir.resolve(targetFileName);</span>
+            throws PublishingSubCommandExcpetion {
+<span class="fc" id="L281">        Validate.notNull(type, &quot;Layout must not be null!&quot;);</span>
+<span class="fc" id="L282">        Validate.notNull(data, &quot;File name must not be null or empty!&quot;);</span>
+<span class="fc" id="L283">        Validate.notNull(outputDir, &quot;Output dir must not be null!&quot;);</span>
+<span class="fc" id="L284">        final String targetFileName = data.getSlug() + &quot;.html&quot;;</span>
+<span class="fc" id="L285">        LOG.info(String.format(&quot;Publishing file '%s'...&quot;, targetFileName));</span>
+<span class="fc" id="L286">        final Path target = outputDir.resolve(targetFileName);</span>
+        final SiteMapUrl.ChangeFrequency frequencey;
+        final SiteMapUrl.Priority priority;
 
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (publishedFileExists(target.toFile())) {</span>
-<span class="nc" id="L188">            LOG.info(String.format(&quot;File %s already exists.&quot;, target));</span>
+<span class="pc bpc" id="L290" title="2 of 3 branches missed.">        switch (type) {</span>
+            case POST:
+<span class="fc" id="L292">                frequencey = SiteMapUrl.ChangeFrequency.DAILY;</span>
+<span class="fc" id="L293">                priority = SiteMapUrl.Priority.POST;</span>
+<span class="fc" id="L294">                break;</span>
+            case SITE:
+<span class="nc" id="L296">                frequencey = SiteMapUrl.ChangeFrequency.WEEKLY;</span>
+<span class="nc" id="L297">                priority = SiteMapUrl.Priority.SITE;</span>
+<span class="nc" id="L298">                break;</span>
+            default:
+<span class="nc" id="L300">                frequencey = SiteMapUrl.ChangeFrequency.MONTHLY;</span>
+<span class="nc" id="L301">                priority = SiteMapUrl.Priority.SITE;</span>
+                break;
+        }
 
-<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (isPurge()) {</span>
-<span class="nc" id="L191">                LOG.info(&quot;Purge option is true. File will be republished.&quot;);</span>
+
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (publishedFileExists(target.toFile())) {</span>
+<span class="nc" id="L307">            LOG.info(String.format(&quot;File %s already exists.&quot;, target));</span>
+
+<span class="nc bnc" id="L309" title="All 2 branches missed.">            if (isPurge()) {</span>
+<span class="nc" id="L310">                LOG.info(&quot;Purge option is true. File will be republished.&quot;);</span>
             } else {
-<span class="nc" id="L193">                LOG.info(&quot;Skip file.&quot;);</span>
+<span class="nc" id="L312">                LOG.info(&quot;Skip file.&quot;);</span>
                 try {
-<span class="nc" id="L195">                    return Page.newExistingPage(&quot;title&quot;, new URI(&quot;&quot;), &quot;description&quot;, new DateTime());</span>
-<span class="nc" id="L196">                } catch (URISyntaxException ex) {</span>
-<span class="nc" id="L197">                    throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);</span>
+<span class="nc" id="L314">                    return new Page(</span>
+                        data.getHeadline(),
+                        createUri(data),
+                        &quot;TODO&quot;,
+                        new DateTime(),
+                        data,
+                        frequencey,
+                        priority);
+<span class="nc" id="L322">                } catch (final URISyntaxException | IOException ex) {</span>
+<span class="nc" id="L323">                    throw new PublishingSubCommandExcpetion(ex.getMessage(), ex);</span>
                 }
             }
         }
 
-<span class="fc" id="L202">        FileInputStream input = null;</span>
-
         try {
-<span class="pc bpc" id="L205" title="3 of 4 branches missed.">            if (type == Formatters.Type.POST || type == Formatters.Type.SITE) {</span>
-<span class="fc" id="L206">                input = new FileInputStream(new File(data.getFilename()));</span>
-<span class="fc" id="L207">                final DataProcessor processor = new DataProcessor(</span>
-                        input,
-                        type,
-                        baseUri,
-                        templateConfig);
-
-<span class="fc" id="L213">                LOG.info(String.format(&quot;Write published file to '%s'.&quot;, target));</span>
-<span class="fc" id="L214">                Files.createFile(target);</span>
-<span class="fc" id="L215">                Files.write(</span>
-                        target,
-                        processor.getHtml().getBytes(Constants.DEFAULT_ENCODING.toString()),
-                        StandardOpenOption.WRITE);
-            }
-<span class="nc" id="L220">        } catch (final IOException | TemplateException ex) {</span>
-<span class="nc" id="L221">            throw new ApplicationException(</span>
-                    ExitCodeImpl.FATAL,
+<span class="fc" id="L329">            final String html = format(type, data);</span>
+<span class="fc" id="L330">            LOG.info(String.format(&quot;Write published file to '%s'.&quot;, target));</span>
+<span class="fc" id="L331">            Files.createFile(target);</span>
+<span class="fc" id="L332">            Files.write(</span>
+                    target,
+                    html.getBytes(Constants.DEFAULT_ENCODING.toString()),
+                    StandardOpenOption.WRITE);
+<span class="fc" id="L336">            return new Page(</span>
+                data.getHeadline(),
+                createUri(data),
+                html,
+                new DateTime(),
+                data,
+                frequencey,
+                priority);
+<span class="nc" id="L344">        } catch (final IOException | TemplateException | URISyntaxException ex) {</span>
+<span class="nc" id="L345">            throw new PublishingSubCommandExcpetion(</span>
                     String.format(&quot;Error occured during publishing: %s!&quot;, ex.getMessage()),
                     ex);
-        } finally {
-<span class="pc" id="L226">            IOUtils.closeQuietly(input);</span>
-<span class="fc" id="L227">        }</span>
-
-        try {
-<span class="fc" id="L230">            return Page.newPublishedPage(&quot;title&quot;, new URI(&quot;&quot;), &quot;description&quot;, new DateTime());</span>
-<span class="nc" id="L231">        } catch (URISyntaxException ex) {</span>
-<span class="nc" id="L232">            throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);</span>
         }
+    }
+
+    /**
+     * Format data to HTML.
+     *
+     * @param type must not be {@code null}
+     * @param data must not be {@code null}
+     * @return never {@code null}
+     * @throws TemplateException if any template rendering error occurs
+     * @throws IOException if template files can't be read
+     */
+    private String format(final Formatters.Type type, final DataFile data) throws TemplateException, IOException {
+        final HtmlFormatter fmt;
+
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">        if (type == Formatters.Type.POST) {</span>
+<span class="fc" id="L364">            fmt = Formatters.createPostFormatter(templateConfig, data.getMarkdown());</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">        } else if (type == Formatters.Type.SITE) {</span>
+<span class="nc" id="L366">            fmt = Formatters.createSiteFormatter(templateConfig, data.getMarkdown());</span>
+        } else {
+<span class="nc" id="L368">            throw new IllegalArgumentException(String.format(&quot;Unsupported type %s!&quot;, type));</span>
+        }
+
+<span class="fc" id="L371">        fmt.setTitle(data.getHeadline());</span>
+<span class="fc" id="L372">        fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());</span>
+<span class="fc" id="L373">        fmt.setBaseUri(baseUri);</span>
+<span class="fc" id="L374">        fmt.setDescription(data.getDescription());</span>
+<span class="fc" id="L375">        fmt.setKeywords(data.getKeywords());</span>
+
+<span class="fc" id="L377">        return fmt.format();</span>
     }
 
     /**
@@ -240,23 +384,36 @@ class Publisher implements Command {
      * @return {@literal true} if file already exists, else {@literal false}
      */
     boolean publishedFileExists(final File file) {
-<span class="fc" id="L243">        return file.exists();</span>
+<span class="fc" id="L387">        return file.exists();</span>
     }
 
+    /**
+     * Update the home site.
+     */
     private void updateHomeSite() {
-<span class="fc" id="L247">        LOG.info(&quot;Update home site...&quot;);</span>
-<span class="fc" id="L248">        new HomeSiteGenerator().execute();</span>
-<span class="fc" id="L249">    }</span>
+<span class="fc" id="L394">        LOG.info(&quot;Update home site...&quot;);</span>
+<span class="fc" id="L395">        new HomeSiteGenerator().execute();</span>
+<span class="fc" id="L396">    }</span>
 
+    /**
+     * Update the site map.
+     */
     private void updateSiteMap() {
-<span class="fc" id="L252">        LOG.info(&quot;Update site map...&quot;);</span>
-<span class="fc" id="L253">        new SiteMapGenerator(templateConfig).execute();</span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L402">        LOG.info(&quot;Update site map...&quot;);</span>
+<span class="fc" id="L403">        new SiteMapGenerator(templateConfig).execute();</span>
+<span class="fc" id="L404">    }</span>
 
+    /**
+     * Update the RSS feed.
+     */
     private void updateFeed() {
-<span class="fc" id="L257">        LOG.info(&quot;Update feed...&quot;);</span>
+<span class="fc" id="L410">        LOG.info(&quot;Update feed...&quot;);</span>
 //        new FeedGenerator(templateConfig).execute();
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L412">    }</span>
+
+    private URI createUri(final DataFile data) throws URISyntaxException {
+<span class="fc" id="L415">        return new URI(&quot;&quot;);</span>
+    }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

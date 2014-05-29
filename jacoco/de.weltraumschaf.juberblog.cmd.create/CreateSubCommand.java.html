@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog.cmd.create</a> &gt; <span class="el_source">CreateSubCommand.java</span></div><h1>CreateSubCommand.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.create</a> &gt; <span class="el_source">CreateSubCommand.java</span></div><h1>CreateSubCommand.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -9,30 +9,39 @@
  *
  * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
  */
-
 package de.weltraumschaf.juberblog.cmd.create;
 
-import de.weltraumschaf.commons.IO;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.string.StringEscape;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
-import org.apache.commons.lang3.Validate;
-import org.apache.log4j.Logger;
+import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.time.Time;
+import de.weltraumschaf.juberblog.time.TimeProvider;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- * Creates a post or site draft.
+ * Creates a post or site optionally as draft.
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-public class CreateSubCommand extends CommonCreateAndPublishSubCommand&lt;CreateOptions&gt;  {
+public final class CreateSubCommand extends CommonCreateAndPublishSubCommand&lt;CreateOptions&gt; {
 
     /**
-     * Log facility.
+     * Template for XML.
      */
-<span class="fc" id="L31">    private static final Logger LOG = Logger.getLogger(CreateSubCommand.class);</span>
+    private static final String TEMPLATE = &quot;create/post_or_site.md.ftl&quot;;
     /**
-     * Command line options.
+     * Used to create the time in the file name.
      */
-    private CreateOptions options;
+<span class="fc" id="L44">    private TimeProvider time = Time.newProvider();</span>
 
     /**
      * Dedicated constructor.
@@ -40,24 +49,146 @@ public class CreateSubCommand extends CommonCreateAndPublishSubCommand&lt;Create
      * @param io must not be {@code null}
      */
     public CreateSubCommand(final IO io) {
-<span class="fc" id="L43">        super(io);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L52">        super(io);</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
-    public void run() {
-<span class="nc" id="L48">        LOG.debug(&quot;create&quot;);</span>
-<span class="nc" id="L49">    }</span>
+    protected void init() throws ApplicationException {
+<span class="fc" id="L57">        super.init();</span>
+<span class="fc" id="L58">        validateArguments();</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
-    public void setOptions(final CreateOptions opt) {
-<span class="fc" id="L53">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
-<span class="fc" id="L54">        options = opt;</span>
-<span class="fc" id="L55">    }</span>
+    public void run() throws ApplicationException {
+<span class="fc" id="L63">        final String title = getOptions().getTitle().trim();</span>
 
-    @Override
-    public CreateOptions getOptions() {
-<span class="fc" id="L59">        return options;</span>
+        try {
+<span class="fc" id="L66">            final Template tpl = new Template(getTemplateConfig(), TEMPLATE);</span>
+<span class="fc" id="L67">            tpl.assignVariable(&quot;title&quot;, title);</span>
+<span class="fc" id="L68">            final String content = tpl.render();</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (getOptions().isSite()) {</span>
+<span class="fc" id="L71">                createSite(content);</span>
+            } else {
+<span class="fc" id="L73">                createPost(content);</span>
+            }
+<span class="nc" id="L75">        } catch (final IOException ex) {</span>
+<span class="nc" id="L76">            throw new ApplicationException(</span>
+                ExitCodeImpl.FATAL, &quot;Can't read template to create post/site! (&quot; + ex.getMessage() + ')', ex);
+<span class="nc" id="L78">        } catch (final TemplateException ex) {</span>
+<span class="nc" id="L79">            throw new ApplicationException(</span>
+                ExitCodeImpl.FATAL, &quot;Can't render template to create post/site! (&quot; + ex.getMessage() + ')', ex);
+<span class="fc" id="L81">        }</span>
+
+<span class="fc" id="L83">        io.println(&quot;Done :)&quot;);</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Injection point for a time provider.
+     *
+     * @param time must not be {@code null}
+     */
+    void setTime(final TimeProvider time) {
+<span class="fc" id="L92">        this.time = Validate.notNull(time, &quot;time&quot;);</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Create site (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    private void createSite(final String content) throws IOException {
+<span class="fc" id="L102">        final String title = getOptions().getTitle();</span>
+        final Path baseDir;
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (getOptions().isDraft()) {</span>
+<span class="fc" id="L106">            io.println(String.format(&quot;Create site draft '%s'...&quot;, title));</span>
+<span class="fc" id="L107">            baseDir = getDirectories().dataDraftSites();</span>
+        } else {
+<span class="fc" id="L109">            io.println(String.format(&quot;Create site '%s'...&quot;, title));</span>
+<span class="fc" id="L110">            baseDir = getDirectories().dataSites();</span>
+        }
+
+<span class="fc" id="L113">        writeFile(createPath(baseDir, title), Validate.notEmpty(content, &quot;content&quot;));</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Create post (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    private void createPost(final String content) throws IOException {
+<span class="fc" id="L123">        final String title = getOptions().getTitle();</span>
+        final Path baseDir;
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (getOptions().isDraft()) {</span>
+<span class="fc" id="L127">            io.println(String.format(&quot;Create post draft '%s'...&quot;, title));</span>
+<span class="fc" id="L128">            baseDir = getDirectories().dataDraftPosts();</span>
+        } else {
+<span class="fc" id="L130">            io.println(String.format(&quot;Create post '%s'...&quot;, title));</span>
+<span class="fc" id="L131">            baseDir = getDirectories().dataPosts();</span>
+        }
+
+<span class="fc" id="L134">        writeFile(createPath(baseDir, title), content);</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Write content to file.
+     *
+     * @param fileName must not be {@code null}
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    void writeFile(final Path fileName, final String content) throws IOException {
+<span class="fc" id="L145">        io.println(String.format(&quot;Write file '%s'...&quot;, fileName));</span>
+<span class="fc" id="L146">        Files.write(</span>
+            Validate.notNull(fileName, &quot;fileName&quot;),
+            Validate.notEmpty(content, &quot;content&quot;).getBytes(Constants.DEFAULT_ENCODING.toString()));
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * Create target path.
+     *
+     * @param baseDir must not be {@code null}
+     * @param title must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    Path createPath(final Path baseDir, final String title) {
+<span class="fc" id="L159">        return Validate.notNull(baseDir).resolve(createFileNameFromTitle(title));</span>
     }
 
+    /**
+     * Create file name from title.
+     * &lt;p&gt;
+     * Format: {@literal TIME_TITLE.md}
+     * {@literal TIME} is provided by {@link #time}. {@literal TITLE} is the escaped title.
+     * &lt;/p&gt;
+     *
+     * @param title must not be {@code null} or empty
+     * @return never {@code null} or empty
+     */
+    String createFileNameFromTitle(final String title) {
+<span class="fc" id="L173">        final StringBuilder buffer = new StringBuilder();</span>
+
+<span class="fc" id="L175">        buffer.append(time.nowAsString())</span>
+              .append('_')
+              .append(StringEscape.escapeFileName(Validate.notEmpty(title)))
+              .append(&quot;.md&quot;);
+
+<span class="fc" id="L180">        return buffer.toString();</span>
+    }
+
+    /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if title is empty
+     */
+    private void validateArguments() throws ApplicationException {
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (getOptions().getTitle().isEmpty()) {</span>
+<span class="fc" id="L190">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, &quot;No title arguemnt given!&quot;);</span>
+        }
+<span class="fc" id="L192">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

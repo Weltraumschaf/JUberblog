@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Preprocessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Preprocessor.java</span></div><h1>Preprocessor.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Preprocessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog</a> &gt; <span class="el_source">Preprocessor.java</span></div><h1>Preprocessor.java</h1><pre class="source lang-java linenums">/*
  *  LICENSE
  *
  * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
@@ -13,9 +13,10 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.model.MetaData;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.Validate;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,12 +39,12 @@ import org.apache.log4j.Logger;
  *
  * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
  */
-<span class="fc" id="L41">public class Preprocessor {</span>
+<span class="fc" id="L42">public final class Preprocessor {</span>
 
     /**
      * Log facility.
      */
-<span class="fc" id="L46">    private static final Logger LOG = Logger.getLogger(Preprocessor.class);</span>
+<span class="fc" id="L47">    private static final Logger LOG = Logger.getLogger(Preprocessor.class);</span>
     /**
      * Indicates beginning of preprocessor area.
      */
@@ -61,7 +62,7 @@ import org.apache.log4j.Logger;
     /**
      * Holds recognized data.
      */
-<span class="fc" id="L64">    private final Map&lt;String, String&gt; data = Maps.newHashMap();</span>
+<span class="fc" id="L65">    private final Map&lt;String, String&gt; data = Maps.newHashMap();</span>
 
     /**
      * Processes the input.
@@ -72,36 +73,36 @@ import org.apache.log4j.Logger;
      * @return returns the input without the preprocessor blocks
      */
     public String process(final String in) {
-<span class="fc" id="L75">        Validate.notNull(in, &quot;Input must not be null!&quot;);</span>
-<span class="fc" id="L76">        data.clear();</span>
-<span class="fc" id="L77">        final List&lt;String&gt; preprocesorBuffer = Lists.newArrayList();</span>
-<span class="fc" id="L78">        final StringBuilder contentBuffer = new StringBuilder();</span>
-<span class="fc" id="L79">        boolean inside = false;</span>
+<span class="fc" id="L76">        Validate.notNull(in, &quot;Input must not be null!&quot;);</span>
+<span class="fc" id="L77">        data.clear();</span>
+<span class="fc" id="L78">        final List&lt;String&gt; preprocesorBuffer = Lists.newArrayList();</span>
+<span class="fc" id="L79">        final StringBuilder contentBuffer = new StringBuilder();</span>
+<span class="fc" id="L80">        boolean inside = false;</span>
 
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (final String line : in.split(Constants.DEFAULT_NEW_LINE.toString())) {</span>
-<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (line.trim().startsWith(START_TOKEN)) {</span>
-<span class="fc" id="L83">                inside = true;</span>
-<span class="fc" id="L84">                continue;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (final String line : in.split(Constants.DEFAULT_NEW_LINE.toString())) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (line.trim().startsWith(START_TOKEN)) {</span>
+<span class="fc" id="L84">                inside = true;</span>
+<span class="fc" id="L85">                continue;</span>
             }
 
-<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (line.trim().startsWith(END_TOKEN)) {</span>
-<span class="fc" id="L88">                inside = false;</span>
-<span class="fc" id="L89">                continue;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (line.trim().startsWith(END_TOKEN)) {</span>
+<span class="fc" id="L89">                inside = false;</span>
+<span class="fc" id="L90">                continue;</span>
             }
 
-<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (inside) {</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">                if (line.trim().startsWith(&quot;//&quot;)) {</span>
-<span class="fc" id="L94">                    continue; // Skip comments.</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (inside) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                if (line.trim().startsWith(&quot;//&quot;)) {</span>
+<span class="fc" id="L95">                    continue; // Skip comments.</span>
                 }
 
-<span class="fc" id="L97">                preprocesorBuffer.add(line);</span>
+<span class="fc" id="L98">                preprocesorBuffer.add(line);</span>
             } else {
-<span class="fc" id="L99">                contentBuffer.append(line).append(Constants.DEFAULT_NEW_LINE.toString());</span>
+<span class="fc" id="L100">                contentBuffer.append(line).append(Constants.DEFAULT_NEW_LINE.toString());</span>
             }
         }
 
-<span class="fc" id="L103">        recognizedData(preprocesorBuffer);</span>
-<span class="fc" id="L104">        return contentBuffer.toString().trim();</span>
+<span class="fc" id="L104">        recognizedData(preprocesorBuffer);</span>
+<span class="fc" id="L105">        return contentBuffer.toString().trim();</span>
     }
 
     /**
@@ -110,7 +111,7 @@ import org.apache.log4j.Logger;
      * @return never {@code null}, defense copy
      */
     public Map&lt;String, String&gt; getData() {
-<span class="fc" id="L113">        return Maps.newHashMap(data);</span>
+<span class="fc" id="L114">        return Maps.newHashMap(data);</span>
     }
 
     /**
@@ -119,7 +120,7 @@ import org.apache.log4j.Logger;
      * @return never {@code null}, always new instance
      */
     public MetaData getMetaData() {
-<span class="fc" id="L122">        return new MetaData(getData());</span>
+<span class="fc" id="L123">        return new MetaData(getData());</span>
     }
 
     /**
@@ -132,8 +133,8 @@ import org.apache.log4j.Logger;
      * @see #recognizedData(java.util.List, java.util.Map)
      */
     private void recognizedData(final List&lt;String&gt; preprocesorBlocks) {
-<span class="fc" id="L135">        recognizedData(preprocesorBlocks, data);</span>
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L136">        recognizedData(preprocesorBlocks, data);</span>
+<span class="fc" id="L137">    }</span>
 
     /**
      * Recognizes key value pairs.
@@ -147,45 +148,45 @@ import org.apache.log4j.Logger;
      * @param map must not be {@code null}
      */
     static void recognizedData(final List&lt;String&gt; preprocesorBlocks, final Map&lt;String, String&gt; map) {
-<span class="fc" id="L150">        Validate.notNull(preprocesorBlocks, &quot;Preprocesor block must not be null!&quot;);</span>
-<span class="fc" id="L151">        Validate.notNull(map, &quot;Map block must not be null!&quot;);</span>
+<span class="fc" id="L151">        Validate.notNull(preprocesorBlocks, &quot;Preprocesor block must not be null!&quot;);</span>
+<span class="fc" id="L152">        Validate.notNull(map, &quot;Map block must not be null!&quot;);</span>
 
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        for (final String line : preprocesorBlocks) {</span>
-<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (!line.contains(SPLIT_TOKEN)) {</span>
-<span class="fc" id="L155">                LOG.warn(String.format(&quot;Malformed line '%s'! Missing split token '%s'. Use format 'key%svalue'.&quot;,</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (final String line : preprocesorBlocks) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            if (!line.contains(SPLIT_TOKEN)) {</span>
+<span class="fc" id="L156">                LOG.warn(String.format(&quot;Malformed line '%s'! Missing split token '%s'. Use format 'key%svalue'.&quot;,</span>
                         line, SPLIT_TOKEN, SPLIT_TOKEN));
-<span class="fc" id="L157">                continue;</span>
+<span class="fc" id="L158">                continue;</span>
             }
 
-<span class="fc" id="L160">            final String[] tokens = line.split(SPLIT_TOKEN);</span>
+<span class="fc" id="L161">            final String[] tokens = line.split(SPLIT_TOKEN);</span>
 
-<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (tokens.length == 0) {</span>
-<span class="fc" id="L163">                LOG.warn(String.format(&quot;No key given: '%s'! Skipping line.&quot;, line));</span>
-<span class="fc" id="L164">                continue;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            if (tokens.length == 0) {</span>
+<span class="fc" id="L164">                LOG.warn(String.format(&quot;No key given: '%s'! Skipping line.&quot;, line));</span>
+<span class="fc" id="L165">                continue;</span>
             }
 
-<span class="fc" id="L167">            final String name = tokens[0].trim();</span>
+<span class="fc" id="L168">            final String name = tokens[0].trim();</span>
 
-<span class="fc bfc" id="L169" title="All 2 branches covered.">            if (name.isEmpty()) {</span>
-<span class="fc" id="L170">                LOG.warn(String.format(&quot;Empty key given: '%s'! Skipping line.&quot;, line));</span>
-<span class="fc" id="L171">                continue;</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">            if (name.isEmpty()) {</span>
+<span class="fc" id="L171">                LOG.warn(String.format(&quot;Empty key given: '%s'! Skipping line.&quot;, line));</span>
+<span class="fc" id="L172">                continue;</span>
             }
 
             final String value;
 
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (tokens.length == 1) {</span>
-<span class="fc" id="L177">                LOG.warn(String.format(&quot;No value given: '%s'! Set vlaue empty.&quot;, line));</span>
-<span class="fc" id="L178">                value = &quot;&quot;;</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            if (tokens.length == 1) {</span>
+<span class="fc" id="L178">                LOG.warn(String.format(&quot;No value given: '%s'! Set vlaue empty.&quot;, line));</span>
+<span class="fc" id="L179">                value = &quot;&quot;;</span>
             } else {
-<span class="fc" id="L180">                value = tokens[1].trim();</span>
+<span class="fc" id="L181">                value = tokens[1].trim();</span>
 
-<span class="fc bfc" id="L182" title="All 2 branches covered.">                if (value.isEmpty()) {</span>
-<span class="fc" id="L183">                    LOG.warn(String.format(&quot;Empty value given: '%s'! Set vlaue empty.&quot;, line));</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">                if (value.isEmpty()) {</span>
+<span class="fc" id="L184">                    LOG.warn(String.format(&quot;Empty value given: '%s'! Set vlaue empty.&quot;, line));</span>
                 }
             }
 
-<span class="fc" id="L187">            map.put(name, value);</span>
-<span class="fc" id="L188">        }</span>
-<span class="fc" id="L189">    }</span>
+<span class="fc" id="L188">            map.put(name, value);</span>
+<span class="fc" id="L189">        }</span>
+<span class="fc" id="L190">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>
