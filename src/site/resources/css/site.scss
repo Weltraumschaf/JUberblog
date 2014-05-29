@@ -47,6 +47,10 @@ p {
     line-height: 1.4em;
 }
 
+hr {
+    border-color: $dark;
+}
+
 #bannerLeft h2 {
     font-size: 3em;
     color: $dark;
@@ -64,6 +68,10 @@ p {
     text-shadow: 0 1px 0 $dark;
 }
 
-.divider {
+.breadcrumb .divider {
+    color: $dark;
+}
+
+.nav-header {
     color: $dark;
 }

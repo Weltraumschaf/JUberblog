@@ -27,6 +27,9 @@ h4, p {
 p {
   line-height: 1.4em; }
 
+hr {
+  border-color: #ad7914; }
+
 #bannerLeft h2 {
   font-size: 3em;
   color: #ad7914; }
@@ -40,5 +43,8 @@ p {
 .breadcrumb li {
   text-shadow: 0 1px 0 #ad7914; }
 
-.divider {
+.breadcrumb .divider {
+  color: #ad7914; }
+
+.nav-header {
   color: #ad7914; }
