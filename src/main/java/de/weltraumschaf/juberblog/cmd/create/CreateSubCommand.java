@@ -38,6 +38,9 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      * Template for XML.
      */
     private static final String TEMPLATE = "create/post_or_site.md.ftl";
+    /**
+     * Used to create the time in the file name.
+     */
     private TimeProvider time = Time.newProvider();
 
     /**

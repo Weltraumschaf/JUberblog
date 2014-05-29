@@ -81,7 +81,7 @@
         <project.build.version.target>1.7</project.build.version.target>
         <project.build.mainClass>de.weltraumschaf.juberblog.App</project.build.mainClass>
         <project.build.binDirectory>${project.basedir}/bin</project.build.binDirectory>
-        <project.build.distDirectory>${project.basedir}/dist</project.build.distDirectory>
+        <project.build.distDirectory>${project.basedir}/src/site/resources/dist</project.build.distDirectory>
         <maven.pmd.rulesetfiles>${project.basedir}/src/main/config/pmd.xml</maven.pmd.rulesetfiles>
         <maven.pmd.cpd-excludes>${project.basedir}/src/main/config/exclude-cpd.properties</maven.pmd.cpd-excludes>
         <maven.pmd.pmd-excludes>${project.basedir}/src/main/config/exclude-pmd.properties</maven.pmd.pmd-excludes>
