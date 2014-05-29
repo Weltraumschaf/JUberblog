@@ -17,14 +17,23 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 
 /**
+ * Joda Time based default implementation.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 final class DefaultProvider implements TimeProvider {
 
-    private static final int LENGTH_OTHERS = 2;
+    /**
+     * Length of the year in string representation.
+     */
     private static final int LENGTH_HEAR = 4;
-
+    /**
+     * Length of all other time pats in string representation.
+     */
+    private static final int LENGTH_OTHERS = 2;
+    /**
+     * Formatter for {@literal yyyy-mm-ddThh.mm.ss}.
+     */
     private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendYear(LENGTH_HEAR, LENGTH_HEAR)
                 .appendLiteral('-')

@@ -13,16 +13,25 @@
 package de.weltraumschaf.juberblog.time;
 
 /**
+ * Factory to provide time utilities.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Time {
 
+    /**
+     * Hidden for pure static factory.
+     */
     private Time() {
         super();
         throw new UnsupportedOperationException("Do not call by reflection!");
     }
 
+    /**
+     * Creates a new time provider.
+     *
+     * @return never {@code null}, always new instance
+     */
     public static TimeProvider newProvider() {
         return new DefaultProvider();
     }

@@ -28,6 +28,13 @@ public abstract class CreateAndPublishOptions extends CommonOptions {
     @Parameter(names = {"-c", "--config" }, description = "Config file to use.")
     private String configurationFile = "";
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param configurationFile must not be {@code null}
+     */
     public CreateAndPublishOptions(boolean help, boolean verbose, final String configurationFile) {
         super(help, verbose);
         this.configurationFile = Validate.notNull(configurationFile, "Parameter 'configurationFile' must not be null!");

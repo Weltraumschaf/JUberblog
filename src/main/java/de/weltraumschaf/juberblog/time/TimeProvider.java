@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.time;
 
 /**
+ * Provides time.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -20,7 +21,8 @@ public interface TimeProvider {
 
     /**
      * Returns now in form of {@literal yyyy-mm-ddThh.mm.ss}.
-     * @return
+     *
+     * @return never {@code null} or empty
      */
     String nowAsString();
 }

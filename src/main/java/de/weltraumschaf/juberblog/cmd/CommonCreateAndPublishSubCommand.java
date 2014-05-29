@@ -129,10 +129,21 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
         return options;
     }
 
+    /**
+     * Accesor for template configuration.
+     *
+     * @return never {@literal null}
+     */
     protected Configuration getTemplateConfig() {
         return templateConfig;
     }
 
+    /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if no configuration file was given,
+     *                              or if it is not readable
+     */
     private void validateArguments() throws ApplicationException {
         if (getOptions().getConfigurationFile().isEmpty()) {
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No config file argument given!");

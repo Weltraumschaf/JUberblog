@@ -68,7 +68,7 @@ final class Publisher implements Command {
      */
     private boolean purge;
     /**
-     * {@literal true} if data already read.
+     * {@code true} if data already read.
      *
      * Used for lazy load {@link #sitesData} and {@link #postsData}.
      */

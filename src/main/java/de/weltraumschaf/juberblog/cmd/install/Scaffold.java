@@ -61,7 +61,6 @@ public final class Scaffold {
      * Dedicated constructor.
      *
      * @param io must not be {@code null}
-     * @param verbose {@code true} to print verbose messages, else {@code false}
      */
     public Scaffold(final IO io) {
         super();
@@ -90,6 +89,7 @@ public final class Scaffold {
      * Copy all files from scaffold to target directory.
      *
      * @param target must not be {@code null}
+     * @throws IOException if scaffold files can't be copied
      */
     public void copyFiles(final File target) throws IOException {
         Validate.notNull(target, "Target must not be null!");

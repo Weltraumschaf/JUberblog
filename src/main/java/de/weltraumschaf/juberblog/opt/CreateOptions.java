@@ -38,10 +38,23 @@ public class CreateOptions extends CreateAndPublishOptions {
     @Parameter(names = {"-t", "--title" }, description = "Title of the blog post.")
     private String title;
 
+    /**
+     * Default constructor.
+     */
     public CreateOptions() {
         this(false, false, "", false, false, "");
     }
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param configurationFile must not be {@code null}
+     * @param draft whether to create a draft or not
+     * @param site {@code true} to create a site, {@code false} to create a post
+     * @param title must not be {@code null}
+     */
     public CreateOptions(final boolean help, final boolean verbose, final String configurationFile, final boolean draft, final boolean site, final String title) {
         super(help, verbose, configurationFile);
         this.draft = draft;

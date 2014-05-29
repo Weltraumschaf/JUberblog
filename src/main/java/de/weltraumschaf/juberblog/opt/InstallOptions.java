@@ -27,10 +27,20 @@ public class InstallOptions extends CommonOptions {
     @Parameter(names = {"-l", "--location" }, description = "Install location of the blog scaffold.")
     private String location;
 
+    /**
+     * Default constructor.
+     */
     public InstallOptions() {
         this(false, false, "");
     }
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param location must not be {@code null}
+     */
     public InstallOptions(final boolean help, final boolean verbose, final String location) {
         super(help, verbose);
         this.location = Validate.notNull(location, "Parameter 'location' must not be null!");

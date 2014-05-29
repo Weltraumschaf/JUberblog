@@ -24,16 +24,19 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Represents a data file.
- *
+ * <p>
  * In JUberblog the data file is the central data storage. It is based on Markdown files with some additions. On of the
  * additions is the the file name convention.
- *
+ * </p>
+ * <p>
  * The file names are produced by this schema:
+ * </p>
  * <pre>
  * filename := TIMESTAMP '.' SLUG '.md' ;
  * </pre>
- *
+ * <p>
  * TIMESTAMP is the Unix time stamp when the file was created. SLUG is th slugged form of the title.
+ * </p>
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */

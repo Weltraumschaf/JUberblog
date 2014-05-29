@@ -36,10 +36,23 @@ public class PublishOptions extends CreateAndPublishOptions {
     @Parameter(names = {"-s", "--sites"}, description = "Publish sites.")
     private boolean sites;
 
+    /**
+     * Default constructor.
+     */
     public PublishOptions() {
         this(false, false, "", false, false, false);
     }
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param help {@code true} if help is wanted
+     * @param verbose {@code true} if verbosity is wanted
+     * @param configurationFile must not be {@code null}
+     * @param purge whether to purge already published files
+     * @param quiet {@code true} to suppress verbose messages
+     * @param sites whether to publish sites, too
+     */
     public PublishOptions(final boolean help, final boolean verbose, final String configurationFile, final boolean purge, final boolean quiet, final boolean sites) {
         super(help, verbose, configurationFile);
         this.purge = purge;
