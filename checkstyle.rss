@@ -26,8 +26,8 @@ under the License.
     <copyright>&#169;2014 Weltraumschaf</copyright>
     <item>
       <title>File: 113,
-             Errors: 26,
-             Warnings: 4,
+             Errors: 25,
+             Warnings: 3,
              Infos: 0
       </title>
             <link>http://weltraumschaf.github.io/JUberblog//checkstyle.html</link>
@@ -66,7 +66,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
+                  1
                 </td>
                 <td>
                   2
@@ -573,7 +573,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
               </tr>
                           <tr>
