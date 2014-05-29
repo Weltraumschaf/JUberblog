@@ -1,5 +1,9 @@
 # TODO
 
+## Site
+
+- add Download section to site (move dist/) in site
+
 ## Features
 
 - implement create sub command

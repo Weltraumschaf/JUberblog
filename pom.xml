@@ -80,6 +80,8 @@
         <project.build.version.source>1.7</project.build.version.source>
         <project.build.version.target>1.7</project.build.version.target>
         <project.build.mainClass>de.weltraumschaf.juberblog.App</project.build.mainClass>
+        <project.build.binDirectory>${project.basedir}/bin</project.build.binDirectory>
+        <project.build.distDirectory>${project.basedir}/dist</project.build.distDirectory>
         <maven.pmd.rulesetfiles>${project.basedir}/src/main/config/pmd.xml</maven.pmd.rulesetfiles>
         <maven.pmd.cpd-excludes>${project.basedir}/src/main/config/exclude-cpd.properties</maven.pmd.cpd-excludes>
         <maven.pmd.pmd-excludes>${project.basedir}/src/main/config/exclude-pmd.properties</maven.pmd.pmd-excludes>
@@ -311,7 +313,7 @@
                         <descriptorRefs>jar-with-dependencies</descriptorRefs>
                     </descriptorRefs>
                     <finalName>${finalName}</finalName>
-                    <outputDirectory>${project.basedir}/bin</outputDirectory>
+                    <outputDirectory>${project.build.binDirectory}</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
                 </configuration>
@@ -564,6 +566,36 @@
                         </plugin>
                     </reportPlugins>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <!--
+                                  cp bin/ -> dist/juberblog/
+                                  tar dist/juberblog/juberblog/tar.bz2
+                                  tar dist/juberblog/juberblog/tar.gz
+                                  rm -r dist/juberblog/
+                                -->
+                                <copydir src="${project.build.binDirectory}"
+                                         dest="${project.build.distDirectory}/juberblog"/>
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2"
+                                     basedir="${project.build.distDirectory}/juberblog"
+                                     compression="bzip2"/>
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz"
+                                     basedir="${project.build.distDirectory}/juberblog"
+                                     compression="gzip"/>
+                                <delete dir="${project.build.distDirectory}/juberblog"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
