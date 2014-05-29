@@ -50,6 +50,9 @@ public class DataFile {
      * Signals that the {@link #creationTime} is not initialized.
      */
     private static final int UNITIALIZED = -1;
+    /**
+     * Processes the file content.
+     */
     private final DataProcessor processor;
     /**
      * The original absolute file name.

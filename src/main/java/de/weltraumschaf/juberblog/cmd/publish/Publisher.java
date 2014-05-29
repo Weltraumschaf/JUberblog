@@ -277,10 +277,10 @@ final class Publisher implements Command {
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-            throws PublishingSubCommandExcpetion {
-        Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(data, "File name must not be null or empty!");
-        Validate.notNull(outputDir, "Output dir must not be null!");
+        throws PublishingSubCommandExcpetion {
+        Validate.notNull(type, "type");
+        Validate.notNull(data, "data");
+        Validate.notNull(outputDir, "outputDir");
         final String targetFileName = data.getSlug() + ".html";
         LOG.info(String.format("Publishing file '%s'...", targetFileName));
         final Path target = outputDir.resolve(targetFileName);
