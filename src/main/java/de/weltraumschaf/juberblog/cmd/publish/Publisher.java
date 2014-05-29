@@ -86,13 +86,25 @@ final class Publisher implements Command {
      */
     private Collection<DataFile> postsData;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param dirs must not be {@code null}
+     * @param templateConfig must not be {@code null}
+     * @param baseUri must not be {@code null} or empty
+     */
     public Publisher(final Directories dirs, final Configuration templateConfig, final String baseUri) {
         super();
-        this.dirs = dirs;
-        this.templateConfig = templateConfig;
-        this.baseUri = baseUri;
+        this.dirs = Validate.notNull(dirs, "dirs");
+        this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
+        this.baseUri = Validate.notEmpty(baseUri, "baseUri");
     }
 
+    /**
+     * Read the data to publish.
+     *
+     * @throws FileNotFoundException if data files can't be read
+     */
     void readData() throws FileNotFoundException {
         if (dataRead) {
             return;
@@ -113,11 +125,23 @@ final class Publisher implements Command {
         dataRead = true;
     }
 
+    /**
+     * Get the data for sites to publish.
+     *
+     * @return never {@code null}
+     * @throws FileNotFoundException if data files can't be read
+     */
     Collection<DataFile> getSitesData() throws FileNotFoundException {
         readData();
         return sitesData;
     }
 
+    /**
+     * Get the data for posts to publish.
+     *
+     * @return never {@code null}
+     * @throws FileNotFoundException if data files can't be read
+     */
     Collection<DataFile> getPostsData() throws FileNotFoundException {
         readData();
         return postsData;
@@ -125,29 +149,56 @@ final class Publisher implements Command {
 
     @Override
     public void execute() throws PublishingSubCommandExcpetion {
-        final List<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
-        final List<Page> publishedPosts = publisPosts();
+        final Collection<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
+        final Collection<Page> publishedPosts = publisPosts();
         updateIndexes(publishedSites, publishedPosts);
     }
 
+    /**
+     * Whether to publish sites or not.
+     *
+     * @param sites {@code true} to publish sites
+     */
     public void setSites(boolean sites) {
         this.sites = sites;
     }
 
+    /**
+     * Whether to publish sites or not.
+     *
+     * @return {@code true} for publish sites
+     */
     private boolean isSites() {
         return sites;
     }
 
-    public void setPurge(boolean purga) {
-        this.purge = purga;
+    /**
+     * Whether to purge published files or not.
+     *
+     * @param purge {@code true} to purge files
+     */
+    public void setPurge(boolean purge) {
+        this.purge = purge;
     }
 
+    /**
+     * Whether to purge published files or not.
+     *
+     * @return {@code true} for purge files
+     */
     private boolean isPurge() {
         return purge;
     }
 
-    private List<Page> publishSites() throws PublishingSubCommandExcpetion {
+    /**
+     * Publish sites.
+     *
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if site data files can't be read
+     */
+    private Collection<Page> publishSites() throws PublishingSubCommandExcpetion {
         LOG.info("Publish sites...");
+
         try {
             return publishFiles(
                     Formatters.Type.SITE,
@@ -158,8 +209,15 @@ final class Publisher implements Command {
         }
     }
 
-    private List<Page> publisPosts() throws PublishingSubCommandExcpetion {
+    /**
+     * Publish posts.
+     *
+     * @return never {@code null}
+     * @throws PublishingSubCommandExcpetion if site data files can't be read
+     */
+    private Collection<Page> publisPosts() throws PublishingSubCommandExcpetion {
         LOG.info("Publish posts...");
+
         try {
             return publishFiles(
                     Formatters.Type.POST,
@@ -170,7 +228,13 @@ final class Publisher implements Command {
         }
     }
 
-    private void updateIndexes(final List<Page> sites, final List<Page> posts) {
+    /**
+     * Update indexes.
+     *
+     * @param sites must not be {@code null}
+     * @param posts must not be {@code null}
+     */
+    private void updateIndexes(final Collection<Page> sites, final Collection<Page> posts) {
         updateHomeSite();
         updateSiteMap();
         updateFeed();
@@ -184,11 +248,11 @@ final class Publisher implements Command {
      * @param outputDir must not be {@literal null}
      * @throws PublishingSubCommandExcpetion if can't render template
      */
-    private List<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
+    private Collection<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
             throws PublishingSubCommandExcpetion {
-        Validate.notNull(type, "Layout must not be null!");
-        Validate.notNull(data, "Dirname must not be null!");
-        Validate.notNull(outputDir, "Output dir must not be null!");
+        Validate.notNull(type, "type");
+        Validate.notNull(data, "data");
+        Validate.notNull(outputDir, "outputDir");
         LOG.debug(String.format("Pubish files from '%s'...", data));
         final List<Page> published = Lists.newArrayList();
 
@@ -250,7 +314,7 @@ final class Publisher implements Command {
                         data,
                         frequencey,
                         priority);
-                } catch (URISyntaxException | IOException ex) {
+                } catch (final URISyntaxException | IOException ex) {
                     throw new PublishingSubCommandExcpetion(ex.getMessage(), ex);
                 }
             }
@@ -279,7 +343,16 @@ final class Publisher implements Command {
         }
     }
 
-    private String format(final Formatters.Type type, final DataFile data) throws RuntimeException, TemplateException, IOException {
+    /**
+     * Format data to HTML.
+     *
+     * @param type must not be {@code null}
+     * @param data must not be {@code null}
+     * @return never {@code null}
+     * @throws TemplateException if any template rendering error occurs
+     * @throws IOException if template files can't be read
+     */
+    private String format(final Formatters.Type type, final DataFile data) throws TemplateException, IOException {
         final HtmlFormatter fmt;
 
         if (type == Formatters.Type.POST) {
@@ -287,7 +360,7 @@ final class Publisher implements Command {
         } else if (type == Formatters.Type.SITE) {
             fmt = Formatters.createSiteFormatter(templateConfig, data.getMarkdown());
         } else {
-            throw new RuntimeException(); // TODO beter making!
+            throw new IllegalArgumentException(String.format("Unsupported type %s!", type));
         }
 
         fmt.setTitle(data.getHeadline());
@@ -309,22 +382,31 @@ final class Publisher implements Command {
         return file.exists();
     }
 
+    /**
+     * Update the home site.
+     */
     private void updateHomeSite() {
         LOG.info("Update home site...");
         new HomeSiteGenerator().execute();
     }
 
+    /**
+     * Update the site map.
+     */
     private void updateSiteMap() {
         LOG.info("Update site map...");
         new SiteMapGenerator(templateConfig).execute();
     }
 
+    /**
+     * Update the RSS feed.
+     */
     private void updateFeed() {
         LOG.info("Update feed...");
 //        new FeedGenerator(templateConfig).execute();
     }
 
-    private URI createUri(DataFile data) throws URISyntaxException {
+    private URI createUri(final DataFile data) throws URISyntaxException {
         return new URI("");
     }
 
