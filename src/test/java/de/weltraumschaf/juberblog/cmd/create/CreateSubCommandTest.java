@@ -164,6 +164,27 @@ public class CreateSubCommandTest {
         assertThat(content, is(equalTo("<?juberblog\n    Navi:\n    Description:\n    Keywords:\n?>\n## title")));
     }
 
+    @Test
+    public void execute_createPostDraft() throws ApplicationException, IOException {
+        createScaffold();
+        when(time.nowAsString()).thenReturn("1234");
+        sut.setOptions(
+            new CreateOptions(
+                false,
+                false,
+                tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties",
+                true,
+                false,
+                "title"));
+
+        sut.execute();
+
+        final Path post = tmp.getRoot().toPath().resolve("data/drafts/posts/1234_title.md");
+        assertThat(Files.exists(post), is(true));
+        final String content = new String(Files.readAllBytes(post), "utf-8");
+        assertThat(content, is(equalTo("<?juberblog\n    Navi:\n    Description:\n    Keywords:\n?>\n## title")));
+    }
+
     private void createScaffold() throws IOException {
         final Scaffold scaffold = new Scaffold(mock(IO.class));
         scaffold.setSrcJar(TestingSourceJarProvider.newProvider());
