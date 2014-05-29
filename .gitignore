@@ -2,3 +2,4 @@
 .project
 .settings/
 *.jar
+.sass-cache/
