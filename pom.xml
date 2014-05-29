@@ -18,7 +18,7 @@
 
     <groupId>de.weltraumschaf</groupId>
     <artifactId>juberblog</artifactId>
-    <version>0.2.4-SNAPSHOT</version>
+    <version>0.2.4</version>
     <packaging>jar</packaging>
 
     <name>JUberblog</name>
@@ -59,7 +59,7 @@
         <connection>scm:git:git://github.com/Weltraumschaf/JUberblog</connection>
         <developerConnection>scm:git:git@github.com:Weltraumschaf/JUberblog.git</developerConnection>
         <url>https://github.com/Weltraumschaf/JUberblog.git</url>
-        <tag>HEAD</tag>
+        <tag>0.2.4</tag>
     </scm>
 
     <distributionManagement>
@@ -393,7 +393,7 @@
                             <includes>
                                 <include>**/*.uxf</include>
                             </includes>
-                            <excludes/>
+                            <excludes />
                         </fileset>
                     </filesets>
                 </configuration>
@@ -580,15 +580,10 @@
                                   tar dist/juberblog/juberblog/tar.gz
                                   rm -r dist/juberblog/
                                 -->
-                                <copydir src="${project.build.binDirectory}"
-                                         dest="${project.build.distDirectory}/juberblog"/>
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2"
-                                     basedir="${project.build.distDirectory}/juberblog"
-                                     compression="bzip2"/>
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz"
-                                     basedir="${project.build.distDirectory}/juberblog"
-                                     compression="gzip"/>
-                                <delete dir="${project.build.distDirectory}/juberblog"/>
+                                <copydir src="${project.build.binDirectory}" dest="${project.build.distDirectory}/juberblog" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2" basedir="${project.build.distDirectory}/juberblog" compression="bzip2" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz" basedir="${project.build.distDirectory}/juberblog" compression="gzip" />
+                                <delete dir="${project.build.distDirectory}/juberblog" />
                             </target>
                         </configuration>
                         <goals>
