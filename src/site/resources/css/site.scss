@@ -10,38 +10,25 @@ $darkSkin:      #AF5637;
 $lightSkin:     #E1876F;
 $rust:          #491711;
 
+$white: #FFFFFF;
+$light: #F5EAD6;
+$middle:#E1C798;
+$dark:  #AD7914;
+$black: #000000;
+
 html,
 body,
 button,
 input,
 select,
 textarea {
-    color: $rust;
-    background-color: $lightBrown;
+    color: $black;
+    background-color: $light;
     font-family: 'Source Sans Pro', sans-serif;
-}
-
-::-moz-selection {
-    background: $lightSkin;
-    text-shadow: none;
-}
-
-::selection {
-    background: $lightSkin;
-    text-shadow: none;
-}
-
-.well, .breadcrumb {
-    background-color: $darkSkin;
-    border: 1px solid $darkSkin;
 }
 
 h1 {
     font-size: 1.8em;
-}
-
-#bannerLeft h2 {
-    font-size: 3em;
 }
 
 h2 {
@@ -60,6 +47,23 @@ p {
     line-height: 1.4em;
 }
 
+#bannerLeft h2 {
+    font-size: 3em;
+    color: $dark;
+}
+
 #bodyColumn img {
     border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.breadcrumb, .sidebar-nav {
+    background-color: $middle;
+}
+
+.breadcrumb li {
+    text-shadow: 0 1px 0 $dark;
+}
+
+.divider {
+    color: $dark;
 }

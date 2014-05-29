@@ -8,27 +8,12 @@ button,
 input,
 select,
 textarea {
-  color: #491711;
-  background-color: #e69773;
+  color: black;
+  background-color: #f5ead6;
   font-family: 'Source Sans Pro', sans-serif; }
-
-::-moz-selection {
-  background: #e1876f;
-  text-shadow: none; }
-
-::selection {
-  background: #e1876f;
-  text-shadow: none; }
-
-.well, .breadcrumb {
-  background-color: #af5637;
-  border: 1px solid #af5637; }
 
 h1 {
   font-size: 1.8em; }
-
-#bannerLeft h2 {
-  font-size: 3em; }
 
 h2 {
   font-size: 1.6em; }
@@ -42,5 +27,18 @@ h4, p {
 p {
   line-height: 1.4em; }
 
+#bannerLeft h2 {
+  font-size: 3em;
+  color: #ad7914; }
+
 #bodyColumn img {
   border: 1px solid rgba(0, 0, 0, 0.15); }
+
+.breadcrumb, .sidebar-nav {
+  background-color: #e1c798; }
+
+.breadcrumb li {
+  text-shadow: 0 1px 0 #ad7914; }
+
+.divider {
+  color: #ad7914; }
