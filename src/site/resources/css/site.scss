@@ -1,0 +1,66 @@
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700,700italic,200italic,200);
+
+/*
+    https://kuler.adobe.com/Henna-4-color-theme-3856779/
+*/
+
+$lightBrown:    #E69773;
+$darkBrown:     #6D3A26;
+$darkSkin:      #AF5637;
+$lightSkin:     #E1876F;
+$rust:          #491711;
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+    color: #222;
+    background-color: #F5F5F5;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+.well, .breadcrumb {
+    background-color: #E1E1E1;
+    border: 1px solid #E3E3E3;
+}
+
+h1 {
+    font-size: 1.8em;
+}
+
+#bannerLeft h2 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+h3 {
+    font-size: 1.4em;
+}
+
+h4, p {
+    font-size: 1.2em;
+}
+
+p {
+    line-height: 1.4em;
+}
+
+#bodyColumn img {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
