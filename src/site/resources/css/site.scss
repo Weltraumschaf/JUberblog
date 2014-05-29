@@ -22,18 +22,18 @@ textarea {
 }
 
 ::-moz-selection {
-    background: #b3d4fc;
+    background: $lightSkin;
     text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
+    background: $lightSkin;
     text-shadow: none;
 }
 
 .well, .breadcrumb {
-    background-color: #E1E1E1;
-    border: 1px solid #E3E3E3;
+    background-color: $darkSkin;
+    border: 1px solid $darkSkin;
 }
 
 h1 {

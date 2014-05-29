@@ -13,16 +13,16 @@ textarea {
   font-family: 'Source Sans Pro', sans-serif; }
 
 ::-moz-selection {
-  background: #b3d4fc;
+  background: #e1876f;
   text-shadow: none; }
 
 ::selection {
-  background: #b3d4fc;
+  background: #e1876f;
   text-shadow: none; }
 
 .well, .breadcrumb {
-  background-color: #E1E1E1;
-  border: 1px solid #E3E3E3; }
+  background-color: #af5637;
+  border: 1px solid #af5637; }
 
 h1 {
   font-size: 1.8em; }
