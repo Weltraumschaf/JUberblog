@@ -246,10 +246,14 @@ final class Publisher implements Command {
      * @param type must not be {@literal null}
      * @param data must not be {@literal null}
      * @param outputDir must not be {@literal null}
+     * @return never {@code null}
      * @throws PublishingSubCommandExcpetion if can't render template
      */
-    private Collection<Page> publishFiles(final Formatters.Type type, final Collection<DataFile> data, final Path outputDir)
-            throws PublishingSubCommandExcpetion {
+    private Collection<Page> publishFiles(
+        final Formatters.Type type,
+        final Collection<DataFile> data,
+        final Path outputDir)
+        throws PublishingSubCommandExcpetion {
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
@@ -269,6 +273,7 @@ final class Publisher implements Command {
      * @param type must not be {@literal null}
      * @param data must not be {@literal null} or empty
      * @param outputDir must not be {@literal null}
+     * @return never {@code null}
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
