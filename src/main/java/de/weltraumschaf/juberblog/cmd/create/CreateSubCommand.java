@@ -83,10 +83,21 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         io.println("Done :)");
     }
 
-    public void setTime(final TimeProvider time) {
+    /**
+     * Injection point for a time provider.
+     *
+     * @param time must not be {@code null}
+     */
+    void setTime(final TimeProvider time) {
         this.time = Validate.notNull(time, "time");
     }
 
+    /**
+     * Create site (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
     private void createSite(final String content) throws IOException {
         final String title = getOptions().getTitle();
         final Path baseDir;
@@ -99,9 +110,15 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
             baseDir = getDirectories().dataSites();
         }
 
-        writeFile(createPath(baseDir, title), content);
+        writeFile(createPath(baseDir, title), Validate.notEmpty(content, "content"));
     }
 
+    /**
+     * Create post (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
     private void createPost(final String content) throws IOException {
         final String title = getOptions().getTitle();
         final Path baseDir;
@@ -117,15 +134,41 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         writeFile(createPath(baseDir, title), content);
     }
 
+    /**
+     * Write content to file.
+     *
+     * @param fileName must not be {@code null}
+     * @param content must not be {@code null} or empty
+     * @throws IOException
+     */
     void writeFile(final Path fileName, final String content) throws IOException {
         io.println(String.format("Write file '%s'...", fileName));
-        Files.write(fileName, content.getBytes(Constants.DEFAULT_ENCODING.toString()));
+        Files.write(
+            Validate.notNull(fileName, "fileName"),
+            Validate.notEmpty(content, "content").getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
 
+    /**
+     * Create target path.
+     *
+     * @param baseDir must not be {@code null}
+     * @param title must not be {@code null} or empty
+     * @return never {@code null}
+     */
     Path createPath(final Path baseDir, final String title) {
-        return baseDir.resolve(createFileNameFromTitle(title));
+        return Validate.notNull(baseDir).resolve(createFileNameFromTitle(title));
     }
 
+    /**
+     * Create file name from title.
+     * <p>
+     * Format: {@literal TIME_TITLE.md}
+     * {@literal TIME} is provided by {@link #time}. {@literal TITLE} is the escaped title.
+     * </p>
+     *
+     * @param title must not be {@code null} or empty
+     * @return never {@code null} or empty
+     */
     String createFileNameFromTitle(final String title) {
         final StringBuilder buffer = new StringBuilder();
 
@@ -137,6 +180,11 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         return buffer.toString();
     }
 
+    /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if title is empty
+     */
     private void validateArguments() throws ApplicationException {
         if (getOptions().getTitle().isEmpty()) {
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title arguemnt given!");
