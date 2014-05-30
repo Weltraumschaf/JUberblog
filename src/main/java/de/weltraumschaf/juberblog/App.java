@@ -66,8 +66,13 @@ public final class App extends InvokableAdapter {
 
         try {
             InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());
-        } catch (UnsupportedEncodingException ex) {
-            LOG.fatal("Can't create IO streams!", ex);
+        } catch (final UnsupportedEncodingException ex) {
+            // CHECKSTYLE:OFF
+            // At this point we do not have IO streams.
+            System.err.println("Can't create IO streams!");
+            System.err.println(ex.getMessage());
+            ex.printStackTrace(System.err);
+            // CHECKSTYLE:ON
             invokable.exit(-1);
         }
     }

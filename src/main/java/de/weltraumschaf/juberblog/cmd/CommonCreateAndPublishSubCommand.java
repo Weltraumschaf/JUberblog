@@ -71,7 +71,10 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
         try {
             templateConfig = Configurations.forProduction(getDirectories().templates().toString());
         } catch (final IOException | URISyntaxException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't configure templates!", ex);
+            throw new ApplicationException(
+                ExitCodeImpl.FATAL,
+                String.format("Can't configure templates from %s!", getDirectories().templates().toString()),
+                ex);
         }
     }
 
