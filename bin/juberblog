@@ -48,7 +48,7 @@ if [ ! -f "${JAR}" ] ; then
     exit 1
 fi
 
-if [ "${JUBERBLOG_DEBUG}" == "true" ]; then
+if [ "${JUBERBLOG_DEBUG}" = "true" ] ; then
     JVM_OPTIONS="${JVM_OPTIONS} -Djcommander.debug=true"
 fi
 
