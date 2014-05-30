@@ -175,13 +175,13 @@ public final class Preprocessor {
             final String value;
 
             if (tokens.length == 1) {
-                LOG.warn(String.format("No value given: '%s'! Set vlaue empty.", line));
+                LOG.warn(String.format("No value given: '%s'! Set vlaue empty.", name));
                 value = "";
             } else {
                 value = tokens[1].trim();
 
                 if (value.isEmpty()) {
-                    LOG.warn(String.format("Empty value given: '%s'! Set vlaue empty.", line));
+                    LOG.warn(String.format("Empty value given: '%s'! Set vlaue empty.", name));
                 }
             }
 
