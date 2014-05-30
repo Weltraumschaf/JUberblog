@@ -33,6 +33,6 @@ public final class Time {
      * @return never {@code null}, always new instance
      */
     public static TimeProvider newProvider() {
-        return new DefaultProvider();
+        return new DefaultTimeProvider();
     }
 }

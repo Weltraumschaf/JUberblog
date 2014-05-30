@@ -21,7 +21,7 @@ import org.joda.time.format.DateTimeFormatterBuilder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class DefaultProvider implements TimeProvider {
+final class DefaultTimeProvider implements TimeProvider {
 
     /**
      * Length of the year in string representation.
@@ -45,7 +45,7 @@ final class DefaultProvider implements TimeProvider {
                 .appendLiteral('.')
                 .appendMinuteOfHour(LENGTH_OTHERS)
                 .appendLiteral('.')
-                .appendSecondOfDay(LENGTH_OTHERS)
+                .appendSecondOfMinute(LENGTH_OTHERS)
                 .toFormatter();
 
     @Override
