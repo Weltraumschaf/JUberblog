@@ -12,11 +12,7 @@
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
-import de.weltraumschaf.commons.string.StringJoiner;
 import de.weltraumschaf.commons.validate.Validate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Options for create commands.
