@@ -23,13 +23,11 @@ import org.apache.log4j.Logger;
 /**
  * Publish all sites/posts from data directory.
  *
- * TODO create index
- * TODO create sitemap.xml
- * TODO create feed xml
+ * TODO create index TODO create sitemap.xml TODO create feed xml
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
+public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<PublishOptions> {
 
     /**
      * Log facility.
@@ -64,6 +62,9 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
 
         try {
             pub.execute();
+            updateHomeSite();
+            updateSiteMap();
+            updateFeed();
         } catch (PublishingSubCommandExcpetion ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Error while publishing files: " + ex.getMessage(), ex);
         }
@@ -74,8 +75,7 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
 
     @Override
     public void setOptions(final PublishOptions opt) {
-        Validate.notNull(opt, "Options must not be null!");
-        options = opt;
+        options = Validate.notNull(opt, "opt");
     }
 
     @Override
@@ -83,4 +83,27 @@ public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand<P
         return options;
     }
 
+    /**
+     * Update the home site.
+     */
+    private void updateHomeSite() {
+        LOG.info("Update home site...");
+        new HomeSiteGenerator().execute();
+    }
+
+    /**
+     * Update the site map.
+     */
+    private void updateSiteMap() {
+        LOG.info("Update site map...");
+        new SiteMapGenerator(getTemplateConfig()).execute();
+    }
+
+    /**
+     * Update the RSS feed.
+     */
+    private void updateFeed() {
+        LOG.info("Update feed...");
+//        new FeedGenerator(templateConfig).execute();
+    }
 }

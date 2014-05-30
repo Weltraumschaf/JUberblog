@@ -151,7 +151,6 @@ final class Publisher implements Command {
     public void execute() throws PublishingSubCommandExcpetion {
         final Collection<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
         final Collection<Page> publishedPosts = publisPosts();
-        updateIndexes(publishedSites, publishedPosts);
     }
 
     /**
@@ -226,18 +225,6 @@ final class Publisher implements Command {
         } catch (FileNotFoundException ex) {
             throw new PublishingSubCommandExcpetion("Can't read posts data files: " + ex.getMessage(), ex);
         }
-    }
-
-    /**
-     * Update indexes.
-     *
-     * @param sites must not be {@code null}
-     * @param posts must not be {@code null}
-     */
-    private void updateIndexes(final Collection<Page> sites, final Collection<Page> posts) {
-        updateHomeSite();
-        updateSiteMap();
-        updateFeed();
     }
 
     /**
@@ -387,29 +374,7 @@ final class Publisher implements Command {
         return file.exists();
     }
 
-    /**
-     * Update the home site.
-     */
-    private void updateHomeSite() {
-        LOG.info("Update home site...");
-        new HomeSiteGenerator().execute();
-    }
 
-    /**
-     * Update the site map.
-     */
-    private void updateSiteMap() {
-        LOG.info("Update site map...");
-        new SiteMapGenerator(templateConfig).execute();
-    }
-
-    /**
-     * Update the RSS feed.
-     */
-    private void updateFeed() {
-        LOG.info("Update feed...");
-//        new FeedGenerator(templateConfig).execute();
-    }
 
     private URI createUri(final DataFile data) throws URISyntaxException {
         return new URI("");
