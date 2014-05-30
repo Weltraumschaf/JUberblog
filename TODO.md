@@ -1,15 +1,8 @@
 # TODO
 
-## Site
-
-- add Download section to site (move dist/) in site
-
 ## Features
 
-- implement create sub command
-    - create Markdown stub in data folder
-        - site
-        - post
+- use command from JCommander
 - implement publish sub command
     - read and format Markdown file from data folder
         - site
