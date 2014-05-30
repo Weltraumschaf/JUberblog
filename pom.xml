@@ -91,7 +91,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
-        <dependency.commons.version>1.0.0-beta</dependency.commons.version>
+        <dependency.commons.version>1.0.0-SNAPSHOT</dependency.commons.version>
     </properties>
 
     <prerequisites>
@@ -571,18 +571,17 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>deploy</phase>
                         <configuration>
                             <target>
-                                <!--
-                                  cp bin/ -> dist/juberblog/
-                                  tar dist/juberblog/juberblog/tar.bz2
-                                  tar dist/juberblog/juberblog/tar.gz
-                                  rm -r dist/juberblog/
-                                -->
-                                <copydir src="${project.build.binDirectory}" dest="${project.build.distDirectory}/juberblog" />
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2" basedir="${project.build.distDirectory}/juberblog" compression="bzip2" />
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz" basedir="${project.build.distDirectory}/juberblog" compression="gzip" />
+                                <copydir src="${project.build.binDirectory}"
+                                         dest="${project.build.distDirectory}/juberblog" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2"
+                                     basedir="${project.build.distDirectory}/juberblog"
+                                     compression="bzip2" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz"
+                                     basedir="${project.build.distDirectory}/juberblog"
+                                     compression="gzip" />
                                 <delete dir="${project.build.distDirectory}/juberblog" />
                             </target>
                         </configuration>

@@ -50,9 +50,15 @@ public class CreateOptionsTest extends CreateAndPublishOptionsTest {
     }
 
     @Test
-    public void titleShortArgument() {
+    public void titleShortArgument_oneArg() {
         optionsParser.parse(new String[]{"-t", "foobar"});
         assertThat(sut().getTitle(), is(equalTo("foobar")));
+    }
+
+    @Test
+    public void titleShortArgument_threeArgs() {
+        optionsParser.parse(new String[]{"-t", "foo bar baz"});
+        assertThat(sut().getTitle(), is(equalTo("foo bar baz")));
     }
 
     @Test
