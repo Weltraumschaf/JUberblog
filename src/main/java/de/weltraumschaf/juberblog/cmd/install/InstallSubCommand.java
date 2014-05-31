@@ -64,7 +64,11 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         final File target = validateLocation(location);
         io.println(String.format("Install scaffold to '%s'...", location));
 
-        if (target.list().length > 0) {
+        if (options.isForce()) {
+            scaffold.setType(Scaffold.InstalationType.OVERWRITE);
+        } else if (options.isUpdate()) {
+            scaffold.setType(Scaffold.InstalationType.BACKUP);
+        } else if (target.list().length > 0) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
                 "Error: Target directory not empty! Use -f to force install or -u to update.");

@@ -56,6 +56,10 @@ public final class Scaffold {
      * Provides the source JAR file location.
      */
     private SourceJarProvider srcJar = new DefaultSourceJarProvider();
+    /**
+     * Behaviour type of installation.
+     */
+    private InstalationType type = InstalationType.FRESH;
 
     /**
      * Dedicated constructor.
@@ -83,6 +87,15 @@ public final class Scaffold {
      */
     public void setSrcJar(final SourceJarProvider srcJar) {
         this.srcJar = Validate.notNull(srcJar);
+    }
+
+    /**
+     * Set installation behaviour type.
+     *
+     * @param type must not be {@code null}
+     */
+    public void setType(final InstalationType type) {
+        this.type = Validate.notNull(type, "type");
     }
 
     /**
@@ -315,5 +328,23 @@ public final class Scaffold {
                     Validate.notEmpty(paths[0], "The string before the '!' must not be null or empty!"),
                     Validate.notEmpty(paths[1], "The string after the '!' must not be null or empty!"));
         }
+    }
+
+    /**
+     * Types of installation strategies.
+     */
+    static enum InstalationType {
+        /**
+         * Requires an empty directory to install the files.
+         */
+        FRESH,
+        /**
+         * Existing files will be overwritten.
+         */
+        OVERWRITE,
+        /**
+         * Existing files will be backed up.
+         */
+        BACKUP;
     }
 }
