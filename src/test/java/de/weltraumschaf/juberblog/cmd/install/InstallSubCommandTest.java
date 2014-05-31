@@ -64,7 +64,6 @@ public class InstallSubCommandTest {
             "public/css/README",
             "public/drafts/posts/README",
             "public/drafts/sites/README",
-            "public/feed.xml",
             "public/img/favicon.ico",
             "public/img/logo.jpg",
             "public/img/raty/background.gif",
@@ -91,7 +90,6 @@ public class InstallSubCommandTest {
             "public/img/raty/star-on-big.png",
             "public/img/raty/star-on.png",
             "public/img/rss.png",
-            "public/index.html",
             "public/js/handlebars.js",
             "public/js/jquery-1.7.2.js",
             "public/js/jquery-1.7.2.min.js",
@@ -102,7 +100,6 @@ public class InstallSubCommandTest {
             "public/js/main.js",
             "public/posts/README",
             "public/robots.txt",
-            "public/sitemap.xml",
             "public/sites/README",
             "README.md",
             "templates/create/post_or_site.md.ftl",
@@ -158,14 +155,8 @@ public class InstallSubCommandTest {
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/create/post_or_site.md.ftl to "
                 + tmp.getRoot().getAbsolutePath() + "/templates/create/post_or_site.md.ftl ...");
         verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/sitemap.xml to "
-                + tmp.getRoot().getAbsolutePath() + "/public/sitemap.xml ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/robots.txt to "
                 + tmp.getRoot().getAbsolutePath() + "/public/robots.txt ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/index.html to "
-                + tmp.getRoot().getAbsolutePath() + "/public/index.html ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/feed.xml to "
-                + tmp.getRoot().getAbsolutePath() + "/public/feed.xml ...");
         verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/sites");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/sites/README to "
                 + tmp.getRoot().getAbsolutePath() + "/public/sites/README ...");
@@ -274,10 +265,10 @@ public class InstallSubCommandTest {
                 + tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties ...");
 
         final Collection<File> installedFiles = FileUtils.listFiles(tmp.getRoot(), null, true);
-        assertThat(installedFiles, hasSize(EXPECTED_FILES.size()));
+        assertThat(installedFiles.toString(), installedFiles, hasSize(EXPECTED_FILES.size()));
 
         for (final String path : EXPECTED_FILES) {
-            assertThat(installedFiles.contains(new File(tmp.getRoot(), path)), is(true));
+            assertThat(path, installedFiles.contains(new File(tmp.getRoot(), path)), is(true));
         }
     }
 
@@ -291,10 +282,10 @@ public class InstallSubCommandTest {
         verify(io, times(1)).println("Install scaffold to '" + tmp.getRoot().getAbsolutePath() + "'...");
 
         final Collection<File> installedFiles = FileUtils.listFiles(tmp.getRoot(), null, true);
-        assertThat(installedFiles, hasSize(57));
+        assertThat(installedFiles.toString(), installedFiles, hasSize(EXPECTED_FILES.size()));
 
         for (final String path : EXPECTED_FILES) {
-            assertThat(installedFiles.contains(new File(tmp.getRoot(), path)), is(true));
+            assertThat(path, installedFiles.contains(new File(tmp.getRoot(), path)), is(true));
         }
     }
 
