@@ -49,6 +49,12 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     }
 
     @Override
+    protected void init() throws ApplicationException {
+        super.init();
+        validateArguments();
+    }
+
+    @Override
     protected void run() throws ApplicationException {
         if (getOptions().isHelp()) {
             return;
@@ -92,6 +98,25 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
     }
 
     /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if title is empty
+     */
+    private void validateArguments() throws ApplicationException {
+        if (options.getLocation().isEmpty()) {
+            throw new ApplicationException(
+                ExitCodeImpl.MISSING_ARGUMENT,
+                "Error: Empty location given! Please specify a valid direcotry as installation location.");
+        }
+
+        if (options.isForce() && options.isUpdate()) {
+            throw new ApplicationException(
+                ExitCodeImpl.BAD_ARGUMENT,
+                "Error: You must not use -f and -u together!");
+        }
+    }
+
+    /**
      * Validate instalation directory.
      *
      * Validates that given string is not empty and is an existing directory.
@@ -101,16 +126,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
      * @throws ApplicationException if target does not exist or is not a directory
      */
     private File validateLocation(final String location) throws ApplicationException {
-        Validate.notNull(location, "location");
-
-        if (location.isEmpty()) {
-            throw new ApplicationException(
-                    ExitCodeImpl.MISSING_ARGUMENT,
-                    "Error: Empty location given! Please specify a valid direcotry as installation location.",
-                    null);
-        }
-
-        final File target = new File(location);
+        final File target = new File(Validate.notNull(location, "location"));
 
         if (!target.exists()) {
             throw new ApplicationException(

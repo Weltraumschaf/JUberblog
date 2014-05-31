@@ -60,6 +60,10 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
 
     @Override
     public void run() throws ApplicationException {
+        if (getOptions().isHelp()) {
+            return;
+        }
+
         final String title = getOptions().getTitle().trim();
 
         try {
