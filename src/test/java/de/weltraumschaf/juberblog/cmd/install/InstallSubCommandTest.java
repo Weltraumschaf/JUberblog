@@ -17,7 +17,6 @@ import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import org.apache.commons.io.FileUtils;
@@ -301,7 +300,7 @@ public class InstallSubCommandTest {
 
     private InstallOptions createOptionsWithDir(final boolean help, final boolean verbose) {
         final String tmpDir = tmp.getRoot().getAbsolutePath();
-        final InstallOptions options = new InstallOptions(help, verbose, tmpDir);
+        final InstallOptions options = new InstallOptions(help, verbose, tmpDir, false, false);
         assertThat(options.getLocation(), is(equalTo(tmpDir)));
 
         return options;

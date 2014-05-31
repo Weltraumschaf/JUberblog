@@ -27,11 +27,21 @@ public class InstallOptions extends CommonOptions {
     @Parameter(names = {"-l", "--location" }, description = "Install location of the blog scaffold.")
     private String location;
 
+    @Parameter(
+        names = {"-f", "--force" },
+        description = "Forced instsallation will install into non empty direcotry and overwrites existing files.")
+    private boolean force;
+
+    @Parameter(
+        names = {"-u", "--update" },
+        description = "Updates an installation. Already existing files will be backed up.")
+    private boolean update;
+
     /**
      * Default constructor.
      */
     public InstallOptions() {
-        this(false, false, "");
+        this(false, false, "", false, false);
     }
 
     /**
@@ -40,10 +50,19 @@ public class InstallOptions extends CommonOptions {
      * @param help {@code true} if help is wanted
      * @param verbose {@code true} if verbosity is wanted
      * @param location must not be {@code null}
+     * @param force {@link true} to force installation
+     * @param update {@link true} to update installation
      */
-    public InstallOptions(final boolean help, final boolean verbose, final String location) {
+    public InstallOptions(
+        final boolean help,
+        final boolean verbose,
+        final String location,
+        final boolean force,
+        final boolean update) {
         super(help, verbose);
-        this.location = Validate.notNull(location, "Parameter 'location' must not be null!");
+        this.location = Validate.notNull(location, "location");
+        this.force = force;
+        this.update = update;
     }
 
 
@@ -59,6 +78,24 @@ public class InstallOptions extends CommonOptions {
     @Override
     public String toString() {
         return "InstallOptions{" + super.toString() + ", location: " + location + '}';
+    }
+
+    /**
+     * Whether it is a forced instalation or not.
+     *
+     * @return {@code true} for forced
+     */
+    public boolean isForce() {
+        return force;
+    }
+
+    /**
+     * Whether it is a update instalation or not.
+     *
+     * @return {@code true} for update
+     */
+    public boolean isUpdate() {
+        return update;
     }
 
 }
