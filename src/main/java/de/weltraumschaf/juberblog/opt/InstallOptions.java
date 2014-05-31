@@ -27,11 +27,17 @@ public class InstallOptions extends CommonOptions {
     @Parameter(names = {"-l", "--location" }, description = "Install location of the blog scaffold.")
     private String location;
 
+    /**
+     * Whether to force installation.
+     */
     @Parameter(
         names = {"-f", "--force" },
         description = "Forced instsallation will install into non empty direcotry and overwrites existing files.")
     private boolean force;
 
+    /**
+     * Whether to update installation.
+     */
     @Parameter(
         names = {"-u", "--update" },
         description = "Updates an installation. Already existing files will be backed up.")
