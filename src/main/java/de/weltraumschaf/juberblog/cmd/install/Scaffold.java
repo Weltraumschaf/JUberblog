@@ -111,7 +111,7 @@ public final class Scaffold {
         try (FileSystem fs = createJarFileSystem(URI.create(src.getJarLocation()))) {
             final String scaffold = src.getResourceLocation();
             final Path dir = fs.getPath(scaffold);
-            Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, verbose));
+            Files.walkFileTree(dir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, verbose, type));
         }
     }
 
@@ -132,10 +132,6 @@ public final class Scaffold {
     private static class CopyDirectoryVisitor extends SimpleFileVisitor<Path> {
 
         /**
-         * Copy options.
-         */
-        private static final StandardCopyOption COPY_OPTIONS = StandardCopyOption.REPLACE_EXISTING;
-        /**
          * Target directory.
          */
         private final Path targetDir;
@@ -151,6 +147,10 @@ public final class Scaffold {
          * Whether to print verbose messages to IO.
          */
         private final boolean verbose;
+        /**
+         * File copy strategy.
+         */
+        private InstalationType strategy;
 
         /**
          * Dedicated constructor.
@@ -159,28 +159,31 @@ public final class Scaffold {
          * @param prefixToStrip must not be {@code null}
          * @param io used for verbose out
          * @param verbose whether to be verbose or not
+         * @param strategy must not be {@code null}
          */
         public CopyDirectoryVisitor(
-            final Path targetDir,
-            final String prefixToStrip,
-            final IO io,
-            final boolean verbose) {
+                final Path targetDir,
+                final String prefixToStrip,
+                final IO io,
+                final boolean verbose,
+                final InstalationType strategy) {
             super();
-            Validate.notNull(targetDir, "Target dir must not be null!");
+            Validate.notNull(targetDir, "targetDir");
 
             if (!Files.exists(targetDir)) {
-                throw new IllegalArgumentException(String.format("Target '%s' does not exists!", targetDir));
+                throw new IllegalArgumentException(String.format("Error: Target '%s' does not exists!", targetDir));
             }
 
             if (!Files.isDirectory(targetDir)) {
-                throw new IllegalArgumentException(String.format("Target '%s' is not a directory!", targetDir));
+                throw new IllegalArgumentException(String.format("Error: Target '%s' is not a directory!", targetDir));
             }
 
             this.targetDir = targetDir;
-            Validate.notNull(prefixToStrip, "Prefix must not be null!");
+            Validate.notNull(prefixToStrip, "prefixToStrip");
             this.prefix = prefixToStrip;
             this.io = Validate.notNull(io);
             this.verbose = verbose;
+            this.strategy = Validate.notNull(strategy);
         }
 
         @Override
@@ -196,10 +199,7 @@ public final class Scaffold {
             final Path target = targetDir.resolve(baseName(dir));
 
             if (!Files.exists(target)) {
-                if (verbose) {
-                    io.println(String.format("Create directory %s", target));
-                }
-
+                println(String.format("Create directory %s", target));
                 Files.createDirectory(target);
             }
 
@@ -211,11 +211,21 @@ public final class Scaffold {
             final FileVisitResult result = super.visitFile(file, attrs);
             final Path target = targetDir.resolve(baseName(file));
 
-            if (verbose) {
-                io.println(String.format("Copy file %s to %s", file, target));
+            if (Files.exists(target)) {
+                if (strategy == InstalationType.OVERWRITE) {
+                    println(String.format("Overwrite file %s ...", target));
+                    Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
+                } else if (strategy == InstalationType.BACKUP) {
+                    println(String.format("Back up file %s ...", target));
+                    Files.copy(target, targetDir.resolve(baseName(file) + ".bak"));
+                    Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    throw new IllegalArgumentException(String.format("Error: File '%s' already exists!", target));
+                }
+            } else {
+                println(String.format("Copy file %s to %s ...", file, target));
+                Files.copy(file, target);
             }
-
-            Files.copy(file, target, COPY_OPTIONS);
 
             return result;
         }
@@ -227,8 +237,18 @@ public final class Scaffold {
          * @return never {@code null}
          */
         private String baseName(final Path file) {
-            Validate.notNull(file, "File must not be null!");
-            return file.toString().replace(prefix, "");
+            return Validate.notNull(file, "file").toString().replace(prefix, "");
+        }
+
+        /**
+         * Prints message only if {@link #verbose} is {@code true}.
+         *
+         * @param msg should not be {@code null} or empty
+         */
+        private void println(final String msg) {
+            if (verbose) {
+                io.println(msg);
+            }
         }
 
     }
@@ -334,6 +354,7 @@ public final class Scaffold {
      * Types of installation strategies.
      */
     static enum InstalationType {
+
         /**
          * Requires an empty directory to install the files.
          */
