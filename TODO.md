@@ -1,5 +1,13 @@
 # TODO
 
+## home dir
+
+- $JUBERBLOG_HOME is ~/.juberblog
+    - lock file to prevent multiple processes: $JUBERBLOG_HOME/lock
+    - file to hold metadata about published sites/posts: $JUBERBLOG_HOME/published
+        - JSON https://sites.google.com/site/gson/gson-user-guide
+        - serialized Map<String, Page>, key is data file name
+        
 ## Features
 
 - use command from JCommander
