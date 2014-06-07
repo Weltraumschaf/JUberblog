@@ -45,7 +45,7 @@ public final class App extends InvokableAdapter {
     /**
      * To obtain environment variables.
      */
-    private final Envoronments.Env env = Envoronments.defaultEnv();
+    private final Environments.Env env = Environments.defaultEnv();
     /**
      * Dedicated constructor.
      *

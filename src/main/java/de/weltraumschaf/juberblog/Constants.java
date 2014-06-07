@@ -42,6 +42,10 @@ public enum Constants {
      */
     ENVIRONMENT_VARIABLE_DEBUG("JUBERBLOG_DEBUG"),
     /**
+     * Where JUberblog stores its private data.
+     */
+    ENVIRONMENT_VARIABLE_HOME("JUBERBLOG_HOME"),
+    /**
      * NAme of the command line script.
      */
     COMMAND_NAME("juberblog"),

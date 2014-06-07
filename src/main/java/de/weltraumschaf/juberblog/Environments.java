@@ -19,12 +19,12 @@ import de.weltraumschaf.commons.validate.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class Envoronments {
+public final class Environments {
 
     /**
      * Hidden for static factory.
      */
-    private Envoronments() {
+    private Environments() {
         super();
     }
 
