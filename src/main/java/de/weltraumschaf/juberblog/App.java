@@ -20,11 +20,15 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
 import de.weltraumschaf.juberblog.files.HomeDir;
+import de.weltraumschaf.juberblog.files.LockFile;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.parboiled.common.StringUtils;
 
@@ -97,9 +101,20 @@ public final class App extends InvokableAdapter {
     public void execute() throws Exception {
         version.load();
         home.createIfNotExists();
-        registerShutdownHook(new Runnable() {
+        final LockFile lock = new LockFile(home.getPath().resolve("lock"));
+
+        if (lock.exists()) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL, String.format("JUberblog is already running!%n"
+                            + "If you are shure this is not the case delete the lock file '%s'.", lock.getPath()));
+        }
+
+        lock.create();
+        registerShutdownHook(new Callable<Void>() {
             @Override
-            public void run() {
+            public Void call() throws IOException {
+                lock.remove();
+                return null;
             }
         });
 
@@ -118,9 +133,9 @@ public final class App extends InvokableAdapter {
     private String helpMessage() {
         final StringBuilder help = new StringBuilder();
         help.append("Usage: ")
-            .append(Constants.COMMAND_NAME)
-            .append(" [-v|--version] [-h|--help] ")
-            .append(StringUtils.join(SubCommands.implemented(), "|"));
+                .append(Constants.COMMAND_NAME)
+                .append(" [-v|--version] [-h|--help] ")
+                .append(StringUtils.join(SubCommands.implemented(), "|"));
         return help.toString();
     }
 
@@ -179,7 +194,7 @@ public final class App extends InvokableAdapter {
      * @throws ApplicationException if help is wanted
      */
     void parseOptions(final SubCommands type, final Arguments args, final SubCommand cmd)
-        throws ApplicationException {
+            throws ApplicationException {
         Validate.notNull(type, "Type must not be null!");
         Validate.notNull(args, "Arguments must not be null!");
         Validate.notNull(cmd, "Sub command must not be null!");

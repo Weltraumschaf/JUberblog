@@ -79,4 +79,13 @@ public final class LockFile {
     public boolean exists() {
         return Files.exists(lockFile);
     }
+
+    /**
+     * Get the path of the lock file.
+     *
+     * @return never {@code null}
+     */
+    public Path getPath() {
+        return lockFile;
+    }
 }

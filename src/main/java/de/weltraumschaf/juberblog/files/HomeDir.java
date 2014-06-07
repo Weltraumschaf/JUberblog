@@ -32,6 +32,10 @@ public final class HomeDir {
      * Used to get environment variables.
      */
     private final Env env;
+    /**
+     * Path of the home directory.
+     */
+    private Path home;
 
     /**
      * Convenience constructor which uses default environment.
@@ -60,13 +64,30 @@ public final class HomeDir {
      */
     public void createIfNotExists() throws IOException {
         final String pathName = env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString());
-        final Path home = Paths.get(pathName);
+        home = Paths.get(pathName);
 
         if (Files.exists(home)) {
             verify(home);
         } else {
             create(home);
         }
+    }
+
+    /**
+     * Get the path of the home directory.
+     * <p>
+     * Throws {@link IllegalStateException} if it may be {@code null}, unless {@link #createIfNotExists()}
+     * not invoked before calling this method.
+     * </p>
+     *
+     * @return never {@code null}
+     */
+    public Path getPath() {
+        if (null == home) {
+            throw new IllegalStateException("Home directory not created yet! Invoke #createIfNotExists() first.");
+        }
+
+        return home;
     }
 
     /**
