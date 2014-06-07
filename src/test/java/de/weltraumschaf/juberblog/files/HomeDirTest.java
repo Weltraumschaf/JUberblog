@@ -11,13 +11,21 @@
  */
 package de.weltraumschaf.juberblog.files;
 
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Environments.Env;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link HomeDir}.
@@ -35,33 +43,70 @@ public class HomeDirTest {
     public final ExpectedException thrown = ExpectedException.none();
     // CHECKSTYLE:ON
 
-    @Mock
-    private Env env;
+    private final Env env = mock(Env.class);
     private HomeDir sut;
+    private Path home;
 
     @Before
     public void createSut() {
         sut = new HomeDir(env);
     }
 
-    @Test
-    public void createIfNotExists_dirExistsAfterCall() {
+    @Before
+    public void defineMockBehaviour() {
+        home = tmp.getRoot().toPath().resolve(".juberblog");
+        when(env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString())).thenReturn(home.toString());
     }
 
     @Test
-    public void createIfNotExists_doesNothingIfDirAlreadyExists() {
+    public void createIfNotExists_dirExistsAfterCall() throws IOException {
+        assertThat(Files.exists(home), is(false));
+
+        sut.createIfNotExists();
+
+        assertThat(Files.exists(home), is(true));
     }
 
     @Test
-    public void createIfNotExists_throwsExceptionIfExistsButIsNotReadable() {
+    public void createIfNotExists_doesNothingIfDirAlreadyExists() throws IOException {
+        Files.createDirectory(home);
+        assertThat(Files.exists(home), is(true));
+
+        sut.createIfNotExists();
+
+        assertThat(Files.exists(home), is(true));
     }
 
     @Test
-    public void createIfNotExists_throwsExcpetionIfExistsButIsNotWritable() {
+    public void createIfNotExists_throwsExceptionIfExistsButIsNotReadable() throws IOException {
+        Files.createFile(home,
+            PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("---------")));
+
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage(String.format("Home direcotry '%s' is not readable!", home.toString()));
+
+        sut.createIfNotExists();
     }
 
     @Test
-    public void createIfNotExists_throwsExceptionIfExistsButIsNotADirecotry() {
+    public void createIfNotExists_throwsExcpetionIfExistsButIsNotWritable() throws IOException {
+        Files.createFile(home,
+            PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("r--r--r--")));
+
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage(String.format("Home direcotry '%s' is not writeable!", home.toString()));
+
+        sut.createIfNotExists();
+    }
+
+    @Test
+    public void createIfNotExists_throwsExceptionIfExistsButIsNotADirecotry() throws IOException {
+        Files.createFile(home);
+
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage(String.format("Home path '%s' is not a direcotry!", home.toString()));
+
+        sut.createIfNotExists();
     }
 
 }
