@@ -53,15 +53,15 @@ PROGRAM_DIRECTORY=`dirname "${PROGRAM}"`
 
 # Set JUBERBLOG_HOME.
 if [ -z "${JUBERBLOG_HOME}" ] ; then
-    JUBERBLOG_HOME=`cd "${PROGRAM_DIRECTORY}" ; pwd`
+    PROGRAM_DIRECTORY=`cd "${PROGRAM_DIRECTORY}" ; pwd`
 fi
 
-JAR="${JUBERBLOG_HOME}/juberblog.jar"
+JAR="${PROGRAM_DIRECTORY}/juberblog.jar"
 
 if [ ! -f "${JAR}" ] ; then
-    PROJECT_DIR=`dirname "${JUBERBLOG_HOME}"`
+    PROJECT_DIR=`dirname "${PROGRAM_DIRECTORY}"`
     echo "ERROR: JAR file ${JAR} not pressent!"
-    echo "Invoke 'mvn clean install' in the project base directory: ${JUBERBLOG_HOME}."
+    echo "Invoke 'mvn clean install' in the project base directory: ${PROJECT_DIR}."
     exit 1
 fi
 
