@@ -19,6 +19,7 @@ import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
+import de.weltraumschaf.juberblog.files.HomeDir;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
@@ -46,6 +47,11 @@ public final class App extends InvokableAdapter {
      * To obtain environment variables.
      */
     private final Environments.Env env = Environments.defaultEnv();
+    /**
+     * Creates and holds the home directory.
+     */
+    private final HomeDir home = new HomeDir(env);
+
     /**
      * Dedicated constructor.
      *
@@ -90,6 +96,7 @@ public final class App extends InvokableAdapter {
     @Override
     public void execute() throws Exception {
         version.load();
+        home.createIfNotExists();
         registerShutdownHook(new Runnable() {
             @Override
             public void run() {
