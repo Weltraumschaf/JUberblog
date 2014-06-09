@@ -267,9 +267,9 @@ public class DataFile {
          * @param file must not be {@code null}
          * @throws FileNotFoundException if file not found
          */
-        public DataProcessor(final File file) throws FileNotFoundException {
+        DataProcessor(final File file) throws FileNotFoundException {
             this(new FileInputStream(file));
-            Validate.notNull(file, "File must not be null!");
+            Validate.notNull(file, "file");
         }
 
         /**
@@ -277,7 +277,7 @@ public class DataFile {
          *
          * @param in must not be {@literal null}
          */
-        public DataProcessor(
+        DataProcessor(
                 final InputStream in) {
             super();
             Validate.notNull(in, "Data file must not be empty!");
@@ -290,7 +290,7 @@ public class DataFile {
          * @return never {@literal null}
          * @throws IOException on any read error of data or template file
          */
-        public MetaData getMetaData() throws IOException {
+        MetaData getMetaData() throws IOException {
             if (null == metaData) {
                 readFileContent();
             }
@@ -318,7 +318,7 @@ public class DataFile {
          * @return never {@code null}
          * @throws IOException if content can't be read
          */
-        public String getMarkdown() throws IOException {
+        String getMarkdown() throws IOException {
             if (null == markdown) {
                 readFileContent();
             }
@@ -332,7 +332,7 @@ public class DataFile {
          * @return never {@literal null}
          * @throws IOException on any read error of data or template file
          */
-        public String getHeadline() throws IOException {
+        String getHeadline() throws IOException {
             if (null == headline) {
                 getMetaData();
                 headline = headliner.find(markdown);

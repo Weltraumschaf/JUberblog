@@ -20,6 +20,7 @@ import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.formatter.HtmlFormatter;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -59,6 +60,7 @@ final class Publisher implements Command {
      * Base URI of the blog.
      */
     private final String baseUri;
+    private final PublishedPages published;
     /**
      * Whether to generate sites.
      */
@@ -92,12 +94,19 @@ final class Publisher implements Command {
      * @param dirs must not be {@code null}
      * @param templateConfig must not be {@code null}
      * @param baseUri must not be {@code null} or empty
+     * @param published must not be {@code null}
      */
-    public Publisher(final Directories dirs, final Configuration templateConfig, final String baseUri) {
+    public Publisher(
+        final Directories dirs,
+        final Configuration templateConfig,
+        final String baseUri,
+        final PublishedPages published)
+    {
         super();
         this.dirs = Validate.notNull(dirs, "dirs");
         this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
         this.baseUri = Validate.notEmpty(baseUri, "baseUri");
+        this.published = Validate.notNull(published, "published");
     }
 
     /**
@@ -149,8 +158,11 @@ final class Publisher implements Command {
 
     @Override
     public void execute() throws PublishingSubCommandExcpetion {
-        final Collection<Page> publishedSites = isSites() ? publishSites() : Lists.<Page>newArrayList();
-        final Collection<Page> publishedPosts = publisPosts();
+        if (isSites()) {
+            published.put(publishSites());
+        }
+
+        published.put(publisPosts());
     }
 
     /**

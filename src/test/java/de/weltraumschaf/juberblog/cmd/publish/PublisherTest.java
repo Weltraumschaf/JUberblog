@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.model.DataFile;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.File;
@@ -37,6 +38,7 @@ public class PublisherTest {
     public final TemporaryFolder tmp = new TemporaryFolder();
     private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     private static final String FIXTURES_DIRECTORY = Constants.PACKAGE_BASE.toString() + "/cmd/publish";
+    private PublishedPages pages = new PublishedPages();
     private File data;
     private File publishedPosts;
     private File publishedSites;
@@ -59,7 +61,7 @@ public class PublisherTest {
                 "foo",
                 tmp.getRoot().getAbsolutePath());
         templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
-        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/");
+        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/", pages);
     }
 
     @Test

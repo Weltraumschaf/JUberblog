@@ -17,6 +17,7 @@ import de.weltraumschaf.commons.time.StopWatch;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
 import org.apache.log4j.Logger;
 
@@ -54,7 +55,13 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
     @Override
     public void run() throws ApplicationException {
         watch.reset();
-        final Publisher pub = new Publisher(getDirectories(), getTemplateConfig(), getBlogConfiguration().getBaseUri());
+        final PublishedPages pages = new PublishedPages();
+        final Publisher pub = new Publisher(
+            getDirectories(),
+            getTemplateConfig(),
+            getBlogConfiguration().getBaseUri(),
+            pages);
+
         pub.setPurge(getOptions().isPurge());
         pub.setSites(getOptions().isSites());
         LOG.info("Start pulishing...");

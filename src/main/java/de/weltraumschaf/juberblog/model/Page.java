@@ -142,6 +142,10 @@ public class Page {
         return priority;
     }
 
+    public DataFile getFile() {
+        return file;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(title, uri, description, publishingDate, priority, frequencey, file);
