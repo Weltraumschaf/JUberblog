@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.juberblog.model.DataFile;
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
@@ -35,15 +36,14 @@ import static org.hamcrest.Matchers.*;
  */
 public class FeedGeneratorTest {
 
-    private static final String URI = "http://www.foobar.com/";
-    @Rule
-    //CHECKSTYLE:OFF
-    public final TemporaryFolder tmp = new TemporaryFolder();
-    //CHECKSTYLE:ON
     @Rule
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
+
+    private static final String URI = "http://www.foobar.com/";
+
+    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData());
 
     private String today(final DateTime ts) {
         return FeedGenerator.formatTimestamp(ts);
@@ -95,9 +95,9 @@ public class FeedGeneratorTest {
                 + "    </channel>\n"
                 + "</rss>")));
         pages.add(new Page("First Post", new URI(URI + "posts/First-Post.html"), "This is the content.", now,
-                new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
+                dummy, SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
         pages.add(new Page("Second Post", new URI(URI + "posts/Second-Post.html"), "This is the content with <strong>"
-                + "HTML</strong>.", now, new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.DAILY,
+                + "HTML</strong>.", now, dummy, SiteMapUrl.ChangeFrequency.DAILY,
                 SiteMapUrl.Priority.POST));
         sut.execute();
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

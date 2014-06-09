@@ -12,13 +12,19 @@
 
 package de.weltraumschaf.juberblog.model;
 
-import java.io.File;
+import de.weltraumschaf.juberblog.Constants;
 import java.io.IOException;
-import org.junit.Test;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
-import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
@@ -28,44 +34,47 @@ import org.junit.rules.TemporaryFolder;
  */
 public class DataFileTest {
 
-    private static final String NAME = "1383315520.This-is-the-First-Post.md";
+    private static final String FIXTURE_PACKAGE = Constants.PACKAGE_BASE.toString() + "/cmd/publish/posts";
 
     @Rule
     //CHECKSTYLE:OFF
     public final TemporaryFolder tmp = new TemporaryFolder();
     //CHECKSTYLE:ON
 
-    private DataFile sut;
+    @Test
+    public void slugify() {
+        final Path file = Paths.get("foo", "bar", "baz", "2014-05-30T21.34.20_This-is-the-First-Post.md");
+        assertThat(file.toString(), is(equalTo("foo/bar/baz/2014-05-30T21.34.20_This-is-the-First-Post.md")));
 
-
-    public DataFileTest() {
-        super();
-    }
-
-    @Before
-    public void createFile() throws IOException {
-        final File file = tmp.newFile(NAME);
-        sut = new DataFile(file);
-        assertThat(file.getName(), is(equalTo(NAME)));
+        assertThat(
+            DataFile.slugify(file),
+            is(equalTo("This-is-the-First-Post")));
     }
 
     @Test
-    public void getFilename() {
-        assertThat(sut.getFilename(), is(equalTo(NAME)));
-    }
+    public void from() throws URISyntaxException, IOException {
+        final Path file = Paths.get(
+            getClass().getResource(FIXTURE_PACKAGE + "/2014-05-30T21.29.20_This-is-the-First-Post.md").toURI());
 
-    @Test
-    public void getBasename() {
-        assertThat(sut.getBasename(), is(equalTo("1383315520.This-is-the-First-Post.md")));
-    }
+        final DataFile data = DataFile.from(file);
 
-    @Test
-    public void getCreationTime() {
-        assertThat(sut.getCreationTime(), is(equalTo(1383315520L)));
-    }
+        assertThat(data, is(not(nullValue())));
+        assertThat(data.getBasename(), is(equalTo("2014-05-30T21.29.20_This-is-the-First-Post.md")));
+        assertThat(data.getFilename(),
+            is(endsWith("/de/weltraumschaf/juberblog/cmd/publish/posts/2014-05-30T21.29.20_This-is-the-First-Post.md")));
+        assertThat(data.getHeadline(), is(equalTo("This is the First Post")));
+        assertThat(data.getMarkdown(), is(equalTo("## This is the First Post\n\nLorem ipsum dolor sit amet consetetur "
+                + "sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat "
+                + "sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren "
+                + "no sea takimata sanctus est lorem ipsum dolor sit\namet.")));
+        assertThat(data.getSlug(), is(equalTo("This-is-the-First-Post")));
+        assertThat(data.getCreationTime(), is(equalTo(1402343143000L)));
+        assertThat(data.getModificationTime(), is(equalTo(1402343143000L)));
 
-    @Test
-    public void getSlug() {
-        assertThat(sut.getSlug(), is(equalTo("This-is-the-First-Post")));
+        final MetaData meta = data.getMetaData();
+        assertThat(meta, is(not(nullValue())));
+        assertThat(meta.getDescription(), is(equalTo("This is the first post.")));
+        assertThat(meta.getKeywords(), is(equalTo("first, post")));
+        assertThat(meta.getNavi(), is(equalTo("")));
     }
 }

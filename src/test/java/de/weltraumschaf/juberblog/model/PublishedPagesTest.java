@@ -72,7 +72,7 @@ public class PublishedPagesTest {
     @Ignore("Stack overflow error.")
     public void save() throws IOException {
         final Path file = tmp.getRoot().toPath().resolve("published");
-        final File dataFile = tmp.newFile();
+        final Path dataFile = tmp.newFile().toPath();
         final String data = "<?juberblog\n"
             + "    Navi: Projects\n"
             + "    Description: My projects.\n"
@@ -85,7 +85,7 @@ public class PublishedPagesTest {
             + "ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\n"
             + "dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\n"
             + "amet.";
-        Files.write(dataFile.toPath(), data.getBytes(Constants.DEFAULT_ENCODING.toString()));
+        Files.write(dataFile, data.getBytes(Constants.DEFAULT_ENCODING.toString()));
         final PublishedPages pages = new PublishedPages();
         pages.put(
             new Page(
@@ -93,7 +93,7 @@ public class PublishedPagesTest {
                 URI.create("www.foo.com"),
                 "description",
                 new DateTime(123456789L),
-                new DataFile(dataFile),
+                DataFile.from(dataFile),
                 SiteMapUrl.ChangeFrequency.ALWAYS,
                 SiteMapUrl.Priority.POST));
         PublishedPages.save(file, pages);

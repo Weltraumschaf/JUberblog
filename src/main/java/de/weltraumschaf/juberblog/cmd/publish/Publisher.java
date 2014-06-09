@@ -97,11 +97,10 @@ final class Publisher implements Command {
      * @param published must not be {@code null}
      */
     public Publisher(
-        final Directories dirs,
-        final Configuration templateConfig,
-        final String baseUri,
-        final PublishedPages published)
-    {
+            final Directories dirs,
+            final Configuration templateConfig,
+            final String baseUri,
+            final PublishedPages published) {
         super();
         this.dirs = Validate.notNull(dirs, "dirs");
         this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
@@ -112,9 +111,9 @@ final class Publisher implements Command {
     /**
      * Read the data to publish.
      *
-     * @throws FileNotFoundException if data files can't be read
+     * @throws IOException if data files can't be read
      */
-    void readData() throws FileNotFoundException {
+    void readData() throws IOException {
         if (dataRead) {
             return;
         }
@@ -122,13 +121,13 @@ final class Publisher implements Command {
         sitesData = Lists.newArrayList();
 
         for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            sitesData.add(new DataFile(f));
+            sitesData.add(DataFile.from(f.toPath()));
         }
 
         postsData = Lists.newArrayList();
 
         for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            postsData.add(new DataFile(f));
+            postsData.add(DataFile.from(f.toPath()));
         }
 
         dataRead = true;
@@ -138,9 +137,9 @@ final class Publisher implements Command {
      * Get the data for sites to publish.
      *
      * @return never {@code null}
-     * @throws FileNotFoundException if data files can't be read
+     * @throws IOException if data files can't be read
      */
-    Collection<DataFile> getSitesData() throws FileNotFoundException {
+    Collection<DataFile> getSitesData() throws IOException {
         readData();
         return sitesData;
     }
@@ -149,9 +148,9 @@ final class Publisher implements Command {
      * Get the data for posts to publish.
      *
      * @return never {@code null}
-     * @throws FileNotFoundException if data files can't be read
+     * @throws IOException if data files can't be read
      */
-    Collection<DataFile> getPostsData() throws FileNotFoundException {
+    Collection<DataFile> getPostsData() throws IOException {
         readData();
         return postsData;
     }
@@ -215,7 +214,7 @@ final class Publisher implements Command {
                     Formatters.Type.SITE,
                     getSitesData(),
                     dirs.htdocsSites());
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             throw new PublishingSubCommandExcpetion("Can't read sites data files: " + ex.getMessage(), ex);
         }
     }
@@ -234,7 +233,7 @@ final class Publisher implements Command {
                     Formatters.Type.POST,
                     getPostsData(),
                     dirs.htdocsPosts());
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             throw new PublishingSubCommandExcpetion("Can't read posts data files: " + ex.getMessage(), ex);
         }
     }
@@ -249,10 +248,10 @@ final class Publisher implements Command {
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Collection<Page> publishFiles(
-        final Formatters.Type type,
-        final Collection<DataFile> data,
-        final Path outputDir)
-        throws PublishingSubCommandExcpetion {
+            final Formatters.Type type,
+            final Collection<DataFile> data,
+            final Path outputDir)
+            throws PublishingSubCommandExcpetion {
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
@@ -276,7 +275,7 @@ final class Publisher implements Command {
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-        throws PublishingSubCommandExcpetion {
+            throws PublishingSubCommandExcpetion {
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
@@ -301,7 +300,6 @@ final class Publisher implements Command {
                 break;
         }
 
-
         if (publishedFileExists(target.toFile())) {
             LOG.info(String.format("File %s already exists.", target));
 
@@ -311,13 +309,13 @@ final class Publisher implements Command {
                 LOG.info("Skip file.");
                 try {
                     return new Page(
-                        data.getHeadline(),
-                        createUri(data),
-                        "TODO",
-                        new DateTime(),
-                        data,
-                        frequencey,
-                        priority);
+                            data.getHeadline(),
+                            createUri(data),
+                            "TODO",
+                            new DateTime(),
+                            data,
+                            frequencey,
+                            priority);
                 } catch (final URISyntaxException | IOException ex) {
                     throw new PublishingSubCommandExcpetion(ex.getMessage(), ex);
                 }
@@ -333,13 +331,13 @@ final class Publisher implements Command {
                     html.getBytes(Constants.DEFAULT_ENCODING.toString()),
                     StandardOpenOption.WRITE);
             return new Page(
-                data.getHeadline(),
-                createUri(data),
-                html,
-                new DateTime(),
-                data,
-                frequencey,
-                priority);
+                    data.getHeadline(),
+                    createUri(data),
+                    html,
+                    new DateTime(),
+                    data,
+                    frequencey,
+                    priority);
         } catch (final IOException | TemplateException | URISyntaxException ex) {
             throw new PublishingSubCommandExcpetion(
                     String.format("Error occured during publishing: %s!", ex.getMessage()),
@@ -370,8 +368,8 @@ final class Publisher implements Command {
         fmt.setTitle(data.getHeadline());
         fmt.setEncoding(Constants.DEFAULT_ENCODING.toString());
         fmt.setBaseUri(baseUri);
-        fmt.setDescription(data.getDescription());
-        fmt.setKeywords(data.getKeywords());
+        fmt.setDescription(data.getMetaData().getDescription());
+        fmt.setKeywords(data.getMetaData().getKeywords());
 
         return fmt.format();
     }
@@ -385,8 +383,6 @@ final class Publisher implements Command {
     boolean publishedFileExists(final File file) {
         return file.exists();
     }
-
-
 
     private URI createUri(final DataFile data) throws URISyntaxException {
         return new URI("");

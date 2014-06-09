@@ -65,15 +65,15 @@ public class PublisherTest {
     }
 
     @Test
-    public void readData() throws FileNotFoundException {
+    public void readData() throws IOException {
         sut.readData();
         assertThat(sut.getPostsData(), containsInAnyOrder(
-                new DataFile(new File(data.getAbsolutePath() + "/posts/1383315520.This-is-the-First-Post.md")),
-                new DataFile(new File(data.getAbsolutePath() + "/posts/1383315841.Second-Post-About-Lorem.md"))
+                DataFile.from(new File(data.getAbsolutePath() + "/posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toPath()),
+                DataFile.from(new File(data.getAbsolutePath() + "/posts/2014-05-30T21.34.20_Second-Post-About-Lorem.md").toPath())
         ));
         assertThat(sut.getSitesData(), containsInAnyOrder(
-                new DataFile(new File(data.getAbsolutePath() + "/sites/1383333526.About-me.md")),
-                new DataFile(new File(data.getAbsolutePath() + "/sites/1383333707.Projects.md"))
+                DataFile.from(new File(data.getAbsolutePath() + "/sites/2014-05-30T21.21.18_About-me.md").toPath()),
+                DataFile.from(new File(data.getAbsolutePath() + "/sites/2014-05-30T21.29.20_Projects.md").toPath())
         ));
     }
 

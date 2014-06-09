@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog.model;
 
+import de.weltraumschaf.commons.guava.Objects;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Headline;
 import de.weltraumschaf.juberblog.Preprocessor;
 import java.io.File;
@@ -20,6 +20,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -32,56 +36,79 @@ import org.apache.commons.io.IOUtils;
  * The file names are produced by this schema:
  * </p>
  * <pre>
- * filename := TIMESTAMP '.' SLUG '.md' ;
+ * filename := TIMESTAMP '_' SLUG '.md' ;
  * </pre>
  * <p>
- * TIMESTAMP is the Unix time stamp when the file was created. SLUG is th slugged form of the title.
+ * TIMESTAMP is time stamp when the file was created and as format {@literal yyyy-mm-ddThh.mm.ss}.
+ * SLUG is th slugged form of the title.
  * </p>
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class DataFile {
+public final class DataFile {
 
     /**
-     * Separates the timestamp from the beginning of the file base name.
+     * Absolute file name.
      */
-    private static final String TIMESTAMP_SEP = ".";
+    private final String fileName;
     /**
-     * Signals that the {@link #creationTime} is not initialized.
+     * The base name of {@link #fileName}.
      */
-    private static final int UNITIALIZED = -1;
+    private final String baseName;
     /**
-     * Processes the file content.
+     * Files creation time.
      */
-    private final DataProcessor processor;
+    private final long creationTime;
     /**
-     * The original absolute file name.
+     * Files last modification time.
      */
-    private final File file;
+    private final long modificationTime;
     /**
-     * Lazy computed.
+     * The part of the {@link #baseName} between the timestamp and the file extension.
      */
-    private String basename;
+    private final String slug;
     /**
-     * Lazy computed.
+     * The page's headline.
      */
-    private long creationTime = UNITIALIZED;
+    private final String headline;
     /**
-     * Lazy computed.
+     * The page's markdown.
      */
-    private String slug;
+    private final String markdown;
+    /**
+     * The page's meta data.
+     */
+    private final MetaData metadata;
 
     /**
      * Dedicated constructor.
      *
-     * @param file must not be {@code null} or empty
-     * @throws java.io.FileNotFoundException if file can't be read
+     * @param fileName must not be {@code null} empty
+     * @param baseName must not be {@code null} empty
+     * @param creationTime must not be less than 0L
+     * @param modificationTime must not be less than 0L
+     * @param slug must not be {@code null} empty
+     * @param headline must not be {@code null} empty
+     * @param markdown must not be {@code null} empty
+     * @param metadata must not be {@code null}
      */
-    public DataFile(final File file) throws FileNotFoundException {
-        super();
-        Validate.notNull(file, "Filename must not be null or empty!");
-        this.file = file;
-        this.processor = new DataProcessor(file);
+    public DataFile(
+            final String fileName,
+            final String baseName,
+            final long creationTime,
+            final long modificationTime,
+            final String slug,
+            final String headline,
+            final String markdown,
+            final MetaData metadata) {
+        this.fileName = Validate.notEmpty(fileName, "fileName");
+        this.baseName = Validate.notEmpty(baseName, "baseName");
+        this.creationTime = Validate.greaterThanOrEqual(creationTime, 0L, "creationTime");
+        this.modificationTime = Validate.greaterThanOrEqual(modificationTime, 0L, "modificationTime");
+        this.slug = Validate.notEmpty(slug, "slug");
+        this.headline = Validate.notEmpty(headline, "headline");
+        this.markdown = Validate.notEmpty(markdown, "markdown");
+        this.metadata = Validate.notNull(metadata, "metadata");
     }
 
     /**
@@ -90,7 +117,7 @@ public class DataFile {
      * @return never {@code null} or empty
      */
     public String getFilename() {
-        return file.getName();
+        return fileName;
     }
 
     /**
@@ -101,12 +128,7 @@ public class DataFile {
      * @return never {@code null}
      */
     public String getBasename() {
-        if (null == basename) {
-            final int pos = getFilename().lastIndexOf(Constants.DIR_SEP.toString()) + 1;
-            basename = getFilename().substring(pos);
-        }
-
-        return basename;
+        return baseName;
     }
 
     /**
@@ -115,12 +137,6 @@ public class DataFile {
      * @return greater -1
      */
     public long getCreationTime() {
-        if (UNITIALIZED == creationTime) {
-            final String name = getBasename();
-            final int pos = name.indexOf(TIMESTAMP_SEP);
-            creationTime = Long.valueOf(name.substring(0, pos));
-        }
-
         return creationTime;
     }
 
@@ -130,7 +146,7 @@ public class DataFile {
      * @return non negative long number
      */
     public long getModificationTime() {
-        return file.lastModified();
+        return modificationTime;
     }
 
     /**
@@ -141,13 +157,6 @@ public class DataFile {
      * @return never {@code null}
      */
     public String getSlug() {
-        if (null == slug) {
-            final String name = getBasename();
-            final int start = name.indexOf(TIMESTAMP_SEP) + 1;
-            final int stop = name.lastIndexOf(".");
-            slug = name.substring(start, stop);
-        }
-
         return slug;
     }
 
@@ -160,7 +169,7 @@ public class DataFile {
      * @throws IOException if file can't be read
      */
     public MetaData getMetaData() throws IOException {
-        return processor.getMetaData();
+        return metadata;
     }
 
     /**
@@ -172,7 +181,7 @@ public class DataFile {
      * @throws IOException if file can't be read
      */
     public String getMarkdown() throws IOException {
-        return processor.getMarkdown();
+        return markdown;
     }
 
     /**
@@ -184,41 +193,34 @@ public class DataFile {
      * @throws IOException if file can't be read
      */
     public String getHeadline() throws IOException {
-        return processor.getHeadline();
-    }
-
-    /**
-     * Get processed keywords of file.
-     *
-     * This method reads and parses the file content.
-     *
-     * @return never {@code  null}
-     * @throws IOException if file can't be read
-     */
-    public String getKeywords() throws IOException {
-        return getMetaData().getKeywords();
-    }
-
-    /**
-     * Get processed description of file.
-     *
-     * This method reads and parses the file content.
-     *
-     * @return never {@code  null}
-     * @throws IOException if file can't be read
-     */
-    public String getDescription() throws IOException {
-        return getMetaData().getDescription();
+        return headline;
     }
 
     @Override
     public String toString() {
-        return file.toString();
+        return Objects.toStringHelper(this)
+                .add("fileName", fileName)
+                .add("baseName", baseName)
+                .add("creationTime", creationTime)
+                .add("modificationTime", modificationTime)
+                .add("slug", slug)
+                .add("headline", headline)
+                .add("markdown", markdown)
+                .add("metadata", metadata)
+                .toString();
     }
 
     @Override
     public int hashCode() {
-        return file.hashCode();
+        return Objects.hashCode(
+                fileName,
+                baseName,
+                creationTime,
+                modificationTime,
+                slug,
+                headline,
+                markdown,
+                metadata);
     }
 
     @Override
@@ -228,7 +230,49 @@ public class DataFile {
         }
 
         final DataFile other = (DataFile) obj;
-        return getFilename().equals(other.getFilename());
+        return Objects.equal(fileName, other.fileName)
+                && Objects.equal(baseName, other.baseName)
+                && Objects.equal(creationTime, other.creationTime)
+                && Objects.equal(modificationTime, other.modificationTime)
+                && Objects.equal(slug, other.slug)
+                && Objects.equal(headline, other.headline)
+                && Objects.equal(markdown, other.markdown)
+                && Objects.equal(metadata, other.metadata);
+    }
+
+    /**
+     * Factory method to create the {@link DataFile value object} from a real file.
+     *
+     * @param file must not be {@code null}
+     * @return never {@code nul}
+     * @throws IOException if input file can't be read
+     */
+    public static DataFile from(final Path file) throws IOException {
+        Validate.notNull(file, "file");
+        final BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
+        final DataProcessor processor = new DataProcessor(file.toFile());
+        return new DataFile(
+                file.toString(),
+                file.toFile().getName(),
+                attributes.creationTime().toMillis(),
+                attributes.lastModifiedTime().toMillis(),
+                slugify(file),
+                processor.getHeadline(),
+                processor.getMarkdown(),
+                processor.getMetaData());
+    }
+
+    /**
+     * Removes date and extension from file name.
+     *
+     * @param file must not be {@code null}
+     * @return never {@code null}
+     */
+    static String slugify(final Path file) {
+        final String name = Validate.notNull(file, "file").toFile().getName();
+        final int start = name.indexOf("_") + 1;
+        final int stop = name.lastIndexOf(".");
+        return name.substring(start, stop);
     }
 
     /**

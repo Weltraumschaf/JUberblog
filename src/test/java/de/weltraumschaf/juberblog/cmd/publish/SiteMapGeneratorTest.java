@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.model.DataFile;
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
@@ -23,7 +24,6 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
@@ -35,17 +35,17 @@ import org.joda.time.DateTime;
  */
 public class SiteMapGeneratorTest {
 
-    private static final String URI = "http://www.foobar.com/";
-    @Rule
-    //CHECKSTYLE:OFF
-    public final TemporaryFolder tmp = new TemporaryFolder();
-    //CHECKSTYLE:ON
     @Rule
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
+    
+    private static final String URI = "http://www.foobar.com/";
+
     private final SiteMapGenerator sut = new SiteMapGenerator(
             Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
+
+    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData());
 
     public SiteMapGeneratorTest() throws IOException, URISyntaxException {
         super();
@@ -109,13 +109,13 @@ public class SiteMapGeneratorTest {
 
         sut.addPage(
             new Page("title1", new URI(URI + "sites/foo.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                    new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
+                    dummy, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
         sut.addPage(
             new Page("title1", new URI(URI + "sites/bar.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                    new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
+                    dummy, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
         sut.addPage(
             new Page("title1", new URI(URI + "posts/foo.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                    new DataFile(tmp.newFile()), SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
+                    dummy, SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
 
         sut.execute();
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
