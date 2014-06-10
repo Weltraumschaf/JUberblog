@@ -248,13 +248,13 @@ public final class DataFile {
      */
     public static DataFile from(final Path file) throws IOException {
         Validate.notNull(file, "file");
-        final BasicFileAttributes attributes = Files.readAttributes(file, BasicFileAttributes.class);
+        final FileAttributes attributes = new FileAttributes(file);
         final DataProcessor processor = new DataProcessor(file.toFile());
         return new DataFile(
                 file.toString(),
                 file.toFile().getName(),
-                attributes.creationTime().toMillis(),
-                attributes.lastModifiedTime().toMillis(),
+                attributes.creationTime(),
+                attributes.lastModifiedTime(),
                 slugify(file),
                 processor.getHeadline(),
                 processor.getMarkdown(),
@@ -274,6 +274,34 @@ public final class DataFile {
         return name.substring(start, stop);
     }
 
+    /**
+     * Wrapper to easy access {@lin BasicFileAttributes basic file attributes}.
+     */
+    static final class FileAttributes {
+        /**
+         * The files attributes.
+         */
+        private final BasicFileAttributes attributes;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param file must not be {@code null}
+         * @throws IOException if attributes can't be read
+         */
+        FileAttributes(final Path file) throws IOException {
+            super();
+            attributes = Files.readAttributes(Validate.notNull(file, "file"), BasicFileAttributes.class);
+        }
+
+        long creationTime() {
+            return attributes.creationTime().toMillis();
+        }
+
+        long lastModifiedTime() {
+            return attributes.lastModifiedTime().toMillis();
+        }
+    }
     /**
      * Parses meta data and Markdown out of a file.
      */

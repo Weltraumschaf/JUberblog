@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.model.DataFile.FileAttributes;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -57,7 +58,7 @@ public class DataFileTest {
             getClass().getResource(FIXTURE_PACKAGE + "/2014-05-30T21.29.20_This-is-the-First-Post.md").toURI());
 
         final DataFile data = DataFile.from(file);
-
+        final FileAttributes attributes = new FileAttributes(file);
         assertThat(data, is(not(nullValue())));
         assertThat(data.getBasename(), is(equalTo("2014-05-30T21.29.20_This-is-the-First-Post.md")));
         assertThat(data.getFilename(),
@@ -68,8 +69,8 @@ public class DataFileTest {
                 + "sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren "
                 + "no sea takimata sanctus est lorem ipsum dolor sit\namet.")));
         assertThat(data.getSlug(), is(equalTo("This-is-the-First-Post")));
-        assertThat(data.getCreationTime(), is(equalTo(1402343143000L)));
-        assertThat(data.getModificationTime(), is(equalTo(1402343143000L)));
+        assertThat(data.getCreationTime(), is(attributes.creationTime()));
+        assertThat(data.getModificationTime(), is(attributes.lastModifiedTime()));
 
         final MetaData meta = data.getMetaData();
         assertThat(meta, is(not(nullValue())));
