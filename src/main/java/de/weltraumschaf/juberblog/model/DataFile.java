@@ -212,14 +212,14 @@ public final class DataFile {
     @Override
     public int hashCode() {
         return Objects.hashCode(
-                fileName,
-                baseName,
-                creationTime,
-                modificationTime,
-                slug,
-                headline,
-                markdown,
-                metadata);
+            fileName,
+            baseName,
+            creationTime,
+            modificationTime,
+            slug,
+            headline,
+            markdown,
+            metadata);
     }
 
     @Override
@@ -230,13 +230,13 @@ public final class DataFile {
 
         final DataFile other = (DataFile) obj;
         return Objects.equal(fileName, other.fileName)
-                && Objects.equal(baseName, other.baseName)
-                && Objects.equal(creationTime, other.creationTime)
-                && Objects.equal(modificationTime, other.modificationTime)
-                && Objects.equal(slug, other.slug)
-                && Objects.equal(headline, other.headline)
-                && Objects.equal(markdown, other.markdown)
-                && Objects.equal(metadata, other.metadata);
+            && Objects.equal(baseName, other.baseName)
+            && Objects.equal(creationTime, other.creationTime)
+            && Objects.equal(modificationTime, other.modificationTime)
+            && Objects.equal(slug, other.slug)
+            && Objects.equal(headline, other.headline)
+            && Objects.equal(markdown, other.markdown)
+            && Objects.equal(metadata, other.metadata);
     }
 
     /**

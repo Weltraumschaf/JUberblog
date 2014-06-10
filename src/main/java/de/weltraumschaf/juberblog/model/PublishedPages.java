@@ -12,15 +12,25 @@
 package de.weltraumschaf.juberblog.model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.guava.Objects;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
+import org.joda.time.DateTime;
 
 /**
  * Holds the published pages.
@@ -30,7 +40,7 @@ import java.util.Map;
 public final class PublishedPages {
 
     /**
-     *Holds the data.
+     * Holds the data.
      * <p>
      * The key is the the filename relative to the data repository.
      * </p>
@@ -82,7 +92,12 @@ public final class PublishedPages {
         Validate.notNull(file, "file");
         Validate.notNull(pages, "pages");
 
-        final Gson serializer = new Gson();
+        final GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
+        builder.registerTypeAdapter(DateTime.class, new DateTimeDeserializer());
+
+        final Gson serializer = builder.create();
+
         final String json = serializer.toJson(pages);
         Files.write(file, json.getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
@@ -90,4 +105,20 @@ public final class PublishedPages {
     public static PublishedPages load(final Path file) {
         return null;
     }
+
+    private static class DateTimeSerializer implements JsonSerializer<DateTime> {
+
+        @Override
+        public JsonElement serialize(final DateTime src, final Type typeOfSrc, final JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
+        }
+    }
+
+    private static class DateTimeDeserializer implements JsonDeserializer<DateTime> {
+
+        public DateTime deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+            return new DateTime(json.getAsJsonPrimitive().getAsString());
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import org.joda.time.DateTime;
@@ -69,7 +70,7 @@ public class PublishedPagesTest {
     }
 
     @Test
-    @Ignore("Stack overflow error.")
+    @Ignore("Does not work.")
     public void save() throws IOException {
         final Path file = tmp.getRoot().toPath().resolve("published");
         final Path dataFile = tmp.newFile().toPath();
@@ -85,7 +86,7 @@ public class PublishedPagesTest {
             + "ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\n"
             + "dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\n"
             + "amet.";
-        Files.write(dataFile, data.getBytes(Constants.DEFAULT_ENCODING.toString()));
+        Files.write(dataFile, data.getBytes());
         final PublishedPages pages = new PublishedPages();
         pages.put(
             new Page(
@@ -97,9 +98,39 @@ public class PublishedPagesTest {
                 SiteMapUrl.ChangeFrequency.ALWAYS,
                 SiteMapUrl.Priority.POST));
         PublishedPages.save(file, pages);
+        final BasicFileAttributes attributes = Files.readAttributes(dataFile, BasicFileAttributes.class);
 
-        final String storedData = new String(Files.readAllBytes(file), Constants.DEFAULT_ENCODING.toString());
-        assertThat(storedData, is(equalTo("{\"data\":{}}")));
+        final String storedData = new String(Files.readAllBytes(file));
+        assertThat(storedData,
+            is(equalTo("{\"data\":{"
+                + "\"" + dataFile.toString() + "\":{"
+                    + "\"title\":\"title\","
+                    + "\"uri\":\"www.foo.com\","
+                    + "\"description\":\"description\","
+                    + "\"publishingDate\":\"1970-01-02T11:17:36.789+01:00\","
+                    + "\"file\":{"
+                        + "\"fileName\":\"" + dataFile.toString() + "\","
+                        + "\"baseName\":\"" + dataFile.getFileName().toString() + "\","
+                        + "\"creationTime\":" + String.valueOf(attributes.creationTime().toMillis()) + ","
+                        + "\"modificationTime\":" + String.valueOf(attributes.lastModifiedTime().toMillis()) + ","
+                        + "\"slug\":\"" + DataFile.slugify(dataFile) + "\","
+                        + "\"headline\":\"Projects\","
+                        + "\"markdown\":\"## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing elitr sed "
+                            + "diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat sed diam "
+                            + "voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd "
+                            + "gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.\","
+                        + "\"metadata\":{"
+                            + "\"data\":{"
+                                + "\"Description\":\"My projects.\","
+                                + "\"Navi\":\"Projects\","
+                                + "\"Keywords\":\"projects\""
+                            + "}"
+                        + "}"
+                    + "},"
+                    + "\"frequencey\":\"ALWAYS\","
+                    + "\"priority\":\"POST\""
+                + "}"
+            + "}}")));
     }
 
     @Test
