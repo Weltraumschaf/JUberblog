@@ -12,21 +12,22 @@
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
-import java.io.File;
+import de.weltraumschaf.juberblog.model.DataFile.FileAttributes;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import org.joda.time.DateTime;
+import org.json.JSONException;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 /**
  * Tests for {@link PublishedPages}.
@@ -70,8 +71,8 @@ public class PublishedPagesTest {
     }
 
     @Test
-    @Ignore("Does not work.")
-    public void save() throws IOException {
+//    @Ignore("Does not work.")
+    public void save() throws IOException, JSONException {
         final Path file = tmp.getRoot().toPath().resolve("published");
         final Path dataFile = tmp.newFile().toPath();
         final String data = "<?juberblog\n"
@@ -98,39 +99,43 @@ public class PublishedPagesTest {
                 SiteMapUrl.ChangeFrequency.ALWAYS,
                 SiteMapUrl.Priority.POST));
         PublishedPages.save(file, pages);
-        final BasicFileAttributes attributes = Files.readAttributes(dataFile, BasicFileAttributes.class);
+        final FileAttributes attributes = new FileAttributes(file);
 
-        final String storedData = new String(Files.readAllBytes(file));
-        assertThat(storedData,
-            is(equalTo("{\"data\":{"
-                + "\"" + dataFile.toString() + "\":{"
-                    + "\"title\":\"title\","
-                    + "\"uri\":\"www.foo.com\","
-                    + "\"description\":\"description\","
-                    + "\"publishingDate\":\"1970-01-02T11:17:36.789+01:00\","
-                    + "\"file\":{"
-                        + "\"fileName\":\"" + dataFile.toString() + "\","
-                        + "\"baseName\":\"" + dataFile.getFileName().toString() + "\","
-                        + "\"creationTime\":" + String.valueOf(attributes.creationTime().toMillis()) + ","
-                        + "\"modificationTime\":" + String.valueOf(attributes.lastModifiedTime().toMillis()) + ","
-                        + "\"slug\":\"" + DataFile.slugify(dataFile) + "\","
-                        + "\"headline\":\"Projects\","
-                        + "\"markdown\":\"## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing elitr sed "
-                            + "diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat sed diam "
-                            + "voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd "
-                            + "gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.\","
-                        + "\"metadata\":{"
-                            + "\"data\":{"
-                                + "\"Description\":\"My projects.\","
-                                + "\"Navi\":\"Projects\","
-                                + "\"Keywords\":\"projects\""
-                            + "}"
+        final String storedData = new String(Files.readAllBytes(file), Constants.DEFAULT_ENCODING.toString());
+        assertThat(storedData, is(not(equalTo(""))));
+        JSONAssert.assertEquals(
+            "{\"data\":{"
+            + "\"" + dataFile.toString() + "\":{"
+                + "\"title\":\"title\","
+                + "\"uri\":\"www.foo.com\","
+                + "\"description\":\"description\","
+                + "\"publishingDate\":\"1970-01-02T11:17:36.789+01:00\","
+                + "\"file\":{"
+                    + "\"fileName\":\"" + dataFile.toString() + "\","
+                    + "\"baseName\":\"" + dataFile.getFileName().toString() + "\","
+                    + "\"creationTime\":" + String.valueOf(attributes.creationTime()) + ","
+                    + "\"modificationTime\":" + String.valueOf(attributes.lastModifiedTime()) + ","
+                    + "\"slug\":\"" + DataFile.slugify(dataFile) + "\","
+                    + "\"headline\":\"Projects\","
+                    + "\"markdown\":\"## Projects\\n"
+                        + "\\n"
+                        + "Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\\n"
+                        + "ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\\n"
+                        + "dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\\n"
+                        + "amet.\","
+                    + "\"metadata\":{"
+                        + "\"data\":{"
+                            + "\"Description\":\"My projects.\","
+                            + "\"Navi\":\"Projects\","
+                            + "\"Keywords\":\"projects\""
                         + "}"
-                    + "},"
-                    + "\"frequencey\":\"ALWAYS\","
-                    + "\"priority\":\"POST\""
-                + "}"
-            + "}}")));
+                    + "}"
+                + "},"
+                + "\"frequencey\":\"ALWAYS\","
+                + "\"priority\":\"POST\""
+            + "}"
+        + "}}",
+        storedData, false);
     }
 
     @Test
