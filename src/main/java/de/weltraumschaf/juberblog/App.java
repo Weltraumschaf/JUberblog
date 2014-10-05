@@ -16,6 +16,7 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
+import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
@@ -28,7 +29,6 @@ import de.weltraumschaf.juberblog.opt.PublishOptions;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.parboiled.common.StringUtils;
 

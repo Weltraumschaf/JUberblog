@@ -12,10 +12,10 @@
 
 package de.weltraumschaf.juberblog.files;
 
+import de.weltraumschaf.commons.system.Environments;
+import de.weltraumschaf.commons.system.Environments.Env;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
-import de.weltraumschaf.juberblog.Environments;
-import de.weltraumschaf.juberblog.Environments.Env;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

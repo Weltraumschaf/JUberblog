@@ -82,16 +82,19 @@
         <project.build.mainClass>de.weltraumschaf.juberblog.App</project.build.mainClass>
         <project.build.binDirectory>${project.basedir}/bin</project.build.binDirectory>
         <project.build.distDirectory>${project.basedir}/src/site/resources/dist</project.build.distDirectory>
+
         <maven.pmd.rulesetfiles>${project.basedir}/src/main/config/pmd.xml</maven.pmd.rulesetfiles>
         <maven.pmd.cpd-excludes>${project.basedir}/src/main/config/exclude-cpd.properties</maven.pmd.cpd-excludes>
         <maven.pmd.pmd-excludes>${project.basedir}/src/main/config/exclude-pmd.properties</maven.pmd.pmd-excludes>
         <maven.findbugs.excludefilterfile>${project.basedir}/src/main/config/findbugs-exclude.xml</maven.findbugs.excludefilterfile>
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
         <maven.version>3.0.3</maven.version>
+
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
-        <dependency.commons.version>1.0.0-beta</dependency.commons.version>
+
+        <dependency.commons.version>1.0.1</dependency.commons.version>
     </properties>
 
     <prerequisites>
@@ -112,6 +115,11 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>string</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>system</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>
         <dependency>
