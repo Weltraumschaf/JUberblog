@@ -56,8 +56,8 @@ public class InstallOptions extends CommonOptions {
      * @param help {@code true} if help is wanted
      * @param verbose {@code true} if verbosity is wanted
      * @param location must not be {@code null}
-     * @param force {@link true} to force installation
-     * @param update {@link true} to update installation
+     * @param force {@code true} to force installation
+     * @param update {@code true} to update installation
      */
     public InstallOptions(
         final boolean help,

@@ -275,7 +275,7 @@ public final class DataFile {
     }
 
     /**
-     * Wrapper to easy access {@lin BasicFileAttributes basic file attributes}.
+     * Wrapper to easy access {@link BasicFileAttributes basic file attributes}.
      */
     static final class FileAttributes {
         /**
