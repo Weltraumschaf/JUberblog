@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.not;
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -139,6 +140,7 @@ public class PublishedPagesTest {
     }
 
     @Test
+    @Ignore("TODO Implement test for loading.")
     public void load() {
     }
 
