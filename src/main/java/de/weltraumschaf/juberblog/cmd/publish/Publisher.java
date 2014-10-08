@@ -255,13 +255,13 @@ final class Publisher implements Command {
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
         LOG.debug(String.format("Pubish files from '%s'...", data));
-        final List<Page> published = Lists.newArrayList();
+        final List<Page> localPublished = Lists.newArrayList();
 
         for (final DataFile file : data) {
-            published.add(publishFile(type, file, outputDir));
+            localPublished.add(publishFile(type, file, outputDir));
         }
 
-        return published;
+        return localPublished;
     }
 
     /**
