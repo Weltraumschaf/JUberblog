@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import org.joda.time.DateTime;
 
 /**
@@ -38,6 +39,12 @@ import org.joda.time.DateTime;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class PublishedPages {
+
+    private static  final GsonBuilder GSON = new GsonBuilder();
+    static {
+        GSON.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
+        GSON.registerTypeAdapter(DateTime.class, new DateTimeDeserializer());
+    }
 
     /**
      * Holds the data.
@@ -68,6 +75,22 @@ public final class PublishedPages {
         data.put(name, page);
     }
 
+    public int size() {
+        return data.size();
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    public Page get(String key) {
+        return data.get(key);
+    }
+
+    public Set<String> keySet() {
+        return data.keySet();
+    }
+
     @Override
     public String toString() {
         return String.format("PublishedPages{pages=%s}", data);
@@ -92,18 +115,17 @@ public final class PublishedPages {
         Validate.notNull(file, "file");
         Validate.notNull(pages, "pages");
 
-        final GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
-        builder.registerTypeAdapter(DateTime.class, new DateTimeDeserializer());
-
-        final Gson serializer = builder.create();
-
+        final Gson serializer = GSON.create();
         final String json = serializer.toJson(pages);
         Files.write(file, json.getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
 
-    public static PublishedPages load(final Path file) {
-        return null;
+    public static PublishedPages load(final Path file) throws IOException {
+        Validate.notNull(file, "file");
+
+        final byte[] content = Files.readAllBytes(file);
+        final Gson serializer = GSON.create();
+        return serializer.fromJson(new String(content, Constants.DEFAULT_ENCODING.toString()), PublishedPages.class);
     }
 
     private static class DateTimeSerializer implements JsonSerializer<DateTime> {
@@ -116,6 +138,7 @@ public final class PublishedPages {
 
     private static class DateTimeDeserializer implements JsonDeserializer<DateTime> {
 
+        @Override
         public DateTime deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
             return new DateTime(json.getAsJsonPrimitive().getAsString());
         }

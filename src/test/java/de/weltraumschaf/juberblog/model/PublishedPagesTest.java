@@ -15,15 +15,20 @@ import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.model.DataFile.FileAttributes;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -72,7 +77,6 @@ public class PublishedPagesTest {
     }
 
     @Test
-//    @Ignore("Does not work.")
     public void save() throws IOException, JSONException {
         final Path file = tmp.getRoot().toPath().resolve("published");
         final Path dataFile = tmp.newFile().toPath();
@@ -140,8 +144,38 @@ public class PublishedPagesTest {
     }
 
     @Test
-    @Ignore("TODO Implement test for loading.")
-    public void load() {
+    public void load() throws IOException, URISyntaxException {
+        final URL fixture = getClass().getResource("/de/weltraumschaf/juberblog/model/published.json");
+        final PublishedPages result = PublishedPages.load(Paths.get(fixture.toURI()));
+
+        assertThat(result, is(not(nullValue())));
+        assertThat(result.isEmpty(), is(false));
+        assertThat(result.size(), is(1));
+
+        assertThat(result.keySet().contains("/foo/bar/baz.json"), is(true));
+
+        final Page firstPage = result.get("/foo/bar/baz.json");
+        assertThat(firstPage, is(not(nullValue())));
+        assertThat(firstPage.getDescription(), is("description"));
+        assertThat(firstPage.getTitle(), is("title"));
+        assertThat(firstPage.getFrequencey(), is(SiteMapUrl.ChangeFrequency.ALWAYS));
+        assertThat(firstPage.getPriority(), is(SiteMapUrl.Priority.POST));
+        assertThat(firstPage.getPublishingDate(), is(new DateTime(123456789L)));
+        assertThat(firstPage.getUri(), is(URI.create("www.foo.com")));
+
+        final Map<String, String> data = new HashMap<>();
+        data.put("Description", "My projects.");
+        data.put("Navi", "Projects");
+        data.put("Keywords", "projects");
+        assertThat(firstPage.getFile(), is(new DataFile(
+            "/foo/bar/baz.json",
+            "baz.json",
+            1412775310000L,
+            1412775310000L,
+            "baz.json",
+            "Projects",
+            "## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.",
+            new MetaData(data))));
     }
 
 }
