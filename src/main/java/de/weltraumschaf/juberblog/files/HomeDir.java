@@ -28,6 +28,8 @@ import java.nio.file.Paths;
  */
 public final class HomeDir {
 
+    private static final String DEFAULT_LOCATION = "~/.juberblog";
+
     /**
      * Used to get environment variables.
      */
@@ -63,7 +65,7 @@ public final class HomeDir {
      * @throws IOException if directory can't be created
      */
     public void createIfNotExists() throws IOException {
-        final String pathName = env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString());
+        final String pathName = env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString(), DEFAULT_LOCATION);
         home = Paths.get(pathName);
 
         if (Files.exists(home)) {
