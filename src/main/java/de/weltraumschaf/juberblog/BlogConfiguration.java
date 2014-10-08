@@ -24,6 +24,8 @@ import org.apache.commons.io.IOUtils;
  *
  * Abstracts the configuration properties file.
  *
+ * XXX See http://read.feedly.com/html?url=http%3A%2F%2Fwww.javacodegeeks.com%2F2014%2F10%2Fdead-simple-configuration.html&theme=white&size=large
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class BlogConfiguration {
