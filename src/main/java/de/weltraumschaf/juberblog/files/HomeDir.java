@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.files;
 
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.Environments.Env;
+import de.weltraumschaf.commons.system.Environments.Names;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import java.io.IOException;
@@ -28,7 +29,7 @@ import java.nio.file.Paths;
  */
 public final class HomeDir {
 
-    private static final String DEFAULT_LOCATION = "~/.juberblog";
+    private static final String DEFAULT_LOCATION = System.getProperty(Names.USER_HOME.getPropertyName()) + "/.juberblog";
 
     /**
      * Used to get environment variables.
