@@ -29,7 +29,7 @@ import java.nio.file.Paths;
  */
 public final class HomeDir {
 
-    private static final String DEFAULT_LOCATION = System.getProperty(Names.USER_HOME.getPropertyName()) + "/.juberblog";
+    static final String DEFAULT_LOCATION = System.getProperty(Names.USER_HOME.getPropertyName()) + "/.juberblog";
 
     /**
      * Used to get environment variables.

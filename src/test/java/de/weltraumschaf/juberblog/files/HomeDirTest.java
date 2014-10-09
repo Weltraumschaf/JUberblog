@@ -20,6 +20,7 @@ import java.nio.file.attribute.PosixFilePermissions;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -56,6 +57,7 @@ public class HomeDirTest {
     public void defineMockBehaviour() {
         home = tmp.getRoot().toPath().resolve(".juberblog");
         when(env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString())).thenReturn(home.toString());
+        when(env.get(Constants.ENVIRONMENT_VARIABLE_HOME.toString(), HomeDir.DEFAULT_LOCATION)).thenReturn(home.toString());
     }
 
     @Test
