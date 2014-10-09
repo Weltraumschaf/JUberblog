@@ -68,10 +68,12 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         watch.start();
 
         try {
+            // TODO Write tests for this stuff here.
             pub.execute();
             updateHomeSite();
             updateSiteMap();
             updateFeed();
+            // TODO Save published data in home dir.
         } catch (PublishingSubCommandExcpetion ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Error while publishing files: " + ex.getMessage(), ex);
         }
