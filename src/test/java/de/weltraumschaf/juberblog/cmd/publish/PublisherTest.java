@@ -18,7 +18,6 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.Test;
@@ -29,6 +28,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 /**
+ * Tests for {@link PublisherTest}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
