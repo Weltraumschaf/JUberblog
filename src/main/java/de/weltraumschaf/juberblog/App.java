@@ -103,7 +103,7 @@ public final class App extends InvokableAdapter {
         home.createIfNotExists();
         final LockFile lock = new LockFile(home.getPath().resolve("lock"));
 
-        if (lock.exists()) { // FIXME Test lock exists.
+        if (lock.exists()) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL, String.format("JUberblog is already running!%n"
                             + "If you are shure this is not the case delete the lock file '%s'.", lock.getPath()));
@@ -123,7 +123,6 @@ public final class App extends InvokableAdapter {
         final SubCommand cmd = createSubcommand(subCommandName);
         parseOptions(subCommandName, args, cmd);
         cmd.execute();
-        //lock.remove(); TODO Remove lock.
     }
 
     /**
