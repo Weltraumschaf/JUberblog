@@ -16,7 +16,9 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Extends the {@link Template template} to provide a two step layout.
@@ -30,9 +32,17 @@ public final class Layout extends Template {
     /**
      * All these variables are assigned to {@link #content} if it is type of {@link Template}.
      */
-    private static final List<VarName> GLOBAL_VARIABLE_NAMES = Arrays.asList(
-            VarName.TITLE, VarName.ENCODING, VarName.DESCRIPTION, VarName.BASE_URI, VarName.KEYWORDS
-    );
+    private static final Set<VarName> GLOBAL_VARIABLE_NAMES = Collections.unmodifiableSet(
+            new HashSet<>(Arrays.asList(
+                            VarName.TITLE,
+                            VarName.ENCODING,
+                            VarName.DESCRIPTION,
+                            VarName.BASE_URI,
+                            VarName.KEYWORDS,
+                            VarName.VERSION,
+                            VarName.HEADLINE
+                    )));
+
     /**
      * Inner template to render content string.
      */
@@ -63,7 +73,7 @@ public final class Layout extends Template {
      * @param title must not be {@code null}
      */
     public void setTitle(final String title) {
-        assignVariable(VarName.TITLE, title);
+        assignVariable(VarName.TITLE, Validate.notNull(title, "title"));
     }
 
     /**
@@ -72,7 +82,7 @@ public final class Layout extends Template {
      * @param description must not be {@code null}
      */
     public void setDescription(final String description) {
-        assignVariable(VarName.DESCRIPTION, description);
+        assignVariable(VarName.DESCRIPTION, Validate.notNull(description, "description"));
     }
 
     /**
@@ -81,7 +91,7 @@ public final class Layout extends Template {
      * @param encoding must not be {@code null}
      */
     public void setEncoding(final String encoding) {
-        assignVariable(VarName.ENCODING, encoding);
+        assignVariable(VarName.ENCODING, Validate.notNull(encoding, "encoding"));
     }
 
     /**
@@ -90,7 +100,7 @@ public final class Layout extends Template {
      * @param baseUri must not be {@code null}
      */
     public void setBaseUri(final String baseUri) {
-        assignVariable(VarName.BASE_URI, baseUri);
+        assignVariable(VarName.BASE_URI, Validate.notNull(baseUri, "baseUri"));
     }
 
     /**
@@ -99,7 +109,15 @@ public final class Layout extends Template {
      * @param keywords must not be {@code null}
      */
     public void setKeywords(final String keywords) {
-        assignVariable(VarName.KEYWORDS, keywords);
+        assignVariable(VarName.KEYWORDS, Validate.notNull(keywords, "keywords"));
+    }
+
+    public void setVersion(final String version) {
+        assignVariable(VarName.VERSION, Validate.notNull(version, "version"));
+    }
+
+    public void setHeadline(final String headline) {
+        assignVariable(VarName.HEADLINE, Validate.notNull(headline, "headline"));
     }
 
     /**

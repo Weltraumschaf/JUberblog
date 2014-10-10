@@ -43,4 +43,6 @@ public interface HtmlFormatter extends Formatter {
      * @param baseUri must not be {@literal null}
      */
     void setBaseUri(String baseUri);
+    void setVersion(String version);
+    void setHeadline(String headline);
 }

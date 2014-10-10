@@ -55,7 +55,9 @@ public enum VarName {
     /**
      * Template variable name for next post.
      */
-    NEXT_POST("nextPost");
+    NEXT_POST("nextPost"),
+    VERSION("version"),
+    HEADLINE("headline");
     /**
      * Name of the variable in the template.
      */

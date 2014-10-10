@@ -18,8 +18,9 @@ import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Formats a blog post.
@@ -41,8 +42,8 @@ class PostFormatter extends BaseFormatter {
     /**
      * Global available variable names.
      */
-    private static final List<VarName> GLOBAL_VARIABLE_NAMES = Arrays.asList(
-            VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST);
+    private static final Set<VarName> GLOBAL_VARIABLE_NAMES = new HashSet<>(Arrays.asList(
+            VarName.DATE_FORMATTED, VarName.PREV_POST, VarName.NEXT_POST));
     /**
      * Post template file name.
      */

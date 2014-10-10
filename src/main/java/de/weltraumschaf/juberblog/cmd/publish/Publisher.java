@@ -374,6 +374,8 @@ final class Publisher implements Command {
         fmt.setBaseUri(baseUri);
         fmt.setDescription(data.getMetaData().getDescription());
         fmt.setKeywords(data.getMetaData().getKeywords());
+        fmt.setVersion("VERSION"); // FIXME Set version.
+        fmt.setHeadline("HEADLINE"); // FIXME Set headline.
 
         return fmt.format();
     }

@@ -21,8 +21,8 @@ import freemarker.template.TemplateException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -111,7 +111,7 @@ public class Template implements Renderable, Assignable {
      * @param assignable must not be {@code null}
      * @param names must not be {@code null}
      */
-    public static void initializeVaribales(final Assignable assignable, final List<VarName> names) {
+    public static void initializeVaribales(final Assignable assignable, final Set<VarName> names) {
         Validate.notNull(assignable, "Assignable must not be null!");
         Validate.notNull(names, "Names must not be null!");
 

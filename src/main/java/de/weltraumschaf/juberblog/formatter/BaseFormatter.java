@@ -87,32 +87,37 @@ abstract class BaseFormatter implements HtmlFormatter {
 
     @Override
     public void setTitle(final String title) {
-        Validate.notNull(title, "Title string must not be null!");
         layout.setTitle(title);
     }
 
     @Override
     public void setEncoding(final String encoding) {
-        Validate.notNull(encoding, "Encoding string must not be null!");
         layout.setEncoding(encoding);
     }
 
     @Override
     public void setBaseUri(final String baseUri) {
-        Validate.notNull(baseUri, "BaseUri string must not be null!");
         layout.setBaseUri(baseUri);
     }
 
     @Override
     public void setDescription(final String description) {
-        Validate.notNull(description, "Description string must not be null!");
         layout.setDescription(description);
     }
 
     @Override
     public void setKeywords(final String keywords) {
-        Validate.notNull(keywords, "Keywords string must not be null!");
         layout.setKeywords(keywords);
     }
 
+    @Override
+    public void setVersion(final String version) {
+        layout.setVersion(version);
+    }
+
+
+    @Override
+    public void setHeadline(final String headline) {
+        layout.setHeadline(headline);
+    }
 }
