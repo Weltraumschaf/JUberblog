@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -43,7 +42,7 @@ public class FeedGeneratorTest {
 
     private static final String URI = "http://www.foobar.com/";
 
-    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData());
+    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData(), DataFile.Type.SITE);
 
     private String today(final DateTime ts) {
         return FeedGenerator.formatTimestamp(ts);

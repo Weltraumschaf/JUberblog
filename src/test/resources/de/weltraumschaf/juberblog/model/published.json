@@ -19,7 +19,8 @@
                         "Navi": "Projects",
                         "Keywords": "projects"
                     }
-                }
+                },
+                "type": "POST"
             },
             "frequencey": "ALWAYS",
             "priority": "POST"

@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.model;
 
 import de.weltraumschaf.juberblog.Constants;
@@ -48,21 +47,21 @@ public class DataFileTest {
         assertThat(file.toString(), is(equalTo("foo/bar/baz/2014-05-30T21.34.20_This-is-the-First-Post.md")));
 
         assertThat(
-            DataFile.slugify(file),
-            is(equalTo("This-is-the-First-Post")));
+                DataFile.slugify(file),
+                is(equalTo("This-is-the-First-Post")));
     }
 
     @Test
     public void from() throws URISyntaxException, IOException {
         final Path file = Paths.get(
-            getClass().getResource(FIXTURE_PACKAGE + "/2014-05-30T21.29.20_This-is-the-First-Post.md").toURI());
+                getClass().getResource(FIXTURE_PACKAGE + "/2014-05-30T21.29.20_This-is-the-First-Post.md").toURI());
 
-        final DataFile data = DataFile.from(file);
+        final DataFile data = DataFile.from(file, DataFile.Type.POST);
         final FileAttributes attributes = new FileAttributes(file);
         assertThat(data, is(not(nullValue())));
         assertThat(data.getBasename(), is(equalTo("2014-05-30T21.29.20_This-is-the-First-Post.md")));
         assertThat(data.getFilename(),
-            is(endsWith("/de/weltraumschaf/juberblog/cmd/publish/posts/2014-05-30T21.29.20_This-is-the-First-Post.md")));
+                is(endsWith("/de/weltraumschaf/juberblog/cmd/publish/posts/2014-05-30T21.29.20_This-is-the-First-Post.md")));
         assertThat(data.getHeadline(), is(equalTo("This is the First Post")));
         assertThat(data.getMarkdown(), is(equalTo("## This is the First Post\n\nLorem ipsum dolor sit amet consetetur "
                 + "sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat "

@@ -100,7 +100,7 @@ public class PublishedPagesTest {
                 URI.create("www.foo.com"),
                 "description",
                 new DateTime(123456789L),
-                DataFile.from(dataFile),
+                DataFile.from(dataFile, DataFile.Type.POST),
                 SiteMapUrl.ChangeFrequency.ALWAYS,
                 SiteMapUrl.Priority.POST));
         PublishedPages.save(file, pages);
@@ -175,7 +175,8 @@ public class PublishedPagesTest {
             "baz.json",
             "Projects",
             "## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.",
-            new MetaData(data))));
+            new MetaData(data),
+            DataFile.Type.POST)));
     }
 
 }

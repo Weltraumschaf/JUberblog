@@ -78,6 +78,7 @@ public final class DataFile {
      * The page's meta data.
      */
     private final MetaData metadata;
+    private final Type type;
 
     /**
      * Dedicated constructor.
@@ -90,6 +91,7 @@ public final class DataFile {
      * @param headline must not be {@code null} empty
      * @param markdown must not be {@code null} empty
      * @param metadata must not be {@code null}
+     * @param type must not be {@code null}
      */
     public DataFile(
             final String fileName,
@@ -99,7 +101,8 @@ public final class DataFile {
             final String slug,
             final String headline,
             final String markdown,
-            final MetaData metadata) {
+            final MetaData metadata,
+            final Type type) {
         this.fileName = Validate.notEmpty(fileName, "fileName");
         this.baseName = Validate.notEmpty(baseName, "baseName");
         this.creationTime = Validate.greaterThanOrEqual(creationTime, 0L, "creationTime");
@@ -108,6 +111,7 @@ public final class DataFile {
         this.headline = Validate.notEmpty(headline, "headline");
         this.markdown = Validate.notEmpty(markdown, "markdown");
         this.metadata = Validate.notNull(metadata, "metadata");
+        this.type = Validate.notNull(type, "type");
     }
 
     /**
@@ -195,6 +199,10 @@ public final class DataFile {
         return headline;
     }
 
+    public boolean isType(final Type t) {
+        return type == t;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -206,6 +214,7 @@ public final class DataFile {
                 .add("headline", headline)
                 .add("markdown", markdown)
                 .add("metadata", metadata)
+                .add("type", type)
                 .toString();
     }
 
@@ -219,7 +228,8 @@ public final class DataFile {
             slug,
             headline,
             markdown,
-            metadata);
+            metadata,
+            type);
     }
 
     @Override
@@ -236,17 +246,19 @@ public final class DataFile {
             && Objects.equal(slug, other.slug)
             && Objects.equal(headline, other.headline)
             && Objects.equal(markdown, other.markdown)
-            && Objects.equal(metadata, other.metadata);
+            && Objects.equal(metadata, other.metadata)
+            && Objects.equal(type, other.type);
     }
 
     /**
      * Factory method to create the {@link DataFile value object} from a real file.
      *
      * @param file must not be {@code null}
+     * @param type must not be {@code null}
      * @return never {@code nul}
      * @throws IOException if input file can't be read
      */
-    public static DataFile from(final Path file) throws IOException {
+    public static DataFile from(final Path file, final Type type) throws IOException {
         Validate.notNull(file, "file");
         final FileAttributes attributes = new FileAttributes(file);
         final DataProcessor processor = new DataProcessor(file.toFile());
@@ -258,7 +270,8 @@ public final class DataFile {
                 slugify(file),
                 processor.getHeadline(),
                 processor.getMarkdown(),
-                processor.getMetaData());
+                processor.getMetaData(),
+                type);
     }
 
     /**
@@ -411,5 +424,9 @@ public final class DataFile {
 
             return headline;
         }
+    }
+
+    public static enum Type {
+        SITE, POST;
     }
 }

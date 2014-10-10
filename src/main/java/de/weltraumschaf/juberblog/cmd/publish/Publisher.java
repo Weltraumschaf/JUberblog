@@ -52,7 +52,7 @@ final class Publisher implements Command {
      */
     private final Directories dirs;
     /**
-     * USed for HTML generation.
+     * Used for HTML generation.
      */
     private final Configuration templateConfig;
     /**
@@ -120,13 +120,13 @@ final class Publisher implements Command {
         sitesData = Lists.newArrayList();
 
         for (final File f : dirs.dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            sitesData.add(DataFile.from(f.toPath()));
+            sitesData.add(DataFile.from(f.toPath(), DataFile.Type.SITE));
         }
 
         postsData = Lists.newArrayList();
 
         for (final File f : dirs.dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            postsData.add(DataFile.from(f.toPath()));
+            postsData.add(DataFile.from(f.toPath(), DataFile.Type.POST));
         }
 
         dataRead = true;
@@ -278,7 +278,7 @@ final class Publisher implements Command {
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
-        final String targetFileName = data.getSlug() + ".html";
+        final String targetFileName = data.getSlug() + HTML_EXTENSION;
         LOG.info(String.format("Publishing file '%s'...", targetFileName));
         final Path target = outputDir.resolve(targetFileName);
         final SiteMapUrl.ChangeFrequency frequencey;
@@ -343,6 +343,7 @@ final class Publisher implements Command {
                     ex);
         }
     }
+    private static final String HTML_EXTENSION = ".html";
 
     /**
      * Format data to HTML.
@@ -383,8 +384,19 @@ final class Publisher implements Command {
         return file.exists();
     }
 
-    private URI createUri(final DataFile data) throws URISyntaxException {
-        return new URI("");
+    URI createUri(final DataFile data) throws URISyntaxException {
+        final StringBuilder buffer = new StringBuilder(baseUri);
+
+        if (data.isType(DataFile.Type.SITE)) {
+            buffer.append("sites/");
+        } else if (data.isType(DataFile.Type.POST)) {
+            buffer.append("posts/");
+        } else {
+            throw new IllegalArgumentException("nsupported type!");
+        }
+
+        buffer.append(data.getSlug()).append(HTML_EXTENSION);
+        return URI.create(buffer.toString());
     }
 
 }

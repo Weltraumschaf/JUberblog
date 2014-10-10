@@ -14,16 +14,19 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.model.DataFile;
+import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.template.Configurations;
 import freemarker.template.Configuration;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -68,13 +71,52 @@ public class PublisherTest {
     public void readData() throws IOException {
         sut.readData();
         assertThat(sut.getPostsData(), containsInAnyOrder(
-                DataFile.from(new File(data.getAbsolutePath() + "/posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toPath()),
-                DataFile.from(new File(data.getAbsolutePath() + "/posts/2014-05-30T21.34.20_Second-Post-About-Lorem.md").toPath())
+                DataFile.from(
+                        new File(data.getAbsolutePath()
+                                + "/posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toPath(),
+                        DataFile.Type.POST),
+                DataFile.from(
+                        new File(data.getAbsolutePath()
+                                + "/posts/2014-05-30T21.34.20_Second-Post-About-Lorem.md").toPath(),
+                        DataFile.Type.POST)
         ));
         assertThat(sut.getSitesData(), containsInAnyOrder(
-                DataFile.from(new File(data.getAbsolutePath() + "/sites/2014-05-30T21.21.18_About-me.md").toPath()),
-                DataFile.from(new File(data.getAbsolutePath() + "/sites/2014-05-30T21.29.20_Projects.md").toPath())
+                DataFile.from(
+                        new File(data.getAbsolutePath()
+                                + "/sites/2014-05-30T21.21.18_About-me.md").toPath(),
+                        DataFile.Type.SITE),
+                DataFile.from(
+                        new File(data.getAbsolutePath()
+                                + "/sites/2014-05-30T21.29.20_Projects.md").toPath(),
+                        DataFile.Type.SITE)
         ));
+    }
+
+    @Test
+    public void createUri() throws URISyntaxException {
+        final DataFile post = new DataFile(
+            "filename",
+            "basename",
+            1L,
+            2L,
+            "slug",
+            "headline",
+            "markdown",
+            new MetaData(),
+            DataFile.Type.POST);
+        assertThat(sut.createUri(post), is(URI.create("http://www.foobar.com/posts/slug.html")));
+
+        final DataFile site = new DataFile(
+            "filename",
+            "basename",
+            1L,
+            2L,
+            "slug",
+            "headline",
+            "markdown",
+            new MetaData(),
+            DataFile.Type.SITE);
+        assertThat(sut.createUri(site), is(URI.create("http://www.foobar.com/sites/slug.html")));
     }
 
     @Test
@@ -82,10 +124,12 @@ public class PublisherTest {
         final File foo = tmp.newFile("foo");
         final File bar = tmp.newFile("bar");
         final File baz = tmp.newFile("baz");
+
         assertThat(sut.publishedFileExists(foo), is(true));
         assertThat(sut.publishedFileExists(bar), is(true));
         assertThat(sut.publishedFileExists(baz), is(true));
-        assertThat(sut.publishedFileExists(new File(tmp.getRoot(), "snafu")), is(false));
+        assertThat(sut.publishedFileExists(new File(tmp.getRoot(), "snafu")),
+                is(false));
     }
 
     /*
@@ -99,10 +143,24 @@ public class PublisherTest {
     @Test
     public void execute_default_noSitesNoDraftsNoPurge() throws PublishingSubCommandExcpetion {
         sut.execute();
+
         assertThat(new File(publishedPosts, "This-is-the-First-Post.html").exists(), is(true));
         assertThat(new File(publishedPosts, "Second-Post-About-Lorem.html").exists(), is(true));
         assertThat(new File(publishedSites, "About-me.html").exists(), is(false));
         assertThat(new File(publishedSites, "Projects.html").exists(), is(false));
+        // TODO Add assertions for sitemap.xml, feed.xml and index.html, sites and posts data collection.
+    }
+
+    @Test
+    public void execute_default_sitesNoDraftsNoPurge() throws PublishingSubCommandExcpetion {
+        sut.setSites(true);
+        sut.execute();
+
+        assertThat(new File(publishedPosts, "This-is-the-First-Post.html").exists(), is(true));
+        assertThat(new File(publishedPosts, "Second-Post-About-Lorem.html").exists(), is(true));
+        assertThat(new File(publishedSites, "About-me.html").exists(), is(true));
+        assertThat(new File(publishedSites, "Projects.html").exists(), is(true));
+        // TODO Add assertions for sitemap.xml, feed.xml and index.html, sites and posts data collection.
     }
 
 }
