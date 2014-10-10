@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
@@ -47,9 +48,10 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      * Dedicated constructor.
      *
      * @param io must not be {@code null}
+     * @param version must not be {@code null}
      */
-    public CreateSubCommand(final IO io) {
-        super(io);
+    public CreateSubCommand(final IO io, final Version version) {
+        super(io, version);
     }
 
     @Override

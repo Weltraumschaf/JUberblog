@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.opt.Options;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,18 +36,18 @@ public class BaseSubCommandTest {
     @Test
     public void throwsExceptionIfConstructedWithNull() {
         thrown.expect(NullPointerException.class);
-        new BaseSubCommandStub(null);
+        new BaseSubCommandStub(null, new Version("."));
     }
 
     @Test
     public void execute_throwsExceptionIfOptionsIsNull() throws ApplicationException {
         thrown.expect(NullPointerException.class);
-        new BaseSubCommandStub(mock(IO.class)).execute();
+        new BaseSubCommandStub(mock(IO.class), new Version(".")).execute();
     }
 
     @Test
     public void execute() throws ApplicationException {
-        final BaseSubCommand sut = spy(new BaseSubCommandStub(mock(IO.class)));
+        final BaseSubCommand sut = spy(new BaseSubCommandStub(mock(IO.class), new Version(".")));
         sut.setOptions(mock(Options.class));
         sut.execute();
         verify(sut).getOptions();
@@ -62,8 +63,8 @@ public class BaseSubCommandTest {
 
         private Options options;
 
-        public BaseSubCommandStub(final IO io) {
-            super(io);
+        public BaseSubCommandStub(final IO io, final Version version) {
+            super(io, version);
         }
 
         @Override

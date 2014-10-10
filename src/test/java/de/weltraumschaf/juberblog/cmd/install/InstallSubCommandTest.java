@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import java.io.File;
@@ -112,7 +113,7 @@ public class InstallSubCommandTest {
     );
 
     private final IO io = mock(IO.class);
-    private final InstallSubCommand sut = new InstallSubCommand(io);
+    private final InstallSubCommand sut = new InstallSubCommand(io, new Version("."));
 
     public InstallSubCommandTest() throws UnsupportedEncodingException {
         super();

@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.model.DataFile;
@@ -26,7 +27,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
@@ -64,7 +64,7 @@ public class PublisherTest {
                 "foo",
                 tmp.getRoot().getAbsolutePath());
         templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
-        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/", pages);
+        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/", pages, new Version("."));
     }
 
     @Test

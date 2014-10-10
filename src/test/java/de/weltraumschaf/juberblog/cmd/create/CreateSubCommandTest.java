@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.cmd.install.Scaffold;
 import de.weltraumschaf.juberblog.cmd.install.TestingSourceJarProvider;
@@ -56,7 +57,7 @@ public class CreateSubCommandTest {
     //CHECKSTYLE:ON
 
     private final TimeProvider time = mock(TimeProvider.class);
-    private final CreateSubCommand sut = new CreateSubCommand(mock(IO.class));
+    private final CreateSubCommand sut = new CreateSubCommand(mock(IO.class), new Version("."));
 
     @Before
     public void injectTimeProvider() {

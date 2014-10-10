@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.opt.Options;
 
@@ -30,16 +31,18 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      * Used for IO.
      */
     protected final IO io;
+    private final Version version;
 
     /**
      * Dedicated constructor.
      *
      * @param io must not be {@code null}
+     * @param version must not be {@code null}
      */
-    public BaseSubCommand(final IO io) {
+    public BaseSubCommand(final IO io, final Version version) {
         super();
-        Validate.notNull(io, "IO must not be null!");
-        this.io = io;
+        this.io = Validate.notNull(io, "io");
+        this.version = Validate.notNull(version, "version");
     }
 
     @Override
@@ -75,4 +78,7 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      */
     protected abstract void run() throws ApplicationException;
 
+    protected Version version() {
+        return version;
+    }
 }

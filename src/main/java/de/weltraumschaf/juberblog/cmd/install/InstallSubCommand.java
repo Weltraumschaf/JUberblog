@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.BaseSubCommand;
@@ -42,9 +43,10 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
      * Dedicated constructor.
      *
      * @param io must not be {@code null}
+     * @param version must not be {@code null}
      */
-    public InstallSubCommand(final IO io) {
-        super(io);
+    public InstallSubCommand(final IO io, final Version version) {
+        super(io, version);
         scaffold = new Scaffold(io);
     }
 

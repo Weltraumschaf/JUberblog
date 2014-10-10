@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
@@ -69,19 +70,22 @@ public class SubCommandsTest {
     @Test
     public void create_throwsExceptionIfTypeIsNull() {
         thrown.expect(NullPointerException.class);
-        SubCommands.create(null, mock(IO.class));
+        SubCommands.create(null, mock(IO.class), new Version("."));
     }
 
     @Test
     public void create_throwsExceptionIfIoIsNull() {
         thrown.expect(NullPointerException.class);
-        SubCommands.create(SubCommands.CREATE, null);
+        SubCommands.create(SubCommands.CREATE, null, new Version("."));
     }
 
     @Test
     public void create() {
-        assertThat(SubCommands.create(SubCommands.CREATE, mock(IO.class)), is(instanceOf(CreateSubCommand.class)));
-        assertThat(SubCommands.create(SubCommands.INSTALL, mock(IO.class)), is(instanceOf(InstallSubCommand.class)));
-        assertThat(SubCommands.create(SubCommands.PUBLISH, mock(IO.class)), is(instanceOf(PublishSubCommand.class)));
+        assertThat(SubCommands.create(SubCommands.CREATE, mock(IO.class), new Version(".")),
+                is(instanceOf(CreateSubCommand.class)));
+        assertThat(SubCommands.create(SubCommands.INSTALL, mock(IO.class), new Version(".")),
+                is(instanceOf(InstallSubCommand.class)));
+        assertThat(SubCommands.create(SubCommands.PUBLISH, mock(IO.class), new Version(".")),
+                is(instanceOf(PublishSubCommand.class)));
     }
 }

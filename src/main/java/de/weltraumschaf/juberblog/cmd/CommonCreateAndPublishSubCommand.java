@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
@@ -56,9 +57,10 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      * Dedicated constructor.
      *
      * @param io must not be {@literal null}
+     * @param version must not be {@literal null}
      */
-    public CommonCreateAndPublishSubCommand(IO io) {
-        super(io);
+    public CommonCreateAndPublishSubCommand(final IO io, final Version version) {
+        super(io, version);
     }
 
     @Override

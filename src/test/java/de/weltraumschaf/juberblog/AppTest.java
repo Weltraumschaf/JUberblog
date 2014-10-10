@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
@@ -165,7 +166,7 @@ public class AppTest {
     public void parseOptions_forCreateSubcommand() throws ApplicationException {
         final App sut = createSut();
         final SubCommands type = SubCommands.CREATE;
-        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class), new Version("."));
         sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-s", "--title", "foo"}), cmd);
         final CreateOptions opt = (CreateOptions) cmd.getOptions();
         assertThat(opt, is(not(nullValue())));
@@ -179,7 +180,7 @@ public class AppTest {
     public void parseOptions_forInstallSubcommand() throws ApplicationException {
         final App sut = createSut();
         final SubCommands type = SubCommands.INSTALL;
-        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class), new Version("."));
         sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-l", "foo"}), cmd);
         final InstallOptions opt = (InstallOptions) cmd.getOptions();
         assertThat(opt, is(not(nullValue())));
@@ -192,7 +193,7 @@ public class AppTest {
     public void parseOptions_forPublishSubcommand() throws ApplicationException {
         final App sut = createSut();
         final SubCommands type = SubCommands.PUBLISH;
-        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class), new Version("."));
         sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-p", "-q", "--sites"}), cmd);
         final PublishOptions opt = (PublishOptions) cmd.getOptions();
         assertThat(opt, is(not(nullValue())));
@@ -210,14 +211,14 @@ public class AppTest {
         sut.parseOptions(
                 SubCommands.NOT_IMPLEMENTED,
                 new Arguments(),
-                SubCommands.create(SubCommands.CREATE, mock(IO.class)));
+                SubCommands.create(SubCommands.CREATE, mock(IO.class), new Version(".")));
     }
 
     @Test
     public void parseOptions_showHelp() {
         final App sut = createSut();
         final SubCommands type = SubCommands.PUBLISH;
-        final SubCommand cmd = SubCommands.create(type, mock(IO.class));
+        final SubCommand cmd = SubCommands.create(type, mock(IO.class), new Version("."));
 
         try {
             sut.parseOptions(type, new Arguments(new String[]{type.toString(), "-h"}), cmd);

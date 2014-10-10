@@ -174,7 +174,7 @@ public final class App extends InvokableAdapter {
         Validate.notNull(subCommandType, "Sub command type must not be null!");
 
         try {
-            return SubCommands.create(subCommandType, getIoStreams());
+            return SubCommands.create(subCommandType, getIoStreams(), version);
         } catch (final IllegalArgumentException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.UNKNOWN_COMMAND,

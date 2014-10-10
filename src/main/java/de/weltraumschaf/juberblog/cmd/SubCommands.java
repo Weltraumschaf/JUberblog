@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
@@ -100,19 +101,20 @@ public enum SubCommands {
      *
      * @param type must not be {@code null}
      * @param io must not be {@code null}
+     * @param version must not be {@code null}
      * @return never {@code null}
      */
-    public static SubCommand create(final SubCommands type, final IO io) {
+    public static SubCommand create(final SubCommands type, final IO io, final Version version) {
         Validate.notNull(type, "Type must not be null!");
         Validate.notNull(io, "IO must not be null!");
 
         switch (type) {
             case CREATE:
-                return new CreateSubCommand(io);
+                return new CreateSubCommand(io, version);
             case PUBLISH:
-                return new PublishSubCommand(io);
+                return new PublishSubCommand(io, version);
             case INSTALL:
-                return new InstallSubCommand(io);
+                return new InstallSubCommand(io, version);
             default:
                 throw new IllegalArgumentException(String.format("Unknown command type '%s'!", type));
         }

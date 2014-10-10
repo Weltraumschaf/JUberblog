@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
@@ -60,6 +61,7 @@ final class Publisher implements Command {
      */
     private final String baseUri;
     private final PublishedPages published;
+    private final Version version;
     /**
      * Whether to generate sites.
      */
@@ -99,12 +101,14 @@ final class Publisher implements Command {
             final Directories dirs,
             final Configuration templateConfig,
             final String baseUri,
-            final PublishedPages published) {
+            final PublishedPages published,
+            final Version version) {
         super();
         this.dirs = Validate.notNull(dirs, "dirs");
         this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
         this.baseUri = Validate.notEmpty(baseUri, "baseUri");
         this.published = Validate.notNull(published, "published");
+        this.version = Validate.notNull(version, "version");
     }
 
     /**
@@ -374,7 +378,7 @@ final class Publisher implements Command {
         fmt.setBaseUri(baseUri);
         fmt.setDescription(data.getMetaData().getDescription());
         fmt.setKeywords(data.getMetaData().getKeywords());
-        fmt.setVersion("VERSION"); // FIXME Set version.
+        fmt.setVersion(version.getVersion());
         fmt.setHeadline("HEADLINE"); // FIXME Set headline.
 
         return fmt.format();

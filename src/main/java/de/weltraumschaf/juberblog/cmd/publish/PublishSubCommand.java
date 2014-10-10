@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.time.StopWatch;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
@@ -47,9 +48,10 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * Dedicated constructor.
      *
      * @param io must not be {@literal null}
+     * @param version must not be {@literal null}
      */
-    public PublishSubCommand(final IO io) {
-        super(io);
+    public PublishSubCommand(final IO io, final Version version) {
+        super(io, version);
     }
 
     @Override
@@ -60,7 +62,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
             getDirectories(),
             getTemplateConfig(),
             getBlogConfiguration().getBaseUri(),
-            pages);
+            pages,
+            version());
 
         pub.setPurge(getOptions().isPurge());
         pub.setSites(getOptions().isSites());
