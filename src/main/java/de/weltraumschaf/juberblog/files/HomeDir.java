@@ -14,7 +14,7 @@ package de.weltraumschaf.juberblog.files;
 
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.Environments.Env;
-import de.weltraumschaf.commons.system.Environments.Names;
+import de.weltraumschaf.commons.system.SystemProperties.Names;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Constants;
 import java.io.IOException;
