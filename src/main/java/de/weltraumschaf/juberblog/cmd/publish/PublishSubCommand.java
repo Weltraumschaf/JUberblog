@@ -25,14 +25,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 /**
  * Publish all sites/posts from data directory.
  *
- * TODO create index TODO create sitemap.xml TODO create feed xml
+ * TODO create index sites (home, sites, posts)
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -82,7 +81,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         try {
             // TODO Write tests for this stuff here.
             pub.execute();
-            updateHomeSite(pages);
+            updateIndexSites(pages);
             updateSiteMap(pages);
             updateFeed(pages);
             // TODO Save published data in home dir.
@@ -107,9 +106,9 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
     /**
      * Update the home site.
      *
-     * FIXME Fix home site  update.
+     * FIXME Fix index sites update.
      */
-    private void updateHomeSite(final PublishedPages pages) {
+    private void updateIndexSites(final PublishedPages pages) {
         LOG.info("Update home site...");
         new HomeSiteGenerator(pages).execute();
     }
