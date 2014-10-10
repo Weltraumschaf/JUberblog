@@ -324,7 +324,11 @@ final class Publisher implements Command {
         try {
             final String html = format(type, data);
             LOG.info(String.format("Write published file to '%s'.", target));
-            Files.createFile(target);
+
+            if (!Files.exists(target)) {
+                Files.createFile(target);
+            }
+
             Files.write(
                     target,
                     html.getBytes(Constants.DEFAULT_ENCODING.toString()),
