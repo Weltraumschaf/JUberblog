@@ -335,6 +335,8 @@ final class Publisher implements Command {
 
             if (!Files.exists(target)) {
                 Files.createFile(target);
+            } else {
+                // TODO delete file if purge.
             }
 
             Files.write(
@@ -344,7 +346,7 @@ final class Publisher implements Command {
             return new Page(
                     data.getHeadline(),
                     createUri(data),
-                    html,
+                    data.getMetaData().getDescription(),
                     new DateTime(),
                     data,
                     frequencey,

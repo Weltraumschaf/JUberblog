@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 /**
  * Publish all sites/posts from data directory.
@@ -105,6 +106,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the home site.
+     *
+     * FIXME Fix home site  update.
      */
     private void updateHomeSite(final PublishedPages pages) {
         LOG.info("Update home site...");
@@ -113,6 +116,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the site map.
+     *
+     * FIXME Fix site map update.
      */
     private void updateSiteMap(final PublishedPages pages) {
         LOG.info("Update site map...");
@@ -126,11 +131,19 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      */
     private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update feed...");
+
+        final String filename = "feed.xml";
         final FeedGenerator generator = new FeedGenerator(getTemplateConfig(), pages);
+
+        generator.setDescription(blogConfiguration().getDescription());
+        generator.setLanguage(blogConfiguration().getLanguage());
+        generator.setLastBuildDate(new DateTime());
+        generator.setLink(blogConfiguration().getBaseUri() + filename);
+        generator.setTitle(blogConfiguration().getHeadline());
         generator.execute();
 
         final String xml = generator.getResult();
-        final Path target = getDirectories().htdocs();
+        final Path target = getDirectories().htdocs().resolve(filename);
 
         if (!Files.exists(target)) {
             try {
@@ -139,6 +152,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
             } catch (final IOException ex) {
                 throw new PublishingSubCommandExcpetion(String.format("Can't create feed file '%s'!", target), ex);
             }
+        } else {
+            // TODO delete file if purge.
         }
 
         try {

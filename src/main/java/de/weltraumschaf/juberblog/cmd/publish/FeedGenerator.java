@@ -34,6 +34,8 @@ import org.joda.time.format.DateTimeFormatter;
  * 2. generate feed object from files
  * 3. write feed.xml
  *
+ * FIXME Renders the description with the whole layout. Only add renderd content of layout.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 final class FeedGenerator implements Command {
@@ -125,8 +127,7 @@ final class FeedGenerator implements Command {
      * @param description must not be {@literal null}
      */
     public void setDescription(final String description) {
-        Validate.notNull(description, "description");
-        this.description = description;
+        this.description =Validate.notNull(description, "description");
     }
 
     /**
@@ -151,7 +152,12 @@ final class FeedGenerator implements Command {
 
     @Override
     public void execute() {
-        final Feed feed = new Feed(title, link, description, language, lastBuildDate.toString(PUBLISH_DATE_FORMAT));
+        final Feed feed = new Feed(
+            title,
+            link,
+            description,
+            language,
+            lastBuildDate.toString(PUBLISH_DATE_FORMAT));
 
         for (final Page page : pages.values()) {
             feed.add(
