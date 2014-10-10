@@ -1,6 +1,6 @@
 <article>
   <strong class="meta">Posted ${date_formatted}</strong>
-  <#if features.rating><div id="rating"></div></#if>
+<#if features.rating><div id="rating"></div></#if>
   ${content}
 </article>
 
