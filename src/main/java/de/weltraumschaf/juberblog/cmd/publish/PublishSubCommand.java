@@ -116,18 +116,41 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the site map.
-     *
-     * FIXME Fix site map update.
      */
-    private void updateSiteMap(final PublishedPages pages) {
+    private void updateSiteMap(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update site map...");
-        new SiteMapGenerator(getTemplateConfig(), pages).execute();
+
+        final String filename = "sitemap.xml";
+        final SiteMapGenerator generator = new SiteMapGenerator(getTemplateConfig(), pages);
+        generator.execute();
+
+        final String xml = generator.getResult();
+        final Path target = getDirectories().htdocs().resolve(filename);
+
+        if (!Files.exists(target)) {
+            try {
+                Files.createFile(target);
+                LOG.info(String.format("File '%s' created.", target));
+            } catch (final IOException ex) {
+                throw new PublishingSubCommandExcpetion(String.format("Can't create feed file '%s'!", target), ex);
+            }
+        } else {
+            // TODO delete file if purge.
+        }
+
+        try {
+            Files.write(
+                    target,
+                    xml.getBytes(Constants.DEFAULT_ENCODING.toString()),
+                    StandardOpenOption.WRITE);
+            LOG.info(String.format("Fle '%s' written.", target));
+        } catch (IOException ex) {
+            throw new PublishingSubCommandExcpetion(String.format("Can't write to feed file '%s'!", target), ex);
+        }
     }
 
     /**
      * Update the RSS feed.
-     *
-     * FIXME Fix feed update.
      */
     private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update feed...");

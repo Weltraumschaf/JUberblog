@@ -42,21 +42,17 @@ public class SiteMapGeneratorTest {
     //CHECKSTYLE:ON
 
     private static final String URI = "http://www.foobar.com/";
-
+    private final PublishedPages pages = new PublishedPages();
     private final SiteMapGenerator sut = new SiteMapGenerator(
             Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
-            new PublishedPages());
+            pages);
 
-    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy1 = new DataFile("file1", "file1", 1L, 1L, "file1", "file1", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy2 = new DataFile("file2", "file2", 2L, 2L, "file2", "file2", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy3 = new DataFile("file3", "file3", 3L, 3L, "file2", "file3", "md", new MetaData(), DataFile.Type.SITE);
 
     public SiteMapGeneratorTest() throws IOException, URISyntaxException {
         super();
-    }
-
-    @Test
-    public void addDirecotry_throwsExceptionIfDirIsNull() throws IOException {
-        thrown.expect(NullPointerException.class);
-        sut.addPage(null);
     }
 
     private String today() {
@@ -109,36 +105,36 @@ public class SiteMapGeneratorTest {
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
                 + "</urlset>")));
 
-        sut.addPage(
+        pages.put(
                 new Page("title1", new URI(URI + "sites/foo.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                        dummy, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
-        sut.addPage(
-                new Page("title1", new URI(URI + "sites/bar.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                        dummy, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
-        sut.addPage(
-                new Page("title1", new URI(URI + "posts/foo.html"), "description1", new DateTime(2013, 10, 27, 0, 0),
-                        dummy, SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
+                        dummy1, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
+        pages.put(
+                new Page("title2", new URI(URI + "sites/bar.html"), "description2", new DateTime(2013, 10, 28, 0, 0),
+                        dummy2, SiteMapUrl.ChangeFrequency.WEEKLY, SiteMapUrl.Priority.SITE));
+        pages.put(
+                new Page("title3", new URI(URI + "posts/foo.html"), "description3", new DateTime(2013, 10, 29, 0, 0),
+                        dummy3, SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
 
         sut.execute();
-        assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        assertThat(sut.getResult(), is(equalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
                 + "    <url>\n"
-                + "        <loc>http://www.foobar.com/sites/foo.html</loc>\n"
-                + "        <lastmod>2013-10-27</lastmod>\n"
-                + "        <changefreq>weekly</changefreq>\n"
-                + "        <priority>0.5</priority>\n"
-                + "    </url>\n"
-                + "    <url>\n"
                 + "        <loc>http://www.foobar.com/sites/bar.html</loc>\n"
-                + "        <lastmod>2013-10-27</lastmod>\n"
+                + "        <lastmod>2013-10-28</lastmod>\n"
                 + "        <changefreq>weekly</changefreq>\n"
                 + "        <priority>0.5</priority>\n"
                 + "    </url>\n"
                 + "    <url>\n"
                 + "        <loc>http://www.foobar.com/posts/foo.html</loc>\n"
-                + "        <lastmod>2013-10-27</lastmod>\n"
+                + "        <lastmod>2013-10-29</lastmod>\n"
                 + "        <changefreq>daily</changefreq>\n"
                 + "        <priority>1.0</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://www.foobar.com/sites/foo.html</loc>\n"
+                + "        <lastmod>2013-10-27</lastmod>\n"
+                + "        <changefreq>weekly</changefreq>\n"
+                + "        <priority>0.5</priority>\n"
                 + "    </url>\n"
                 + "</urlset>")));
     }

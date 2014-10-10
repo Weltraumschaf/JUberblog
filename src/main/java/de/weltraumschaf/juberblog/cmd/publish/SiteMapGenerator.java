@@ -43,7 +43,7 @@ final class SiteMapGenerator implements Command {
     /**
      * Directories with published files.
      */
-    private final List<Page> pages = Lists.newArrayList();
+    private final PublishedPages pages;
     /**
      * used to render XML.
      */
@@ -60,8 +60,8 @@ final class SiteMapGenerator implements Command {
      */
     public SiteMapGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
-        Validate.notNull(templateConfiguration);
-        this.templateConfiguration = templateConfiguration;
+        this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
+        this.pages = Validate.notNull(pages, "pages");
     }
 
     @Override
@@ -75,16 +75,6 @@ final class SiteMapGenerator implements Command {
     }
 
     /**
-     * Add directory to find published files with their base URI.
-     *
-     * @param page must not be {@literal null}, must be directory
-     */
-    public void addPage(final Page page) {
-        Validate.notNull(page, "Page must not be null!");
-        pages.add(page);
-    }
-
-    /**
      * Find published files for all {@link #pages firecotries}.
      *
      * @return never {@literal null}
@@ -92,7 +82,7 @@ final class SiteMapGenerator implements Command {
     SiteMap findPublishedFiles() {
         final SiteMap map = new SiteMap();
 
-        for (final Page page : pages) {
+        for (final Page page : pages.values()) {
             map.add(new SiteMapUrl(
                     page.getUri().toString(),
                     formatTimestamp(page.getPublishingDate()),
