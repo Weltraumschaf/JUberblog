@@ -16,18 +16,22 @@ import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.time.StopWatch;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.opt.PublishOptions;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
  * Publish all sites/posts from data directory.
  *
- * TODO create index
- * TODO create sitemap.xml
- * TODO create feed xml
+ * TODO create index TODO create sitemap.xml TODO create feed xml
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -61,12 +65,12 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         watch.reset();
         final PublishedPages pages = new PublishedPages();
         final Publisher pub = new Publisher(
-            getDirectories(),
-            getTemplateConfig(),
-            blogConfiguration().getBaseUri(),
-            pages,
-            version(),
-            blogConfiguration()
+                getDirectories(),
+                getTemplateConfig(),
+                blogConfiguration().getBaseUri(),
+                pages,
+                version(),
+                blogConfiguration()
         );
 
         pub.setPurge(getOptions().isPurge());
@@ -117,9 +121,34 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the RSS feed.
+     *
+     * FIXME Fix feed update.
      */
-    private void updateFeed(final PublishedPages pages) {
+    private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update feed...");
-        new FeedGenerator(getTemplateConfig(), pages).execute();
+        final FeedGenerator generator = new FeedGenerator(getTemplateConfig(), pages);
+        generator.execute();
+
+        final String xml = generator.getResult();
+        final Path target = getDirectories().htdocs();
+
+        if (!Files.exists(target)) {
+            try {
+                Files.createFile(target);
+                LOG.info(String.format("File '%s' created.", target));
+            } catch (final IOException ex) {
+                throw new PublishingSubCommandExcpetion(String.format("Can't create feed file '%s'!", target), ex);
+            }
+        }
+
+        try {
+            Files.write(
+                    target,
+                    xml.getBytes(Constants.DEFAULT_ENCODING.toString()),
+                    StandardOpenOption.WRITE);
+            LOG.info(String.format("Fle '%s' written.", target));
+        } catch (IOException ex) {
+            throw new PublishingSubCommandExcpetion(String.format("Can't write to feed file '%s'!", target), ex);
+        }
     }
 }

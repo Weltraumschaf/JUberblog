@@ -93,8 +93,8 @@ final class FeedGenerator implements Command {
      */
     public FeedGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
-        Validate.notNull(templateConfiguration, "TemplateConfiguration must not be null!");
-        Validate.notNull(pages, "Pages must not be null!");
+        Validate.notNull(templateConfiguration, "templateConfiguration");
+        Validate.notNull(pages, "pages");
         this.templateConfiguration = templateConfiguration;
         this.pages = pages;
     }
@@ -105,7 +105,7 @@ final class FeedGenerator implements Command {
      * @param title must not be {@literal null}
      */
     public void setTitle(final String title) {
-        Validate.notNull(pages, "Page must not be null!");
+        Validate.notNull(pages, "pages");
         this.title = title;
     }
 
@@ -115,7 +115,7 @@ final class FeedGenerator implements Command {
      * @param link must not be {@literal null}
      */
     public void setLink(final String link) {
-        Validate.notNull(link, "Link must not be null!");
+        Validate.notNull(link, "link");
         this.link = link;
     }
 
@@ -125,7 +125,7 @@ final class FeedGenerator implements Command {
      * @param description must not be {@literal null}
      */
     public void setDescription(final String description) {
-        Validate.notNull(description, "Description must not be null!");
+        Validate.notNull(description, "description");
         this.description = description;
     }
 
@@ -135,7 +135,7 @@ final class FeedGenerator implements Command {
      * @param language must not be {@literal null}
      */
     public void setLanguage(final String language) {
-        Validate.notNull(language, "Language must not be null!");
+        Validate.notNull(language, "language");
         this.language = language;
     }
 
@@ -145,7 +145,7 @@ final class FeedGenerator implements Command {
      * @param lastBuildDate must not be {@literal null}
      */
     public void setLastBuildDate(final DateTime lastBuildDate) {
-        Validate.notNull(lastBuildDate, "LastBuildDate must not be null!");
+        Validate.notNull(lastBuildDate, "lastBuildDate");
         this.lastBuildDate = lastBuildDate;
     }
 

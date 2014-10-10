@@ -59,16 +59,11 @@ public final class Feed {
      */
     public Feed(String title, String link, String description, String language, String lastBuildDate) {
         super();
-        Validate.notEmpty(title, "Title must not be null or empty!");
-        Validate.notEmpty(link, "Link must not be null or empty!");
-        Validate.notEmpty(description, "Description must not be null or empty!");
-        Validate.notEmpty(language, "Language must not be null or empty!");
-        Validate.notEmpty(lastBuildDate, "LastBuildDate must not be null or empty!");
-        this.title = title;
-        this.link = link;
-        this.description = description;
-        this.language = language;
-        this.lastBuildDate = lastBuildDate;
+        this.title = Validate.notEmpty(title, "title");
+        this.link = Validate.notEmpty(link, "link");
+        this.description = Validate.notEmpty(description, "description");
+        this.language = Validate.notEmpty(language, "language");
+        this.lastBuildDate = Validate.notEmpty(lastBuildDate, "lastBuildDate");
     }
 
     /**

@@ -17,6 +17,7 @@ import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.system.Environments;
+import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
@@ -66,6 +67,20 @@ public final class App extends InvokableAdapter {
         version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
     }
 
+    private static void handleFatals(final App invokable, final Throwable cause, final ExitCode code, final String prefix) {
+        // CHECKSTYLE:OFF
+        // At this point we do not have IO streams.
+        System.err.print(prefix);
+        System.err.println(cause.getMessage());
+
+        if (invokable.isDebug()) {
+            cause.printStackTrace(System.err);
+        }
+
+        // CHECKSTYLE:ON
+        invokable.exit(code.getCode());
+    }
+
     /**
      * Main entry point of VM.
      *
@@ -77,13 +92,7 @@ public final class App extends InvokableAdapter {
         try {
             InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());
         } catch (final UnsupportedEncodingException ex) {
-            // CHECKSTYLE:OFF
-            // At this point we do not have IO streams.
-            System.err.println("Can't create IO streams!");
-            System.err.println(ex.getMessage());
-            ex.printStackTrace(System.err);
-            // CHECKSTYLE:ON
-            invokable.exit(-1);
+            handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
         }
     }
 
