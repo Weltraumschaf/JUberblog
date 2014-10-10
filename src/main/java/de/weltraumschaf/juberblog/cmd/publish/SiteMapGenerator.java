@@ -16,6 +16,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
@@ -57,7 +58,7 @@ final class SiteMapGenerator implements Command {
      *
      * @param templateConfiguration must not be {@literal null}
      */
-    public SiteMapGenerator(final Configuration templateConfiguration) {
+    public SiteMapGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
         Validate.notNull(templateConfiguration);
         this.templateConfiguration = templateConfiguration;

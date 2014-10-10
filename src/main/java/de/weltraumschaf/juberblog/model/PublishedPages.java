@@ -91,6 +91,10 @@ public final class PublishedPages {
         return data.keySet();
     }
 
+    public Collection<Page> values() {
+        return data.values();
+    }
+
     @Override
     public String toString() {
         return String.format("PublishedPages{pages=%s}", data);

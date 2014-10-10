@@ -19,6 +19,7 @@ import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.model.FeedItem;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
@@ -59,7 +60,7 @@ final class FeedGenerator implements Command {
     /**
      * Pages for the feed.
      */
-    private final List<Page> pages;
+    private final PublishedPages pages;
     /**
      * Feed title.
      */
@@ -91,7 +92,7 @@ final class FeedGenerator implements Command {
      * @param templateConfiguration must not be {@literal null}
      * @param pages must not be {@literal null}
      */
-    public FeedGenerator(final Configuration templateConfiguration, final List<Page> pages) {
+    public FeedGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
         Validate.notNull(templateConfiguration, "TemplateConfiguration must not be null!");
         Validate.notNull(pages, "Pages must not be null!");
@@ -153,7 +154,7 @@ final class FeedGenerator implements Command {
     public void execute() {
         final Feed feed = new Feed(title, link, description, language, lastBuildDate.toString(PUBLISH_DATE_FORMAT));
 
-        for (final Page page : pages) {
+        for (final Page page : pages.values()) {
             feed.add(
                 new FeedItem(
                     page.getTitle(),

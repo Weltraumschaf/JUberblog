@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
@@ -43,7 +44,8 @@ public class SiteMapGeneratorTest {
     private static final String URI = "http://www.foobar.com/";
 
     private final SiteMapGenerator sut = new SiteMapGenerator(
-            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
+            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
+            new PublishedPages());
 
     private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData(), DataFile.Type.SITE);
 

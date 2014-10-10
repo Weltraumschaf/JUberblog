@@ -12,6 +12,7 @@
 
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.juberblog.model.PublishedPages;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -24,7 +25,7 @@ import org.junit.Ignore;
  */
 public class HomeSiteGeneratorTest {
 
-    private final HomeSiteGenerator sut = new HomeSiteGenerator();
+    private final HomeSiteGenerator sut = new HomeSiteGenerator(new PublishedPages());
 
     @Test @Ignore
     public void execute() {

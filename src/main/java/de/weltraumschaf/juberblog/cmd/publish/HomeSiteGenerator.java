@@ -11,12 +11,18 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.juberblog.model.PublishedPages;
+
 /**
  * Generates the home site.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 class HomeSiteGenerator implements Command {
+
+    public HomeSiteGenerator(final PublishedPages pages) {
+        super();
+    }
 
     @Override
     public void execute() {
