@@ -13,7 +13,6 @@
 
         <link rel="stylesheet" type="text/css"
               href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,400italic,700,700italic|Source+Code+Pro"/>
-        <link rel="stylesheet" href="${basetUri}css/normalize.min.css" type="text/css"/>
         <link rel="stylesheet" href="${basetUri}css/main.css" type="text/css"/>
         <link rel="stylesheet" href="${basetUri}css/custom.css" type="text/css"/>
         <link rel="shortcut icon" href="${basetUri}img/favicon.ico" type="image/x-icon"/>
