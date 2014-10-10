@@ -18,7 +18,7 @@
 
     <groupId>de.weltraumschaf</groupId>
     <artifactId>juberblog</artifactId>
-    <version>0.2.5-SNAPSHOT</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
 
     <name>JUberblog</name>
