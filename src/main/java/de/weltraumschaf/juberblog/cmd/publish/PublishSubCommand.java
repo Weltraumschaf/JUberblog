@@ -61,9 +61,11 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         final Publisher pub = new Publisher(
             getDirectories(),
             getTemplateConfig(),
-            getBlogConfiguration().getBaseUri(),
+            blogConfiguration().getBaseUri(),
             pages,
-            version());
+            version(),
+            blogConfiguration()
+        );
 
         pub.setPurge(getOptions().isPurge());
         pub.setSites(getOptions().isSites());

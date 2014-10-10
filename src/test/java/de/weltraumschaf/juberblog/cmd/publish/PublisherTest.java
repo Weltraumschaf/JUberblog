@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.application.Version;
+import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.model.DataFile;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Properties;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -64,7 +66,13 @@ public class PublisherTest {
                 "foo",
                 tmp.getRoot().getAbsolutePath());
         templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
-        sut = new Publisher(dirs, templateConfig, "http://www.foobar.com/", pages, new Version("."));
+        sut = new Publisher(
+            dirs,
+            templateConfig,
+            "http://www.foobar.com/",
+            pages,
+            new Version("."),
+            new BlogConfiguration(new Properties()));
     }
 
     @Test

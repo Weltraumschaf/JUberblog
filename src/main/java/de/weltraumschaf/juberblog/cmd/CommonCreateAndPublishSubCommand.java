@@ -101,7 +101,7 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      *
      * @return never {@literal null}
      */
-    protected BlogConfiguration getBlogConfiguration() {
+    protected BlogConfiguration blogConfiguration() {
         return blogConfiguration;
     }
 
