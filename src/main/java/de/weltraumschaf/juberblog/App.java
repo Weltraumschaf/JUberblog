@@ -198,9 +198,9 @@ public final class App extends InvokableAdapter {
             return SubCommands.create(subCommandType, getIoStreams(), version);
         } catch (final IllegalArgumentException ex) {
             throw new ApplicationException(
-                    ExitCodeImpl.UNKNOWN_COMMAND,
-                    ex.getMessage(),
-                    ex);
+                ExitCodeImpl.UNKNOWN_COMMAND,
+                ex.getMessage(),
+                ex);
         }
     }
 
