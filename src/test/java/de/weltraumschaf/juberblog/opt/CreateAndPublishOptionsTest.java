@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.opt;
 
 import org.junit.Test;
@@ -24,7 +23,8 @@ import static org.hamcrest.Matchers.*;
 public class CreateAndPublishOptionsTest extends CommonOptionsTest {
 
     public CreateAndPublishOptionsTest() {
-        super(new CreateAndPublishOptions(false, false, ""){ });
+        super(new CreateAndPublishOptions(false, false, "") {
+        });
     }
 
     protected CreateAndPublishOptionsTest(CommonOptions sut) {
