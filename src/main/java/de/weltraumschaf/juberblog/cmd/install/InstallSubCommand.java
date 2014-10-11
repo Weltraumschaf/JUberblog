@@ -64,7 +64,7 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
 
         final String location = options.getLocation().trim();
         final File target = validateLocation(location);
-        io.println(String.format("Install scaffold to '%s'...", location));
+        io().println(String.format("Install scaffold to '%s'...", location));
 
         if (options.isForce()) {
             scaffold.setType(Scaffold.InstalationType.OVERWRITE);

@@ -86,7 +86,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
                 ExitCodeImpl.FATAL, "Can't render template to create post/site! (" + ex.getMessage() + ')', ex);
         }
 
-        io.println("Done :)");
+        io().println("Done :)");
     }
 
     /**
@@ -109,10 +109,10 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         final Path baseDir;
 
         if (getOptions().isDraft()) {
-            io.println(String.format("Create site draft '%s'...", title));
+            io().println(String.format("Create site draft '%s'...", title));
             baseDir = getDirectories().dataDraftSites();
         } else {
-            io.println(String.format("Create site '%s'...", title));
+            io().println(String.format("Create site '%s'...", title));
             baseDir = getDirectories().dataSites();
         }
 
@@ -130,10 +130,10 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         final Path baseDir;
 
         if (getOptions().isDraft()) {
-            io.println(String.format("Create post draft '%s'...", title));
+            io().println(String.format("Create post draft '%s'...", title));
             baseDir = getDirectories().dataDraftPosts();
         } else {
-            io.println(String.format("Create post '%s'...", title));
+            io().println(String.format("Create post '%s'...", title));
             baseDir = getDirectories().dataPosts();
         }
 
@@ -148,7 +148,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
      * @throws IOException if file can't be written
      */
     void writeFile(final Path fileName, final String content) throws IOException {
-        io.println(String.format("Write file '%s'...", fileName));
+        io().println(String.format("Write file '%s'...", fileName));
         Files.write(
             Validate.notNull(fileName, "fileName"),
             Validate.notEmpty(content, "content").getBytes(Constants.DEFAULT_ENCODING.toString()));
