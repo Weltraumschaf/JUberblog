@@ -34,8 +34,6 @@ import org.joda.time.format.DateTimeFormatter;
  * 2. generate feed object from files
  * 3. write feed.xml
  *
- * FIXME Renders the description with the whole layout. Only add renderd content of layout.
- *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 final class FeedGenerator implements Command {
