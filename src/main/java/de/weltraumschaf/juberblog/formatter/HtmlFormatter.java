@@ -43,6 +43,16 @@ public interface HtmlFormatter extends Formatter {
      * @param baseUri must not be {@literal null}
      */
     void setBaseUri(String baseUri);
+    /**
+     * Set the JUberblog software version.
+     *
+     * @param version must not be {@literal null}
+     */
     void setVersion(String version);
+    /**
+     * Set the whole blogs headline from blog configuration.
+     *
+     * @param headline must not be {@literal null}
+     */
     void setHeadline(String headline);
 }
