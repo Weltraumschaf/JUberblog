@@ -107,6 +107,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * Update the home site.
      *
      * FIXME Fix index sites update.
+     *
+     * @param pages must not be {@code null}
      */
     private void updateIndexSites(final PublishedPages pages) {
         LOG.info("Update home site...");
@@ -115,6 +117,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the site map.
+     *
+     * @param pages must not be {@code null}
      */
     private void updateSiteMap(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update site map...");
@@ -150,6 +154,8 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
 
     /**
      * Update the RSS feed.
+     *
+     * @param pages must not be {@code null}
      */
     private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update feed...");

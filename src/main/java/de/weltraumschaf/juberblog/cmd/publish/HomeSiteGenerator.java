@@ -29,7 +29,7 @@ final class HomeSiteGenerator implements Command {
     /**
      * Dedicated constructor.
      *
-     * @param pages
+     * @param pages pages to generate home site for, must not be {@code null}
      */
     public HomeSiteGenerator(final PublishedPages pages) {
         super();

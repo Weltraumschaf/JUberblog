@@ -50,6 +50,10 @@ final class Publisher implements Command {
      */
     private static final Logger LOG = Logger.getLogger(Publisher.class);
     /**
+     * File extension for published pages.
+     */
+    private static final String HTML_EXTENSION = ".html";
+    /**
      * Used to find data and write published files.
      */
     private final Directories dirs;
@@ -61,8 +65,17 @@ final class Publisher implements Command {
      * Base URI of the blog.
      */
     private final String baseUri;
+    /**
+     * Holds information of all published pages.
+     */
     private final PublishedPages published;
+    /**
+     * Used to assign the version to the templates.
+     */
     private final Version version;
+    /**
+     * Used to assign stuff like headline and such to the templates.
+     */
     private final BlogConfiguration blogConfig;
     /**
      * Whether to generate sites.
@@ -98,6 +111,8 @@ final class Publisher implements Command {
      * @param templateConfig must not be {@code null}
      * @param baseUri must not be {@code null} or empty
      * @param published must not be {@code null}
+     * @param version must not be {@code null}
+     * @param blogConfig must not be {@code null}
      */
     public Publisher(
             final Directories dirs,
@@ -357,7 +372,6 @@ final class Publisher implements Command {
                     ex);
         }
     }
-    private static final String HTML_EXTENSION = ".html";
 
     /**
      * Format data to HTML.
@@ -400,6 +414,13 @@ final class Publisher implements Command {
         return file.exists();
     }
 
+    /**
+     * Creates the absolute URI to the published page.
+     *
+     * @param data must not be {@code null}
+     * @return never {@code nul}
+     * @throws URISyntaxException if resulting URI will be invalid
+     */
     URI createUri(final DataFile data) throws URISyntaxException {
         final StringBuilder buffer = new StringBuilder(baseUri);
 
