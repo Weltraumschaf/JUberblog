@@ -31,6 +31,9 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      * Used for IO.
      */
     protected final IO io;
+    /**
+     * Holds the applications version information.
+     */
     private final Version version;
 
     /**
@@ -78,6 +81,11 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      */
     protected abstract void run() throws ApplicationException;
 
+    /**
+     * Get the application's version information.
+     *
+     * @return never {@code null}
+     */
     protected Version version() {
         return version;
     }

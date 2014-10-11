@@ -48,6 +48,9 @@ public enum ExitCodeImpl implements ExitCode {
      * Indicates an invalid command line argument.
      */
     BAD_ARGUMENT(5),
+    /**
+     * If on start up system.in, system.out or System.err can't be accessed.
+     */
     CANT_READ_IO_STREAMS(255);
     /**
      * Exit code number returned as exit code to JVM.
