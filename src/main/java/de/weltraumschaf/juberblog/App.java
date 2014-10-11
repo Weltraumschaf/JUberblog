@@ -67,18 +67,30 @@ public final class App extends InvokableAdapter {
         version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
     }
 
-    private static void handleFatals(final App invokable, final Throwable cause, final ExitCode code, final String prefix) {
+    /**
+     * Handles all not yet catched exceptions in main function.
+     *
+     * @param invokable must not be {@code null}
+     * @param cause must not be {@code null}
+     * @param code must not be {@code null}
+     * @param prefix must not be {@code null}
+     */
+    private static void handleFatals(
+        final App invokable,
+        final Throwable cause,
+        final ExitCode code,
+        final String prefix) {
         // CHECKSTYLE:OFF
         // At this point we do not have IO streams.
-        System.err.print(prefix);
-        System.err.println(cause.getMessage());
+        System.err.print(Validate.notNull(prefix, "prefix"));
+        System.err.println(Validate.notNull(cause, "cause").getMessage());
 
-        if (invokable.isDebug()) {
+        if (Validate.notNull(invokable, "invokable").isDebug()) {
             cause.printStackTrace(System.err);
         }
 
         // CHECKSTYLE:ON
-        invokable.exit(code.getCode());
+        invokable.exit(Validate.notNull(code, "code").getCode());
     }
 
     /**
