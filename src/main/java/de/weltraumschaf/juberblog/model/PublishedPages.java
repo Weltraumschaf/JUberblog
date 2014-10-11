@@ -108,7 +108,7 @@ public final class PublishedPages {
      */
     public Page get(final String key) {
         if (data.containsKey(key)) {
-        return data.get(Validate.notEmpty(key, "key"));
+            return data.get(Validate.notEmpty(key, "key"));
         }
 
         throw new IllegalArgumentException(String.format("There is no page for key '%s'!", key));
@@ -192,8 +192,7 @@ public final class PublishedPages {
         public JsonElement serialize(
             final DateTime src,
             final Type typeOfSrc,
-            final JsonSerializationContext context)
-        {
+            final JsonSerializationContext context) {
             return new JsonPrimitive(src.toString());
         }
     }
@@ -207,8 +206,7 @@ public final class PublishedPages {
         public DateTime deserialize(
             final JsonElement json,
             final Type typeOfT,
-            final JsonDeserializationContext context) throws JsonParseException
-        {
+            final JsonDeserializationContext context) throws JsonParseException {
             return new DateTime(json.getAsJsonPrimitive().getAsString());
         }
     }
