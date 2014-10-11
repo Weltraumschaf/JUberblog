@@ -56,8 +56,15 @@ public enum VarName {
      * Template variable name for next post.
      */
     NEXT_POST("nextPost"),
+    /**
+     * Template variable name for JUberblog's version.
+     */
     VERSION("version"),
+    /**
+     * Template variable name for blog's headline.
+     */
     HEADLINE("headline");
+
     /**
      * Name of the variable in the template.
      */
