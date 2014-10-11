@@ -119,6 +119,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * Update the site map.
      *
      * @param pages must not be {@code null}
+     * @throws PublishingSubCommandExcpetion if site map can't be updated
      */
     private void updateSiteMap(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update site map...");
@@ -156,6 +157,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * Update the RSS feed.
      *
      * @param pages must not be {@code null}
+     * @throws PublishingSubCommandExcpetion if feed can't be updated
      */
     private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update feed...");
