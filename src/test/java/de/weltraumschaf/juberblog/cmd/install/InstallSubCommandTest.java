@@ -40,21 +40,6 @@ import static org.mockito.Mockito.verify;
  */
 public class InstallSubCommandTest {
 
-    @Rule
-    //CHECKSTYLE:OFF
-    public final TemporaryFolder tmp = new TemporaryFolder();
-    //CHECKSTYLE:ON
-
-    @Rule
-    //CHECKSTYLE:OFF
-    public final ExpectedException thrown = ExpectedException.none();
-    //CHECKSTYLE:ON
-
-    @Rule
-    //CHECKSTYLE:OFF
-    public final CapturedOutput output = new CapturedOutput();
-    //CHECKSTYLE:ON
-
     private static final Collection<String> EXPECTED_FILES = Arrays.asList(
             "configuration/configuration.sample.properties",
             "data/drafts/posts/README",
@@ -112,6 +97,22 @@ public class InstallSubCommandTest {
             "templates/site_map.ftl"
     );
 
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final TemporaryFolder tmp = new TemporaryFolder();
+    //CHECKSTYLE:ON
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final ExpectedException thrown = ExpectedException.none();
+    //CHECKSTYLE:ON
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final CapturedOutput output = new CapturedOutput();
+    //CHECKSTYLE:ON
+
     private final IO io = mock(IO.class);
     private final InstallSubCommand sut = new InstallSubCommand(io, new Version("."));
 
@@ -136,134 +137,235 @@ public class InstallSubCommandTest {
         sut.setOptions(options);
 
         sut.execute();
-        verify(io, times(1)).println("Install scaffold to '" + tmp.getRoot().getAbsolutePath() + "'...");
+        verify(io, times(1)).println("Install scaffold to '"
+                + tmp.getRoot().getAbsolutePath()
+                + "'...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/README.md to "
-                + tmp.getRoot().getAbsolutePath() + "/README.md ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/templates");
+                + tmp.getRoot().getAbsolutePath()
+                + "/README.md ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/site_map.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/site_map.ftl ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/site_map.ftl ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/site.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/site.ftl ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/site.ftl ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/post.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/post.ftl ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/post.ftl ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/layout.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/layout.ftl ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/layout.ftl ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/index.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/index.ftl ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/index.ftl ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/feed.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/feed.ftl ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/templates/create");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/create/post_or_site.md.ftl to "
-                + tmp.getRoot().getAbsolutePath() + "/templates/create/post_or_site.md.ftl ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public");
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/feed.ftl ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/create");
+        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/templates/create/"
+                + "post_or_site.md.ftl to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/templates/create/post_or_site.md.ftl ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/robots.txt to "
-                + tmp.getRoot().getAbsolutePath() + "/public/robots.txt ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/sites");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/robots.txt ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/sites");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/sites/README to "
-                + tmp.getRoot().getAbsolutePath() + "/public/sites/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/posts");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/sites/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/posts");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/posts/README to "
-                + tmp.getRoot().getAbsolutePath() + "/public/posts/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/js");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/posts/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/main.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/main.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/main.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/LAB.src.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/LAB.src.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/LAB.src.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/LAB.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/LAB.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/LAB.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/jquery.raty.min.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/jquery.raty.min.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/jquery.raty.min.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/jquery.raty.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/jquery.raty.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/jquery.raty.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/jquery-1.7.2.min.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/jquery-1.7.2.min.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/jquery-1.7.2.min.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/jquery-1.7.2.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/jquery-1.7.2.js ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/jquery-1.7.2.js ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/js/handlebars.js to "
-                + tmp.getRoot().getAbsolutePath() + "/public/js/handlebars.js ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/img");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/js/handlebars.js ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/rss.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/rss.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/rss.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/logo.jpg to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/logo.jpg ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/logo.jpg ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/favicon.ico to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/favicon.ico ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/img/raty");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/favicon.ico ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-on.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-on.png ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-on-big.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-on-big.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-on.png ...");
+        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-on-big.png "
+                + "to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-on-big.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-off.png ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-off-big.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-off-big.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-off.png ...");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-off-big.png to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-off-big.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-half.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-half.png ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-half-big.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/star-half-big.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-half.png ...");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/star-half-big.png to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/star-half-big.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/medal-on.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/medal-on.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/medal-on.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/medal-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/medal-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/medal-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-d.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-d.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-d.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-d-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-d-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-d-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-c.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-c.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-c.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-c-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-c-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-c-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-b.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-b.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-b.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-b-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-b-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-b-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-a.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-a.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-a.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/face-a-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/face-a-off.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/face-a-off.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/coffee.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/coffee.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/coffee.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-on.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/cancel-on.png ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-on-big.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/cancel-on-big.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/cancel-on.png ...");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-on-big.png to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/cancel-on-big.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-off.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/cancel-off.png ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-off-big.png to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/cancel-off-big.png ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/cancel-off.png ...");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/cancel-off-big.png to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/cancel-off-big.png ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/img/raty/background.gif to "
-                + tmp.getRoot().getAbsolutePath() + "/public/img/raty/background.gif ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/drafts");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/drafts/sites");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/img/raty/background.gif ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/drafts");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/drafts/sites");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/drafts/sites/README to "
-                + tmp.getRoot().getAbsolutePath() + "/public/drafts/sites/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/drafts/posts");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/drafts/sites/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/drafts/posts");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/drafts/posts/README to "
-                + tmp.getRoot().getAbsolutePath() + "/public/drafts/posts/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/public/css");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/drafts/posts/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/css");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/css/README to "
-                + tmp.getRoot().getAbsolutePath() + "/public/css/README ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/css/README ...");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/css/main.css to "
-                + tmp.getRoot().getAbsolutePath() + "/public/css/main.css ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data/sites");
+                + tmp.getRoot().getAbsolutePath()
+                + "/public/css/main.css ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/sites");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/data/sites/README to "
-                + tmp.getRoot().getAbsolutePath() + "/data/sites/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data/posts");
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/sites/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/posts");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/data/posts/README to "
-                + tmp.getRoot().getAbsolutePath() + "/data/posts/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data/drafts");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data/drafts/sites");
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/posts/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/drafts");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/drafts/sites");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/data/drafts/sites/README to "
-                + tmp.getRoot().getAbsolutePath() + "/data/drafts/sites/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/data/drafts/posts");
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/drafts/sites/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/drafts/posts");
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/data/drafts/posts/README to "
-                + tmp.getRoot().getAbsolutePath() + "/data/drafts/posts/README ...");
-        verify(io, times(1)).println("Create directory " + tmp.getRoot().getAbsolutePath() + "/configuration");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/configuration/configuration.sample.properties to "
-                + tmp.getRoot().getAbsolutePath() + "/configuration/configuration.sample.properties ...");
+                + tmp.getRoot().getAbsolutePath()
+                + "/data/drafts/posts/README ...");
+        verify(io, times(1)).println("Create directory "
+                + tmp.getRoot().getAbsolutePath()
+                + "/configuration");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/configuration/configuration.sample.properties to "
+                + tmp.getRoot().getAbsolutePath()
+                + "/configuration/configuration.sample.properties ...");
 
         final Collection<File> installedFiles = FileUtils.listFiles(tmp.getRoot(), null, true);
         assertThat(installedFiles.toString(), installedFiles, hasSize(EXPECTED_FILES.size()));
