@@ -78,6 +78,9 @@ public final class DataFile {
      * The page's meta data.
      */
     private final MetaData metadata;
+    /**
+     * Type of the data file.
+     */
     private final Type type;
 
     /**
@@ -94,11 +97,11 @@ public final class DataFile {
      * @param type must not be {@code null}
      */
     public DataFile(
-            final String fileName,
-            final String baseName,
-            final long creationTime,
-            final long modificationTime,
-            final String slug,
+            final String fileName, // TODO Move into FileAttributes
+            final String baseName, // TODO Move into FileAttributes
+            final long creationTime, // TODO Move into FileAttributes
+            final long modificationTime, // TODO Move into FileAttributes
+            final String slug, // TODO Move into FileAttributes
             final String headline,
             final String markdown,
             final MetaData metadata,
@@ -199,6 +202,12 @@ public final class DataFile {
         return headline;
     }
 
+    /**
+     * Tells whether a data file object is of a particular type.
+     *
+     * @param t must not be {@code null}
+     * @return {@code true} if the data file is of type t, else {@code false}
+     */
     public boolean isType(final Type t) {
         return type == t;
     }
@@ -281,6 +290,7 @@ public final class DataFile {
      * @return never {@code null}
      */
     static String slugify(final Path file) {
+        // TODO Use slugger lib.
         final String name = Validate.notNull(file, "file").toFile().getName();
         final int start = name.indexOf("_") + 1;
         final int stop = name.lastIndexOf(".");
@@ -307,10 +317,20 @@ public final class DataFile {
             attributes = Files.readAttributes(Validate.notNull(file, "file"), BasicFileAttributes.class);
         }
 
+        /**
+         * Reads the creation time.
+         *
+         * @return creation time in milliseconds
+         */
         long creationTime() {
             return attributes.creationTime().toMillis();
         }
 
+        /**
+         * Reads the last modified time.
+         *
+         * @return creation time in milliseconds
+         */
         long lastModifiedTime() {
             return attributes.lastModifiedTime().toMillis();
         }
@@ -426,7 +446,17 @@ public final class DataFile {
         }
     }
 
+    /**
+     * Type of data file.
+     */
     public static enum Type {
-        SITE, POST;
+        /**
+         * {@link Datafile Data files} of this type contains data for a site.
+         */
+        SITE,
+        /**
+         * {@link Datafile Data files} of this type contains data for a post.
+         */
+        POST;
     }
 }

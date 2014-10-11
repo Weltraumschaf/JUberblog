@@ -48,7 +48,7 @@ public class Page {
      */
     private final SiteMapUrl.ChangeFrequency frequencey;
     /**
-     * Priotiry of page.
+     * Priority of page.
      */
     private final SiteMapUrl.Priority priority;
 
@@ -64,28 +64,21 @@ public class Page {
      * @param priority must not be {@literal null}
      */
     public Page(
-        final String title,
-        final URI link,
-        final String description,
-        final DateTime publishingDate,
-        final DataFile file,
-        final SiteMapUrl.ChangeFrequency frequencey,
-        final SiteMapUrl.Priority priority) {
+            final String title,
+            final URI link,
+            final String description,
+            final DateTime publishingDate,
+            final DataFile file,
+            final SiteMapUrl.ChangeFrequency frequencey,
+            final SiteMapUrl.Priority priority) {
         super();
-        Validate.notNull(title, "Title must not be null!");
-        Validate.notNull(link, "Link must not be null!");
-        Validate.notNull(description, "Description must not be null!");
-        Validate.notNull(publishingDate, "PublishingDate must not be null!");
-        Validate.notNull(file, "File must not be null!");
-        Validate.notNull(frequencey, "Frequencey must not be null!");
-        Validate.notNull(priority, "Priority must not be null!");
-        this.title = title;
-        this.uri = link;
-        this.description = description;
-        this.publishingDate = publishingDate;
-        this.file = file;
-        this.frequencey = frequencey;
-        this.priority = priority;
+        this.title = Validate.notNull(title, "title");
+        this.uri = Validate.notNull(link, "link");
+        this.description = Validate.notNull(description, "description");
+        this.publishingDate = Validate.notNull(publishingDate, "publishingDate");
+        this.file = Validate.notNull(file, "file");
+        this.frequencey = Validate.notNull(frequencey, "frequencey");
+        this.priority = Validate.notNull(priority, "priority");
     }
 
     /**
@@ -142,6 +135,11 @@ public class Page {
         return priority;
     }
 
+    /**
+     * Get an object which contains all essential data for this page.
+     *
+     * @return never {@code null}
+     */
     public DataFile getFile() {
         return file;
     }
@@ -170,14 +168,14 @@ public class Page {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-            .add("title", title)
-            .add("uri", uri)
-            .add("description", description)
-            .add("publishingDate", publishingDate)
-            .add("priority", priority)
-            .add("frequencey", frequencey)
-            .add("file", file)
-            .toString();
+                .add("title", title)
+                .add("uri", uri)
+                .add("description", description)
+                .add("publishingDate", publishingDate)
+                .add("priority", priority)
+                .add("frequencey", frequencey)
+                .add("file", file)
+                .toString();
     }
 
 }

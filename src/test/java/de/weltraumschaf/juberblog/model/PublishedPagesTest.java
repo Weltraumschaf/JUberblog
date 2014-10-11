@@ -124,9 +124,12 @@ public class PublishedPagesTest {
                     + "\"headline\":\"Projects\","
                     + "\"markdown\":\"## Projects\\n"
                         + "\\n"
-                        + "Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\\n"
-                        + "ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\\n"
-                        + "dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\\n"
+                        + "Lorem ipsum dolor sit amet consetetur sadipscing elitr "
+                            + "sed diam nonumy eirmod tempor invidunt\\n"
+                        + "ut labore et dolore magna aliquyam erat sed diam voluptua "
+                            + "at vero eos et accusam et justo duo\\n"
+                        + "dolores et ea rebum stet clita kasd gubergren no sea takimata "
+                            + "sanctus est lorem ipsum dolor sit\\n"
                         + "amet.\","
                     + "\"metadata\":{"
                         + "\"data\":{"
@@ -174,7 +177,13 @@ public class PublishedPagesTest {
             1412775310000L,
             "baz.json",
             "Projects",
-            "## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.",
+            "## Projects\n\nLorem ipsum dolor sit amet consetetur sadipscing "
+                    + "elitr sed diam nonumy eirmod tempor invidunt\n"
+                + "ut labore et dolore magna aliquyam erat sed diam voluptua "
+                    + "at vero eos et accusam et justo duo\n"
+                + "dolores et ea rebum stet clita kasd gubergren no sea takimata "
+                    + "sanctus est lorem ipsum dolor sit\n"
+                + "amet.",
             new MetaData(data),
             DataFile.Type.POST)));
     }

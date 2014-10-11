@@ -29,6 +29,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.joda.time.DateTime;
@@ -40,6 +41,9 @@ import org.joda.time.DateTime;
  */
 public final class PublishedPages {
 
+    /**
+     * Factory to create JSON serializer with registered type adapter.
+     */
     private static  final GsonBuilder GSON = new GsonBuilder();
     static {
         GSON.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
@@ -75,24 +79,57 @@ public final class PublishedPages {
         data.put(name, page);
     }
 
+    /**
+     * Count of pages.
+     *
+     * @return not negative
+     */
     public int size() {
         return data.size();
     }
 
+    /**
+     * Tells if there are no pagesat all.
+     *
+     * @return {@code true} if {@link #size()} {@code == 0}, else {@code false}
+     */
     public boolean isEmpty() {
         return data.isEmpty();
     }
 
-    public Page get(String key) {
-        return data.get(key);
+    /**
+     * Returns a page by its key.
+     * <p>
+     * Throws an {@link IllegalArgumentException} if a non existing key is requested.
+     * </p>
+     *
+     * @param key must not be {@code nul} or empty
+     * @return never {@code null}
+     */
+    public Page get(final String key) {
+        if (data.containsKey(key)) {
+        return data.get(Validate.notEmpty(key, "key"));
+        }
+
+        throw new IllegalArgumentException(String.format("There is no page for key '%s'!", key));
     }
 
+    /**
+     * Get a set of keys for which pages are stored.
+     *
+     * @return never {@code null}, unmodifiable
+     */
     public Set<String> keySet() {
-        return data.keySet();
+        return Collections.unmodifiableSet(data.keySet());
     }
 
+    /**
+     * Get a collection of the stored pages.
+     *
+     * @return never {@code null}, unmodifiable
+     */
     public Collection<Page> values() {
-        return data.values();
+        return Collections.unmodifiableCollection(data.values());
     }
 
     @Override
@@ -115,6 +152,13 @@ public final class PublishedPages {
         return Objects.equal(data, other.data);
     }
 
+    /**
+     * Saves the whole object serialized as JSON to a file.
+     *
+     * @param file must not be {@code null}
+     * @param pages must not be {@code null}
+     * @throws IOException if file can't be saved
+     */
     public static void save(final Path file, final PublishedPages pages) throws IOException {
         Validate.notNull(file, "file");
         Validate.notNull(pages, "pages");
@@ -124,6 +168,13 @@ public final class PublishedPages {
         Files.write(file, json.getBytes(Constants.DEFAULT_ENCODING.toString()));
     }
 
+    /**
+     * Loads the whole object from JSON file.
+     *
+     * @param file must not be {@code null}
+     * @return never {@code null}, always new instance
+     * @throws IOException if file can't be read
+     */
     public static PublishedPages load(final Path file) throws IOException {
         Validate.notNull(file, "file");
 
@@ -132,18 +183,32 @@ public final class PublishedPages {
         return serializer.fromJson(new String(content, Constants.DEFAULT_ENCODING.toString()), PublishedPages.class);
     }
 
-    private static class DateTimeSerializer implements JsonSerializer<DateTime> {
+    /**
+     * Custom serializer for Joda Time.
+     */
+    private static final class DateTimeSerializer implements JsonSerializer<DateTime> {
 
         @Override
-        public JsonElement serialize(final DateTime src, final Type typeOfSrc, final JsonSerializationContext context) {
+        public JsonElement serialize(
+            final DateTime src,
+            final Type typeOfSrc,
+            final JsonSerializationContext context)
+        {
             return new JsonPrimitive(src.toString());
         }
     }
 
-    private static class DateTimeDeserializer implements JsonDeserializer<DateTime> {
+    /**
+     * Custom deserializer for Joda Time.
+     */
+    private static final class DateTimeDeserializer implements JsonDeserializer<DateTime> {
 
         @Override
-        public DateTime deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+        public DateTime deserialize(
+            final JsonElement json,
+            final Type typeOfT,
+            final JsonDeserializationContext context) throws JsonParseException
+        {
             return new DateTime(json.getAsJsonPrimitive().getAsString());
         }
     }

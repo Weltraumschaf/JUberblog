@@ -61,12 +61,13 @@ public class DataFileTest {
         assertThat(data, is(not(nullValue())));
         assertThat(data.getBasename(), is(equalTo("2014-05-30T21.29.20_This-is-the-First-Post.md")));
         assertThat(data.getFilename(),
-                is(endsWith("/de/weltraumschaf/juberblog/cmd/publish/posts/2014-05-30T21.29.20_This-is-the-First-Post.md")));
+                is(endsWith("/de/weltraumschaf/juberblog/cmd/publish/posts/"
+                        + "2014-05-30T21.29.20_This-is-the-First-Post.md")));
         assertThat(data.getHeadline(), is(equalTo("This is the First Post")));
-        assertThat(data.getMarkdown(), is(equalTo("## This is the First Post\n\nLorem ipsum dolor sit amet consetetur "
-                + "sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna aliquyam erat "
-                + "sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet clita kasd gubergren "
-                + "no sea takimata sanctus est lorem ipsum dolor sit\namet.")));
+        assertThat(data.getMarkdown(), is(equalTo("## This is the First Post\n\nLorem ipsum dolor sit amet "
+                + "consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt\nut labore et dolore magna "
+                + "aliquyam erat sed diam voluptua at vero eos et accusam et justo duo\ndolores et ea rebum stet "
+                + "clita kasd gubergren no sea takimata sanctus est lorem ipsum dolor sit\namet.")));
         assertThat(data.getSlug(), is(equalTo("This-is-the-First-Post")));
         assertThat(data.getCreationTime(), is(attributes.creationTime()));
         assertThat(data.getModificationTime(), is(attributes.lastModifiedTime()));
