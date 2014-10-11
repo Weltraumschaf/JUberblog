@@ -451,11 +451,11 @@ public final class DataFile {
      */
     public static enum Type {
         /**
-         * {@link Datafile Data files} of this type contains data for a site.
+         * {@link DataFile Data files} of this type contains data for a site.
          */
         SITE,
         /**
-         * {@link Datafile Data files} of this type contains data for a post.
+         * {@link DataFile Data files} of this type contains data for a post.
          */
         POST;
     }
