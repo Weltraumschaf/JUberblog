@@ -39,11 +39,15 @@ import org.junit.rules.TemporaryFolder;
  */
 public class PublisherTest {
 
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
     private static final String TEMPLATE_DIRECTORRY = Constants.PACKAGE_BASE.toString() + "/template";
     private static final String FIXTURES_DIRECTORY = Constants.PACKAGE_BASE.toString() + "/cmd/publish";
-    private PublishedPages pages = new PublishedPages();
+
+    @Rule
+    //CHECKSTYLE:OFF
+    public final TemporaryFolder tmp = new TemporaryFolder();
+    //CHECKSTYLE:ON
+
+    private final PublishedPages pages = new PublishedPages();
     private File data;
     private File publishedPosts;
     private File publishedSites;

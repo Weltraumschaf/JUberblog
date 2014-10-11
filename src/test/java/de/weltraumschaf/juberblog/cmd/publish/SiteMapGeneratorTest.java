@@ -36,27 +36,27 @@ import org.joda.time.DateTime;
  */
 public class SiteMapGeneratorTest {
 
+    private static final String URI = "http://www.foobar.com/";
+
     @Rule
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
 
-    private static final String URI = "http://www.foobar.com/";
     private final PublishedPages pages = new PublishedPages();
     private final SiteMapGenerator sut = new SiteMapGenerator(
             Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
             pages);
 
-    private final DataFile dummy1 = new DataFile("file1", "file1", 1L, 1L, "file1", "file1", "md", new MetaData(), DataFile.Type.SITE);
-    private final DataFile dummy2 = new DataFile("file2", "file2", 2L, 2L, "file2", "file2", "md", new MetaData(), DataFile.Type.SITE);
-    private final DataFile dummy3 = new DataFile("file3", "file3", 3L, 3L, "file2", "file3", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy1 = new DataFile(
+        "file1", "file1", 1L, 1L, "file1", "file1", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy2 = new DataFile(
+        "file2", "file2", 2L, 2L, "file2", "file2", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy3 = new DataFile(
+        "file3", "file3", 3L, 3L, "file2", "file3", "md", new MetaData(), DataFile.Type.SITE);
 
     public SiteMapGeneratorTest() throws IOException, URISyntaxException {
         super();
-    }
-
-    private String today() {
-        return SiteMapGenerator.formatTimestamp(new DateTime());
     }
 
     @Test
