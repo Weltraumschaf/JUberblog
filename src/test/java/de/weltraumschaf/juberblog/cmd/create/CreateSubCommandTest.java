@@ -14,7 +14,9 @@ package de.weltraumschaf.juberblog.cmd.create;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
+import static de.weltraumschaf.commons.testing.ApplicationExceptionCodeMatcher.hasExitCode;
 import de.weltraumschaf.juberblog.Constants;
+import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.install.Scaffold;
 import de.weltraumschaf.juberblog.cmd.install.TestingSourceJarProvider;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
@@ -101,16 +103,17 @@ public class CreateSubCommandTest {
         final String content = "The content";
 
         sut.writeFile(fileName, content);
+        final Collection<String> readedLines = Files.readAllLines(
+            fileName, Charset.forName(Constants.DEFAULT_ENCODING.toString()));
 
-        final Collection<String> readedLines = Files.readAllLines(fileName, Charset.forName(Constants.DEFAULT_ENCODING.toString()));
         assertThat(readedLines, both(hasSize(1)).and(contains((Object) content)));
     }
 
     @Test
     public void execute_noConfigFileGiven() throws ApplicationException {
-        // TODO test exit code.
         thrown.expect(ApplicationException.class);
         thrown.expectMessage("No config file argument given!");
+        thrown.expect(hasExitCode(ExitCodeImpl.TOO_FEW_ARGUMENTS));
 
         sut.setOptions(new CreateOptions());
         sut.execute();
@@ -118,9 +121,9 @@ public class CreateSubCommandTest {
 
     @Test
     public void execute_unreadableConfigFileGiven() throws ApplicationException {
-        // TODO test exit code.
         thrown.expect(ApplicationException.class);
         thrown.expectMessage("Can't read config file '/foo/bar/baz'!");
+        thrown.expect(hasExitCode(ExitCodeImpl.BAD_ARGUMENT));
 
         sut.setOptions(new CreateOptions(false, false, "/foo/bar/baz", false, false, "title"));
         sut.execute();
@@ -129,9 +132,9 @@ public class CreateSubCommandTest {
     @Test
     public void execute_notitleGiven() throws ApplicationException, IOException {
         createScaffold();
-        // TODO test exit code.
         thrown.expect(ApplicationException.class);
         thrown.expectMessage("No title arguemnt given!");
+        thrown.expect(hasExitCode(ExitCodeImpl.TOO_FEW_ARGUMENTS));
 
         sut.setOptions(
             new CreateOptions(
