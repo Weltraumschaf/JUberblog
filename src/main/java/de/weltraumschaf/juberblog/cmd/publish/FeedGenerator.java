@@ -47,14 +47,14 @@ final class FeedGenerator implements Command {
      * See http://www.joda.org/joda-time/key_format.html
      */
     private static final DateTimeFormatter PUBLISH_DATE_FORMAT
-            = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z");
+        = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z");
     /**
      * DC publishing date format.
      *
      * See http://www.joda.org/joda-time/key_format.html
      */
     private static final DateTimeFormatter DC_DATE_FORMAT
-            = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+        = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
     /**
      * Template configuration.
      */
@@ -206,11 +206,11 @@ final class FeedGenerator implements Command {
     /**
      * Sorts a given collection by {@link ComparePageByPublishingDate date}.
      *
-     * @param pages must not be {@code null}
+     * @param unsorted must not be {@code null}
      * @return never {@code null}, unmodifiable copy
      */
-    private Collection<Page> sortByDate(final Collection<Page> pages) {
-        final List<Page> copy = new ArrayList<>(pages);
+    private Collection<Page> sortByDate(final Collection<Page> unsorted) {
+        final List<Page> copy = new ArrayList<>(unsorted);
 
         Collections.sort(copy, new ComparePageByPublishingDate());
 
