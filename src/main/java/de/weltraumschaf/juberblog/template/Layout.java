@@ -41,7 +41,7 @@ public final class Layout extends Template {
                             VarName.KEYWORDS,
                             VarName.VERSION,
                             VarName.HEADLINE
-                    )));
+            )));
 
     /**
      * Inner template to render content string.
@@ -104,7 +104,7 @@ public final class Layout extends Template {
     }
 
     /**
-     * Assign the keyword to the layout template.
+     * Assign the keywords to the layout template.
      *
      * @param keywords must not be {@code null}
      */
@@ -112,10 +112,20 @@ public final class Layout extends Template {
         assignVariable(VarName.KEYWORDS, Validate.notNull(keywords, "keywords"));
     }
 
+    /**
+     * Assign the software version to the layout template.
+     *
+     * @param version must not be {@code null}
+     */
     public void setVersion(final String version) {
         assignVariable(VarName.VERSION, Validate.notNull(version, "version"));
     }
 
+    /**
+     * Assign the blog's headline to the layout template.
+     *
+     * @param headline must not be {@code null}
+     */
     public void setHeadline(final String headline) {
         assignVariable(VarName.HEADLINE, Validate.notNull(headline, "headline"));
     }
