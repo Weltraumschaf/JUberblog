@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.Page;
@@ -27,7 +26,6 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
-import org.junit.Ignore;
 
 /**
  * Tests for {@link FeedGenerator}.
@@ -36,12 +34,12 @@ import org.junit.Ignore;
  */
 public class FeedGeneratorTest {
 
+    private static final String URI = "http://www.foobar.com/";
+
     @Rule
     //CHECKSTYLE:OFF
     public final ExpectedException thrown = ExpectedException.none();
     //CHECKSTYLE:ON
-
-    private static final String URI = "http://www.foobar.com/";
 
     private final DataFile dummy1 = new DataFile(
         "file1",

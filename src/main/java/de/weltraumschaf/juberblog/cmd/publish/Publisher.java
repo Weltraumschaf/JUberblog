@@ -273,11 +273,14 @@ final class Publisher implements Command {
             final Formatters.Type type,
             final Collection<DataFile> data,
             final Path outputDir)
-            throws PublishingSubCommandExcpetion {
+        throws PublishingSubCommandExcpetion {
+
+        LOG.debug(String.format("Pubish files from '%s'...", data));
+
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
-        LOG.debug(String.format("Pubish files from '%s'...", data));
+
         final List<Page> localPublished = Lists.newArrayList();
 
         for (final DataFile file : data) {
@@ -297,10 +300,12 @@ final class Publisher implements Command {
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Page publishFile(final Formatters.Type type, final DataFile data, final Path outputDir)
-            throws PublishingSubCommandExcpetion {
+        throws PublishingSubCommandExcpetion {
+
         Validate.notNull(type, "type");
         Validate.notNull(data, "data");
         Validate.notNull(outputDir, "outputDir");
+
         final String targetFileName = data.getSlug() + HTML_EXTENSION;
         LOG.info(String.format("Publishing file '%s'...", targetFileName));
         final Path target = outputDir.resolve(targetFileName);

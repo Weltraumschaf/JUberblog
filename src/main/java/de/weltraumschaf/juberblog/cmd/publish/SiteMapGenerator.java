@@ -55,6 +55,7 @@ final class SiteMapGenerator implements Command {
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@literal null}
+     * @param pages must not be {@literal null}
      */
     public SiteMapGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
