@@ -206,7 +206,7 @@ public final class PublishedPages {
         public DateTime deserialize(
             final JsonElement json,
             final Type typeOfT,
-            final JsonDeserializationContext context) throws JsonParseException {
+            final JsonDeserializationContext context) {
             return new DateTime(json.getAsJsonPrimitive().getAsString());
         }
     }
