@@ -22,6 +22,7 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -202,15 +203,29 @@ final class FeedGenerator implements Command {
         return ts.toString(DC_DATE_FORMAT);
     }
 
-    private Collection<Page> sortByDate(final Collection<Page> values) {
-        final List<Page> copy = new ArrayList<>(values);
+    /**
+     * Sorts a given collection by {@link ComparePageByPublishingDate date}.
+     *
+     * @param pages must not be {@code null}
+     * @return never {@code null}, unmodifiable copy
+     */
+    private Collection<Page> sortByDate(final Collection<Page> pages) {
+        final List<Page> copy = new ArrayList<>(pages);
 
         Collections.sort(copy, new ComparePageByPublishingDate());
 
         return Collections.unmodifiableCollection(copy);
     }
 
-    private static final class ComparePageByPublishingDate implements Comparator<Page> {
+    /**
+     * Compares given {@link Page pages} by their publishing date.
+     */
+    private static final class ComparePageByPublishingDate implements Comparator<Page>, Serializable {
+
+        /**
+         * For serialization.
+         */
+        private static final long serialVersionUID = 1L;
 
         @Override
         public int compare(final Page c1, final Page c2) {
