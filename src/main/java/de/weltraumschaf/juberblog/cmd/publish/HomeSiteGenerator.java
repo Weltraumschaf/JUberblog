@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 
 /**
@@ -18,10 +19,21 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-class HomeSiteGenerator implements Command {
+final class HomeSiteGenerator implements Command {
 
+    /**
+     * Contains data to generate the home site.
+     */
+    private final PublishedPages pages;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param pages
+     */
     public HomeSiteGenerator(final PublishedPages pages) {
         super();
+        this.pages = Validate.notNull(pages, "pages");
     }
 
     @Override

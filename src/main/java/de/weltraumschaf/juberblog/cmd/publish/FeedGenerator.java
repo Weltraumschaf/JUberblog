@@ -127,7 +127,7 @@ final class FeedGenerator implements Command {
      * @param description must not be {@literal null}
      */
     public void setDescription(final String description) {
-        this.description =Validate.notNull(description, "description");
+        this.description = Validate.notNull(description, "description");
     }
 
     /**
