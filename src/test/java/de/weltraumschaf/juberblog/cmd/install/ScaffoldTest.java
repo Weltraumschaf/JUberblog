@@ -31,7 +31,7 @@ public class ScaffoldTest {
     //CHECKSTYLE:ON
 
     @Test
-    public void JarResource_newSourceJar_nullAsPath() {
+    public void jarResource_newSourceJar_nullAsPath() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("Parameter 'path' must not be null or empty!");
 
@@ -39,7 +39,7 @@ public class ScaffoldTest {
     }
 
     @Test
-    public void JarResource_newSourceJar_emptyAsPath() {
+    public void jarResource_newSourceJar_emptyAsPath() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Parameter 'path' must not be null or empty!");
 
@@ -47,7 +47,7 @@ public class ScaffoldTest {
     }
 
     @Test
-    public void JarResource_newSourceJar_noBangInPath() {
+    public void jarResource_newSourceJar_noBangInPath() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Path does not contain '!'!");
 
@@ -55,7 +55,7 @@ public class ScaffoldTest {
     }
 
     @Test
-    public void JarResource_newSourceJar_emptyBeforeBangInPath() {
+    public void jarResource_newSourceJar_emptyBeforeBangInPath() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The string before the '!' must not be null or empty!");
 
@@ -63,7 +63,7 @@ public class ScaffoldTest {
     }
 
     @Test
-    public void JarResource_newSourceJar_emptyAfterBangInPath() {
+    public void jarResource_newSourceJar_emptyAfterBangInPath() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The string after the '!' must not be null or empty!");
 
@@ -71,7 +71,7 @@ public class ScaffoldTest {
     }
 
     @Test
-    public void JarResource_newSourceJar() {
+    public void jarResource_newSourceJar() {
         final Scaffold.JarResource src = Scaffold.JarResource.newSourceJar("/foo/bar/baz!/snafu/bla/blub");
 
         assertThat(src.getJarLocation(), is(equalTo("/foo/bar/baz")));
