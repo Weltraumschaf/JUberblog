@@ -37,6 +37,13 @@ public final class TestingSourceJarProvider {
             "/src/test/resources/de/weltraumschaf/juberblog/cmd/install/scaffold-fixture.jar";
 
     /**
+     * Hidden for pure static class."
+     */
+    private TestingSourceJarProvider() {
+        super();
+    }
+
+    /**
      * Creates new provider.
      *
      * @return never {@code null}
