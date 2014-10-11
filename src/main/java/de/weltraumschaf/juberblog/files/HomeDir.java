@@ -29,6 +29,9 @@ import java.nio.file.Paths;
  */
 public final class HomeDir {
 
+    /**
+     * Default location is in the users home directory.
+     */
     static final String DEFAULT_LOCATION = System.getProperty(Names.USER_HOME.getPropertyName()) + "/.juberblog";
 
     /**
@@ -99,19 +102,19 @@ public final class HomeDir {
      * Throws {@link RuntimeException} if given path is not readable, writable or a directory.
      * </p>
      *
-     * @param home must not be {@code null}
+     * @param directory must not be {@code null}
      */
-    private void verify(final Path home) {
-        if (!Files.isReadable(home)) {
-            throw new RuntimeException(String.format("Home direcotry '%s' is not readable!", home));
+    private void verify(final Path directory) {
+        if (!Files.isReadable(directory)) {
+            throw new RuntimeException(String.format("Home direcotry '%s' is not readable!", directory));
         }
 
-        if (!Files.isWritable(home)) {
-            throw new RuntimeException(String.format("Home direcotry '%s' is not writeable!", home));
+        if (!Files.isWritable(directory)) {
+            throw new RuntimeException(String.format("Home direcotry '%s' is not writeable!", directory));
         }
 
-        if (!Files.isDirectory(home)) {
-            throw new RuntimeException(String.format("Home path '%s' is not a direcotry!", home));
+        if (!Files.isDirectory(directory)) {
+            throw new RuntimeException(String.format("Home path '%s' is not a direcotry!", directory));
         }
     }
 
