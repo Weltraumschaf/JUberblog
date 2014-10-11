@@ -121,11 +121,11 @@ public final class HomeDir {
     /**
      * Creates the directory.
      *
-     * @param home must not be {@code null}
+     * @param directory must not be {@code null}
      * @throws IOException if directory can't be created
      */
-    private void create(final Path home) throws IOException {
-        Files.createDirectories(home);
+    private void create(final Path directory) throws IOException {
+        Files.createDirectories(directory);
     }
 
 }
