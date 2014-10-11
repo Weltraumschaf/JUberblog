@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.string.StringEscape;
@@ -23,6 +22,11 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -30,9 +34,7 @@ import org.joda.time.format.DateTimeFormatter;
 /**
  * Generates the feed XML.
  *
- * 1. read all files in posts/ with mod date
- * 2. generate feed object from files
- * 3. write feed.xml
+ * 1. read all files in posts/ with mod date 2. generate feed object from files 3. write feed.xml
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -43,15 +45,15 @@ final class FeedGenerator implements Command {
      *
      * See http://www.joda.org/joda-time/key_format.html
      */
-    private static final DateTimeFormatter PUBLISH_DATE_FORMAT =
-        DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z");
+    private static final DateTimeFormatter PUBLISH_DATE_FORMAT
+            = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z");
     /**
      * DC publishing date format.
      *
      * See http://www.joda.org/joda-time/key_format.html
      */
-    private static final DateTimeFormatter DC_DATE_FORMAT =
-        DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+    private static final DateTimeFormatter DC_DATE_FORMAT
+            = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
     /**
      * Template configuration.
      */
@@ -93,10 +95,8 @@ final class FeedGenerator implements Command {
      */
     public FeedGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
-        Validate.notNull(templateConfiguration, "templateConfiguration");
-        Validate.notNull(pages, "pages");
-        this.templateConfiguration = templateConfiguration;
-        this.pages = pages;
+        this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
+        this.pages = Validate.notNull(pages, "pages");
     }
 
     /**
@@ -105,8 +105,7 @@ final class FeedGenerator implements Command {
      * @param title must not be {@literal null}
      */
     public void setTitle(final String title) {
-        Validate.notNull(pages, "pages");
-        this.title = title;
+        this.title = Validate.notNull(title, "title");
     }
 
     /**
@@ -115,8 +114,7 @@ final class FeedGenerator implements Command {
      * @param link must not be {@literal null}
      */
     public void setLink(final String link) {
-        Validate.notNull(link, "link");
-        this.link = link;
+        this.link = Validate.notNull(link, "link");
     }
 
     /**
@@ -134,8 +132,7 @@ final class FeedGenerator implements Command {
      * @param language must not be {@literal null}
      */
     public void setLanguage(final String language) {
-        Validate.notNull(language, "language");
-        this.language = language;
+        this.language = Validate.notNull(language, "language");
     }
 
     /**
@@ -144,27 +141,26 @@ final class FeedGenerator implements Command {
      * @param lastBuildDate must not be {@literal null}
      */
     public void setLastBuildDate(final DateTime lastBuildDate) {
-        Validate.notNull(lastBuildDate, "lastBuildDate");
-        this.lastBuildDate = lastBuildDate;
+        this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");
     }
 
     @Override
     public void execute() {
         final Feed feed = new Feed(
-            title,
-            link,
-            description,
-            language,
-            lastBuildDate.toString(PUBLISH_DATE_FORMAT));
+                title,
+                link,
+                description,
+                language,
+                lastBuildDate.toString(PUBLISH_DATE_FORMAT));
 
-        for (final Page page : pages.values()) {
+        for (final Page page : sortByDate(pages.values())) {
             feed.add(
-                new FeedItem(
-                    page.getTitle(),
-                    page.getUri().toString(),
-                    StringEscape.escapeXml(page.getDescription()),
-                    formatTimestamp(page.getPublishingDate()),
-                    formatDcDate(page.getPublishingDate())));
+                    new FeedItem(
+                            page.getTitle(),
+                            page.getUri().toString(),
+                            StringEscape.escapeXml(page.getDescription()),
+                            formatTimestamp(page.getPublishingDate()),
+                            formatDcDate(page.getPublishingDate())));
         }
 
         try {
@@ -206,4 +202,19 @@ final class FeedGenerator implements Command {
         return ts.toString(DC_DATE_FORMAT);
     }
 
+    private Collection<Page> sortByDate(final Collection<Page> values) {
+        final List<Page> copy = new ArrayList<>(values);
+
+        Collections.sort(copy, new ComparePageByPublishingDate());
+
+        return Collections.unmodifiableCollection(copy);
+    }
+
+    private static final class ComparePageByPublishingDate implements Comparator<Page> {
+
+        @Override
+        public int compare(final Page c1, final Page c2) {
+            return c1.getPublishingDate().compareTo(c2.getPublishingDate());
+        }
+    }
 }

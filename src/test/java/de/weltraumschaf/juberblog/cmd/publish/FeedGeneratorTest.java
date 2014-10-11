@@ -43,7 +43,26 @@ public class FeedGeneratorTest {
 
     private static final String URI = "http://www.foobar.com/";
 
-    private final DataFile dummy = new DataFile("file", "file", 0L, 0L, "file", "file", "md", new MetaData(), DataFile.Type.SITE);
+    private final DataFile dummy1 = new DataFile(
+        "file1",
+        "file1",
+        0L,
+        0L,
+        "file1",
+        "file1",
+        "md",
+        new MetaData(),
+        DataFile.Type.POST);
+    private final DataFile dummy2 = new DataFile(
+        "file2",
+        "file2",
+        0L,
+        0L,
+        "file2",
+        "file2",
+        "md",
+        new MetaData(),
+        DataFile.Type.POST);
 
     private String today(final DateTime ts) {
         return FeedGenerator.formatTimestamp(ts);
@@ -68,8 +87,7 @@ public class FeedGeneratorTest {
     }
 
     @Test
-    @Ignore("FIXME Fix sorting.")
-    public void execute() throws IOException, URISyntaxException {
+    public void execute_noPages() throws IOException, URISyntaxException {
         final PublishedPages pages = new PublishedPages();
         final FeedGenerator sut = new FeedGenerator(
                 Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), pages);
@@ -80,7 +98,9 @@ public class FeedGeneratorTest {
         sut.setLink(URI + "feed.xml");
         final DateTime now = new DateTime();
         sut.setLastBuildDate(now);
+
         sut.execute();
+
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -95,12 +115,41 @@ public class FeedGeneratorTest {
                 + "        <lastBuildDate>" + today(now) + "</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>")));
-        pages.put(new Page("First Post", new URI(URI + "posts/First-Post.html"), "This is the content.", now,
-                dummy, SiteMapUrl.ChangeFrequency.DAILY, SiteMapUrl.Priority.POST));
-        pages.put(new Page("Second Post", new URI(URI + "posts/Second-Post.html"), "This is the content with <strong>"
-                + "HTML</strong>.", now, dummy, SiteMapUrl.ChangeFrequency.DAILY,
+    }
+
+    @Test
+    public void execute_twoPage() throws IOException, URISyntaxException {
+        final PublishedPages pages = new PublishedPages();
+        final FeedGenerator sut = new FeedGenerator(
+                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), pages);
+        assertThat(sut.getResult(), is(equalTo("")));
+        sut.setTitle("This is the title");
+        sut.setDescription("This is the description.");
+        sut.setLanguage("en");
+        sut.setLink(URI + "feed.xml");
+        final DateTime now = new DateTime();
+        sut.setLastBuildDate(now);
+        pages.put(
+            new Page(
+                "First Post",
+                new URI(URI + "posts/First-Post.html"),
+                "This is the content.",
+                new DateTime(2014, 10, 1, 12, 30),
+                dummy1,
+                SiteMapUrl.ChangeFrequency.DAILY,
                 SiteMapUrl.Priority.POST));
+        pages.put(
+            new Page(
+                "Second Post",
+                new URI(URI + "posts/Second-Post.html"),
+                "This is the content with <strong>HTML</strong>.",
+                new DateTime(2014, 10, 5, 22, 5),
+                dummy2,
+                SiteMapUrl.ChangeFrequency.DAILY,
+                SiteMapUrl.Priority.POST));
+
         sut.execute();
+
         assertThat(sut.getResult(), is(equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -117,15 +166,15 @@ public class FeedGeneratorTest {
                 + "            <title>First Post</title>\n"
                 + "            <link>http://www.foobar.com/posts/First-Post.html</link>\n"
                 + "            <description>This is the content.</description>\n"
-                + "            <pubDate>" + today(now) + "</pubDate>\n"
-                + "            <dc:date>" + todayDc(now) + "</dc:date>\n"
+                + "            <pubDate>Wed, 01 Oct 2014 12:30:00 +0200</pubDate>\n"
+                + "            <dc:date>2014-10-01T12:30:00+02:00</dc:date>\n"
                 + "        </item>\n"
                 + "        <item>\n"
                 + "            <title>Second Post</title>\n"
                 + "            <link>http://www.foobar.com/posts/Second-Post.html</link>\n"
                 + "            <description>This is the content with &lt;strong&gt;HTML&lt;/strong&gt;.</description>\n"
-                + "            <pubDate>" + today(now) + "</pubDate>\n"
-                + "            <dc:date>" + todayDc(now) + "</dc:date>\n"
+                + "            <pubDate>Sun, 05 Oct 2014 22:05:00 +0200</pubDate>\n"
+                + "            <dc:date>2014-10-05T22:05:00+02:00</dc:date>\n"
                 + "        </item>\n"
                 + "    </channel>\n"
                 + "</rss>")));
