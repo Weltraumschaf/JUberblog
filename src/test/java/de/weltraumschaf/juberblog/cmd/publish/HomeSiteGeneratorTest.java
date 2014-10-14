@@ -13,6 +13,9 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.model.PublishedPages;
+import de.weltraumschaf.juberblog.template.Configurations;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -23,7 +26,12 @@ import org.junit.Ignore;
  */
 public class HomeSiteGeneratorTest {
 
-    private final HomeSiteGenerator sut = new HomeSiteGenerator(new PublishedPages());
+    private final HomeSiteGenerator sut = new HomeSiteGenerator(
+            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), new PublishedPages());
+
+    public HomeSiteGeneratorTest() throws IOException, URISyntaxException {
+        super();
+    }
 
     @Test @Ignore
     public void execute() {

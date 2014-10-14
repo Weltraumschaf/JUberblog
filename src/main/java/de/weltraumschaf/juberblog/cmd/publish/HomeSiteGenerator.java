@@ -11,8 +11,18 @@
  */
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.formatter.Formatter;
+import de.weltraumschaf.juberblog.formatter.Formatters;
+import de.weltraumschaf.juberblog.model.DataFile;
+import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.Post;
 import de.weltraumschaf.juberblog.model.PublishedPages;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Generates the home site.
@@ -22,23 +32,48 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 final class HomeSiteGenerator implements Command {
 
     /**
+     * Template configuration.
+     */
+    private final Configuration templateConfiguration;
+    /**
      * Contains data to generate the home site.
      */
     private final PublishedPages pages;
+    private String html = "";
 
     /**
      * Dedicated constructor.
      *
-     * @param pages pages to generate home site for, must not be {@code null}
+     * @param templateConfiguration must not be {@literal null}
+     * @param pages must not be {@literal null}
      */
-    public HomeSiteGenerator(final PublishedPages pages) {
+    public HomeSiteGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
         super();
+        this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
         this.pages = Validate.notNull(pages, "pages");
     }
 
     @Override
     public void execute() {
-        // TODO Implementhome home site generation.
+        try {
+            final List<Post> posts = Lists.newArrayList();
+
+            for (final Page post : Page.filter(pages.values(), DataFile.Type.SITE)) {
+                posts.add(new Post(
+                    post.getUri().toString(),
+                    post.getTitle(),
+                    post.getPublishingDate().toString()));
+            }
+
+            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfiguration, posts);
+            html = fmt.format();
+        } catch (final IOException | TemplateException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    String getResult() {
+        return html;
     }
 
 }

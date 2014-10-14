@@ -11,9 +11,15 @@
  */
 package de.weltraumschaf.juberblog.model;
 
+import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.guava.Objects;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.model.DataFile.Type;
+import java.io.Serializable;
 import java.net.URI;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import org.joda.time.DateTime;
 
 /**
@@ -178,4 +184,30 @@ public class Page {
                 .toString();
     }
 
+    public static Collection<Page> filter(final Collection<Page> pages, final Type type) {
+        final List<Page> filtered = Lists.newArrayList();
+
+        for (final Page page : pages) {
+            if (!page.getFile().isType(type)) {
+                filtered.add(page);
+            }
+        }
+
+        return filtered;
+    }
+    /**
+     * Compares given {@link Page pages} by their publishing date.
+     */
+    public static final class CompareByPublishingDate implements Comparator<Page>, Serializable {
+
+        /**
+         * For serialization.
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int compare(final Page c1, final Page c2) {
+            return c1.getPublishingDate().compareTo(c2.getPublishingDate());
+        }
+    }
 }

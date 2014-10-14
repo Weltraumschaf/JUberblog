@@ -68,8 +68,7 @@ class PostFormatter extends BaseFormatter {
      * @param date must not be {@code null}
      */
     public void setDateFormatted(final String date) {
-        Validate.notNull(date, "Date must not be null");
-        content.assignVariable(VarName.DATE_FORMATTED, date);
+        content.assignVariable(VarName.DATE_FORMATTED, Validate.notNull(date, "date"));
     }
 
     /**
@@ -78,8 +77,7 @@ class PostFormatter extends BaseFormatter {
      * @param prevPost must not be {@code null}
      */
     public void setPrevPost(final String prevPost) {
-        Validate.notNull(prevPost, "Prev post must not be null");
-        content.assignVariable(VarName.PREV_POST, prevPost);
+        content.assignVariable(VarName.PREV_POST, Validate.notNull(prevPost, "prevPost"));
     }
 
     /**
@@ -88,8 +86,7 @@ class PostFormatter extends BaseFormatter {
      * @param nextPost must not be {@code null}
      */
     public void setNextPost(final String nextPost) {
-        Validate.notNull(nextPost, "Next post must not be null");
-        content.assignVariable(VarName.NEXT_POST, nextPost);
+        content.assignVariable(VarName.NEXT_POST, Validate.notNull(nextPost, "nextPost"));
     }
 
 }

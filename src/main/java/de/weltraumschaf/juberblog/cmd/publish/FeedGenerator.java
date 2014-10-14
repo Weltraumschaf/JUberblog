@@ -18,15 +18,14 @@ import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.model.FeedItem;
 import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.Page.CompareByPublishingDate;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -212,24 +211,9 @@ final class FeedGenerator implements Command {
     private Collection<Page> sortByDate(final Collection<Page> unsorted) {
         final List<Page> copy = new ArrayList<>(unsorted);
 
-        Collections.sort(copy, new ComparePageByPublishingDate());
+        Collections.sort(copy, new CompareByPublishingDate());
 
         return Collections.unmodifiableCollection(copy);
     }
 
-    /**
-     * Compares given {@link Page pages} by their publishing date.
-     */
-    private static final class ComparePageByPublishingDate implements Comparator<Page>, Serializable {
-
-        /**
-         * For serialization.
-         */
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public int compare(final Page c1, final Page c2) {
-            return c1.getPublishingDate().compareTo(c2.getPublishingDate());
-        }
-    }
 }

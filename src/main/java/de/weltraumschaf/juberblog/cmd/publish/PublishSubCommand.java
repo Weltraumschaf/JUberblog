@@ -110,9 +110,17 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      *
      * @param pages must not be {@code null}
      */
-    private void updateIndexSites(final PublishedPages pages) {
+    private void updateIndexSites(final PublishedPages pages) throws PublishingSubCommandExcpetion {
         LOG.info("Update home site...");
-        new HomeSiteGenerator(pages).execute();
+
+        final String filename = "index.html";
+        final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig(), pages);
+        generator.execute();
+
+        final String html = generator.getResult();
+        final Path target = getDirectories().htdocs().resolve(filename);
+
+        writeFile(target, html);
     }
 
     /**
@@ -131,26 +139,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         final String xml = generator.getResult();
         final Path target = getDirectories().htdocs().resolve(filename);
 
-        if (!Files.exists(target)) {
-            try {
-                Files.createFile(target);
-                LOG.info(String.format("File '%s' created.", target));
-            } catch (final IOException ex) {
-                throw new PublishingSubCommandExcpetion(String.format("Can't create feed file '%s'!", target), ex);
-            }
-        } else {
-            // TODO delete file if purge.
-        }
-
-        try {
-            Files.write(
-                    target,
-                    xml.getBytes(Constants.DEFAULT_ENCODING.toString()),
-                    StandardOpenOption.WRITE);
-            LOG.info(String.format("Fle '%s' written.", target));
-        } catch (IOException ex) {
-            throw new PublishingSubCommandExcpetion(String.format("Can't write to feed file '%s'!", target), ex);
-        }
+        writeFile(target, xml);
     }
 
     /**
@@ -175,12 +164,16 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         final String xml = generator.getResult();
         final Path target = getDirectories().htdocs().resolve(filename);
 
+        writeFile(target, xml);
+    }
+
+    private void writeFile(final Path target, final String content) throws PublishingSubCommandExcpetion {
         if (!Files.exists(target)) {
             try {
                 Files.createFile(target);
                 LOG.info(String.format("File '%s' created.", target));
             } catch (final IOException ex) {
-                throw new PublishingSubCommandExcpetion(String.format("Can't create feed file '%s'!", target), ex);
+                throw new PublishingSubCommandExcpetion(String.format("Can't create file '%s'!", target), ex);
             }
         } else {
             // TODO delete file if purge.
@@ -189,7 +182,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         try {
             Files.write(
                     target,
-                    xml.getBytes(Constants.DEFAULT_ENCODING.toString()),
+                    content.getBytes(Constants.DEFAULT_ENCODING.toString()),
                     StandardOpenOption.WRITE);
             LOG.info(String.format("Fle '%s' written.", target));
         } catch (IOException ex) {

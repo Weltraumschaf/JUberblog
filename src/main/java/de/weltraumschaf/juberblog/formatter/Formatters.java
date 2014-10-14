@@ -12,9 +12,13 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.model.Feed;
+import de.weltraumschaf.juberblog.model.Page;
+import de.weltraumschaf.juberblog.model.Post;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import freemarker.template.Configuration;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Factory to create formatters.
@@ -87,7 +91,22 @@ public final class Formatters {
     }
 
     /**
+     * Create a formatter for the home site.
+     *
+     * @param templateConfiguration must not be {@code null}
+     * @param pages must not be {@code null}
+     * @return never {@code null}
+     * @throws IOException on any template or markdown IO error
+     */
+    public static Formatter createHomeSiteFormatter(
+        final Configuration templateConfiguration, final List<Post> pages) throws IOException {
+        return new HomeSiteFormatter(templateConfiguration, pages);
+    }
+
+    /**
      * Type of formatters.
+     *
+     * XXX Necessary?
      */
     public enum Type {
         /** For blog posts. */

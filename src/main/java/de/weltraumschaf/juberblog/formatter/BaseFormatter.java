@@ -68,13 +68,11 @@ abstract class BaseFormatter implements HtmlFormatter {
     public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate, final String markdown)
         throws IOException {
         super();
-        Validate.notNull(templateConfiguration, "Template configuration must not be null!");
-        Validate.notEmpty(contentTemplate, "Layout template must not be null or empty!");
-        Validate.notNull(markdown, "Markdown string must not be null!");
-        content = new Layout(templateConfiguration, contentTemplate);
-        layout = new Layout(templateConfiguration, LAYOUT_TEMPLATE);
-        layout.setContent(content);
-        this.markdown = markdown;
+        Validate.notNull(templateConfiguration, "templateConfiguration");
+        this.content = new Layout(templateConfiguration, Validate.notEmpty(contentTemplate, "contentTemplate"));
+        this.layout = new Layout(templateConfiguration, LAYOUT_TEMPLATE);
+        this.layout.setContent(content);
+        this.markdown = Validate.notNull(markdown, "markdown");
     }
 
     @Override
