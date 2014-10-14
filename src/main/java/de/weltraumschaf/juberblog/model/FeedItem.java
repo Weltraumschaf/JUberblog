@@ -47,22 +47,17 @@ public final class FeedItem {
      *
      * @param title must not be {@literal null} or empty
      * @param link must not be {@literal null} or empty
-     * @param description must not be {@literal null} or empty
+     * @param description must not be {@literal null}
      * @param pubDate must not be {@literal null} or empty
      * @param dcDate must not be {@literal null} or empty
      */
     public FeedItem(String title, String link, String description, String pubDate, String dcDate) {
         super();
-        Validate.notEmpty(title, "Title must not be null or empty!");
-        Validate.notEmpty(link, "Link must not be null or empty!");
-        Validate.notEmpty(description, "Description must not be null or empty!");
-        Validate.notEmpty(pubDate, "PubDate must not be null or empty!");
-        Validate.notEmpty(dcDate, "DcDate must not be null or empty!");
-        this.title = title;
-        this.link = link;
-        this.description = description;
-        this.pubDate = pubDate;
-        this.dcDate = dcDate;
+        this.title = Validate.notEmpty(title, "title");
+        this.link = Validate.notEmpty(link, "link");
+        this.description = Validate.notNull(description, "description");
+        this.pubDate = Validate.notEmpty(pubDate, "pubDate");
+        this.dcDate = Validate.notEmpty(dcDate, "dcDate");
     }
 
     /**
