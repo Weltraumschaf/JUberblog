@@ -149,6 +149,7 @@ public final class App extends InvokableAdapter {
         final JCommander optionsParser = new JCommander();
         optionsParser.setProgramName(Constants.COMMAND_NAME.toString());
         optionsParser.addObject(baseOptions);
+        optionsParser.setAcceptUnknownOptions(true);
 
         // XXX Quick and dirty hack to preven JCommander error about main command.
         if (args.getFirstArgument().startsWith("-")) {
