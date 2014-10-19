@@ -94,7 +94,7 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
 
-        <dependency.commons.version>1.1.0-SNAPSHOT</dependency.commons.version>
+        <dependency.commons.version>1.1.0</dependency.commons.version>
     </properties>
 
     <prerequisites>
