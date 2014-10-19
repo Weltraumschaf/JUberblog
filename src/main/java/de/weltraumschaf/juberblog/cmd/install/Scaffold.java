@@ -171,11 +171,11 @@ public final class Scaffold {
             Validate.notNull(targetDir, "targetDir");
 
             if (!Files.exists(targetDir)) {
-                throw new IllegalArgumentException(String.format("Error: Target '%s' does not exists!", targetDir));
+                throw new IllegalArgumentException(String.format("Target '%s' does not exists!", targetDir));
             }
 
             if (!Files.isDirectory(targetDir)) {
-                throw new IllegalArgumentException(String.format("Error: Target '%s' is not a directory!", targetDir));
+                throw new IllegalArgumentException(String.format("Target '%s' is not a directory!", targetDir));
             }
 
             this.targetDir = targetDir;
@@ -220,7 +220,7 @@ public final class Scaffold {
                     Files.copy(target, targetDir.resolve(baseName(file) + ".bak"));
                     Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
                 } else {
-                    throw new IllegalArgumentException(String.format("Error: File '%s' already exists!", target));
+                    throw new IllegalArgumentException(String.format("File '%s' already exists!", target));
                 }
             } else {
                 println(String.format("Copy file %s to %s ...", file, target));

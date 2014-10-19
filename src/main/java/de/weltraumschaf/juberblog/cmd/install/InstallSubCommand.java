@@ -73,14 +73,14 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         } else if (target.list().length > 0) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
-                "Error: Target directory not empty! Use -f to force install or -u to update.");
+                "Target directory not empty! Use -f to force install or -u to update.");
         }
 
         try {
             scaffold.setVerbose(getOptions().isVerbose());
             scaffold.copyFiles(target);
         } catch (IOException ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, "Error: Can't install scaffold!", ex);
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't install scaffold!", ex);
         }
     }
 
@@ -112,13 +112,13 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         if (options.getLocation().isEmpty()) {
             throw new ApplicationException(
                 ExitCodeImpl.MISSING_ARGUMENT,
-                "Error: Empty location given! Please specify a valid direcotry as installation location.");
+                "Empty location given! Please specify a valid direcotry as installation location.");
         }
 
         if (options.isForce() && options.isUpdate()) {
             throw new ApplicationException(
                 ExitCodeImpl.BAD_ARGUMENT,
-                "Error: You must not use -f and -u together!");
+                "You must not use -f and -u together!");
         }
     }
 
@@ -137,14 +137,14 @@ public final class InstallSubCommand extends BaseSubCommand<InstallOptions> {
         if (!target.exists()) {
             throw new ApplicationException(
                     ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Error: Install location '%s' does not exist!", location),
+                    String.format("Install location '%s' does not exist!", location),
                     null);
         }
 
         if (!target.isDirectory()) {
             throw new ApplicationException(
                     ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Error: Install location '%s' is not a directory!", location),
+                    String.format("Install location '%s' is not a directory!", location),
                     null);
         }
 

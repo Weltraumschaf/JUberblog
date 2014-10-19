@@ -149,7 +149,13 @@ public final class App extends InvokableAdapter {
         final JCommander optionsParser = new JCommander();
         optionsParser.setProgramName(Constants.COMMAND_NAME.toString());
         optionsParser.addObject(baseOptions);
-        optionsParser.parse(args.getAll());
+
+        // XXX Quick and dirty hack to preven JCommander error about main command.
+        if (args.getFirstArgument().startsWith("-")) {
+            optionsParser.parse(args.getAll());
+        } else {
+            optionsParser.parse(args.getTailArguments());
+        }
 
         if (baseOptions.isVersion()) {
             getIoStreams().println(String.format("Version: %s", version));
