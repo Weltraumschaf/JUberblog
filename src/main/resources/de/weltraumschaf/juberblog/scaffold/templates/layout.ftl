@@ -94,7 +94,9 @@
                 </div>
 
                 <footer role="contentinfo">
-                    Proudly made without PHP and MySQL, but with some <a title="Source code at GitHub." href="https://github.com/Weltraumschaf/uberblog">Ruby</a>.
+                    Proudly made without PHP and MySQL, but with some
+                    <a title="Source code at GitHub."
+                       href="https://github.com/Weltraumschaf/JUberblog">Java</a>.
                 </footer>
             </div>
         </div>
