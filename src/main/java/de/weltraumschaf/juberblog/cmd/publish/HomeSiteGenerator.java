@@ -36,7 +36,7 @@ final class HomeSiteGenerator implements Command {
      * Template configuration.
      */
     private final Configuration templateConfig;
-    private String title = "";
+    private String headline = "";
     private String description = "";
     private String version = "";
     /**
@@ -71,7 +71,7 @@ final class HomeSiteGenerator implements Command {
                         post.getPublishingDate().toString()));
             }
 
-            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfig, posts, title, description, version);
+            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfig, posts, headline, description, version);
             html = fmt.format();
         } catch (final IOException | TemplateException ex) {
             throw new RuntimeException(ex);
@@ -82,8 +82,8 @@ final class HomeSiteGenerator implements Command {
         return html;
     }
 
-    void setTitle(final String title) {
-        this.title = Validate.notNull(title, "title");
+    void setHeadline(final String headline) {
+        this.headline = Validate.notNull(headline, "headline");
     }
 
     void setVersion(final String version) {

@@ -31,7 +31,7 @@ public class HomeSiteFormatter extends BaseFormatter {
      */
     private static final String TEMPLATE = "index.ftl";
     private final List<Post> posts;
-    private final String title;
+    private final String headline;
     private final String description;
     private final String version;
 
@@ -40,15 +40,15 @@ public class HomeSiteFormatter extends BaseFormatter {
      *
      * @param templateConfiguration must not be {@code null} or empty
      * @param posts must not be {@code null}
-     * @param title must not be {@code null}
+     * @param headline must not be {@code null}
      * @param description must not be {@code null}
      * @param version must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts, final String title, final String description, final String version) throws IOException {
+    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts, final String headline, final String description, final String version) throws IOException {
         super(templateConfiguration, TEMPLATE, "BLA");
         this.posts = Validate.notNull(posts, "posts");
-        this.title = Validate.notNull(title, "title");
+        this.headline = Validate.notNull(headline, "title");
         this.description = Validate.notNull(description, "description");
         this.version = Validate.notNull(version, "version");
     }
@@ -56,7 +56,7 @@ public class HomeSiteFormatter extends BaseFormatter {
     @Override
     public String format() throws IOException, TemplateException {
         content.assignVariable("posts", posts);
-        setTitle(title);
+        setHeadline(headline);
         setDescription(description);
         setVersion(version);
         return super.format();

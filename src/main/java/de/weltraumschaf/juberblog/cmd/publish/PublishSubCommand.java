@@ -116,7 +116,7 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         final String filename = "index.html";
         final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig());
         generator.setPages(pages);
-        generator.setTitle(blogConfiguration().getHeadline());
+        generator.setHeadline(blogConfiguration().getHeadline());
         generator.setDescription(blogConfiguration().getDescription());
         generator.setVersion(version().getVersion());
 

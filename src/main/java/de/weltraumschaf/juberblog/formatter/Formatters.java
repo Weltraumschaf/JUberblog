@@ -100,8 +100,8 @@ public final class Formatters {
      * @throws IOException on any template or markdown IO error
      */
     public static Formatter createHomeSiteFormatter(
-        final Configuration templateConfiguration, final List<Post> pages, final String title, final String description, final String version) throws IOException {
-        return new HomeSiteFormatter(templateConfiguration, pages, title, description, version);
+        final Configuration templateConfiguration, final List<Post> pages, final String headline, final String description, final String version) throws IOException {
+        return new HomeSiteFormatter(templateConfiguration, pages, headline, description, version);
     }
 
     /**
