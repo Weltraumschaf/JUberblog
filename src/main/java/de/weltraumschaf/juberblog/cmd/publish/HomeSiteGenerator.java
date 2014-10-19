@@ -82,16 +82,16 @@ final class HomeSiteGenerator implements Command {
         return html;
     }
 
-    void setTitle(final String headline) {
-
+    void setTitle(final String title) {
+        this.title = Validate.notNull(title, "title");
     }
 
     void setVersion(final String version) {
-
+        this.version = Validate.notNull(version, "version");
     }
 
     void setDescription(final String description) {
-
+        this.description = Validate.notNull(description, "description");
     }
 
 }
