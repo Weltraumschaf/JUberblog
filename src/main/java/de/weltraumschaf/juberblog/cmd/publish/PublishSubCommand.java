@@ -114,7 +114,12 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         LOG.info("Update home site...");
 
         final String filename = "index.html";
-        final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig(), pages);
+        final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig());
+        generator.setPages(pages);
+        generator.setTitle(blogConfiguration().getHeadline());
+        generator.setDescription(blogConfiguration().getDescription());
+        generator.setVersion(version().getVersion());
+
         generator.execute();
 
         final String html = generator.getResult();
@@ -154,11 +159,12 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
         final String filename = "feed.xml";
         final FeedGenerator generator = new FeedGenerator(getTemplateConfig(), pages);
 
+        generator.setTitle(blogConfiguration().getHeadline());
         generator.setDescription(blogConfiguration().getDescription());
         generator.setLanguage(blogConfiguration().getLanguage());
         generator.setLastBuildDate(new DateTime());
         generator.setLink(blogConfiguration().getBaseUri() + filename);
-        generator.setTitle(blogConfiguration().getHeadline());
+
         generator.execute();
 
         final String xml = generator.getResult();

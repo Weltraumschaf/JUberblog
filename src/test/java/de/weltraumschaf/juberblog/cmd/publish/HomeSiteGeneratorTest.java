@@ -27,7 +27,7 @@ import org.junit.Ignore;
 public class HomeSiteGeneratorTest {
 
     private final HomeSiteGenerator sut = new HomeSiteGenerator(
-            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), new PublishedPages());
+            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR));
 
     public HomeSiteGeneratorTest() throws IOException, URISyntaxException {
         super();

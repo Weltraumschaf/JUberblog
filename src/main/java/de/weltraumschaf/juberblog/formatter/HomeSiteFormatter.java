@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.model.Post;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -30,22 +31,34 @@ public class HomeSiteFormatter extends BaseFormatter {
      */
     private static final String TEMPLATE = "index.ftl";
     private final List<Post> posts;
+    private final String title;
+    private final String description;
+    private final String version;
 
     /**
      * Dedicated constructor.
      *
      * @param templateConfiguration must not be {@code null} or empty
      * @param posts must not be {@code null}
+     * @param title must not be {@code null}
+     * @param description must not be {@code null}
+     * @param version must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts) throws IOException {
+    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts, final String title, final String description, final String version) throws IOException {
         super(templateConfiguration, TEMPLATE, "BLA");
         this.posts = Validate.notNull(posts, "posts");
+        this.title = Validate.notNull(title, "title");
+        this.description = Validate.notNull(description, "description");
+        this.version = Validate.notNull(version, "version");
     }
 
     @Override
     public String format() throws IOException, TemplateException {
         content.assignVariable("posts", posts);
+        setTitle(title);
+        setDescription(description);
+        setVersion(version);
         return super.format();
     }
 

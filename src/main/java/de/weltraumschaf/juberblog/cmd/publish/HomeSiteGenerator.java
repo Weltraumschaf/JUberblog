@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.DataFile;
@@ -34,22 +35,27 @@ final class HomeSiteGenerator implements Command {
     /**
      * Template configuration.
      */
-    private final Configuration templateConfiguration;
+    private final Configuration templateConfig;
+    private String title = "";
+    private String description = "";
+    private String version = "";
     /**
      * Contains data to generate the home site.
      */
-    private final PublishedPages pages;
+    private PublishedPages pages = new PublishedPages();
     private String html = "";
 
     /**
      * Dedicated constructor.
      *
-     * @param templateConfiguration must not be {@literal null}
-     * @param pages must not be {@literal null}
+     * @param templateConfig must not be {@literal null}
      */
-    public HomeSiteGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
+    public HomeSiteGenerator(final Configuration templateConfig) {
         super();
-        this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
+        this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
+    }
+
+    public void setPages(final PublishedPages pages) {
         this.pages = Validate.notNull(pages, "pages");
     }
 
@@ -60,12 +66,12 @@ final class HomeSiteGenerator implements Command {
 
             for (final Page post : Page.filter(pages.values(), DataFile.Type.SITE)) {
                 posts.add(new Post(
-                    post.getUri().toString(),
-                    post.getTitle(),
-                    post.getPublishingDate().toString()));
+                        post.getUri().toString(),
+                        post.getTitle(),
+                        post.getPublishingDate().toString()));
             }
 
-            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfiguration, posts);
+            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfig, posts, title, description, version);
             html = fmt.format();
         } catch (final IOException | TemplateException ex) {
             throw new RuntimeException(ex);
@@ -74,6 +80,18 @@ final class HomeSiteGenerator implements Command {
 
     String getResult() {
         return html;
+    }
+
+    void setTitle(final String headline) {
+
+    }
+
+    void setVersion(final String version) {
+
+    }
+
+    void setDescription(final String description) {
+
     }
 
 }

@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
+import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.Post;
@@ -99,8 +100,8 @@ public final class Formatters {
      * @throws IOException on any template or markdown IO error
      */
     public static Formatter createHomeSiteFormatter(
-        final Configuration templateConfiguration, final List<Post> pages) throws IOException {
-        return new HomeSiteFormatter(templateConfiguration, pages);
+        final Configuration templateConfiguration, final List<Post> pages, final String title, final String description, final String version) throws IOException {
+        return new HomeSiteFormatter(templateConfiguration, pages, title, description, version);
     }
 
     /**

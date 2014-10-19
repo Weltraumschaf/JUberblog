@@ -22,6 +22,8 @@ public interface HtmlFormatter extends Formatter {
     /**
      * Set the site title.
      *
+     * TODO Rename to setHeadline().
+     *
      * @param title must not be {@literal null}
      */
     void setTitle(String title);
