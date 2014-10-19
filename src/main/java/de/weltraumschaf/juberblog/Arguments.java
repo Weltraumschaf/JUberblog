@@ -68,6 +68,10 @@ public final class Arguments {
         return Arrays.copyOfRange(args, 1, args.length);
     }
 
+    public String[] getAll() {
+        return args.clone();
+    }
+
     @Override
     public String toString() {
         return "first: " + getFirstArgument()

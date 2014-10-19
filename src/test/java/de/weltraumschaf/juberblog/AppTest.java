@@ -80,68 +80,6 @@ public class AppTest {
     }
 
     @Test
-    public void validateArguments_emptyArgs() {
-        final App sut = createSut();
-        try {
-            sut.validateArguments();
-            fail("Expected exception not thrown!");
-        } catch (final ApplicationException ex) {
-            assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
-            assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
-                    + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
-        }
-    }
-
-    @Test
-    public void validateArguments_firstArgIsEmpty() {
-        final App sut = createSut("");
-
-        try {
-            sut.validateArguments();
-            fail("Expected exception not thrown!");
-        } catch (final ApplicationException ex) {
-            assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
-            assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
-                    + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
-        }
-    }
-
-    @Test
-    public void validateArguments_allArgsAreEmpty() {
-        final App sut = createSut("", "", "");
-
-        try {
-            sut.validateArguments();
-            fail("Expected exception not thrown!");
-        } catch (final ApplicationException ex) {
-            assertThat(ex.getExitCode(), is((ExitCode) ExitCodeImpl.TOO_FEW_ARGUMENTS));
-            assertThat(ex.getMessage(), is(equalTo("No sub comamnd given!"
-                    + Constants.DEFAULT_NEW_LINE
-                    + "Usage: juberblog [-v|--version] [-h|--help] create|publish|install")));
-        }
-    }
-
-    @Test
-    public void validateArguments_oneArgument() throws ApplicationException {
-        final App sut = createSut("foo");
-        final Arguments args = sut.validateArguments();
-        assertThat(args, is(not(nullValue())));
-        assertThat(args.getFirstArgument(), is(equalTo("foo")));
-        assertThat(args.getTailArguments(), is(new String[]{}));
-    }
-
-    @Test
-    public void validateArguments_multipleArggs() throws ApplicationException {
-        final App sut = createSut("foo", "bar", "baz");
-        final Arguments args = sut.validateArguments();
-        assertThat(args, is(not(nullValue())));
-        assertThat(args.getFirstArgument(), is(equalTo("foo")));
-        assertThat(args.getTailArguments(), is(new String[]{"bar", "baz"}));
-    }
-
-    @Test
     public void parseOptions_throwsExceptionIfTypeIsNull() throws ApplicationException {
         final App sut = createSut();
         thrown.expect(NullPointerException.class);

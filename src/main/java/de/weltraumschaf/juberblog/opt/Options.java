@@ -32,4 +32,8 @@ public interface Options {
      */
     boolean isVerbose();
 
+    boolean isVersion();
+
+    boolean isDebug();
+
 }

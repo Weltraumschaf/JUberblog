@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.opt;
 
 import com.beust.jcommander.Parameter;
@@ -19,18 +18,32 @@ import com.beust.jcommander.Parameter;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class CommonOptions implements Options {
+public class CommonOptions implements Options {
 
     /**
      * Help flag.
      */
-    @Parameter(names = {"-h", "--help" }, description = "Show this message.", help = true)
+    @Parameter(names = {"-h", "--help"}, description = "Show this message.", help = true)
     private boolean help;
     /**
      * Verbose flag.
      */
-    @Parameter(names = {"-v", "--verbose" }, description = "Tell you more.")
+    @Parameter(names = {"--verbose"}, description = "Tell you more.")
     private boolean verbose;
+    /**
+     * Version flag.
+     */
+    @Parameter(names = {"-v", "--version"}, description = "Show version info.")
+    private boolean version;
+    /**
+     * Debug flag.
+     */
+    @Parameter(names = {"--debug"}, description = "Print debug level information.")
+    private boolean debug;
+
+    public CommonOptions() {
+        this(false, false);
+    }
 
     /**
      * Dedicated constructor.
@@ -55,8 +68,21 @@ public abstract class CommonOptions implements Options {
     }
 
     @Override
+    public boolean isVersion() {
+        return version;
+    }
+
+    @Override
+    public boolean isDebug() {
+        return debug;
+    }
+
+    @Override
     public String toString() {
-        return "help: " + help + ", verbose: " + verbose;
+        return "help: " + help + ", "
+                + "verbose: " + verbose + ", "
+                + "version: " + version + ", "
+                + "debig: " + debug;
     }
 
 }

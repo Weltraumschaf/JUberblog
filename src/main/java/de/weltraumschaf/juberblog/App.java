@@ -23,6 +23,7 @@ import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.cmd.SubCommands;
 import de.weltraumschaf.juberblog.files.HomeDir;
 import de.weltraumschaf.juberblog.files.LockFile;
+import de.weltraumschaf.juberblog.opt.CommonOptions;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
 import de.weltraumschaf.juberblog.opt.InstallOptions;
 import de.weltraumschaf.juberblog.opt.Options;
@@ -56,6 +57,7 @@ public final class App extends InvokableAdapter {
      * Creates and holds the home directory.
      */
     private final HomeDir home = new HomeDir(env);
+    private final Options baseOptions = new CommonOptions();
 
     /**
      * Dedicated constructor.
@@ -76,10 +78,10 @@ public final class App extends InvokableAdapter {
      * @param prefix must not be {@code null}
      */
     private static void handleFatals(
-        final App invokable,
-        final Throwable cause,
-        final ExitCode code,
-        final String prefix) {
+            final App invokable,
+            final Throwable cause,
+            final ExitCode code,
+            final String prefix) {
         // CHECKSTYLE:OFF
         // At this point we do not have IO streams.
         System.err.print(Validate.notNull(prefix, "prefix"));
@@ -115,7 +117,11 @@ public final class App extends InvokableAdapter {
      */
     boolean isDebug() {
         final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
-        return "true".equalsIgnoreCase(debug.trim());
+        return baseOptions.isDebug() || "true".equalsIgnoreCase(debug.trim());
+    }
+
+    boolean isVerbose() {
+        return baseOptions.isVerbose();
     }
 
     @Override
@@ -139,11 +145,31 @@ public final class App extends InvokableAdapter {
             }
         });
 
-        final Arguments args = validateArguments();
-        final SubCommands subCommandName = SubCommands.forSubCommandName(args.getFirstArgument());
-        final SubCommand cmd = createSubcommand(subCommandName);
-        parseOptions(subCommandName, args, cmd);
-        cmd.execute();
+        final Arguments args = new Arguments(getArgs());
+        final JCommander optionsParser = new JCommander();
+        optionsParser.setProgramName(Constants.COMMAND_NAME.toString());
+        optionsParser.addObject(baseOptions);
+        optionsParser.parse(args.getAll());
+
+        if (baseOptions.isVersion()) {
+            getIoStreams().println(String.format("Version: %s", version));
+        } else if (baseOptions.isHelp()) {
+            getIoStreams().println(helpMessage());
+        } else {
+            final String firstArgument = args.getFirstArgument().trim();
+
+            if (firstArgument.isEmpty()) {
+                final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
+                errorMesage.append(Constants.DEFAULT_NEW_LINE)
+                        .append(helpMessage());
+                throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);
+            }
+
+            final SubCommands subCommandName = SubCommands.forSubCommandName(firstArgument);
+            final SubCommand cmd = createSubcommand(subCommandName);
+            parseOptions(subCommandName, args, cmd);
+            cmd.execute();
+        }
     }
 
     /**
@@ -161,30 +187,6 @@ public final class App extends InvokableAdapter {
     }
 
     /**
-     * Validates the command line arguments and creates the argument object.
-     *
-     * @return never {@code null}
-     * @throws ApplicationException if too few arguments given
-     */
-    Arguments validateArguments() throws ApplicationException {
-        final Arguments args = new Arguments(getArgs());
-        final String firstArgument = args.getFirstArgument().trim();
-
-        if ("-h".equals(firstArgument) || "--help".equals(firstArgument)) {
-            throw new ApplicationException(ExitCodeImpl.OK, helpMessage(), null);
-        } else if ("-v".equals(firstArgument) || "--version".equals(firstArgument)) {
-            throw new ApplicationException(ExitCodeImpl.OK, String.format("Version: %s", version), null);
-        } else if (firstArgument.isEmpty()) {
-            final StringBuilder errorMesage = new StringBuilder("No sub comamnd given!");
-            errorMesage.append(Constants.DEFAULT_NEW_LINE)
-                    .append(helpMessage());
-            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, errorMesage.toString(), null);
-        }
-
-        return args;
-    }
-
-    /**
      * Creates sub command object.
      *
      * @param subCommandType must not be {@code null}
@@ -198,9 +200,9 @@ public final class App extends InvokableAdapter {
             return SubCommands.create(subCommandType, getIoStreams(), version);
         } catch (final IllegalArgumentException ex) {
             throw new ApplicationException(
-                ExitCodeImpl.UNKNOWN_COMMAND,
-                ex.getMessage(),
-                ex);
+                    ExitCodeImpl.UNKNOWN_COMMAND,
+                    ex.getMessage(),
+                    ex);
         }
     }
 

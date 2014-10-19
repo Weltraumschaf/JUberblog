@@ -80,7 +80,8 @@ public class CommonOptionsTest {
     public void verboseShortArgument() {
         optionsParser.parse(new String[]{"-v"});
         assertThat(sut.isHelp(), is(false));
-        assertThat(sut.isVerbose(), is(true));
+        assertThat(sut.isVerbose(), is(false));
+        assertThat(sut.isVersion(), is(true));
     }
 
     @Test
@@ -94,7 +95,8 @@ public class CommonOptionsTest {
     public void helpAndVerboseShortArgument() {
         optionsParser.parse(new String[]{"-h", "-v"});
         assertThat(sut.isHelp(), is(true));
-        assertThat(sut.isVerbose(), is(true));
+        assertThat(sut.isVersion(), is(true));
+        assertThat(sut.isVerbose(), is(false));
     }
 
     @Test
@@ -115,6 +117,7 @@ public class CommonOptionsTest {
     public void helpLongAndVerboseShortArgument() {
         optionsParser.parse(new String[]{"--help", "-v"});
         assertThat(sut.isHelp(), is(true));
-        assertThat(sut.isVerbose(), is(true));
+        assertThat(sut.isVersion(), is(true));
+        assertThat(sut.isVerbose(), is(false));
     }
 }
