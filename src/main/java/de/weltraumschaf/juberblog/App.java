@@ -37,6 +37,8 @@ import org.parboiled.common.StringUtils;
 /**
  * Main class.
  *
+ * TODO Use JCommander extension from commons lib.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class App extends InvokableAdapter {
