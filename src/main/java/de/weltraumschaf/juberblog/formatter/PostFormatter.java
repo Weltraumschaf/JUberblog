@@ -13,7 +13,6 @@ package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import java.io.IOException;
@@ -58,8 +57,8 @@ class PostFormatter extends BaseFormatter {
      */
     public PostFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
         super(templateConfiguration, TEMPLATE, markdown);
-        content.assignVariable("features", FEATURES);
-        Template.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);
+        content.assignVariable(VarName.FEATURES.toString(), FEATURES);
+        VarName.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);
     }
 
     /**
@@ -68,7 +67,7 @@ class PostFormatter extends BaseFormatter {
      * @param date must not be {@code null}
      */
     public void setDateFormatted(final String date) {
-        content.assignVariable(VarName.DATE_FORMATTED, Validate.notNull(date, "date"));
+        content.assignVariable(VarName.DATE_FORMATTED.toString(), Validate.notNull(date, "date"));
     }
 
     /**
@@ -77,7 +76,7 @@ class PostFormatter extends BaseFormatter {
      * @param prevPost must not be {@code null}
      */
     public void setPrevPost(final String prevPost) {
-        content.assignVariable(VarName.PREV_POST, Validate.notNull(prevPost, "prevPost"));
+        content.assignVariable(VarName.PREV_POST.toString(), Validate.notNull(prevPost, "prevPost"));
     }
 
     /**
@@ -86,7 +85,7 @@ class PostFormatter extends BaseFormatter {
      * @param nextPost must not be {@code null}
      */
     public void setNextPost(final String nextPost) {
-        content.assignVariable(VarName.NEXT_POST, Validate.notNull(nextPost, "nextPost"));
+        content.assignVariable(VarName.NEXT_POST.toString(), Validate.notNull(nextPost, "nextPost"));
     }
 
 }

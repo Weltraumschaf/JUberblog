@@ -12,12 +12,15 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.model.Feed;
-import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Formats an RSS feed.
@@ -33,11 +36,12 @@ class FeedFormatter implements Formatter {
     /**
      * used to render XML.
      */
-    private final Template content;
+    private final Fragment content;
     /**
      * Data model.
      */
     private final Feed feed;
+    private final FreeMarkerDown fmd;
 
     /**
      * Dedicated constructor.
@@ -49,9 +53,10 @@ class FeedFormatter implements Formatter {
     public FeedFormatter(final Configuration templateConfiguration, final Feed feed) throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
+        fmd = FreeMarkerDown.create(templateConfiguration);
         Validate.notNull(feed, "Feedmust not be null!");
-        content = new Template(templateConfiguration, TEMPLATE);
-        content.assignVariable(VarName.ENCODING, templateConfiguration.getDefaultEncoding());
+        content = fmd.createFragemnt(Paths.get(TEMPLATE));
+        content.assignVariable(VarName.ENCODING.toString(), templateConfiguration.getDefaultEncoding());
         this.feed = feed;
     }
 
@@ -63,7 +68,7 @@ class FeedFormatter implements Formatter {
 
     @Override
     public void setEncoding(final String encoding) {
-        content.assignVariable(VarName.ENCODING, encoding);
+        content.assignVariable(VarName.ENCODING.toString(), encoding);
     }
 
 }

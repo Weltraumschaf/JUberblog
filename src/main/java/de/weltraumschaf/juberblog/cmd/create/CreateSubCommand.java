@@ -16,17 +16,20 @@ import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.freemarkerdown.Options;
+import de.weltraumschaf.freemarkerdown.TemplateError;
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
 import de.weltraumschaf.juberblog.opt.CreateOptions;
-import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.time.Time;
 import de.weltraumschaf.juberblog.time.TimeProvider;
-import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Creates a post or site optionally as draft.
@@ -69,9 +72,11 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         final String title = getOptions().getTitle().trim();
 
         try {
-            final Template tpl = new Template(getTemplateConfig(), TEMPLATE);
+            final FreeMarkerDown fmd = FreeMarkerDown.create();
+//            final Template tpl = new Template(getTemplateConfig(), TEMPLATE);
+            final Fragment tpl = fmd.createFragemnt(Paths.get(TEMPLATE));
             tpl.assignVariable("title", title);
-            final String content = tpl.render();
+            final String content = fmd.render(tpl, Options.WITHOUT_MARKDOWN);
 
             if (getOptions().isSite()) {
                 createSite(content);
@@ -81,7 +86,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
         } catch (final IOException ex) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL, "Can't read template to create post/site! (" + ex.getMessage() + ')', ex);
-        } catch (final TemplateException ex) {
+        } catch (final TemplateError ex) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL, "Can't render template to create post/site! (" + ex.getMessage() + ')', ex);
         }

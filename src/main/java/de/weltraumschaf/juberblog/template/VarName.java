@@ -12,6 +12,8 @@
 package de.weltraumschaf.juberblog.template;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.TemplateModel;
+import java.util.Set;
 
 /**
  * Common template variable names.
@@ -63,7 +65,8 @@ public enum VarName {
     /**
      * Template variable name for blog's headline.
      */
-    HEADLINE("headline");
+    HEADLINE("headline"),
+    FEATURES("features");
 
     /**
      * Name of the variable in the template.
@@ -76,13 +79,22 @@ public enum VarName {
      * @param name must not be {@code null} or empty
      */
     VarName(final String name) {
-        Validate.notEmpty(name, "Name must not be null or empty!");
+        Validate.notEmpty(name, "name");
         this.name = name;
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public static void initializeVaribales(final TemplateModel template, final Set<VarName> names) {
+        Validate.notNull(template, "template");
+        Validate.notNull(names, "names");
+
+        for (final VarName name : names) {
+            template.assignVariable(name.toString(), "");
+        }
     }
 
 }

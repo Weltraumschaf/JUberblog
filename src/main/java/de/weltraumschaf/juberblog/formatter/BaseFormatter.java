@@ -12,13 +12,15 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.juberblog.Constants;
-import de.weltraumschaf.juberblog.filter.MarkdownFilter;
-import de.weltraumschaf.juberblog.template.Layout;
-import de.weltraumschaf.juberblog.template.Template;
+import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Implements the base of all formatters.
@@ -56,6 +58,7 @@ abstract class BaseFormatter implements HtmlFormatter {
      * Markdown to format.
      */
     private final String markdown;
+    private final FreeMarkerDown fmd;
 
     /**
      * Dedicated constructor.
@@ -69,53 +72,54 @@ abstract class BaseFormatter implements HtmlFormatter {
         throws IOException {
         super();
         Validate.notNull(templateConfiguration, "templateConfiguration");
-        this.content = new Layout(templateConfiguration, Validate.notEmpty(contentTemplate, "contentTemplate"));
-        this.layout = new Layout(templateConfiguration, LAYOUT_TEMPLATE);
-        this.layout.setContent(content);
+        fmd = FreeMarkerDown.create(templateConfiguration);
+        Validate.notEmpty(contentTemplate, "contentTemplate");
+        this.content = fmd.createLayout(Paths.get(contentTemplate));
+        this.layout = fmd.createLayout(Paths.get(LAYOUT_TEMPLATE));
+        this.layout.assignTemplateModel(VarName.CONTENT.toString(), content);
         this.markdown = Validate.notNull(markdown, "markdown");
     }
 
     @Override
     public String format() throws IOException, TemplateException {
-        final Template input = new Template(markdown, Constants.DEFAULT_ENCODING.toString());
-        input.addPostFilter(new MarkdownFilter());
-        content.setContent(input);
-        return layout.render();
+        final Fragment input = fmd.createFragemnt(markdown, Constants.DEFAULT_ENCODING.toString());
+        this.content.assignTemplateModel(VarName.CONTENT.toString(), input);
+        return fmd.render(layout);
     }
 
     @Override
     public void setTitle(final String title) {
-        layout.setTitle(title);
+        this.layout.assignVariable(VarName.TITLE.toString(), title);
     }
 
     @Override
     public void setEncoding(final String encoding) {
-        layout.setEncoding(encoding);
+        this.layout.assignVariable(VarName.ENCODING.toString(), encoding);
     }
 
     @Override
     public void setBaseUri(final String baseUri) {
-        layout.setBaseUri(baseUri);
+        this.layout.assignVariable(VarName.BASE_URI.toString(), baseUri);
     }
 
     @Override
     public void setDescription(final String description) {
-        layout.setDescription(description);
+        this.layout.assignVariable(VarName.DESCRIPTION.toString(), description);
     }
 
     @Override
     public void setKeywords(final String keywords) {
-        layout.setKeywords(keywords);
+        this.layout.assignVariable(VarName.KEYWORDS.toString(), keywords);
     }
 
     @Override
     public void setVersion(final String version) {
-        layout.setVersion(version);
+        this.layout.assignVariable(VarName.VERSION.toString(), version);
     }
 
 
     @Override
     public void setHeadline(final String headline) {
-        layout.setHeadline(headline);
+        this.layout.assignVariable(VarName.HEADLINE.toString(), headline);
     }
 }

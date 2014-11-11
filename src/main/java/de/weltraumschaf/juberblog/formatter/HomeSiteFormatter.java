@@ -13,7 +13,6 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.model.Post;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;

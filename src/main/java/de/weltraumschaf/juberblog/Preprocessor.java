@@ -37,8 +37,10 @@ import org.apache.log4j.Logger;
  * ...
  * </pre>
  *
+ * @deprecated 
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
+@Deprecated
 public final class Preprocessor {
 
     /**

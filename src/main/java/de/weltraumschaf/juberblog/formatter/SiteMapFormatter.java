@@ -12,12 +12,14 @@
 package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.model.SiteMap;
-import de.weltraumschaf.juberblog.template.Template;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Formats a site map to a string.
@@ -33,11 +35,12 @@ class SiteMapFormatter implements Formatter {
     /**
      * used to render XML.
      */
-    private final Template content;
+    private final Fragment content;
     /**
      * The formatted site map.
      */
     private final SiteMap siteMap;
+    private final FreeMarkerDown fmd;
 
     /**
      * Dedicated constructor.
@@ -50,19 +53,20 @@ class SiteMapFormatter implements Formatter {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
         Validate.notNull(siteMap, "SiteMap not be null!");
-        content = new Template(templateConfiguration, TEMPLATE);
+        fmd = FreeMarkerDown.create(templateConfiguration);
+        content = fmd.createFragemnt(Paths.get(TEMPLATE));
         this.siteMap = siteMap;
     }
 
     @Override
-    public void setEncoding(String encoding) {
-        content.assignVariable(VarName.ENCODING, encoding);
+    public void setEncoding(final String encoding) {
+        content.assignVariable(VarName.ENCODING.toString(), encoding);
     }
 
     @Override
     public String format() throws IOException, TemplateException {
         content.assignVariable("urls", siteMap.getUrls());
-        return content.render();
+        return fmd.render(content);
     }
 
 }
