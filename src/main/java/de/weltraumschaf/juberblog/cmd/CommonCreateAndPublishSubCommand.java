@@ -18,8 +18,10 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.ExitCodeImpl;
+import de.weltraumschaf.juberblog.cmd.publish.PublishingSubCommandExcpetion;
 import de.weltraumschaf.juberblog.opt.CreateAndPublishOptions;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.Configuration;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,8 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand}
- * and {@link de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand}.
+ * Common functionality for {@link de.weltraumschaf.juberblog.cmd.create.CreateSubCommand} and
+ * {@link de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand}.
  *
  * @param <O> type of options
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
@@ -69,15 +71,7 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
         validateArguments();
         loadBlogConfiguration();
         loadDirectories();
-
-        try {
-            templateConfig = Configurations.forProduction(getDirectories().templates().toString());
-        } catch (final IOException | URISyntaxException ex) {
-            throw new ApplicationException(
-                ExitCodeImpl.FATAL,
-                String.format("Can't configure templates from %s!", getDirectories().templates().toString()),
-                ex);
-        }
+        templateConfig = Configurations.forProduction();
     }
 
     /**
@@ -101,7 +95,7 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      *
      * @return never {@literal null}
      */
-    protected BlogConfiguration blogConfiguration() {
+    protected final BlogConfiguration blogConfiguration() {
         return blogConfiguration;
     }
 
@@ -117,11 +111,10 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
      *
      * @return never {@literal null}
      */
-    protected Directories getDirectories() {
+    protected final Directories getDirectories() {
         Validate.notNull(directories, "Directories must not be null!");
         return directories;
     }
-
 
     @Override
     public void setOptions(final O opt) {
@@ -135,19 +128,18 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
     }
 
     /**
-     * Accesor for template configuration.
+     * Accessor for template configuration.
      *
      * @return never {@literal null}
      */
-    protected Configuration getTemplateConfig() {
+    protected final Configuration getTemplateConfig() {
         return templateConfig;
     }
 
     /**
      * Validates the required command line arguments.
      *
-     * @throws ApplicationException if no configuration file was given,
-     *                              or if it is not readable
+     * @throws ApplicationException if no configuration file was given, or if it is not readable
      */
     private void validateArguments() throws ApplicationException {
         if (getOptions().getConfigurationFile().isEmpty()) {
@@ -158,9 +150,21 @@ public abstract class CommonCreateAndPublishSubCommand<O extends CreateAndPublis
 
         if (!Files.isReadable(configFile)) {
             throw new ApplicationException(
-                ExitCodeImpl.BAD_ARGUMENT,
-                String.format("Can't read config file '%s'!", getOptions().getConfigurationFile()));
+                    ExitCodeImpl.BAD_ARGUMENT,
+                    String.format("Can't read config file '%s'!", getOptions().getConfigurationFile()));
         }
     }
 
+    protected final Path createTemplateDir() throws ApplicationException {
+        final String fileName = getDirectories().templates().toString();
+
+        try {
+            return TemplateDirectories.create(fileName);
+        } catch (URISyntaxException ex) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL,
+                    String.format("Cant read template! '%s'", fileName),
+                    ex);
+        }
+    }
 }

@@ -17,6 +17,7 @@ import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -88,7 +89,7 @@ public class FeedGeneratorTest {
     public void execute_noPages() throws IOException, URISyntaxException {
         final PublishedPages pages = new PublishedPages();
         final FeedGenerator sut = new FeedGenerator(
-                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), pages);
+                Configurations.forTests(), pages, TemplateDirectories.scaffold());
         assertThat(sut.getResult(), is(equalTo("")));
         sut.setTitle("This is the title");
         sut.setDescription("This is the description.");
@@ -119,7 +120,7 @@ public class FeedGeneratorTest {
     public void execute_twoPage() throws IOException, URISyntaxException {
         final PublishedPages pages = new PublishedPages();
         final FeedGenerator sut = new FeedGenerator(
-                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), pages);
+                Configurations.forTests(), pages, TemplateDirectories.scaffold());
         assertThat(sut.getResult(), is(equalTo("")));
         sut.setTitle("This is the title");
         sut.setDescription("This is the description.");

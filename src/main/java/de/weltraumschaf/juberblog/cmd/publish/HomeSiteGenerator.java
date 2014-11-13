@@ -13,7 +13,6 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.DataFile;
@@ -23,6 +22,7 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -36,6 +36,7 @@ final class HomeSiteGenerator implements Command {
      * Template configuration.
      */
     private final Configuration templateConfig;
+    private final Path templateDir;
     private String headline = "";
     private String description = "";
     private String version = "";
@@ -50,9 +51,10 @@ final class HomeSiteGenerator implements Command {
      *
      * @param templateConfig must not be {@literal null}
      */
-    public HomeSiteGenerator(final Configuration templateConfig) {
+    public HomeSiteGenerator(final Configuration templateConfig, final Path templateDir) {
         super();
         this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
+        this.templateDir = Validate.notNull(templateDir, "templateDir");
     }
 
     public void setPages(final PublishedPages pages) {
@@ -71,7 +73,7 @@ final class HomeSiteGenerator implements Command {
                         post.getPublishingDate().toString()));
             }
 
-            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfig, posts, headline, description, version);
+            final Formatter fmt = Formatters.createHomeSiteFormatter(templateConfig, posts, headline, description, version, templateDir);
             html = fmt.format();
         } catch (final IOException | TemplateException ex) {
             throw new RuntimeException(ex);

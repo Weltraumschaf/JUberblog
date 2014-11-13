@@ -64,21 +64,22 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
     public void run() throws ApplicationException {
         watch.reset();
         final PublishedPages pages = new PublishedPages();
-        final Publisher pub = new Publisher(
-                getDirectories(),
-                getTemplateConfig(),
-                blogConfiguration().getBaseUri(),
-                pages,
-                version(),
-                blogConfiguration()
-        );
-
-        pub.setPurge(getOptions().isPurge());
-        pub.setSites(getOptions().isSites());
-        LOG.info("Start pulishing...");
-        watch.start();
 
         try {
+            final Publisher pub = new Publisher(
+                    getDirectories(),
+                    getTemplateConfig(),
+                    blogConfiguration().getBaseUri(),
+                    pages,
+                    version(),
+                    blogConfiguration(),
+                    createTemplateDir()
+            );
+
+            pub.setPurge(getOptions().isPurge());
+            pub.setSites(getOptions().isSites());
+            LOG.info("Start pulishing...");
+            watch.start();
             // TODO Write tests for this stuff here.
             pub.execute();
             updateIndexSites(pages);
@@ -87,10 +88,10 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
             // TODO Save published data in home dir.
         } catch (PublishingSubCommandExcpetion ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Error while publishing files: " + ex.getMessage(), ex);
+        } finally {
+            watch.stop();
+            LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
         }
-
-        watch.stop();
-        LOG.info(String.format("Publishing finished! Elapsed time: %s", watch.toString()));
     }
 
     @Override
@@ -110,11 +111,11 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      *
      * @param pages must not be {@code null}
      */
-    private void updateIndexSites(final PublishedPages pages) throws PublishingSubCommandExcpetion {
+    private void updateIndexSites(final PublishedPages pages) throws PublishingSubCommandExcpetion, ApplicationException {
         LOG.info("Update home site...");
 
         final String filename = "index.html";
-        final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig());
+        final HomeSiteGenerator generator = new HomeSiteGenerator(getTemplateConfig(), createTemplateDir());
         generator.setPages(pages);
         generator.setHeadline(blogConfiguration().getHeadline());
         generator.setDescription(blogConfiguration().getDescription());
@@ -134,11 +135,11 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * @param pages must not be {@code null}
      * @throws PublishingSubCommandExcpetion if site map can't be updated
      */
-    private void updateSiteMap(final PublishedPages pages) throws PublishingSubCommandExcpetion {
+    private void updateSiteMap(final PublishedPages pages) throws PublishingSubCommandExcpetion, ApplicationException {
         LOG.info("Update site map...");
 
         final String filename = "sitemap.xml";
-        final SiteMapGenerator generator = new SiteMapGenerator(getTemplateConfig(), pages);
+        final SiteMapGenerator generator = new SiteMapGenerator(getTemplateConfig(), pages, createTemplateDir());
         generator.execute();
 
         final String xml = generator.getResult();
@@ -153,11 +154,12 @@ public final class PublishSubCommand extends CommonCreateAndPublishSubCommand<Pu
      * @param pages must not be {@code null}
      * @throws PublishingSubCommandExcpetion if feed can't be updated
      */
-    private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion {
+    private void updateFeed(final PublishedPages pages) throws PublishingSubCommandExcpetion, ApplicationException {
         LOG.info("Update feed...");
 
         final String filename = "feed.xml";
-        final FeedGenerator generator = new FeedGenerator(getTemplateConfig(), pages);
+        final FeedGenerator generator;
+        generator = new FeedGenerator(getTemplateConfig(), pages, createTemplateDir());
 
         generator.setTitle(blogConfiguration().getHeadline());
         generator.setDescription(blogConfiguration().getDescription());

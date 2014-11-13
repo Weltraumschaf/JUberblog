@@ -15,6 +15,7 @@ import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,8 +39,9 @@ public class SiteMapFormatterTest {
     public SiteMapFormatterTest() throws IOException, URISyntaxException {
         super();
         sut = new SiteMapFormatter(
-                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
-                siteMap);
+                Configurations.forTests(),
+                siteMap,
+                TemplateDirectories.scaffold());
         sut.setEncoding(Constants.DEFAULT_ENCODING.toString());
     }
 

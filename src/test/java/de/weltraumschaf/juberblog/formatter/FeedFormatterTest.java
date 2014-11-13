@@ -15,6 +15,7 @@ import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.model.FeedItem;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,7 @@ public class FeedFormatterTest {
 
     public FeedFormatterTest() throws IOException, URISyntaxException {
         super();
-        sut = new FeedFormatter(Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR), feed);
+        sut = new FeedFormatter(Configurations.forTests(), feed, TemplateDirectories.scaffold());
         sut.setEncoding(Constants.DEFAULT_ENCODING.toString());
     }
 

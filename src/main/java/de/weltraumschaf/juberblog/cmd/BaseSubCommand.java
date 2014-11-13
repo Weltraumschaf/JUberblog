@@ -86,7 +86,7 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      *
      * @return never {@code null}
      */
-    protected Version version() {
+    protected final Version version() {
         return version;
     }
 
@@ -95,7 +95,8 @@ public abstract class BaseSubCommand<T extends Options> implements SubCommand<T>
      *
      * @return never {@code null}
      */
-    protected IO io() {
+    protected final IO io() {
         return io;
     }
+
 }

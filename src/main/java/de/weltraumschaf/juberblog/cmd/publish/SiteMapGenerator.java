@@ -21,6 +21,7 @@ import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -46,6 +47,7 @@ final class SiteMapGenerator implements Command {
      * used to render XML.
      */
     private final Configuration templateConfiguration;
+    private final Path templateDir;
     /**
      * Computed by {@link #execute()}.
      */
@@ -57,10 +59,11 @@ final class SiteMapGenerator implements Command {
      * @param templateConfiguration must not be {@literal null}
      * @param pages must not be {@literal null}
      */
-    public SiteMapGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
+    public SiteMapGenerator(final Configuration templateConfiguration, final PublishedPages pages, final Path templateDir) {
         super();
         this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
         this.pages = Validate.notNull(pages, "pages");
+        this.templateDir = Validate.notNull(templateDir, "templateDir");
     }
 
     @Override
@@ -101,7 +104,7 @@ final class SiteMapGenerator implements Command {
      */
     String generaeXml(final SiteMap map) throws IOException, TemplateException {
         Validate.notNull(map, "Map must not be null!");
-        final Formatter fmt = Formatters.createSiteMapFormatter(templateConfiguration, map);
+        final Formatter fmt = Formatters.createSiteMapFormatter(templateConfiguration, map, templateDir);
         fmt.setEncoding(templateConfiguration.getDefaultEncoding());
         return fmt.format();
     }

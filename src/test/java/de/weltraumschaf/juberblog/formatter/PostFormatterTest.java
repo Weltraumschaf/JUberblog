@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.formatter;
 
 import de.weltraumschaf.juberblog.Constants;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +36,9 @@ public class PostFormatterTest {
     public void format() throws IOException, URISyntaxException, TemplateException {
         final InputStream markdownFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.md");
         final PostFormatter sut = new PostFormatter(
-                Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
-                IOUtils.toString(markdownFile));
+                Configurations.forTests(),
+                IOUtils.toString(markdownFile),
+                TemplateDirectories.scaffold());
         sut.setDateFormatted("date");
         final InputStream htmlFile = getClass().getResourceAsStream(FIXTURE_PACKAGE + "/post.html");
         final String formatedHtml = sut.format();

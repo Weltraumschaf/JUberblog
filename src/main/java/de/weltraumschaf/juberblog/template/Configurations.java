@@ -11,12 +11,10 @@
  */
 package de.weltraumschaf.juberblog.template;
 
-import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.Constants;
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.TemplateExceptionHandler;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
@@ -27,11 +25,6 @@ import org.apache.log4j.Logger;
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Configurations {
-
-    /**
-     * Location of scaffold templates inside the JAR.
-     */
-    public static final String SCAFFOLD_TEMPLATE_DIR = Constants.PACKAGE_BASE.toString() + "/scaffold/templates";
 
     /**
      * Log facility.
@@ -48,13 +41,10 @@ public final class Configurations {
     /**
      * Creates a configuration with an exception handler which logs and rethrows exceptions.
      *
-     * @param templateDirectory must not be {@code null} or empty
      * @return always new instance, never {@code null}
-     * @throws IOException on ani I/O error reading the template directory
-     * @throws URISyntaxException on any URI error for template directory
      */
-    public static Configuration forTests(final String templateDirectory) throws IOException, URISyntaxException {
-        final Configuration cfg = configureTemplates(templateDirectory);
+    public static Configuration forTests()  {
+        final Configuration cfg = configureTemplates();
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.DEBUG_HANDLER);
         return cfg;
     }
@@ -62,13 +52,10 @@ public final class Configurations {
     /**
      * Creates a configuration with an exception handler which ignores template errors.
      *
-     * @param templateDirectory must not be {@code null} or empty
      * @return always new instance, never {@code null}
-     * @throws IOException on ani I/O error reading the template directory
-     * @throws URISyntaxException on any URI error for template directory
      */
-    public static Configuration forProduction(final String templateDirectory) throws IOException, URISyntaxException {
-        final Configuration cfg = configureTemplates(templateDirectory);
+    public static Configuration forProduction()  {
+        final Configuration cfg = configureTemplates();
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         return cfg;
     }
@@ -76,13 +63,10 @@ public final class Configurations {
     /**
      * Creates a configuration with an exception handler which add template errors as HTML to output.
      *
-     * @param templateDirectory must not be {@code null} or empty
      * @return always new instance, never {@code null}
-     * @throws IOException on ani I/O error reading the template directory
-     * @throws URISyntaxException on any URI error for template directory
      */
-    public static Configuration forDrafts(final String templateDirectory) throws IOException, URISyntaxException {
-        final Configuration cfg = configureTemplates(templateDirectory);
+    public static Configuration forDrafts() {
+        final Configuration cfg = configureTemplates();
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
         return cfg;
     }
@@ -95,22 +79,9 @@ public final class Configurations {
      * @throws IOException if template directory can't be read
      * @throws URISyntaxException if template directory URI can't be created from class loader
      */
-    private static Configuration configureTemplates(final String templateDirectory)
-        throws IOException, URISyntaxException {
-        Validate.notEmpty(templateDirectory, "Template directory must not be nul or empty!");
-        LOG.debug("Configure templates for directory " + templateDirectory);
-        final Configuration cfg = new Configuration();
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
+    private static Configuration configureTemplates() {
+        final Configuration cfg = FreeMarkerDown.createConfiguration();
         cfg.setDefaultEncoding(Constants.DEFAULT_ENCODING.toString());
-        cfg.setIncompatibleImprovements(Constants.FREEMARKER_VERSION);
-
-        if (templateDirectory.startsWith(Constants.PACKAGE_BASE.toString())) {
-            // Read resources via class loader for tests.
-            cfg.setDirectoryForTemplateLoading(new File(Configurations.class.getResource(templateDirectory).toURI()));
-        } else {
-            cfg.setDirectoryForTemplateLoading(new File(templateDirectory));
-        }
-
         return cfg;
     }
 

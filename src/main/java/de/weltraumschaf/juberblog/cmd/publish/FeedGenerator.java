@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Directories;
 import de.weltraumschaf.juberblog.formatter.Formatter;
 import de.weltraumschaf.juberblog.formatter.Formatters;
 import de.weltraumschaf.juberblog.model.Feed;
@@ -23,6 +24,7 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -62,6 +64,7 @@ final class FeedGenerator implements Command {
      * Pages for the feed.
      */
     private final PublishedPages pages;
+    private final Path tempateDir;
     /**
      * Feed title.
      */
@@ -93,10 +96,11 @@ final class FeedGenerator implements Command {
      * @param templateConfiguration must not be {@literal null}
      * @param pages must not be {@literal null}
      */
-    public FeedGenerator(final Configuration templateConfiguration, final PublishedPages pages) {
+    public FeedGenerator(final Configuration templateConfiguration, final PublishedPages pages, final Path  tempateDir) {
         super();
         this.templateConfiguration = Validate.notNull(templateConfiguration, "templateConfiguration");
         this.pages = Validate.notNull(pages, "pages");
+        this.tempateDir = Validate.notNull(tempateDir, "tempateDir");
     }
 
     /**
@@ -164,7 +168,7 @@ final class FeedGenerator implements Command {
         }
 
         try {
-            final Formatter fmt = Formatters.createFeedFormatter(templateConfiguration, feed);
+            final Formatter fmt = Formatters.createFeedFormatter(templateConfiguration, feed, tempateDir);
             xml = fmt.format();
         } catch (final IOException | TemplateException ex) {
             throw new RuntimeException(ex);

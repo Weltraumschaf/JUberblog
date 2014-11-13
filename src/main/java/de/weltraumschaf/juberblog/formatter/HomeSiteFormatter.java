@@ -17,6 +17,7 @@ import de.weltraumschaf.juberblog.model.Post;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -44,8 +45,8 @@ public class HomeSiteFormatter extends BaseFormatter {
      * @param version must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts, final String headline, final String description, final String version) throws IOException {
-        super(templateConfiguration, TEMPLATE, "BLA");
+    public HomeSiteFormatter(final Configuration templateConfiguration, final List<Post> posts, final String headline, final String description, final String version, final Path templateDir) throws IOException {
+        super(templateConfiguration, TEMPLATE, "BLA", templateDir);
         this.posts = Validate.notNull(posts, "posts");
         this.headline = Validate.notNull(headline, "title");
         this.description = Validate.notNull(description, "description");

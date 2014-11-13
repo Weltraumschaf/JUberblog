@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.formatter;
 
 import freemarker.template.Configuration;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * Formats a site.
@@ -34,8 +35,8 @@ class SiteFormatter extends BaseFormatter {
      * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public SiteFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
-        super(templateConfiguration, SITE_TEMPLATE, markdown);
+    public SiteFormatter(final Configuration templateConfiguration, final String markdown, final Path templateDir) throws IOException {
+        super(templateConfiguration, SITE_TEMPLATE, markdown, templateDir);
     }
 
 }

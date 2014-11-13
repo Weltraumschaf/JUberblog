@@ -61,6 +61,7 @@ final class Publisher implements Command {
      * Used for HTML generation.
      */
     private final Configuration templateConfig;
+    private final Path templateDir;
     /**
      * Base URI of the blog.
      */
@@ -120,7 +121,8 @@ final class Publisher implements Command {
             final String baseUri,
             final PublishedPages published,
             final Version version,
-            final BlogConfiguration blogConfig) {
+            final BlogConfiguration blogConfig,
+            final Path templateDir) {
         super();
         this.dirs = Validate.notNull(dirs, "dirs");
         this.templateConfig = Validate.notNull(templateConfig, "templateConfig");
@@ -128,6 +130,7 @@ final class Publisher implements Command {
         this.published = Validate.notNull(published, "published");
         this.version = Validate.notNull(version, "version");
         this.blogConfig = Validate.notNull(blogConfig, "blogConfig");
+        this.templateDir = Validate.notNull(templateDir, "templateDir");
     }
 
     /**
@@ -391,9 +394,9 @@ final class Publisher implements Command {
         final HtmlFormatter fmt;
 
         if (type == Formatters.Type.POST) {
-            fmt = Formatters.createPostFormatter(templateConfig, data.getMarkdown());
+            fmt = Formatters.createPostFormatter(templateConfig, data.getMarkdown(), templateDir);
         } else if (type == Formatters.Type.SITE) {
-            fmt = Formatters.createSiteFormatter(templateConfig, data.getMarkdown());
+            fmt = Formatters.createSiteFormatter(templateConfig, data.getMarkdown(), templateDir);
         } else {
             throw new IllegalArgumentException(String.format("Unsupported type %s!", type));
         }

@@ -19,6 +19,7 @@ import de.weltraumschaf.juberblog.model.DataFile;
 import de.weltraumschaf.juberblog.model.MetaData;
 import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.Configuration;
 import java.io.File;
 import java.io.IOException;
@@ -69,14 +70,15 @@ public class PublisherTest {
                 data.getAbsolutePath(),
                 "foo",
                 tmp.getRoot().getAbsolutePath());
-        templateConfig = Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR);
+        templateConfig = Configurations.forTests();
         sut = new Publisher(
-            dirs,
-            templateConfig,
-            "http://www.foobar.com/",
-            pages,
-            new Version("."),
-            new BlogConfiguration(new Properties()));
+                dirs,
+                templateConfig,
+                "http://www.foobar.com/",
+                pages,
+                new Version("."),
+                new BlogConfiguration(new Properties()),
+                TemplateDirectories.scaffold());
     }
 
     @Test
@@ -107,27 +109,27 @@ public class PublisherTest {
     @Test
     public void createUri() throws URISyntaxException {
         final DataFile post = new DataFile(
-            "filename",
-            "basename",
-            1L,
-            2L,
-            "slug",
-            "headline",
-            "markdown",
-            new MetaData(),
-            DataFile.Type.POST);
+                "filename",
+                "basename",
+                1L,
+                2L,
+                "slug",
+                "headline",
+                "markdown",
+                new MetaData(),
+                DataFile.Type.POST);
         assertThat(sut.createUri(post), is(URI.create("http://www.foobar.com/posts/slug.html")));
 
         final DataFile site = new DataFile(
-            "filename",
-            "basename",
-            1L,
-            2L,
-            "slug",
-            "headline",
-            "markdown",
-            new MetaData(),
-            DataFile.Type.SITE);
+                "filename",
+                "basename",
+                1L,
+                2L,
+                "slug",
+                "headline",
+                "markdown",
+                new MetaData(),
+                DataFile.Type.SITE);
         assertThat(sut.createUri(site), is(URI.create("http://www.foobar.com/sites/slug.html")));
     }
 

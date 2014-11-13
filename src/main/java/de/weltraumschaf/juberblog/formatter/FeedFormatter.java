@@ -17,10 +17,9 @@ import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.model.Feed;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 /**
  * Formats an RSS feed.
@@ -50,12 +49,12 @@ class FeedFormatter implements Formatter {
      * @param feed must not be {@literal nul}
      * @throws IOException on any template IO error
      */
-    public FeedFormatter(final Configuration templateConfiguration, final Feed feed) throws IOException {
+    public FeedFormatter(final Configuration templateConfiguration, final Feed feed, final Path templateDir) throws IOException {
         super();
         Validate.notNull(templateConfiguration, "Template configuration must not be null!");
         fmd = FreeMarkerDown.create(templateConfiguration);
         Validate.notNull(feed, "Feedmust not be null!");
-        content = fmd.createFragemnt(Paths.get(TEMPLATE));
+        content = fmd.createFragemnt(templateDir.resolve(TEMPLATE));
         content.assignVariable(VarName.ENCODING.toString(), templateConfiguration.getDefaultEncoding());
         this.feed = feed;
     }

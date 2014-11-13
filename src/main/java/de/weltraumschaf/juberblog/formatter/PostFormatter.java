@@ -16,6 +16,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,8 +56,8 @@ class PostFormatter extends BaseFormatter {
      * @param markdown must not be {@code null}
      * @throws IOException if template file can't be read
      */
-    public PostFormatter(final Configuration templateConfiguration, final String markdown) throws IOException {
-        super(templateConfiguration, TEMPLATE, markdown);
+    public PostFormatter(final Configuration templateConfiguration, final String markdown, final Path templateDir) throws IOException {
+        super(templateConfiguration, TEMPLATE, markdown, templateDir);
         content.assignVariable(VarName.FEATURES.toString(), FEATURES);
         VarName.initializeVaribales(content, GLOBAL_VARIABLE_NAMES);
     }

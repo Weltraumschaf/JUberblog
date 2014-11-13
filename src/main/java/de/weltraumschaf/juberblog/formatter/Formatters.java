@@ -11,14 +11,12 @@
  */
 package de.weltraumschaf.juberblog.formatter;
 
-import de.weltraumschaf.juberblog.BlogConfiguration;
 import de.weltraumschaf.juberblog.model.Feed;
-import de.weltraumschaf.juberblog.model.Page;
 import de.weltraumschaf.juberblog.model.Post;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import freemarker.template.Configuration;
 import java.io.IOException;
-import java.util.Collection;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -45,8 +43,9 @@ public final class Formatters {
      */
     public static HtmlFormatter createSiteFormatter(
         final Configuration templateConfiguration,
-        final String markdown) throws IOException {
-        return new SiteFormatter(templateConfiguration, markdown);
+        final String markdown,
+        final Path templateDir) throws IOException {
+        return new SiteFormatter(templateConfiguration, markdown, templateDir);
     }
 
     /**
@@ -59,8 +58,9 @@ public final class Formatters {
      */
     public static HtmlFormatter createPostFormatter(
         final Configuration templateConfiguration,
-        final String markdown) throws IOException {
-        return new PostFormatter(templateConfiguration, markdown);
+        final String markdown,
+        final Path templateDir) throws IOException {
+        return new PostFormatter(templateConfiguration, markdown, templateDir);
     }
 
     /**
@@ -73,8 +73,9 @@ public final class Formatters {
      */
     public static Formatter createFeedFormatter(
         final Configuration templateConfiguration,
-        final Feed feed) throws IOException {
-        return new FeedFormatter(templateConfiguration, feed);
+        final Feed feed,
+        final Path dirs) throws IOException {
+        return new FeedFormatter(templateConfiguration, feed, dirs);
     }
 
     /**
@@ -87,8 +88,9 @@ public final class Formatters {
      */
     public static Formatter createSiteMapFormatter(
         final Configuration templateConfiguration,
-        final SiteMap siteMap) throws IOException {
-        return new SiteMapFormatter(templateConfiguration, siteMap);
+        final SiteMap siteMap,
+        final Path templateDir) throws IOException {
+        return new SiteMapFormatter(templateConfiguration, siteMap, templateDir);
     }
 
     /**
@@ -100,8 +102,8 @@ public final class Formatters {
      * @throws IOException on any template or markdown IO error
      */
     public static Formatter createHomeSiteFormatter(
-        final Configuration templateConfiguration, final List<Post> pages, final String headline, final String description, final String version) throws IOException {
-        return new HomeSiteFormatter(templateConfiguration, pages, headline, description, version);
+        final Configuration templateConfiguration, final List<Post> pages, final String headline, final String description, final String version, final Path templateDir) throws IOException {
+        return new HomeSiteFormatter(templateConfiguration, pages, headline, description, version, templateDir);
     }
 
     /**

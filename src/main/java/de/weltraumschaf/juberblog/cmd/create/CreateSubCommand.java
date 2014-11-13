@@ -73,8 +73,7 @@ public final class CreateSubCommand extends CommonCreateAndPublishSubCommand<Cre
 
         try {
             final FreeMarkerDown fmd = FreeMarkerDown.create();
-//            final Template tpl = new Template(getTemplateConfig(), TEMPLATE);
-            final Fragment tpl = fmd.createFragemnt(Paths.get(TEMPLATE));
+            final Fragment tpl = fmd.createFragemnt(createTemplateDir().resolve(TEMPLATE));
             tpl.assignVariable("title", title);
             final String content = fmd.render(tpl, Options.WITHOUT_MARKDOWN);
 

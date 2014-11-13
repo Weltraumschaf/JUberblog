@@ -18,6 +18,7 @@ import de.weltraumschaf.juberblog.model.PublishedPages;
 import de.weltraumschaf.juberblog.model.SiteMap;
 import de.weltraumschaf.juberblog.model.SiteMapUrl;
 import de.weltraumschaf.juberblog.template.Configurations;
+import de.weltraumschaf.juberblog.template.TemplateDirectories;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.net.URI;
@@ -45,15 +46,16 @@ public class SiteMapGeneratorTest {
 
     private final PublishedPages pages = new PublishedPages();
     private final SiteMapGenerator sut = new SiteMapGenerator(
-            Configurations.forTests(Configurations.SCAFFOLD_TEMPLATE_DIR),
-            pages);
+            Configurations.forTests(),
+            pages,
+            TemplateDirectories.scaffold());
 
     private final DataFile dummy1 = new DataFile(
-        "file1", "file1", 1L, 1L, "file1", "file1", "md", new MetaData(), DataFile.Type.SITE);
+            "file1", "file1", 1L, 1L, "file1", "file1", "md", new MetaData(), DataFile.Type.SITE);
     private final DataFile dummy2 = new DataFile(
-        "file2", "file2", 2L, 2L, "file2", "file2", "md", new MetaData(), DataFile.Type.SITE);
+            "file2", "file2", 2L, 2L, "file2", "file2", "md", new MetaData(), DataFile.Type.SITE);
     private final DataFile dummy3 = new DataFile(
-        "file3", "file3", 3L, 3L, "file2", "file3", "md", new MetaData(), DataFile.Type.SITE);
+            "file3", "file3", 3L, 3L, "file2", "file3", "md", new MetaData(), DataFile.Type.SITE);
 
     public SiteMapGeneratorTest() throws IOException, URISyntaxException {
         super();

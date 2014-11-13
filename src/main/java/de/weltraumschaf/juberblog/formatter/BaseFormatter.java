@@ -20,6 +20,7 @@ import de.weltraumschaf.juberblog.template.VarName;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -68,14 +69,14 @@ abstract class BaseFormatter implements HtmlFormatter {
      * @param markdown  must not be {@literal null}
      * @throws IOException if template file can't be read
      */
-    public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate, final String markdown)
+    public BaseFormatter(final Configuration templateConfiguration, final String contentTemplate, final String markdown, final Path templateDir)
         throws IOException {
         super();
         Validate.notNull(templateConfiguration, "templateConfiguration");
         fmd = FreeMarkerDown.create(templateConfiguration);
         Validate.notEmpty(contentTemplate, "contentTemplate");
-        this.content = fmd.createLayout(Paths.get(contentTemplate));
-        this.layout = fmd.createLayout(Paths.get(LAYOUT_TEMPLATE));
+        this.content = fmd.createLayout(templateDir.resolve(contentTemplate));
+        this.layout = fmd.createLayout(templateDir.resolve(LAYOUT_TEMPLATE));
         this.layout.assignTemplateModel(VarName.CONTENT.toString(), content);
         this.markdown = Validate.notNull(markdown, "markdown");
     }

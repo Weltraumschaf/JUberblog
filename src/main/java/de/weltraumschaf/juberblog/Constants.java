@@ -12,7 +12,6 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.validate.Validate;
-import freemarker.template.Version;
 
 /**
  * Contains global constants.
@@ -65,28 +64,6 @@ public enum Constants {
      * Name of drafts sub directory.
      */
     DRAFTS_DIR("drafts");
-
-    /**
-     * Major version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MAJOR_VERSION = 2;
-    /**
-     * Minor version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MINOR_VERSION = 3;
-    /**
-     * Mini version of Freemarker template engine.
-     */
-    private static final int FREEMARKER_MINI_VERSION = 20;
-    /**
-     * Used Freemarker version.
-     */
-    //CHECKSTYLE:OFF Must be declared after private numbers.
-    public static final Version FREEMARKER_VERSION = new Version(
-            FREEMARKER_MAJOR_VERSION,
-            FREEMARKER_MINOR_VERSION,
-            FREEMARKER_MINI_VERSION);
-    //CHECKSTYLE:ON
 
     /**
      * Constant value.
