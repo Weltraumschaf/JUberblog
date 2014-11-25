@@ -87,7 +87,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>de.weltraumschaf</groupId>
+            <artifactId>freemarkerdown</artifactId>
+            <version>1.0.0-alpha</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -228,7 +232,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
