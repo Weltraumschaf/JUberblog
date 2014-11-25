@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,10 +49,12 @@ final class Publisher2 implements Command {
     @Override
     public void execute() throws PublishingSubCommandExcpetion {
         if (options.isPublishSites()) {
+            //  TODO add drafts here.
             published.put(publishSites());
         }
 
         if (options.isPublishPages()) {
+            //  TODO add drafts here.
             published.put(publisPosts());
         }
     }
@@ -76,13 +79,7 @@ final class Publisher2 implements Command {
      * @throws IOException if data files can't be read
      */
     Collection<Path> readSitesData() throws IOException {
-        final Collection<Path> sitesData = Lists.newArrayList();
-
-        for (final File f : options.getDirs().dataSites().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            sitesData.add(f.toPath());
-        }
-
-        return sitesData;
+        return readData(options.getDirs().dataSites());
     }
 
     private Collection<Page> publisPosts() throws PublishingSubCommandExcpetion {
@@ -105,28 +102,43 @@ final class Publisher2 implements Command {
      * @throws IOException if data files can't be read
      */
     Collection<Path> getPostsData() throws IOException {
-        final Collection<Path> postsData = Lists.newArrayList();
+        return readData(options.getDirs().dataPosts());
+    }
 
-        for (final File f : options.getDirs().dataPosts().toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
-            postsData.add(f.toPath());
+    Collection<Path> readData(final Path from) throws IOException {
+        final Collection<Path> data = Lists.newArrayList();
+
+        for (final File f : from.toFile().listFiles(FilenameFilters.findMarkdownFiles())) {
+            data.add(f.toPath());
         }
 
-        return postsData;
+        return data;
     }
 
     /**
      * Publish all files in given directory with given layout.
      *
      * @param type must not be {@literal null}
-     * @param data must not be {@literal null}
+     * @param files must not be {@literal null}
      * @param outputDir must not be {@literal null}
      * @return never {@code null}
      * @throws PublishingSubCommandExcpetion if can't render template
      */
     private Collection<Page> publishFiles(final Formatters.Type type,
-            final Collection<Path> data,
+            final Collection<Path> files,
             final Path outputDir)
             throws PublishingSubCommandExcpetion {
+        final Collection<Page> done = Lists.newArrayList();
+
+        for (final Path file : files) {
+            done.add(publishFile(type, file, outputDir));
+        }
+
+        return done;
+    }
+
+    private Page publishFile(final Formatters.Type type, final Path file, final Path outputDir) {
         return null;
     }
+
 }
