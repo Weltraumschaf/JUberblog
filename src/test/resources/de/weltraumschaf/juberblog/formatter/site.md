@@ -1,3 +1,0 @@
-# A Site
-
-Some text.

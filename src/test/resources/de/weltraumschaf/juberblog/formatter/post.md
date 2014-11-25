@@ -1,3 +1,0 @@
-# A Post
-
-Some text.
