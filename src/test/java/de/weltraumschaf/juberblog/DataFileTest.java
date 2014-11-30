@@ -9,13 +9,26 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
+
 package de.weltraumschaf.juberblog;
 
+import java.net.URISyntaxException;
+import org.junit.Test;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
 /**
- * Tests for {@link App}.
+ * Tests for {@link DataFile}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class AppTest extends JUberblogTestCase {
+public class DataFileTest extends JUberblogTestCase {
+
+    @Test
+    public void getBareName() throws URISyntaxException {
+        final DataFile sut = new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString());
+
+        assertThat(sut.getBareName(), is("This-is-the-First-Post"));
+    }
 
 }
