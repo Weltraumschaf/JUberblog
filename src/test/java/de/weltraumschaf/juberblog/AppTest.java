@@ -42,11 +42,11 @@ public class AppTest {
     }
 
     @Test
-    public void testSomeMethod() throws URISyntaxException, UnsupportedEncodingException, IOException {
+    public void Renderer_render() throws URISyntaxException, UnsupportedEncodingException, IOException {
         // http://www.adam-bien.com/roller/abien/entry/listing_directory_contents_with_jdk
         final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"));
 
-        final String html = renderer.render(createPath("2014-05-30T21.29.20_This-is-the-First-Post.md"));
+        final String html = renderer.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
         assertThat(html, is(
                 "<!DOCTYPE html>\n"
