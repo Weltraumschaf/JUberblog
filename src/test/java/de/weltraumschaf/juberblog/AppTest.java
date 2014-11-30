@@ -34,7 +34,10 @@ import java.util.Objects;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests for {@link App}.
@@ -43,6 +46,10 @@ import org.junit.Test;
  */
 public class AppTest {
 
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
+
+    private static final String ENCODING = "utf-8";
     private static final String BASE = "/de/weltraumschaf/juberblog/";
 
     private Path createPath(final String name) throws URISyntaxException {
@@ -51,7 +58,7 @@ public class AppTest {
 
     @Test
     public void Renderer_render() throws URISyntaxException, UnsupportedEncodingException, IOException {
-        final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"));
+        final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"), ENCODING);
 
         final String html = renderer.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
@@ -74,8 +81,10 @@ public class AppTest {
     }
 
     @Test
-    public void findFiles() throws URISyntaxException, IOException {
-        final Collection<DataFile> foundFiles = new MarkdownFilesFinder().find(createPath("posts"));
+    public void MarkdownFilesFinder_findFiles() throws URISyntaxException, IOException {
+        final FilesFinder sut = new FilesFinder(FileNameExtension.MARKDOWN);
+
+        final Collection<DataFile> foundFiles = sut.find(createPath("posts"));
 
         assertThat(foundFiles.size(), is(3));
         assertThat(foundFiles, containsInAnyOrder(
@@ -85,23 +94,52 @@ public class AppTest {
         ));
     }
 
+    @Test
+    public void DataFile_getBareName() throws URISyntaxException {
+        final DataFile sut = new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString());
+
+        assertThat(sut.getBareName(), is("This-is-the-First-Post"));
+    }
+
+    @Test
+    public void Publisher_publishPosts() throws URISyntaxException, IOException {
+        final Publisher sut = new Publisher(
+                createPath("posts"),
+                tmp.getRoot().toPath(),
+                createPath("layout.ftl"),
+                createPath("post.ftl"),
+                ENCODING
+        );
+
+        sut.publish();
+
+        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
+        assertThat(foundFiles.size(), is(3));
+        assertThat(foundFiles, containsInAnyOrder(
+                new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html"),
+                new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html"),
+                new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html")
+        ));
+    }
+
     final static class Renderer {
 
-        private static final String ENCODING = "utf-8";
+        private final String encoding;
 
         private final FreeMarkerDown fmd = FreeMarkerDown.create();
         private final Layout outerTemplate;
         private final Layout innerTemplate;
 
-        public Renderer(final Path outerTemplate, final Path innerTemplate) throws IOException {
+        public Renderer(final Path outerTemplate, final Path innerTemplate, final String encoding) throws IOException {
             super();
-            this.outerTemplate = fmd.createLayout(outerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
-            this.innerTemplate = fmd.createLayout(innerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
+            this.encoding = Validate.notEmpty(encoding, "encoding");
+            this.outerTemplate = fmd.createLayout(outerTemplate, encoding, Options.WITHOUT_MARKDOWN);
+            this.innerTemplate = fmd.createLayout(innerTemplate, encoding, Options.WITHOUT_MARKDOWN);
             this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
         }
 
         String render(final Path content) throws IOException {
-            innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, ENCODING));
+            innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, encoding));
             outerTemplate.assignVariable("name", "NAME");
             outerTemplate.assignVariable("description", "DESCRIPTION");
 
@@ -120,6 +158,16 @@ public class AppTest {
         DataFile(final String absoluteFileName) {
             super();
             this.absoluteFileName = Validate.notEmpty(absoluteFileName, "absoluteFileName");
+        }
+
+        Path getPath() {
+            return Paths.get(absoluteFileName);
+        }
+
+        String getBareName() {
+            final int firstDashPosition = absoluteFileName.lastIndexOf("_");
+            final int lastDotPosition = absoluteFileName.lastIndexOf(".");
+            return absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
         }
 
         @Override
@@ -145,14 +193,18 @@ public class AppTest {
 
     }
 
-    final static class MarkdownFilesFinder {
+    final static class FilesFinder {
 
-        private static final MarkdownFileFinder FILTER = new MarkdownFileFinder();
+        private final FileFilter filter;
+
+        FilesFinder(final FileNameExtension type) {
+            filter = new FileFilter(type);
+        }
 
         Collection<DataFile> find(final Path directory) throws IOException {
             final List<DataFile> foundFiles = new ArrayList<>();
 
-            try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory, FILTER)) {
+            try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory, filter)) {
                 for (final Path path : directoryStream) {
                     foundFiles.add(new DataFile(path.toString()));
                 }
@@ -161,12 +213,66 @@ public class AppTest {
             return Collections.unmodifiableList(foundFiles);
         }
 
-        private static final class MarkdownFileFinder implements DirectoryStream.Filter<Path> {
+        private static final class FileFilter implements DirectoryStream.Filter<Path> {
+
+            private final FileNameExtension type;
+
+            FileFilter(final FileNameExtension type) {
+                super();
+                this.type = type;
+            }
 
             @Override
             public boolean accept(final Path file) throws IOException {
-                return file.toString().endsWith(".md");
+                return file.toString().endsWith(type.getExtension());
             }
         }
+    }
+
+    enum FileNameExtension {
+
+        MARKDOWN(".md"), HTML(".html");
+
+        private final String extension;
+
+        private FileNameExtension(final String fileNameExtension) {
+            this.extension = Validate.notEmpty(fileNameExtension, "fileNameExtension");
+        }
+
+        String getExtension() {
+            return extension;
+        }
+
+    }
+
+    final static class Publisher {
+
+        private final FilesFinder finder = new FilesFinder(FileNameExtension.MARKDOWN);
+        private final Path inputDir;
+        private final Path outputDir;
+        private final String encoding;
+        private final Renderer renderer;
+
+        Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding) throws IOException {
+            super();
+            this.inputDir = Validate.notNull(inputDir, "inputDir");
+            this.outputDir = Validate.notNull(outputDir, "outputDir");
+            this.renderer = new Renderer(
+                    Validate.notNull(layoutTemplateFile, "layoutTemplateFile"),
+                    Validate.notNull(postTemplateFile, "postTemplateFile"),
+                    encoding
+            );
+            this.encoding = Validate.notEmpty(encoding, "encoding");
+        }
+
+        void publish() throws IOException {
+            for (final DataFile foundPostData : finder.find(inputDir)) {
+                Files.write(
+                        outputDir.resolve(foundPostData.getBareName() + FileNameExtension.HTML.getExtension()),
+                        renderer.render(foundPostData.getPath()).getBytes(encoding)
+                );
+            }
+        }
+
     }
 }
