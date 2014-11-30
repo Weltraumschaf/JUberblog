@@ -12,7 +12,6 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.guava.Maps;
-import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.freemarkerdown.Options;
@@ -21,8 +20,12 @@ import de.weltraumschaf.freemarkerdown.PreProcessors;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -43,7 +46,6 @@ public class AppTest {
 
     @Test
     public void Renderer_render() throws URISyntaxException, UnsupportedEncodingException, IOException {
-        // http://www.adam-bien.com/roller/abien/entry/listing_directory_contents_with_jdk
         final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"));
 
         final String html = renderer.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
@@ -66,6 +68,27 @@ public class AppTest {
                 + "</html>"));
     }
 
+    @Test
+    public void findFiles() throws URISyntaxException {
+        final DirectoryStream.Filter<Path> filter = new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(final Path file) throws IOException {
+                return file.toString().endsWith(".md");
+            }
+        };
+
+        final List<String> fileNames = new ArrayList<>();
+
+        try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(createPath("posts"), filter)) {
+            for (final Path path : directoryStream) {
+                fileNames.add(path.toString());
+            }
+        } catch (IOException ex) {
+        }
+
+        assertThat(fileNames.size(), is(3));
+    }
+
     final class Renderer {
 
         private static final String ENCODING = "utf-8";
@@ -74,7 +97,7 @@ public class AppTest {
         private final Layout outerTemplate;
         private final Layout innerTemplate;
 
-        public Renderer(final Path outerTemplate, final Path  innerTemplate) throws IOException {
+        public Renderer(final Path outerTemplate, final Path innerTemplate) throws IOException {
             super();
             this.outerTemplate = fmd.createLayout(outerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
             this.innerTemplate = fmd.createLayout(innerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
