@@ -90,7 +90,7 @@
         <dependency>
             <groupId>de.weltraumschaf</groupId>
             <artifactId>freemarkerdown</artifactId>
-            <version>1.0.0-beta-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

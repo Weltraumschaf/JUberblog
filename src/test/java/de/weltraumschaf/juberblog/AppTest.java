@@ -36,7 +36,6 @@ import org.junit.Test;
 public class AppTest {
 
     private static final String BASE = "/de/weltraumschaf/juberblog/";
-    private static final String ENCODING = "utf-8";
 
     private Path createPath(final String name) throws URISyntaxException {
         return Paths.get(getClass().getResource(BASE + name).toURI());
@@ -44,23 +43,12 @@ public class AppTest {
 
     @Test
     public void testSomeMethod() throws URISyntaxException, UnsupportedEncodingException, IOException {
-        final FreeMarkerDown fmd = FreeMarkerDown.create();
+        // http://www.adam-bien.com/roller/abien/entry/listing_directory_contents_with_jdk
+        final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"));
 
-        final Fragment content = fmd.createFragemnt(createPath("2014-05-30T21.29.20_This-is-the-First-Post.md"), ENCODING);
+        final String html = renderer.render(createPath("2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
-        final Layout post = fmd.createLayout(createPath("post.ftl"), ENCODING, Options.WITHOUT_MARKDOWN);
-        post.assignTemplateModel("content", content);
-
-        final Layout layout = fmd.createLayout(createPath("layout.ftl"), ENCODING, Options.WITHOUT_MARKDOWN);
-        layout.assignVariable("name", "NAME");
-        layout.assignVariable("description", "DESCRIPTION");
-        layout.assignTemplateModel("content", post);
-
-        final Map<String, String> keyValues = Maps.newHashMap();
-        final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
-        fmd.register(processor);
-
-        assertThat(fmd.render(layout), is(
+        assertThat(html, is(
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
@@ -76,6 +64,34 @@ public class AppTest {
                 + "</article>\n"
                 + "    </body>\n"
                 + "</html>"));
+    }
+
+    final class Renderer {
+
+        private static final String ENCODING = "utf-8";
+
+        private final FreeMarkerDown fmd = FreeMarkerDown.create();
+        private final Layout outerTemplate;
+        private final Layout innerTemplate;
+
+        public Renderer(final Path outerTemplate, final Path  innerTemplate) throws IOException {
+            super();
+            this.outerTemplate = fmd.createLayout(outerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
+            this.innerTemplate = fmd.createLayout(innerTemplate, ENCODING, Options.WITHOUT_MARKDOWN);
+            this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
+        }
+
+        String render(final Path content) throws IOException {
+            innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, ENCODING));
+            outerTemplate.assignVariable("name", "NAME");
+            outerTemplate.assignVariable("description", "DESCRIPTION");
+
+            final Map<String, String> keyValues = Maps.newHashMap();
+            final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
+            fmd.register(processor);
+
+            return fmd.render(outerTemplate);
+        }
     }
 
 }
