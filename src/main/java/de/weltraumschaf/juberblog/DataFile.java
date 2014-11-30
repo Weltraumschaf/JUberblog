@@ -12,6 +12,8 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.validate.Validate;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -37,6 +39,10 @@ final class DataFile {
         final int firstDashPosition = absoluteFileName.lastIndexOf("_");
         final int lastDotPosition = absoluteFileName.lastIndexOf(".");
         return absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
+    }
+
+    String readContent(final String encoding) throws IOException {
+        return new String(Files.readAllBytes(getPath()), encoding);
     }
 
     @Override

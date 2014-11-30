@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import java.io.IOException;
@@ -45,11 +44,62 @@ public class PublisherTest extends JUberblogTestCase {
 
         final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(3));
-        assertThat(foundFiles, containsInAnyOrder(
-                new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html"),
-                new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html"),
-                new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html")
-        ));
+        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html");
+        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html");
+        final DataFile expectedThree = new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html");
+        assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree));
+        assertThat(
+                expectedOne.readContent(ENCODING),
+                is("<!DOCTYPE html>\n"
+                        + "<html>\n"
+                        + "    <body>\n"
+                        + "        <h1>NAME</h1>\n"
+                        + "        <h2>DESCRIPTION</h2>\n"
+                        + "\n"
+                        + "        <article>\n"
+                        + "    <h3>This is the First Post</h3>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>\n"
+                        + "</article>\n"
+                        + "    </body>\n"
+                        + "</html>"));
+        assertThat(
+                expectedTwo.readContent(ENCODING),
+                is("<!DOCTYPE html>\n"
+                        + "<html>\n"
+                        + "    <body>\n"
+                        + "        <h1>NAME</h1>\n"
+                        + "        <h2>DESCRIPTION</h2>\n"
+                        + "\n"
+                        + "        <article>\n"
+                        + "    <h3>This is the Second Post</h3>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>\n"
+                        + "</article>\n"
+                        + "    </body>\n"
+                        + "</html>"));
+        assertThat(
+                expectedThree.readContent(ENCODING),
+                is("<!DOCTYPE html>\n"
+                        + "<html>\n"
+                        + "    <body>\n"
+                        + "        <h1>NAME</h1>\n"
+                        + "        <h2>DESCRIPTION</h2>\n"
+                        + "\n"
+                        + "        <article>\n"
+                        + "    <h3>This is the Third Post</h3>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>"
+                        + "<p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor "
+                        + "invidunt ut labore et dolore magna aliquyam.</p>\n"
+                        + "</article>\n"
+                        + "    </body>\n"
+                        + "</html>")
+        );
     }
 
 }
