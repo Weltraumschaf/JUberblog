@@ -11,23 +11,29 @@
  */
 package de.weltraumschaf.juberblog.tasks;
 
-import com.beust.jcommander.internal.Lists;
+import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.DateFormatter;
 import de.weltraumschaf.juberblog.DateFormatter.Format;
+import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class GenerateFeedTask implements Task<Void> {
+public final class GenerateFeedTask implements Task<Void, List<Page>> {
 
     private final Config config;
 
@@ -38,6 +44,11 @@ public final class GenerateFeedTask implements Task<Void> {
 
     @Override
     public Void execute() throws Exception {
+        return execute(Collections.<Page>emptyList());
+    }
+
+    @Override
+    public Void execute(final List<Page> previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create();
         final Fragment template = fmd.createFragemnt(config.template, RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable("encoding", config.encoding);
@@ -48,7 +59,7 @@ public final class GenerateFeedTask implements Task<Void> {
         template.assignVariable(
                 "lastBuildDate",
                 DateFormatter.format(config.lastBuildDate, Format.RSS_PUBLISH_DATE_FORMAT));
-        template.assignVariable("items", Lists.newArrayList());
+        template.assignVariable("items", convert(previusResult));
 
         Files.write(
                 config.outputDir.resolve("feed" + FileNameExtension.XML.getExtension()),
@@ -56,6 +67,27 @@ public final class GenerateFeedTask implements Task<Void> {
         );
 
         return null;
+    }
+
+    private Collection<Map<String, String>> convert(final List<Page> pages) {
+        // TODO Sort pages from old to new.
+        final Collection<Map<String, String>> items = Lists.newArrayList();
+
+        for (final Page page : pages) {
+            items.add(convert(page));
+        }
+
+        return Collections.unmodifiableCollection(items);
+    }
+
+    private Map<String, String> convert(final Page page) {
+        final Map<String, String> item = Maps.newHashMap();
+        item.put("title", page.getTitle());
+        item.put("link", page.getLink());
+        item.put("description", page.getDescription());
+        item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
+        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_DC_DATE_FORMAT));
+        return Collections.unmodifiableMap(item);
     }
 
     public static final class Config {

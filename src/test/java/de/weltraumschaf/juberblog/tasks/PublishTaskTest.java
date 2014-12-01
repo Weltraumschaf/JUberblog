@@ -39,7 +39,7 @@ public class PublishTaskTest extends JUberblogTestCase {
 
     @Test
     public void execute() throws Exception {
-        final Task<Void> sut = new PublishTask(new PublishTask.Config(
+        final PublishTask sut = new PublishTask(new PublishTask.Config(
                 ENCODING,
                 createPath("sites"),
                 tmp.getRoot().toPath(),

@@ -16,8 +16,9 @@ package de.weltraumschaf.juberblog.tasks;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public interface Task<R> {
+public interface Task<R, P> {
 
     R execute() throws Exception;
+    R execute(P previusResult) throws Exception;
 
 }

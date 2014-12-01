@@ -14,13 +14,17 @@ package de.weltraumschaf.juberblog.tasks;
 import de.weltraumschaf.juberblog.DateFormatter;
 import de.weltraumschaf.juberblog.DateFormatter.Format;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinder;
+import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -34,6 +38,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
+    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
 
     @Test(expected = NullPointerException.class)
     public void constructWithNullThrowsException() {
@@ -41,16 +46,16 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
     }
 
     @Test
-    public void execute() throws Exception {
-        final DateTime now = new DateTime();
-        final Task<Void> sut = new GenerateFeedTask(new GenerateFeedTask.Config(
+    public void execute_noPages() throws Exception {
+        final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
                 createPath("feed.ftl"),
                 tmp.getRoot().toPath(),
                 ENCODING,
                 "title",
                 "link",
                 "description",
-                "language", now));
+                "language",
+                DateTime.parse("01.12.2014", formatter)));
 
         sut.execute();
 
@@ -71,8 +76,59 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 + "        <link>link</link>\n"
                 + "        <description>description</description>\n"
                 + "        <language>language</language>\n"
-                + "        <lastBuildDate>" + DateFormatter.format(now, Format.RSS_PUBLISH_DATE_FORMAT) + "</lastBuildDate>\n"
+                + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
                 + "    </channel>\n"
+                + "</rss>"));
+    }
+
+    @Test
+    public void execute_twoPages() throws Exception {
+        final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
+                createPath("feed.ftl"),
+                tmp.getRoot().toPath(),
+                ENCODING,
+                "title",
+                "link",
+                "description",
+                "language",
+                DateTime.parse("01.12.2014", formatter)));
+        sut.execute(Arrays.asList(
+                new Page("title1", "link1", "desc1", DateTime.parse("29.11.2014", formatter)),
+                new Page("title2", "link2", "desc2", DateTime.parse("30.11.2014", formatter))));
+
+        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.XML)
+                .find(tmp.getRoot().toPath());
+        assertThat(foundFiles.size(), is(1));
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
+        assertThat(foundFiles, containsInAnyOrder(expectedFile));
+        assertThat(expectedFile.readContent(ENCODING), is(
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
+                + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
+                + "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+                + "     version=\"2.0\"\n"
+                + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
+                + "    <channel>\n"
+                + "        <title>title</title>\n"
+                + "        <link>link</link>\n"
+                + "        <description>description</description>\n"
+                + "        <language>language</language>\n"
+                + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
+                + "        <item>\n"
+                + "            <title>title1</title>\n"
+                + "            <link>link1</link>\n"
+                + "            <description>desc1</description>\n"
+                + "            <pubDate>Sat, 29 Nov 2014 00:00:00 +0100</pubDate>\n"
+                + "            <dc:date>2014-11-29T00:00:00+01:00</dc:date>\n"
+                + "        </item>\n"
+                + "        <item>\n"
+                + "            <title>title2</title>\n"
+                + "            <link>link2</link>\n"
+                + "            <description>desc2</description>\n"
+                + "            <pubDate>Sun, 30 Nov 2014 00:00:00 +0100</pubDate>\n"
+                + "            <dc:date>2014-11-30T00:00:00+01:00</dc:date>\n"
+                + "        </item>\n "
+                + "   </channel>\n"
                 + "</rss>"));
     }
 

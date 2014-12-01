@@ -37,18 +37,23 @@ public class DateFormatter {
 
     /**
      * Predefined format patterns.
+     *
+     * See http://www.joda.org/joda-time/key_format.html
      */
     public enum Format {
 
         /**
          * Publishing date format for RSS files.
-         *
-         * See http://www.joda.org/joda-time/key_format.html
+         *//**
+         * Publishing date format for RSS files.
          */
-        RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z");
-
+        RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z"),
         /**
-         * T
+         * DC publishing date format.
+         */
+        RSS_DC_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ssZZ");
+        /**
+         * USed to format date time.
          */
         private final DateTimeFormatter formatter;
 
@@ -61,6 +66,11 @@ public class DateFormatter {
             this.formatter = DateTimeFormat.forPattern(Validate.notEmpty(pattern, "pattern"));
         }
 
+        /**
+         * Get the formatter.
+         *
+         * @return never {@code null}
+         */
         private DateTimeFormatter getFormatter() {
             return formatter;
         }

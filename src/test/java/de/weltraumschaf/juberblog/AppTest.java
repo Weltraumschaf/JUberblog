@@ -41,12 +41,12 @@ public class AppTest extends JUberblogTestCase {
     public void publishing() throws Exception {
         final TaskExecutor executor = new TaskExecutor();
         executor.append(new PublishTask(new PublishTask.Config(
-                                        ENCODING,
-                                        createPath("posts"),
-                                        tmp.getRoot().toPath(),
-                                        createPath("layout.ftl"),
-                                        createPath("post.ftl")
-                                )))
+                ENCODING,
+                createPath("posts"),
+                tmp.getRoot().toPath(),
+                createPath("layout.ftl"),
+                createPath("post.ftl")
+        )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         createPath("feed.ftl"),
                                         tmp.getRoot().toPath(),
@@ -82,21 +82,31 @@ public class AppTest extends JUberblogTestCase {
                         new DataFile(tmp.getRoot().toString() + "/feed.xml")));
     }
 
-    class GenerateIndexTask implements Task<Void> {
+    class GenerateIndexTask implements Task<Void, Void> {
 
         @Override
         public Void execute() throws Exception {
             // TODO Implement index generation.
             return null;
         }
+
+        @Override
+        public Void execute(Void previusResult) throws Exception {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 
-    class GenerateSitemapTask implements Task<Void> {
+    class GenerateSitemapTask implements Task<Void, Void> {
 
         @Override
         public Void execute() throws Exception {
             // TODO Implement site map generation.
             return null;
+        }
+
+        @Override
+        public Void execute(Void previusResult) throws Exception {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 

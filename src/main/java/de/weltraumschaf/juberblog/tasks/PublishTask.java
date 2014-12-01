@@ -19,7 +19,7 @@ import java.nio.file.Path;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class PublishTask implements Task<Void> {
+public final class PublishTask implements Task<Void, Void> {
 
     private final Config config;
 
@@ -39,6 +39,11 @@ public final class PublishTask implements Task<Void> {
         );
         publisher.publish();
         return null;
+    }
+
+    @Override
+    public Void execute(final Void previusResult) throws Exception {
+        return execute();
     }
 
     public static final class Config {
