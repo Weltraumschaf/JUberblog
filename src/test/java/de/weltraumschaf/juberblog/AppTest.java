@@ -21,6 +21,7 @@ import de.weltraumschaf.juberblog.tasks.TaskExecutor;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class AppTest extends JUberblogTestCase {
                                         "link",
                                         "description",
                                         "language",
-                                        "lastBuildDate"
+                                        new DateTime()
                                 )))
                 .append(new PublishTask(new PublishTask.Config(
                                         ENCODING,

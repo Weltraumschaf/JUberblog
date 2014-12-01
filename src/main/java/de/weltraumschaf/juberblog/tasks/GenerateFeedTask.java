@@ -16,9 +16,13 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
+import de.weltraumschaf.juberblog.DateFormatter;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -42,7 +46,9 @@ public final class GenerateFeedTask implements Task<Void> {
         template.assignVariable("link", config.link);
         template.assignVariable("description", config.description);
         template.assignVariable("language", config.language);
-        template.assignVariable("lastBuildDate", config.lastBuildDate);
+        template.assignVariable(
+                "lastBuildDate",
+                DateFormatter.format(config.lastBuildDate, DateFormatter.RSS_PUBLISH_DATE_FORMAT));
         template.assignVariable("items", Lists.newArrayList());
 
         Files.write(
@@ -62,9 +68,9 @@ public final class GenerateFeedTask implements Task<Void> {
         private final String link;
         private final String description;
         private final String language;
-        private final String lastBuildDate;
+        private final DateTime lastBuildDate;
 
-        public Config(final Path template, final Path outputDir, final String encoding, final String title, final String link, final String description, final String language, final String lastBuildDate) {
+        public Config(final Path template, final Path outputDir, final String encoding, final String title, final String link, final String description, final String language, final DateTime lastBuildDate) {
             super();
             this.template = Validate.notNull(template, "template");
             this.outputDir = Validate.notNull(outputDir, "outputDir");
@@ -73,7 +79,7 @@ public final class GenerateFeedTask implements Task<Void> {
             this.link = Validate.notEmpty(link, "link");
             this.description = Validate.notEmpty(description, "description");
             this.language = Validate.notEmpty(language, "language");
-            this.lastBuildDate = Validate.notEmpty(lastBuildDate, "lastBuildDate");
+            this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");
         }
     }
 }
