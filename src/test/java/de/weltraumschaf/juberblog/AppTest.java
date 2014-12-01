@@ -11,16 +11,17 @@
  */
 package de.weltraumschaf.juberblog;
 
-import de.weltraumschaf.commons.validate.Validate;
 import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
+import de.weltraumschaf.juberblog.tasks.PublishTask;
 import de.weltraumschaf.juberblog.tasks.Task;
 import de.weltraumschaf.juberblog.tasks.TaskExecutor;
-import java.nio.file.Path;
+import java.util.Collection;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.InOrder;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests for {@link App}.
@@ -53,49 +54,15 @@ public class AppTest extends JUberblogTestCase {
                 .append(new GenerateIndexTask())
                 .append(new GenerateSitemapTask())
                 .execute();
-    }
 
-    public static final class PublishTask implements Task<Void> {
-
-        private final Config config;
-
-        public PublishTask(final Config config) {
-            super();
-            this.config = config;
-        }
-
-        @Override
-        public Void execute() throws Exception {
-            final Publisher publisher = new Publisher(
-                    config.inputDir,
-                    config.outputDir,
-                    config.layoutTemplate,
-                    config.contentTemplate,
-                    config.encoding
-            );
-            publisher.publish();
-            return null;
-        }
-
-        public static final class Config {
-
-            private final String encoding;
-            private final Path inputDir;
-            private final Path outputDir;
-            private final Path layoutTemplate;
-            private final Path contentTemplate;
-
-            public Config(final String encoding, final Path inputDir, final Path outputDir, final Path layoutTemplate, final Path contentTemplate) {
-                super();
-                this.encoding = Validate.notEmpty(encoding, "encoding");
-                this.inputDir = Validate.notNull(inputDir, "inputDir");
-                this.outputDir = Validate.notNull(outputDir, "outputDir");
-                this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
-                this.contentTemplate = Validate.notNull(contentTemplate, "contentTemplate");
-            }
-
-        }
-
+        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
+        assertThat(foundFiles.size(), is(5));
+        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html");
+        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html");
+        final DataFile expectedThree = new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html");
+        final DataFile expectedFour = new DataFile(tmp.getRoot().toString() + "/Site-One.html");
+        final DataFile expectedFive = new DataFile(tmp.getRoot().toString() + "/Site-Two.html");
+        assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree, expectedFour, expectedFive));
     }
 
     class GenerateIndexTask implements Task<Void> {

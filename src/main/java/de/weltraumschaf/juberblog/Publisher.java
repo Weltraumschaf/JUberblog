@@ -20,7 +20,7 @@ import java.nio.file.Path;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class Publisher {
+public final class Publisher {
 
     private final FilesFinder finder = new FilesFinder(FileNameExtension.MARKDOWN);
     private final Path inputDir;
@@ -28,7 +28,7 @@ final class Publisher {
     private final String encoding;
     private final Renderer renderer;
 
-    Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding) throws IOException {
+    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
         this.outputDir = Validate.notNull(outputDir, "outputDir");
@@ -40,7 +40,7 @@ final class Publisher {
         this.encoding = Validate.notEmpty(encoding, "encoding");
     }
 
-    void publish() throws IOException {
+    public void publish() throws IOException {
         for (final DataFile foundPostData : finder.find(inputDir)) {
             Files.write(
                     outputDir.resolve(foundPostData.getBareName() + FileNameExtension.HTML.getExtension()),
