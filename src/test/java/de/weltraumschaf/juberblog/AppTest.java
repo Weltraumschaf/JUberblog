@@ -33,45 +33,23 @@ public class AppTest extends JUberblogTestCase {
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
-    public void TaskExecutor_execute() throws Exception {
-        final TaskExecutor sut = new TaskExecutor();
-        sut.execute();
-
-        final Task taskOne = mock(Task.class);
-        sut.append(taskOne);
-        final Task taskTwo = mock(Task.class);
-        sut.append(taskTwo);
-
-        sut.execute();
-
-        InOrder inOrder = inOrder(taskOne, taskTwo);
-        inOrder.verify(taskOne, times(1)).execute();
-        inOrder.verify(taskTwo, times(1)).execute();
-    }
-
-    @Test
     public void publishing() throws Exception {
         final TaskExecutor executor = new TaskExecutor();
-
-        final PublishTask.Config configForPosts = new PublishTask.Config(
-                ENCODING,
-                createPath("posts"),
-                tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("post.ftl")
-        );
-
-        final PublishTask.Config configForSites = new PublishTask.Config(
-                ENCODING,
-                createPath("sites"),
-                tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("site.ftl")
-        );
-
-        executor.append(new PublishTask(configForPosts)) // Posts
+        executor.append(new PublishTask(new PublishTask.Config(
+                        ENCODING,
+                        createPath("posts"),
+                        tmp.getRoot().toPath(),
+                        createPath("layout.ftl"),
+                        createPath("post.ftl")
+                )))
                 .append(new GenerateFeedTask())
-                .append(new PublishTask(configForSites)) // Sites
+                .append(new PublishTask(new PublishTask.Config(
+                        ENCODING,
+                        createPath("sites"),
+                        tmp.getRoot().toPath(),
+                        createPath("layout.ftl"),
+                        createPath("site.ftl")
+                )))
                 .append(new GenerateIndexTask())
                 .append(new GenerateSitemapTask())
                 .execute();
