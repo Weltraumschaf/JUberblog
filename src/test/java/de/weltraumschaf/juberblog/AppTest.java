@@ -11,6 +11,9 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.juberblog.file.DataFile;
+import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FileNameExtension;
 import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import de.weltraumschaf.juberblog.tasks.PublishTask;
 import de.weltraumschaf.juberblog.tasks.Task;
@@ -37,20 +40,20 @@ public class AppTest extends JUberblogTestCase {
     public void publishing() throws Exception {
         final TaskExecutor executor = new TaskExecutor();
         executor.append(new PublishTask(new PublishTask.Config(
-                        ENCODING,
-                        createPath("posts"),
-                        tmp.getRoot().toPath(),
-                        createPath("layout.ftl"),
-                        createPath("post.ftl")
-                )))
+                ENCODING,
+                createPath("posts"),
+                tmp.getRoot().toPath(),
+                createPath("layout.ftl"),
+                createPath("post.ftl")
+        )))
                 .append(new GenerateFeedTask())
                 .append(new PublishTask(new PublishTask.Config(
-                        ENCODING,
-                        createPath("sites"),
-                        tmp.getRoot().toPath(),
-                        createPath("layout.ftl"),
-                        createPath("site.ftl")
-                )))
+                                        ENCODING,
+                                        createPath("sites"),
+                                        tmp.getRoot().toPath(),
+                                        createPath("layout.ftl"),
+                                        createPath("site.ftl")
+                                )))
                 .append(new GenerateIndexTask())
                 .append(new GenerateSitemapTask())
                 .execute();
@@ -65,10 +68,20 @@ public class AppTest extends JUberblogTestCase {
         assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree, expectedFour, expectedFive));
     }
 
+    class GenerateFeedTask implements Task<Void> {
+
+        @Override
+        public Void execute() throws Exception {
+            // TODO Implement feed generation.
+            return null;
+        }
+    }
+
     class GenerateIndexTask implements Task<Void> {
 
         @Override
         public Void execute() throws Exception {
+            // TODO Implement index generation.
             return null;
         }
     }
@@ -77,15 +90,9 @@ public class AppTest extends JUberblogTestCase {
 
         @Override
         public Void execute() throws Exception {
+            // TODO Implement site map generation.
             return null;
         }
     }
 
-    class GenerateFeedTask implements Task<Void> {
-
-        @Override
-        public Void execute() throws Exception {
-            return null;
-        }
-    }
 }

@@ -11,9 +11,9 @@
  */
 package de.weltraumschaf.juberblog.tasks;
 
-import de.weltraumschaf.juberblog.DataFile;
-import de.weltraumschaf.juberblog.FileNameExtension;
-import de.weltraumschaf.juberblog.FilesFinder;
+import de.weltraumschaf.juberblog.file.DataFile;
+import de.weltraumschaf.juberblog.file.FileNameExtension;
+import de.weltraumschaf.juberblog.file.FilesFinder;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import java.util.Collection;
 import org.junit.Test;

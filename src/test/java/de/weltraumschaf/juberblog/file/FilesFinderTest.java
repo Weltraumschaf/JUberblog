@@ -10,8 +10,9 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog;
+package de.weltraumschaf.juberblog.file;
 
+import de.weltraumschaf.juberblog.JUberblogTestCase;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;

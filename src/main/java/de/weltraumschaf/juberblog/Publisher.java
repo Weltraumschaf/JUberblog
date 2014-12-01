@@ -11,6 +11,9 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.juberblog.file.FileNameExtension;
+import de.weltraumschaf.juberblog.file.DataFile;
+import de.weltraumschaf.juberblog.file.FilesFinder;
 import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
 import java.nio.file.Files;
