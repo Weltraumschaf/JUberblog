@@ -9,28 +9,60 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
+ * Formats Joda time objects to various predefined formats.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class DateFormatter {
 
     /**
-     * Publishing date format.
+     * Formats the given date with a given format.
      *
-     * See http://www.joda.org/joda-time/key_format.html
+     * @param time must not be {@code null}
+     * @param format must not be {@code null}
+     * @return never {@code null}
      */
-    public static final DateTimeFormatter RSS_PUBLISH_DATE_FORMAT
-        = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z");
+    public static String format(final DateTime time, final Format format) {
+        return Validate.notNull(time, "time")
+                .toString(Validate.notNull(format, "format").getFormatter());
+    }
 
-    public static String format(DateTime time, final DateTimeFormatter format) {
-        return time.toString(format);
+    /**
+     * Predefined format patterns.
+     */
+    public enum Format {
+
+        /**
+         * Publishing date format for RSS files.
+         *
+         * See http://www.joda.org/joda-time/key_format.html
+         */
+        RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z");
+
+        /**
+         * T
+         */
+        private final DateTimeFormatter formatter;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param pattern must not be {@code nul} or empty
+         */
+        private Format(final String pattern) {
+            this.formatter = DateTimeFormat.forPattern(Validate.notEmpty(pattern, "pattern"));
+        }
+
+        private DateTimeFormatter getFormatter() {
+            return formatter;
+        }
     }
 }

@@ -12,13 +12,13 @@
 package de.weltraumschaf.juberblog.tasks;
 
 import de.weltraumschaf.juberblog.DateFormatter;
+import de.weltraumschaf.juberblog.DateFormatter.Format;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinder;
 import java.util.Collection;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
@@ -71,7 +71,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 + "        <link>link</link>\n"
                 + "        <description>description</description>\n"
                 + "        <language>language</language>\n"
-                + "        <lastBuildDate>" + DateFormatter.format(now, DateFormatter.RSS_PUBLISH_DATE_FORMAT) + "</lastBuildDate>\n"
+                + "        <lastBuildDate>" + DateFormatter.format(now, Format.RSS_PUBLISH_DATE_FORMAT) + "</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>"));
     }

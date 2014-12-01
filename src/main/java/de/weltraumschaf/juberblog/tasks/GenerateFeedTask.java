@@ -17,12 +17,11 @@ import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.DateFormatter;
+import de.weltraumschaf.juberblog.DateFormatter.Format;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -48,7 +47,7 @@ public final class GenerateFeedTask implements Task<Void> {
         template.assignVariable("language", config.language);
         template.assignVariable(
                 "lastBuildDate",
-                DateFormatter.format(config.lastBuildDate, DateFormatter.RSS_PUBLISH_DATE_FORMAT));
+                DateFormatter.format(config.lastBuildDate, Format.RSS_PUBLISH_DATE_FORMAT));
         template.assignVariable("items", Lists.newArrayList());
 
         Files.write(
