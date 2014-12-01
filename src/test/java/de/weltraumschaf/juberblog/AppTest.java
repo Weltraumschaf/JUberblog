@@ -11,13 +11,19 @@
  */
 package de.weltraumschaf.juberblog;
 
+import com.beust.jcommander.internal.Lists;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinder;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
-import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import de.weltraumschaf.juberblog.tasks.PublishTask;
 import de.weltraumschaf.juberblog.tasks.Task;
 import de.weltraumschaf.juberblog.tasks.TaskExecutor;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -40,13 +46,22 @@ public class AppTest extends JUberblogTestCase {
     public void publishing() throws Exception {
         final TaskExecutor executor = new TaskExecutor();
         executor.append(new PublishTask(new PublishTask.Config(
-                ENCODING,
-                createPath("posts"),
-                tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("post.ftl")
-        )))
-                .append(new GenerateFeedTask())
+                                        ENCODING,
+                                        createPath("posts"),
+                                        tmp.getRoot().toPath(),
+                                        createPath("layout.ftl"),
+                                        createPath("post.ftl")
+                                )))
+                .append(new GenerateFeedTask(new GenerateFeedTask.Config(
+                                        createPath("feed.ftl"),
+                                        tmp.getRoot().toPath(),
+                                        ENCODING,
+                                        "title",
+                                        "link",
+                                        "description",
+                                        "language",
+                                        "lastBuildDate"
+                                )))
                 .append(new PublishTask(new PublishTask.Config(
                                         ENCODING,
                                         createPath("sites"),
@@ -58,22 +73,71 @@ public class AppTest extends JUberblogTestCase {
                 .append(new GenerateSitemapTask())
                 .execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
-        assertThat(foundFiles.size(), is(5));
-        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html");
-        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html");
-        final DataFile expectedThree = new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html");
-        final DataFile expectedFour = new DataFile(tmp.getRoot().toString() + "/Site-One.html");
-        final DataFile expectedFive = new DataFile(tmp.getRoot().toString() + "/Site-Two.html");
-        assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree, expectedFour, expectedFive));
+        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML, FileNameExtension.XML)
+                .find(tmp.getRoot().toPath());
+        assertThat(foundFiles.size(), is(6));
+        assertThat(
+                foundFiles,
+                containsInAnyOrder(
+                        new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html"),
+                        new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html"),
+                        new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html"),
+                        new DataFile(tmp.getRoot().toString() + "/Site-One.html"),
+                        new DataFile(tmp.getRoot().toString() + "/Site-Two.html"),
+                        new DataFile(tmp.getRoot().toString() + "/feed.xml")));
     }
 
-    class GenerateFeedTask implements Task<Void> {
+    public static final class GenerateFeedTask implements Task<Void> {
+
+        private final Config config;
+
+        public GenerateFeedTask(final Config config) {
+            super();
+            this.config = Validate.notNull(config, "config");
+        }
 
         @Override
         public Void execute() throws Exception {
-            // TODO Implement feed generation.
+            final FreeMarkerDown fmd = FreeMarkerDown.create();
+            final Fragment template = fmd.createFragemnt(config.template, RenderOptions.WITHOUT_MARKDOWN);
+            template.assignVariable("encoding", config.encoding);
+            template.assignVariable("title", config.title);
+            template.assignVariable("link", config.link);
+            template.assignVariable("description", config.description);
+            template.assignVariable("language", config.language);
+            template.assignVariable("lastBuildDate", config.lastBuildDate);
+            template.assignVariable("items", Lists.newArrayList());
+
+            Files.write(
+                    config.outputDir.resolve("feed" + FileNameExtension.XML.getExtension()),
+                    fmd.render(template).getBytes(config.encoding)
+            );
+
             return null;
+        }
+
+        public static final class Config {
+
+            private final Path template;
+            private final Path outputDir;
+            private final String encoding;
+            private final String title;
+            private final String link;
+            private final String description;
+            private final String language;
+            private final String lastBuildDate;
+
+            public Config(final Path template, final Path outputDir, final String encoding, final String title, final String link, final String description, final String language, final String lastBuildDate) {
+                super();
+                this.template = Validate.notNull(template, "template");
+                this.outputDir = Validate.notNull(outputDir, "outputDir");
+                this.encoding = Validate.notEmpty(encoding, "title");
+                this.title = Validate.notEmpty(title, "title");
+                this.link = Validate.notEmpty(link, "link");
+                this.description = Validate.notEmpty(description, "description");
+                this.language = Validate.notEmpty(language, "language");
+                this.lastBuildDate = Validate.notEmpty(lastBuildDate, "lastBuildDate");
+            }
         }
     }
 

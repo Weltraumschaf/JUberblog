@@ -15,7 +15,7 @@ import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.Layout;
-import de.weltraumschaf.freemarkerdown.Options;
+import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.PreProcessor;
 import de.weltraumschaf.freemarkerdown.PreProcessors;
 import java.io.IOException;
@@ -37,8 +37,8 @@ final class Renderer {
     public Renderer(final Path outerTemplate, final Path innerTemplate, final String encoding) throws IOException {
         super();
         this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, Options.WITHOUT_MARKDOWN);
-        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, Options.WITHOUT_MARKDOWN);
+        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
+        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
         this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
     }
 

@@ -19,7 +19,7 @@ import de.weltraumschaf.commons.validate.Validate;
  */
 public enum FileNameExtension {
 
-    MARKDOWN(".md"), HTML(".html");
+    MARKDOWN(".md"), HTML(".html"), XML(".xml");
 
     private final String extension;
 

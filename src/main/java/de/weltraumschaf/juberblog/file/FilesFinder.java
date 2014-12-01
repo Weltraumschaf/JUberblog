@@ -17,6 +17,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,7 @@ public final class FilesFinder {
 
     private final FileFilter filter;
 
-    public FilesFinder(final FileNameExtension type) {
+    public FilesFinder(final FileNameExtension ... type) {
         filter = new FileFilter(type);
     }
 
@@ -47,16 +48,22 @@ public final class FilesFinder {
 
     private static final class FileFilter implements DirectoryStream.Filter<Path> {
 
-        private final FileNameExtension type;
+        private final List<FileNameExtension> extensions;
 
-        FileFilter(final FileNameExtension type) {
+        FileFilter(final FileNameExtension ... type) {
             super();
-            this.type = Validate.notNull(type, "type");
+            this.extensions = Arrays.asList(Validate.notNull(type, "type"));
         }
 
         @Override
         public boolean accept(final Path file) throws IOException {
-            return file.toString().endsWith(type.getExtension());
+            for (final FileNameExtension extension : extensions) {
+                if (file.toString().endsWith(extension.getExtension())) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
