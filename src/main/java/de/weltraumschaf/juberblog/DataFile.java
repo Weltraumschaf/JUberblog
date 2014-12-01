@@ -22,26 +22,26 @@ import java.util.Objects;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class DataFile {
+public final class DataFile {
 
     private final String absoluteFileName;
 
-    DataFile(final String absoluteFileName) {
+    public DataFile(final String absoluteFileName) {
         super();
         this.absoluteFileName = Validate.notEmpty(absoluteFileName, "absoluteFileName");
     }
 
-    Path getPath() {
+    public Path getPath() {
         return Paths.get(absoluteFileName);
     }
 
-    String getBareName() {
+    public String getBareName() {
         final int firstDashPosition = absoluteFileName.lastIndexOf("_");
         final int lastDotPosition = absoluteFileName.lastIndexOf(".");
         return absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
     }
 
-    String readContent(final String encoding) throws IOException {
+    public String readContent(final String encoding) throws IOException {
         return new String(Files.readAllBytes(getPath()), encoding);
     }
 

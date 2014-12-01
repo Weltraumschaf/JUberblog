@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -24,15 +25,15 @@ import java.util.List;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class FilesFinder {
+public final class FilesFinder {
 
     private final FileFilter filter;
 
-    FilesFinder(final FileNameExtension type) {
+    public FilesFinder(final FileNameExtension type) {
         filter = new FileFilter(type);
     }
 
-    Collection<DataFile> find(final Path directory) throws IOException {
+    public Collection<DataFile> find(final Path directory) throws IOException {
         final List<DataFile> foundFiles = new ArrayList<>();
 
         try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory, filter)) {
@@ -50,7 +51,7 @@ final class FilesFinder {
 
         FileFilter(final FileNameExtension type) {
             super();
-            this.type = type;
+            this.type = Validate.notNull(type, "type");
         }
 
         @Override

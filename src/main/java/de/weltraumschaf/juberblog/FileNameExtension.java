@@ -17,7 +17,7 @@ import de.weltraumschaf.commons.validate.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-enum FileNameExtension {
+public enum FileNameExtension {
 
     MARKDOWN(".md"), HTML(".html");
 

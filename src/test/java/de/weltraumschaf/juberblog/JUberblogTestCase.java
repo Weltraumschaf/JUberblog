@@ -21,12 +21,12 @@ import java.nio.file.Paths;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-abstract class JUberblogTestCase {
+public abstract class JUberblogTestCase {
 
-    static final String ENCODING = "utf-8";
-    static final String BASE = "/de/weltraumschaf/juberblog/";
+    public static final String ENCODING = "utf-8";
+    public static final String BASE = "/de/weltraumschaf/juberblog/";
 
-    Path createPath(final String name) throws URISyntaxException {
+    protected final Path createPath(final String name) throws URISyntaxException {
         return Paths.get(getClass().getResource(BASE + name).toURI());
     }
 }

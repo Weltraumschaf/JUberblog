@@ -25,7 +25,7 @@ public final class PublishTask implements Task<Void> {
 
     public PublishTask(final Config config) {
         super();
-        this.config = config;
+        this.config = Validate.notNull(config, "config");
     }
 
     @Override
