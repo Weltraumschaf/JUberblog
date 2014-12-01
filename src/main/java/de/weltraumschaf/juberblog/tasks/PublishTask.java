@@ -12,14 +12,17 @@
 package de.weltraumschaf.juberblog.tasks;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.Publisher;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class PublishTask implements Task<Void, Void> {
+public final class PublishTask implements Task<Collection<Page>, Void> {
 
     private final Config config;
 
@@ -29,7 +32,7 @@ public final class PublishTask implements Task<Void, Void> {
     }
 
     @Override
-    public Void execute() throws Exception {
+    public Collection<Page> execute() throws Exception {
         final Publisher publisher = new Publisher(
                 config.inputDir,
                 config.outputDir,
@@ -38,11 +41,12 @@ public final class PublishTask implements Task<Void, Void> {
                 config.encoding
         );
         publisher.publish();
-        return null;
+        // TODO Return pages list.
+        return Collections.emptyList();
     }
 
     @Override
-    public Void execute(final Void previusResult) throws Exception {
+    public Collection<Page> execute(final Void previusResult) throws Exception {
         return execute();
     }
 

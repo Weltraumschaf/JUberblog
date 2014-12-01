@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 
 /**
@@ -51,4 +52,59 @@ public class TaskExecutorTest {
         inOrder.verify(taskTwo, times(1)).execute();
     }
 
+    @Test
+    public void execute_previousResultIsPassedInToNextTask() throws Exception {
+        final FirstTask first = spy(new FirstTask());
+        sut.append(first);
+        final SecondTask second = spy(new SecondTask());
+        sut.append(second);
+        final ThirdTask third = spy(new ThirdTask());
+        sut.append(third);
+
+        sut.execute();
+
+        final InOrder inOrder = inOrder(first, second, third);
+        inOrder.verify(first, times(1)).execute();
+        inOrder.verify(second, times(1)).execute("FirstTask");
+        inOrder.verify(third, times(1)).execute("SecondTask");
+    }
+
+    private static class FirstTask implements Task<String, Void> {
+
+        @Override
+        public String execute() throws Exception {
+            return "FirstTask";
+        }
+
+        @Override
+        public String execute(final Void previusResult) throws Exception {
+            return execute();
+        }
+    }
+
+    private static class SecondTask implements Task<String, String> {
+
+        @Override
+        public String execute() throws Exception {
+            return execute("");
+        }
+
+        @Override
+        public String execute(final String previusResult) throws Exception {
+            return "SecondTask";
+        }
+    }
+
+    private static class ThirdTask implements Task<Void, String> {
+
+        @Override
+        public Void execute() throws Exception {
+            return execute("");
+        }
+
+        @Override
+        public Void execute(final String previusResult) throws Exception {
+            return null;
+        }
+    }
 }

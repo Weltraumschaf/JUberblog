@@ -29,8 +29,14 @@ public final class TaskExecutor {
     }
 
     public void execute() throws Exception {
+        Object result = null;
+
         for (final Task task : tasks) {
-            task.execute();
+            if (null == result) {
+                result = task.execute();
+            } else {
+                result = task.execute(result);
+            }
         }
     }
 
