@@ -30,13 +30,22 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
+ * Generates the RSS feed.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class GenerateFeedTask extends BaseTask<Void, List<Page>> implements Task<Void, List<Page>> {
 
+    /**
+     * Task configuration.
+     */
     private final Config config;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param config  must not be {@code null}
+     */
     public GenerateFeedTask(final Config config) {
         super(BaseTask.<List<Page>>castClass(List.class));
         this.config = Validate.notNull(config, "config");

@@ -40,9 +40,8 @@ public final class PublishTask extends BaseTask<Collection<Page>, Void> implemen
                 config.contentTemplate,
                 config.encoding
         );
-        publisher.publish();
-        // TODO Return pages list.
-        return Collections.emptyList();
+
+        return publisher.publish();
     }
 
     @Override
