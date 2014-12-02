@@ -38,4 +38,6 @@ public interface Task<R, P> {
      */
     R execute(P previusResult) throws Exception;
 
+    Class<P> getDesiredTypeForPreviusResult();
+
 }

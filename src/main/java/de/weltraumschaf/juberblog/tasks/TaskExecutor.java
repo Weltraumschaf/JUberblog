@@ -51,10 +51,10 @@ public final class TaskExecutor {
         Object result = null;
 
         for (final Task task : tasks) {
-            if (null == result) {
-                result = task.execute();
-            } else {
+            if (null != result && result.getClass().equals(task.getDesiredTypeForPreviusResult())) {
                 result = task.execute(result);
+            } else {
+                result = task.execute();
             }
         }
     }

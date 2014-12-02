@@ -22,12 +22,12 @@ import java.util.Collections;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class PublishTask implements Task<Collection<Page>, Void> {
+public final class PublishTask extends BaseTask<Collection<Page>, Void> implements Task<Collection<Page>, Void> {
 
     private final Config config;
 
     public PublishTask(final Config config) {
-        super();
+        super(Void.class);
         this.config = Validate.notNull(config, "config");
     }
 

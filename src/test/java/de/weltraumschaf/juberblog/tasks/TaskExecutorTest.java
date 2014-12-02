@@ -80,6 +80,11 @@ public class TaskExecutorTest {
         public String execute(final Void previusResult) throws Exception {
             return execute();
         }
+
+        @Override
+        public Class<Void> getDesiredTypeForPreviusResult() {
+            return Void.class;
+        }
     }
 
     private static class SecondTask implements Task<String, String> {
@@ -93,6 +98,11 @@ public class TaskExecutorTest {
         public String execute(final String previusResult) throws Exception {
             return "SecondTask";
         }
+
+        @Override
+        public Class<String> getDesiredTypeForPreviusResult() {
+            return String.class;
+        }
     }
 
     private static class ThirdTask implements Task<Void, String> {
@@ -105,6 +115,11 @@ public class TaskExecutorTest {
         @Override
         public Void execute(final String previusResult) throws Exception {
             return null;
+        }
+
+        @Override
+        public Class<String> getDesiredTypeForPreviusResult() {
+            return String.class;
         }
     }
 }

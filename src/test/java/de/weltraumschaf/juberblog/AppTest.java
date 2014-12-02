@@ -92,7 +92,12 @@ public class AppTest extends JUberblogTestCase {
 
         @Override
         public Void execute(Void previusResult) throws Exception {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return null;
+        }
+
+        @Override
+        public Class<Void> getDesiredTypeForPreviusResult() {
+            return Void.class;
         }
     }
 
@@ -106,7 +111,12 @@ public class AppTest extends JUberblogTestCase {
 
         @Override
         public Void execute(Void previusResult) throws Exception {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return null;
+        }
+
+        @Override
+        public Class<Void> getDesiredTypeForPreviusResult() {
+            return Void.class;
         }
     }
 

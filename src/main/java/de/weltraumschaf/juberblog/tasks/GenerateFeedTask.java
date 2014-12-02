@@ -33,12 +33,12 @@ import org.joda.time.DateTime;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class GenerateFeedTask implements Task<Void, List<Page>> {
+public final class GenerateFeedTask extends BaseTask<Void, List<Page>> implements Task<Void, List<Page>> {
 
     private final Config config;
 
     public GenerateFeedTask(final Config config) {
-        super();
+        super(BaseTask.<List<Page>>castClass(List.class));
         this.config = Validate.notNull(config, "config");
     }
 
