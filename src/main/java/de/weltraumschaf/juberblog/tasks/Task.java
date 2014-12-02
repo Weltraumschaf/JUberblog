@@ -13,12 +13,29 @@
 package de.weltraumschaf.juberblog.tasks;
 
 /**
+ * A code unit which does something.
  *
+ * @param <R> type of return value
+ * @param <P> type of previous result
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public interface Task<R, P> {
 
+    /**
+     * Executes the task.
+     *
+     * @return may return {@code null}
+     * @throws Exception if any error happens
+     */
     R execute() throws Exception;
+
+    /**
+     * Executes the task and takes the result of the previously executed task.
+     *
+     * @param previusResult may be {@code null}
+     * @return may return {@code null}
+     * @throws Exception if any error happens
+     */
     R execute(P previusResult) throws Exception;
 
 }

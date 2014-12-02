@@ -20,7 +20,7 @@ import org.joda.time.DateTime;
 public class Page {
 
     private final String title;
-    private final String link; // TODO USe URI.
+    private final String link; // TODO Use URI.
     private final String description;
     private final DateTime publishingDate;
 
