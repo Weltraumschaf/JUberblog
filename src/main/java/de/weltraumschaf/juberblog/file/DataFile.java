@@ -19,30 +19,86 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
+ * Abstracts a file from file system which contains blog data.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class DataFile {
 
+    /**
+     * Absolute file name of data file.
+     */
     private final String absoluteFileName;
+    /**
+     * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
+     */
+    private Path path;
+    /**
+     * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
+     */
+    private String bareName;
+    /**
+     * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
+     */
+    private String content;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param absoluteFileName must not be {@code null} or empty
+     */
     public DataFile(final String absoluteFileName) {
         super();
         this.absoluteFileName = Validate.notEmpty(absoluteFileName, "absoluteFileName");
     }
 
+    /**
+     * Creates path object for file.
+     *
+     * @return never {@code null}, same instance
+     */
     public Path getPath() {
-        return Paths.get(absoluteFileName);
+        if (null == path) {
+            path = Paths.get(absoluteFileName);
+        }
+
+        return path;
     }
 
+    /**
+     * Computes the bare file name.
+     * <p>
+     * The method strips the leading time stamp and the trailing file extension.
+     * </p>
+     * <p>
+     * Example: For a file name like {@code /foo/bar/baz/2014-05-30T21.29.20_This-is-the-First-Post.md} the bare name
+     * is {@code This-is-the-First-Post}.
+     * </p>
+     * @return never {@code null}, same instance
+     */
     public String getBareName() {
-        final int firstDashPosition = absoluteFileName.lastIndexOf("_");
-        final int lastDotPosition = absoluteFileName.lastIndexOf(".");
-        return absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
+        if (null == bareName) {
+            final int firstDashPosition = absoluteFileName.lastIndexOf("_");
+            final int lastDotPosition = absoluteFileName.lastIndexOf(".");
+            bareName = absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
+        }
+
+        return bareName;
     }
 
+    /**
+     * Reads the file content.
+     *
+     * @param encoding must not be {@code null} or empty
+     * @return never {@code null}, same instance
+     * @throws IOException if file can't be read
+     */
     public String readContent(final String encoding) throws IOException {
-        return new String(Files.readAllBytes(getPath()), encoding);
+        if (null == content) {
+            content = new String(Files.readAllBytes(getPath()), Validate.notEmpty(encoding, "encoding"));
+        }
+
+        return content;
     }
 
     @Override
