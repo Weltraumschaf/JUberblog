@@ -12,7 +12,7 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.juberblog.file.DataFile;
-import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.tasks.GenerateFeedTask;
 import de.weltraumschaf.juberblog.tasks.PublishTask;
@@ -68,7 +68,7 @@ public class AppTest extends JUberblogTestCase {
                 .append(new GenerateSitemapTask())
                 .execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML, FileNameExtension.XML)
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML, FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(6));
         assertThat(

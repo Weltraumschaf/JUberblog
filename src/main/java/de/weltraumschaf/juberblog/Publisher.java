@@ -13,7 +13,7 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
-import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +25,6 @@ import java.nio.file.Path;
  */
 public final class Publisher {
 
-    private final FilesFinder finder = new FilesFinder(FileNameExtension.MARKDOWN);
     private final Path inputDir;
     private final Path outputDir;
     private final String encoding;
@@ -44,7 +43,7 @@ public final class Publisher {
     }
 
     public void publish() throws IOException {
-        for (final DataFile foundPostData : finder.find(inputDir)) {
+        for (final DataFile foundPostData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
             Files.write(
                     outputDir.resolve(foundPostData.getBareName() + FileNameExtension.HTML.getExtension()),
                     renderer.render(foundPostData.getPath()).getBytes(encoding)

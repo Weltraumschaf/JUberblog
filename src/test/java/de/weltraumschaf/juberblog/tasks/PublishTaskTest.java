@@ -13,7 +13,7 @@ package de.weltraumschaf.juberblog.tasks;
 
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
-import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import java.util.Collection;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class PublishTaskTest extends JUberblogTestCase {
 
         sut.execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(2));
         final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/Site-One.html");
         final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/Site-Two.html");

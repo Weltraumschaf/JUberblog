@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.file;
 
 import de.weltraumschaf.juberblog.JUberblogTestCase;
@@ -19,17 +18,18 @@ import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 
 /**
- * Tests for {@link FilesFinder}.
+ * Tests for {@link FilesFinderByExtension}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class FilesFinderTest extends JUberblogTestCase {
+public class FilesFinderByExtensionTest extends JUberblogTestCase {
 
     @Test
     public void findMarkdownFiles() throws URISyntaxException, IOException {
-        final FilesFinder sut = new FilesFinder(FileNameExtension.MARKDOWN);
+        final FilesFinderByExtension sut = FilesFinderByExtension.MARKDOWN;
 
         final Collection<DataFile> foundFiles = sut.find(createPath("posts"));
 
@@ -39,6 +39,21 @@ public class FilesFinderTest extends JUberblogTestCase {
                 new DataFile(createPath("posts/2014-06-30T23.25.44_This-is-the-Second-Post.md").toString()),
                 new DataFile(createPath("posts/2014-07-28T17.44.13_This-is-the-Third-Post.md").toString())
         ));
+    }
+
+    @Test
+    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathIsNull()")
+    public void find_pathIsNull() {
+    }
+
+    @Test
+    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathDoesNotExist()")
+    public void find_pathDoesNotExist() {
+    }
+
+    @Test
+    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathIsNotDirecotry()")
+    public void find_pathIsNotDirecotry() {
     }
 
 }

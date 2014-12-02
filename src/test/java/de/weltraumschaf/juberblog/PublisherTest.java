@@ -12,7 +12,7 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.juberblog.file.DataFile;
-import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -45,7 +45,7 @@ public class PublisherTest extends JUberblogTestCase {
 
         sut.publish();
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.HTML).find(tmp.getRoot().toPath());
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(3));
         final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html");
         final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html");

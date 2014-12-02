@@ -17,7 +17,7 @@ import de.weltraumschaf.juberblog.JUberblogTestCase;
 import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
-import de.weltraumschaf.juberblog.file.FilesFinder;
+import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
@@ -59,7 +59,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
 
         sut.execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.XML)
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
@@ -96,7 +96,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 new Page("title1", "link1", "desc1", DateTime.parse("29.11.2014", formatter)),
                 new Page("title2", "link2", "desc2", DateTime.parse("30.11.2014", formatter))));
 
-        final Collection<DataFile> foundFiles = new FilesFinder(FileNameExtension.XML)
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
