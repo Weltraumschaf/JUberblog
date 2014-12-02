@@ -56,6 +56,8 @@ final class Renderer {
      * XXX: Inject one instance from main app.
      */
     private final FreeMarkerDown fmd = FreeMarkerDown.create();
+    private final Map<String, String> keyValues = Maps.newHashMap();
+    private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
     /**
      * Outer part of the two step layout.
      */
@@ -102,12 +104,10 @@ final class Renderer {
             throw new IllegalArgumentException(String.format("Given path '%s' is a directory!", content));
         }
 
+        keyValues.clear();
         innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, encoding));
         outerTemplate.assignVariable("name", "NAME");
         outerTemplate.assignVariable("description", "DESCRIPTION");
-
-        final Map<String, String> keyValues = Maps.newHashMap();
-        final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
         fmd.register(processor);
 
         return new RendererResult(fmd.render(outerTemplate), keyValues);
@@ -120,6 +120,7 @@ final class Renderer {
      * </p>
      */
     static final class RendererResult {
+
         /**
          * The rendered content (usually HTML).
          */
@@ -138,7 +139,7 @@ final class Renderer {
         private RendererResult(final String renderedContent, final Map<String, String> metaData) {
             super();
             this.renderedContent = Validate.notNull(renderedContent, "renderedContent");
-            this.metaData = Validate.notNull(metaData, "metaData");
+            this.metaData = Maps.newHashMap(Validate.notNull(metaData, "metaData"));
         }
 
         /**
