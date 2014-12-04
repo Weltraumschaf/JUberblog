@@ -31,6 +31,7 @@ import org.joda.time.DateTime;
  */
 public final class Publisher {
 
+    private final Headline headline = new Headline();
     /**
      * Where to find data files.
      */
@@ -96,7 +97,7 @@ public final class Publisher {
                     : "";
 
             publishedPages.add(new Page(
-                    "title",
+                    headline.find("title"), // TODO Find the Markdown / What to do if empty?.
                     "link", // TODO Add link to published page.
                     description,
                     new DateTime(0L)));

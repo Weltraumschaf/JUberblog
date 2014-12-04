@@ -14,10 +14,12 @@ package de.weltraumschaf.juberblog;
 import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.freemarkerdown.Interceptor;
 import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.PreProcessor;
 import de.weltraumschaf.freemarkerdown.PreProcessors;
+import de.weltraumschaf.freemarkerdown.TemplateModel;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +30,7 @@ import java.util.Map;
  * Orchestrates the whole two step template and preprocessing stuff to render a post or site.
  *
  * <p>
- * Structure of template fragemnts:
+ * Structure of template fragments:
  * </p>
  * <pre>
  * +-------------------+
@@ -58,6 +60,7 @@ final class Renderer {
     private final FreeMarkerDown fmd = FreeMarkerDown.create();
     private final Map<String, String> keyValues = Maps.newHashMap();
     private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
+    private final MarkdownInterceptor interceptor = new MarkdownInterceptor();
     /**
      * Outer part of the two step layout.
      */
@@ -81,6 +84,7 @@ final class Renderer {
         this.outerTemplate = fmd.createLayout(outerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
         this.innerTemplate = fmd.createLayout(innerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
         this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
+        fmd.register(interceptor, Interceptor.ExecutionPoint.BEFORE_RENDERING);
     }
 
     /**
@@ -158,6 +162,15 @@ final class Renderer {
          */
         Map<String, String> getMetaData() {
             return Collections.unmodifiableMap(metaData);
+        }
+
+    }
+
+    private static final class MarkdownInterceptor implements Interceptor {
+
+        @Override
+        public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
+
         }
 
     }

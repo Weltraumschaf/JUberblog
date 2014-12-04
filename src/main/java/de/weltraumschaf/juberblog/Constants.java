@@ -31,7 +31,8 @@ public enum Constants {
     /**
      * Package base of whole project.
      */
-    PACKAGE_BASE("/de/weltraumschaf/juberblog");
+    PACKAGE_BASE("/de/weltraumschaf/juberblog"),
+    DEFAULT_NEW_LINE(String.format("%n"));
 
     /**
      * Constant value.
