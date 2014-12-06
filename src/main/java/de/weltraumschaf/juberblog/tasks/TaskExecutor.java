@@ -51,12 +51,25 @@ public final class TaskExecutor {
         Object result = null;
 
         for (final Task task : tasks) {
-            if (null != result && result.getClass().equals(task.getDesiredTypeForPreviusResult())) {
-                result = task.execute(result);
-            } else {
-                result = task.execute();
-            }
+            result = executeTask(task, result);
         }
+    }
+
+    private Object executeTask(final Task task, final Object result) throws Exception {
+        if (null != result && hasResultExpectedType(task, result)) {
+            return executeUnchecked(task, result);
+        } else {
+            return task.execute();
+        }
+    }
+
+    private static boolean hasResultExpectedType(final Task task, final Object result) {
+        return result.getClass().equals(task.getDesiredTypeForPreviusResult());
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object executeUnchecked(final Task task, final Object result) throws Exception {
+        return task.execute(result);
     }
 
 }
