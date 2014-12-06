@@ -86,7 +86,7 @@
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
 
         <dependency.commons.version>1.1.3</dependency.commons.version>
-        <dependency.freemarkerdown.version>1.0.0-SNAPSHOT</dependency.freemarkerdown.version>
+        <dependency.freemarkerdown.version>1.0.0-beta</dependency.freemarkerdown.version>
         <dependency.joda-time.version>2.3</dependency.joda-time.version>
     </properties>
 
