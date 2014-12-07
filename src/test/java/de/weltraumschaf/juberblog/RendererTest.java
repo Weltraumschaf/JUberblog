@@ -49,6 +49,17 @@ public class RendererTest extends JUberblogTestCase {
                 + "</article>\n"
                 + "    </body>\n"
                 + "</html>"));
+        assertThat(result.getMarkdown(), is(
+                "\n"
+                + "\n"
+                + "### This is the First Post\n"
+                + "\n"
+                + "Lorem ipsum  dolor sit amet consetetur  sadipscing elitr sed diam  nonumy eirmod\n"
+                + "tempor invidunt ut labore et dolore magna aliquyam.\n"
+                + "\n"
+                + "Lorem ipsum  dolor sit amet consetetur  sadipscing elitr sed diam  nonumy eirmod\n"
+                + "tempor invidunt ut labore et dolore magna aliquyam.\n"
+                + "\n"));
         assertThat(result.getMetaData().size(), is(1));
         assertThat(result.getMetaData(), hasEntry("Description", "This is the first post."));
     }

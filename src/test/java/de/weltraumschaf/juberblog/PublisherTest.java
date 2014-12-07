@@ -47,9 +47,9 @@ public class PublisherTest extends JUberblogTestCase {
         final Collection<Page> pages = sut.publish();
         assertThat(pages.size(), is(3));
         assertThat(pages, containsInAnyOrder(
-                new Page("title", "link", "This is the first post.", new DateTime(0L)),
-                new Page("title", "link", "This is the second post.", new DateTime(0L)),
-                new Page("title", "link", "This is the third post.", new DateTime(0L))
+                new Page("This is the First Post", "link", "This is the first post.", new DateTime(0L)),
+                new Page("This is the Second Post", "link", "This is the second post.", new DateTime(0L)),
+                new Page("This is the Third Post", "link", "This is the third post.", new DateTime(0L))
         ));
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());

@@ -58,8 +58,12 @@ public final class GenerateFeedTask extends BaseTask<Void, List<Page>> implement
 
     @Override
     public Void execute(final List<Page> previusResult) throws Exception {
-        final FreeMarkerDown fmd = FreeMarkerDown.create();
-        final Fragment template = fmd.createFragemnt(config.template, RenderOptions.WITHOUT_MARKDOWN);
+        final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
+        final Fragment template = fmd.createFragemnt(
+                config.template,
+                config.encoding,
+                config.template.toString(),
+                RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable("encoding", config.encoding);
         template.assignVariable("title", config.title);
         template.assignVariable("link", config.link);

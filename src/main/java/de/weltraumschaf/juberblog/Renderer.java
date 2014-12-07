@@ -15,6 +15,7 @@ import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.Interceptor;
+import de.weltraumschaf.freemarkerdown.Interceptor.ExecutionPoint;
 import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.PreProcessor;
@@ -57,10 +58,10 @@ final class Renderer {
      *
      * XXX: Inject one instance from main app.
      */
-    private final FreeMarkerDown fmd = FreeMarkerDown.create();
+    private final FreeMarkerDown fmd;
     private final Map<String, String> keyValues = Maps.newHashMap();
     private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
-    private final MarkdownInterceptor interceptor = new MarkdownInterceptor();
+    private final GetUnprocessedMarkdown interceptor = new GetUnprocessedMarkdown();
     /**
      * Outer part of the two step layout.
      */
@@ -81,10 +82,11 @@ final class Renderer {
     public Renderer(final Path outerTemplate, final Path innerTemplate, final String encoding) throws IOException {
         super();
         this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
-        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, RenderOptions.WITHOUT_MARKDOWN);
+        this.fmd = FreeMarkerDown.create(encoding);
+        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, "outerTemplate", RenderOptions.WITHOUT_MARKDOWN);
+        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, "innerTemplate", RenderOptions.WITHOUT_MARKDOWN);
         this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
-        fmd.register(interceptor, Interceptor.ExecutionPoint.BEFORE_RENDERING);
+        fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);
     }
 
     /**
@@ -109,12 +111,12 @@ final class Renderer {
         }
 
         keyValues.clear();
-        innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, encoding));
+        innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, encoding, "content"));
         outerTemplate.assignVariable("name", "NAME");
         outerTemplate.assignVariable("description", "DESCRIPTION");
         fmd.register(processor);
 
-        return new RendererResult(fmd.render(outerTemplate), keyValues);
+        return new RendererResult(fmd.render(outerTemplate), interceptor.getMarkdown(), keyValues);
     }
 
     /**
@@ -129,6 +131,7 @@ final class Renderer {
          * The rendered content (usually HTML).
          */
         private final String renderedContent;
+        private final String markdown;
         /**
          * Meta data found by pre processors of FreeMarkerDown.
          */
@@ -140,9 +143,10 @@ final class Renderer {
          * @param renderedContent must not be {@code null}
          * @param metaData must not be {@code null}
          */
-        private RendererResult(final String renderedContent, final Map<String, String> metaData) {
+        private RendererResult(final String renderedContent, final String markdown, final Map<String, String> metaData) {
             super();
             this.renderedContent = Validate.notNull(renderedContent, "renderedContent");
+            this.markdown = Validate.notNull(markdown, "markdown");
             this.metaData = Maps.newHashMap(Validate.notNull(metaData, "metaData"));
         }
 
@@ -153,6 +157,10 @@ final class Renderer {
          */
         String getRenderedContent() {
             return renderedContent;
+        }
+
+        String getMarkdown() {
+            return markdown;
         }
 
         /**
@@ -166,11 +174,21 @@ final class Renderer {
 
     }
 
-    private static final class MarkdownInterceptor implements Interceptor {
+    private static final class GetUnprocessedMarkdown implements Interceptor {
+
+        private String markdown = "";
 
         @Override
-        public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
+        public void intercept(final ExecutionPoint point, final TemplateModel template, String content) {
+            final String name = template.getName();
 
+            if ("content".equals(name)) {
+                markdown = content;
+            }
+        }
+
+        private String getMarkdown() {
+            return markdown;
         }
 
     }

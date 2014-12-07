@@ -16,6 +16,8 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Interceptor;
+import de.weltraumschaf.freemarkerdown.TemplateModel;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -94,10 +96,11 @@ public final class Publisher {
             final Map<String, String> metaData = result.getMetaData();
             final String description = metaData.containsKey("Description")
                     ? metaData.get("Description")
-                    : "";
+                    : ""; // TODO Extract excerpt from Markdown.
 
+            // XXX: Emit errors if something of this is not available.
             publishedPages.add(new Page(
-                    headline.find("title"), // TODO Find the Markdown / What to do if empty?.
+                     headline.find(result.getMarkdown()),
                     "link", // TODO Add link to published page.
                     description,
                     new DateTime(0L)));
@@ -105,4 +108,5 @@ public final class Publisher {
 
         return Collections.unmodifiableCollection(publishedPages);
     }
+
 }
