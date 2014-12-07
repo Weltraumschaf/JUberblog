@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.JUberblogTestCase;
 import java.net.URISyntaxException;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
+import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -25,11 +26,24 @@ import static org.junit.Assert.assertThat;
  */
 public class DataFileTest extends JUberblogTestCase {
 
-    @Test
-    public void getBareName() throws URISyntaxException {
-        final DataFile sut = new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString());
+    private final DataFile sut = new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString());
 
+    public DataFileTest() throws URISyntaxException {
+        super();
+    }
+
+    @Test
+    public void getBaseName() {
+        assertThat(sut.getBaseName(), is("2014-05-30T21.29.20_This-is-the-First-Post.md"));
+    }
+
+    @Test
+    public void getBareName() {
         assertThat(sut.getBareName(), is("This-is-the-First-Post"));
     }
 
+    @Test
+    public void getCreationDate() {
+        assertThat(sut.getCreationDate(), is(new DateTime("2014-05-30T21:29:20")));
+    }
 }

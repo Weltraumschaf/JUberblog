@@ -13,18 +13,28 @@ package de.weltraumschaf.juberblog.file;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import org.joda.time.DateTime;
 
 /**
  * Abstracts a file from file system which contains blog data.
+ * <p>
+ * A data file is expected to have a file name in this format:
+ * {@code YYYY-MM-DDTHH.MM.DD_This-is-the-First-Post.md}.
+ * </p>
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class DataFile {
 
+    /**
+     * Separates the creation date from the rest of the file name.
+     */
+    private static final String DATE_BARE_NAME_SEPARATOR = "_";
     /**
      * Absolute file name of data file.
      */
@@ -37,6 +47,14 @@ public final class DataFile {
      * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
      */
     private String bareName;
+    /**
+     * Lazy computed file base name.
+     */
+    private String baseName;
+    /**
+     * Lazy computed from the file name.
+     */
+    private DateTime creationDate;
     /**
      * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
      */
@@ -66,24 +84,54 @@ public final class DataFile {
     }
 
     /**
+     * get the base name part of the absolute file name.
+     *
+     * @return never {@code null}, same instance
+     */
+    public String getBaseName() {
+        if (null == baseName) {
+            final int lastSlashPosition = absoluteFileName.lastIndexOf(FileSystems.getDefault().getSeparator());
+            baseName = absoluteFileName.substring(lastSlashPosition + 1);
+        }
+
+        return baseName;
+    }
+
+    /**
      * Computes the bare file name.
      * <p>
      * The method strips the leading time stamp and the trailing file extension.
      * </p>
      * <p>
-     * Example: For a file name like {@code /foo/bar/baz/2014-05-30T21.29.20_This-is-the-First-Post.md} the bare name
-     * is {@code This-is-the-First-Post}.
+     * Example: For a file name like {@code /foo/bar/baz/2014-05-30T21.29.20_This-is-the-First-Post.md} the bare name is
+     * {@code This-is-the-First-Post}.
      * </p>
+     *
      * @return never {@code null}, same instance
      */
     public String getBareName() {
         if (null == bareName) {
-            final int firstDashPosition = absoluteFileName.lastIndexOf("_");
-            final int lastDotPosition = absoluteFileName.lastIndexOf(".");
-            bareName = absoluteFileName.substring(firstDashPosition + 1, lastDotPosition);
+            final int firstDashPosition = getBaseName().indexOf(DATE_BARE_NAME_SEPARATOR);
+            final int lastDotPosition = getBaseName().lastIndexOf(".");
+            bareName = getBaseName().substring(firstDashPosition + 1, lastDotPosition);
         }
 
         return bareName;
+    }
+
+    /**
+     * Get creation date.
+     *
+     * @return never {@code null}, same instance
+     */
+    public DateTime getCreationDate() {
+        if (null == creationDate) {
+            final int firstDashPosition = getBaseName().indexOf(DATE_BARE_NAME_SEPARATOR);
+            final String dateTime = getBaseName().substring(0, firstDashPosition).replaceAll("\\.", ":");
+            creationDate = new DateTime(dateTime);
+        }
+
+        return creationDate;
     }
 
     /**

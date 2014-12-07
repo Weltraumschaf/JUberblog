@@ -103,7 +103,7 @@ public final class Publisher {
                      headline.find(result.getMarkdown()),
                     "link", // TODO Add link to published page.
                     description,
-                    new DateTime(0L)));
+                    foundPostData.getCreationDate()));
         }
 
         return Collections.unmodifiableCollection(publishedPages);
