@@ -15,10 +15,14 @@ import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests for {@link Renderer}.
@@ -27,11 +31,21 @@ import org.junit.Ignore;
  */
 public class RendererTest extends JUberblogTestCase {
 
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
+
+    final Renderer sut = new Renderer(createPath("layout.ftl"), createPath("post.ftl"), ENCODING);
+
+    public RendererTest() throws IOException, URISyntaxException {
+        super();
+    }
+
     @Test
     public void render() throws URISyntaxException, UnsupportedEncodingException, IOException {
-        final Renderer renderer = new Renderer(createPath("layout.ftl"), createPath("post.ftl"), ENCODING);
-
-        final Renderer.RendererResult result = renderer.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
+        final Renderer.RendererResult result = sut.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
         assertThat(result.getRenderedContent(), is(
                 "<!DOCTYPE html>\n"
@@ -65,18 +79,27 @@ public class RendererTest extends JUberblogTestCase {
     }
 
     @Test
-    @Ignore("TODO Implement RendererTest#render_pathIsNull()")
-    public void render_pathIsNull() {
+    public void render_pathIsNull() throws IOException {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("'content'");
+
+        sut.render(null);
     }
 
     @Test
-    @Ignore("TODO Implement RendererTest#render_pathDoesNotExist()")
-    public void render_pathDoesNotExist() {
+    public void render_pathDoesNotExist() throws IOException {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Given path '/foo/ba/baz' does not exist!");
+
+        sut.render(Paths.get("/foo/ba/baz"));
     }
 
     @Test
-    @Ignore("TODO Implement RendererTest#render_pathIsNotDirecotry()")
-    public void render_pathIsNotDirecotry() {
+    public void render_pathIsDirecotry() throws IOException {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("is a directory");
+
+        sut.render(tmp.getRoot().toPath());
     }
 
 }

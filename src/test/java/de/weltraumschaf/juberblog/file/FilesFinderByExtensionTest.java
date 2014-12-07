@@ -14,11 +14,14 @@ package de.weltraumschaf.juberblog.file;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests for {@link FilesFinderByExtension}.
@@ -27,10 +30,16 @@ import org.junit.Ignore;
  */
 public class FilesFinderByExtensionTest extends JUberblogTestCase {
 
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
+
+    private final FilesFinderByExtension sut = FilesFinderByExtension.MARKDOWN;
+
     @Test
     public void findMarkdownFiles() throws URISyntaxException, IOException {
-        final FilesFinderByExtension sut = FilesFinderByExtension.MARKDOWN;
-
         final Collection<DataFile> foundFiles = sut.find(createPath("posts"));
 
         assertThat(foundFiles.size(), is(3));
@@ -42,18 +51,27 @@ public class FilesFinderByExtensionTest extends JUberblogTestCase {
     }
 
     @Test
-    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathIsNull()")
-    public void find_pathIsNull() {
+    public void find_pathIsNull() throws IOException {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("'directory'");
+
+        sut.find(null);
     }
 
     @Test
-    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathDoesNotExist()")
-    public void find_pathDoesNotExist() {
+    public void find_pathDoesNotExist() throws IOException {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Given path '/foo/bar/baz' does not exist!");
+
+        sut.find(Paths.get("/foo/bar/baz"));
     }
 
     @Test
-    @Ignore("TODO Implement FilesFinderByExtensionTest#find_pathIsNotDirecotry()")
-    public void find_pathIsNotDirecotry() {
+    public void find_pathIsNotDirecotry() throws IOException {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("is not a directory");
+
+        sut.find(tmp.newFile().toPath());
     }
 
 }
