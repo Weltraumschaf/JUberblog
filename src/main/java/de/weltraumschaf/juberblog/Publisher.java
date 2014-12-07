@@ -43,7 +43,7 @@ public final class Publisher {
      * Used encoding for IO.
      */
     private final String encoding;
-    private final String baseUrlForPosts;
+    private final String baseUrlForPages;
     /**
      * Renders the page (Markdown/templates).
      */
@@ -59,7 +59,7 @@ public final class Publisher {
      * @param encoding must not be {@code null} or empty
      * @throws IOException
      */
-    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPosts) throws IOException {
+    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPages) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
         this.outputDir = Validate.notNull(outputDir, "outputDir");
@@ -69,7 +69,7 @@ public final class Publisher {
                 encoding
         );
         this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.baseUrlForPosts = Validate.notEmpty(baseUrlForPosts, "baseUrlForPosts");
+        this.baseUrlForPages = Validate.notEmpty(baseUrlForPages, "baseUrlForPages");
     }
 
     /**
@@ -84,9 +84,9 @@ public final class Publisher {
     public Collection<Page> publish() throws IOException {
         final Collection<Page> publishedPages = Lists.newArrayList();
 
-        for (final DataFile foundPostData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
-            final Renderer.RendererResult result = renderer.render(foundPostData.getPath());
-            final String outputBaseName = foundPostData.getBareName() + FileNameExtension.HTML.getExtension();
+        for (final DataFile foundData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
+            final Renderer.RendererResult result = renderer.render(foundData.getPath());
+            final String outputBaseName = foundData.getBareName() + FileNameExtension.HTML.getExtension();
 
             Files.write(outputDir.resolve(outputBaseName), result.getRenderedContent().getBytes(encoding));
 
@@ -98,10 +98,10 @@ public final class Publisher {
 
             // XXX: Emit errors if something of this is not available.
             publishedPages.add(new Page(
-                     headline.find(result.getMarkdown()),
-                    baseUrlForPosts + "/" + outputBaseName,
+                    headline.find(result.getMarkdown()),
+                    baseUrlForPages + "/" + outputBaseName,
                     description,
-                    foundPostData.getCreationDate()));
+                    foundData.getCreationDate()));
         }
 
         return Collections.unmodifiableCollection(publishedPages);
