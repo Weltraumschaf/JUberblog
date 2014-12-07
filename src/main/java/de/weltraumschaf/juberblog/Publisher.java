@@ -43,6 +43,9 @@ public final class Publisher {
      * Used encoding for IO.
      */
     private final String encoding;
+    /**
+     * Base URL of published pages.
+     */
     private final String baseUrlForPages;
     /**
      * Renders the page (Markdown/templates).
