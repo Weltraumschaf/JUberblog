@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Page.Pages;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -84,8 +85,8 @@ public final class Publisher {
      * @return never {@code null}, unmodifiable
      * @throws IOException on any file IO error
      */
-    public Collection<Page> publish() throws IOException {
-        final Collection<Page> publishedPages = Lists.newArrayList();
+    public Pages publish() throws IOException {
+        final Pages publishedPages = new Pages();
 
         for (final DataFile foundData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
             final Renderer.RendererResult result = renderer.render(foundData.getPath());
@@ -107,7 +108,7 @@ public final class Publisher {
                     foundData.getCreationDate()));
         }
 
-        return Collections.unmodifiableCollection(publishedPages);
+        return publishedPages;
     }
 
 }

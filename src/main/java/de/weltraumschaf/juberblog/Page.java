@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.validate.Validate;
+import java.util.ArrayList;
 import java.util.Objects;
 import org.joda.time.DateTime;
 
@@ -78,4 +79,11 @@ public class Page {
                 + '}';
     }
 
+    public static final class Pages extends ArrayList<Page> {
+
+        public Pages() {
+            super();
+        }
+
+    }
 }

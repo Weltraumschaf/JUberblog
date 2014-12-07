@@ -11,10 +11,9 @@
  */
 package de.weltraumschaf.juberblog.tasks;
 
-import de.weltraumschaf.juberblog.DateFormatter;
-import de.weltraumschaf.juberblog.DateFormatter.Format;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import de.weltraumschaf.juberblog.Page;
+import de.weltraumschaf.juberblog.Page.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -92,9 +91,10 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 "description",
                 "language",
                 DateTime.parse("01.12.2014", formatter)));
-        sut.execute(Arrays.asList(
-                new Page("title1", "link1", "desc1", DateTime.parse("29.11.2014", formatter)),
-                new Page("title2", "link2", "desc2", DateTime.parse("30.11.2014", formatter))));
+        final Pages pages = new Pages();
+        pages.add(new Page("title1", "link1", "desc1", DateTime.parse("29.11.2014", formatter)));
+        pages.add(new Page("title2", "link2", "desc2", DateTime.parse("30.11.2014", formatter)));
+        sut.execute(pages);
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());

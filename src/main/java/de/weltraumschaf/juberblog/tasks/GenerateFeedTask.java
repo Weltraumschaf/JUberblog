@@ -20,6 +20,7 @@ import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.DateFormatter;
 import de.weltraumschaf.juberblog.DateFormatter.Format;
 import de.weltraumschaf.juberblog.Page;
+import de.weltraumschaf.juberblog.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +35,7 @@ import org.joda.time.DateTime;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class GenerateFeedTask extends BaseTask<Void, List<Page>> implements Task<Void, List<Page>> {
+public final class GenerateFeedTask extends BaseTask<Void, Pages> implements Task<Void, Pages> {
 
     /**
      * Task configuration.
@@ -47,17 +48,17 @@ public final class GenerateFeedTask extends BaseTask<Void, List<Page>> implement
      * @param config  must not be {@code null}
      */
     public GenerateFeedTask(final Config config) {
-        super(BaseTask.<List<Page>>castClass(List.class));
+        super(Pages.class);
         this.config = Validate.notNull(config, "config");
     }
 
     @Override
     public Void execute() throws Exception {
-        return execute(Collections.<Page>emptyList());
+        return execute(new Pages());
     }
 
     @Override
-    public Void execute(final List<Page> previusResult) throws Exception {
+    public Void execute(final Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
                 config.template,
