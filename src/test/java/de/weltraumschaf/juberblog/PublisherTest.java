@@ -41,7 +41,8 @@ public class PublisherTest extends JUberblogTestCase {
                 tmp.getRoot().toPath(),
                 createPath("layout.ftl"),
                 createPath("post.ftl"),
-                ENCODING
+                ENCODING,
+                "http://localhost/posts"
         );
 
         final Collection<Page> pages = sut.publish();
@@ -49,17 +50,17 @@ public class PublisherTest extends JUberblogTestCase {
         assertThat(pages, containsInAnyOrder(
                 new Page(
                         "This is the First Post",
-                        "link",
+                        "http://localhost/posts/This-is-the-First-Post.html",
                         "This is the first post.",
                         new DateTime("2014-05-30T21:29:20")),
                 new Page(
                         "This is the Second Post",
-                        "link",
+                        "http://localhost/posts/This-is-the-Second-Post.html",
                         "This is the second post.",
                         new DateTime("2014-06-30T23:25:44")),
                 new Page(
                         "This is the Third Post",
-                        "link",
+                        "http://localhost/posts/This-is-the-Third-Post.html",
                         "This is the third post.",
                         new DateTime("2014-07-28T17:44:13"))
         ));

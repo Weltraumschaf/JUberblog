@@ -41,12 +41,12 @@ public class AppTest extends JUberblogTestCase {
     public void publishing() throws Exception {
         final TaskExecutor executor = new TaskExecutor();
         executor.append(new PublishTask(new PublishTask.Config(
-                ENCODING,
-                createPath("posts"),
-                tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("post.ftl")
-        )))
+                                        ENCODING,
+                                        createPath("posts"),
+                                        tmp.getRoot().toPath(),
+                                        createPath("layout.ftl"),
+                                        createPath("post.ftl")
+                                )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         createPath("feed.ftl"),
                                         tmp.getRoot().toPath(),

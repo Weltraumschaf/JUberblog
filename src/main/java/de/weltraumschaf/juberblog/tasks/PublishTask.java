@@ -16,7 +16,6 @@ import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.Publisher;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  *
@@ -38,7 +37,8 @@ public final class PublishTask extends BaseTask<Collection<Page>, Void> implemen
                 config.outputDir,
                 config.layoutTemplate,
                 config.contentTemplate,
-                config.encoding
+                config.encoding,
+                "http://localhost/posts"
         );
 
         return publisher.publish();

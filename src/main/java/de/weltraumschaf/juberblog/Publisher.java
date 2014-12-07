@@ -16,15 +16,12 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.freemarkerdown.Interceptor;
-import de.weltraumschaf.freemarkerdown.TemplateModel;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import org.joda.time.DateTime;
 
 /**
  * Publish pages from given data files into a given directory.
@@ -46,6 +43,7 @@ public final class Publisher {
      * Used encoding for IO.
      */
     private final String encoding;
+    private final String baseUrlForPosts;
     /**
      * Renders the page (Markdown/templates).
      */
@@ -61,7 +59,7 @@ public final class Publisher {
      * @param encoding must not be {@code null} or empty
      * @throws IOException
      */
-    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding) throws IOException {
+    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPosts) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
         this.outputDir = Validate.notNull(outputDir, "outputDir");
@@ -71,6 +69,7 @@ public final class Publisher {
                 encoding
         );
         this.encoding = Validate.notEmpty(encoding, "encoding");
+        this.baseUrlForPosts = Validate.notEmpty(baseUrlForPosts, "baseUrlForPosts");
     }
 
     /**
@@ -87,10 +86,9 @@ public final class Publisher {
 
         for (final DataFile foundPostData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
             final Renderer.RendererResult result = renderer.render(foundPostData.getPath());
+            final String outputBaseName = foundPostData.getBareName() + FileNameExtension.HTML.getExtension();
 
-            Files.write(outputDir.resolve(foundPostData.getBareName() + FileNameExtension.HTML.getExtension()),
-                    result.getRenderedContent().getBytes(encoding)
-            );
+            Files.write(outputDir.resolve(outputBaseName), result.getRenderedContent().getBytes(encoding));
 
             // XXX: Check if present, extract etc.
             final Map<String, String> metaData = result.getMetaData();
@@ -101,7 +99,7 @@ public final class Publisher {
             // XXX: Emit errors if something of this is not available.
             publishedPages.add(new Page(
                      headline.find(result.getMarkdown()),
-                    "link", // TODO Add link to published page.
+                    baseUrlForPosts + "/" + outputBaseName,
                     description,
                     foundPostData.getCreationDate()));
         }
