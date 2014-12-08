@@ -16,13 +16,13 @@ import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Page.Pages;
+import de.weltraumschaf.juberblog.Page.SortByDateAscending;
+import de.weltraumschaf.juberblog.Page.Type;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
-import org.joda.time.DateTimeComparator;
 
 /**
  * Publish pages from given data files into a given directory.
@@ -52,6 +52,7 @@ public final class Publisher {
      * Renders the page (Markdown/templates).
      */
     private final Renderer renderer;
+    private final Type type;
 
     /**
      * Dedicated constructor.
@@ -63,7 +64,7 @@ public final class Publisher {
      * @param encoding must not be {@code null} or empty
      * @throws IOException
      */
-    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPages) throws IOException {
+    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPages, final Type type) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
         this.outputDir = Validate.notNull(outputDir, "outputDir");
@@ -74,6 +75,7 @@ public final class Publisher {
         );
         this.encoding = Validate.notEmpty(encoding, "encoding");
         this.baseUrlForPages = Validate.notEmpty(baseUrlForPages, "baseUrlForPages");
+        this.type = Validate.notNull(type, "type");
     }
 
     /**
@@ -105,21 +107,12 @@ public final class Publisher {
                     headline.find(result.getMarkdown()),
                     baseUrlForPages + "/" + outputBaseName,
                     description,
-                    foundData.getCreationDate()));
+                    foundData.getCreationDate(),
+                    type));
         }
 
         Collections.sort(publishedPages, new SortByDateAscending());
         return publishedPages;
     }
 
-    private static final class SortByDateAscending implements Comparator<Page> {
-
-        private final Comparator<Object> jodaCompare = DateTimeComparator.getInstance();
-
-        @Override
-        public int compare(final Page o1, final Page o2) {
-            return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());
-        }
-
-    }
 }

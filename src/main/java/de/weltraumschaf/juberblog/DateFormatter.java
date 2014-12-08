@@ -46,12 +46,18 @@ public class DateFormatter {
          * Publishing date format for RSS files.
          *//**
          * Publishing date format for RSS files.
+         *//**
+         * Publishing date format for RSS files.
+         *//**
+         * Publishing date format for RSS files.
          */
         RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z"),
         /**
          * DC publishing date format.
+         *
+         * http://www.w3.org/TR/NOTE-datetime
          */
-        RSS_DC_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ssZZ");
+        W3C_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ssZZ");
         /**
          * USed to format date time.
          */

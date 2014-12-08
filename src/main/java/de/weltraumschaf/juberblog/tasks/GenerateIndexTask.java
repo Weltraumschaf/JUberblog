@@ -20,6 +20,7 @@ import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.DateFormatter;
 import de.weltraumschaf.juberblog.Page;
+import de.weltraumschaf.juberblog.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,27 +33,22 @@ import java.util.Map;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class GenerateIndexTask implements Task<Void, Page.Pages> {
+public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pages, Pages> {
 
     private final Config config;
 
     public GenerateIndexTask(final Config config) {
-        super();
+        super(Pages.class);
         this.config = Validate.notNull(config, "config");
     }
 
     @Override
-    public Class<Page.Pages> getDesiredTypeForPreviusResult() {
-        return Page.Pages.class;
-    }
-
-    @Override
-    public Void execute() throws Exception {
+    public Pages execute() throws Exception {
         return execute(new Page.Pages());
     }
 
     @Override
-    public Void execute(Page.Pages previusResult) throws Exception {
+    public Pages execute(Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
                 config.indexTemplate,
@@ -73,7 +69,7 @@ public class GenerateIndexTask implements Task<Void, Page.Pages> {
                 fmd.render(layout).getBytes(config.encoding)
         );
 
-        return null;
+        return previusResult;
     }
 
     private Collection<Map<String, String>> convert(final List<Page> pages) {
@@ -92,7 +88,7 @@ public class GenerateIndexTask implements Task<Void, Page.Pages> {
         item.put("link", page.getLink());
         item.put("description", page.getDescription());
         item.put("pubDate", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
-        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.RSS_DC_DATE_FORMAT));
+        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
         return Collections.unmodifiableMap(item);
     }
 

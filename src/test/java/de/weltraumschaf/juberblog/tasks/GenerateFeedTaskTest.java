@@ -88,8 +88,8 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 "language",
                 new DateTime("2014-12-01")));
         final Pages pages = new Pages();
-        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29")));
-        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30")));
+        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
+        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
 
         sut.execute(pages);
 

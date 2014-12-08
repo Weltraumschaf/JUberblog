@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -80,8 +79,8 @@ public class GenerateIndexTaskTest extends JUberblogTestCase {
                 createPath("layout.ftl"),
                 createPath("index.ftl")));
         final Page.Pages pages = new Page.Pages();
-        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29")));
-        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30")));
+        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
+        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
 
         sut.execute(pages);
 

@@ -99,7 +99,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         item.put("link", page.getLink());
         item.put("description", page.getDescription());
         item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
-        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_DC_DATE_FORMAT));
+        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));
         return Collections.unmodifiableMap(item);
     }
 

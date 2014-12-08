@@ -13,8 +13,10 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 
 /**
  *
@@ -26,13 +28,15 @@ public class Page {
     private final String link; // TODO Use URI.
     private final String description;
     private final DateTime publishingDate;
+    private final Type type;
 
-    public Page(final String title, final String link, final String description, final DateTime publishingDate) {
+    public Page(final String title, final String link, final String description, final DateTime publishingDate, final Type type) {
         super();
         this.title = Validate.notEmpty(title, "title");
         this.link = Validate.notNull(link, "link");
         this.description = Validate.notNull(description, "description");
         this.publishingDate = Validate.notNull(publishingDate, "publishingDate");
+        this.type = Validate.notNull(type, "type");
     }
 
     public String getTitle() {
@@ -51,9 +55,13 @@ public class Page {
         return publishingDate;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(title, link, description, publishingDate);
+        return Objects.hash(title, link, description, publishingDate, type);
     }
 
     @Override
@@ -66,7 +74,8 @@ public class Page {
         return Objects.equals(title, other.title)
                 && Objects.equals(link, other.link)
                 && Objects.equals(description, other.description)
-                && Objects.equals(publishingDate, other.publishingDate);
+                && Objects.equals(publishingDate, other.publishingDate)
+                && Objects.equals(type, other.type);
     }
 
     @Override
@@ -75,7 +84,8 @@ public class Page {
                 + "title=" + title + ", "
                 + "link=" + link + ", "
                 + "description=" + description + ", "
-                + "publishingDate=" + publishingDate
+                + "publishingDate=" + publishingDate + ", "
+                + "type=" + type
                 + '}';
     }
 
@@ -83,6 +93,22 @@ public class Page {
 
         public Pages() {
             super();
+        }
+
+    }
+
+    public enum Type {
+
+        POST, SITE;
+    }
+
+    public static final class SortByDateAscending implements Comparator<Page> {
+
+        private final Comparator<Object> jodaCompare = DateTimeComparator.getInstance();
+
+        @Override
+        public int compare(final Page o1, final Page o2) {
+            return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());
         }
 
     }

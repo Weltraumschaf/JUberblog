@@ -42,7 +42,8 @@ public class PublisherTest extends JUberblogTestCase {
                 createPath("layout.ftl"),
                 createPath("post.ftl"),
                 ENCODING,
-                "http://localhost/posts"
+                "http://localhost/posts",
+                Page.Type.POST
         );
 
         final Collection<Page> pages = sut.publish();
@@ -52,17 +53,17 @@ public class PublisherTest extends JUberblogTestCase {
                         "This is the First Post",
                         "http://localhost/posts/This-is-the-First-Post.html",
                         "This is the first post.",
-                        new DateTime("2014-05-30T21:29:20")),
+                        new DateTime("2014-05-30T21:29:20"), Page.Type.POST),
                 new Page(
                         "This is the Second Post",
                         "http://localhost/posts/This-is-the-Second-Post.html",
                         "This is the second post.",
-                        new DateTime("2014-06-30T23:25:44")),
+                        new DateTime("2014-06-30T23:25:44"), Page.Type.POST),
                 new Page(
                         "This is the Third Post",
                         "http://localhost/posts/This-is-the-Third-Post.html",
                         "This is the third post.",
-                        new DateTime("2014-07-28T17:44:13"))
+                        new DateTime("2014-07-28T17:44:13"), Page.Type.POST)
         ));
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());

@@ -15,6 +15,7 @@ import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.Page;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
@@ -44,7 +45,8 @@ public class PublishTaskTest extends JUberblogTestCase {
                 createPath("sites"),
                 tmp.getRoot().toPath(),
                 createPath("layout.ftl"),
-                createPath("site.ftl")
+                createPath("site.ftl"),
+                Page.Type.SITE
         ));
 
         sut.execute();
