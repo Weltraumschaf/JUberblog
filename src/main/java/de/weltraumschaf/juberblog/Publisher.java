@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog;
 
-import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -20,9 +19,10 @@ import de.weltraumschaf.juberblog.Page.Pages;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
+import org.joda.time.DateTimeComparator;
 
 /**
  * Publish pages from given data files into a given directory.
@@ -108,7 +108,18 @@ public final class Publisher {
                     foundData.getCreationDate()));
         }
 
-        return publishedPages; // TODO Sort pages from old to new.
+        Collections.sort(publishedPages, new SortByDateAscending());
+        return publishedPages;
     }
 
+    private static final class SortByDateAscending implements Comparator<Page> {
+
+        private final Comparator<Object> jodaCompare = DateTimeComparator.getInstance();
+
+        @Override
+        public int compare(final Page o1, final Page o2) {
+            return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());
+        }
+
+    }
 }
