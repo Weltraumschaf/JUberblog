@@ -90,6 +90,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
         final Pages pages = new Pages();
         pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29")));
         pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30")));
+
         sut.execute(pages);
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
