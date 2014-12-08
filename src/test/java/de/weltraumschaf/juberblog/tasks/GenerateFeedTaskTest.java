@@ -17,13 +17,10 @@ import de.weltraumschaf.juberblog.Page.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
-import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -37,7 +34,6 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
-    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
 
     @Test(expected = NullPointerException.class)
     public void constructWithNullThrowsException() {
@@ -54,7 +50,7 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 "link",
                 "description",
                 "language",
-                DateTime.parse("01.12.2014", formatter)));
+                new DateTime("2014-12-01")));
 
         sut.execute();
 
@@ -90,10 +86,10 @@ public class GenerateFeedTaskTest extends JUberblogTestCase {
                 "link",
                 "description",
                 "language",
-                DateTime.parse("01.12.2014", formatter)));
+                new DateTime("2014-12-01")));
         final Pages pages = new Pages();
-        pages.add(new Page("title1", "link1", "desc1", DateTime.parse("29.11.2014", formatter)));
-        pages.add(new Page("title2", "link2", "desc2", DateTime.parse("30.11.2014", formatter)));
+        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29")));
+        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30")));
         sut.execute(pages);
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
