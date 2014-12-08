@@ -108,7 +108,7 @@ public final class Publisher {
                     foundData.getCreationDate()));
         }
 
-        return publishedPages;
+        return publishedPages; // TODO Sort pages from old to new.
     }
 
 }

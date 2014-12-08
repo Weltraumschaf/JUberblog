@@ -12,11 +12,9 @@
 package de.weltraumschaf.juberblog.tasks;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.Page;
 import de.weltraumschaf.juberblog.Page.Pages;
 import de.weltraumschaf.juberblog.Publisher;
 import java.nio.file.Path;
-import java.util.Collection;
 
 /**
  *

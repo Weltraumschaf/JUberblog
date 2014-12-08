@@ -35,7 +35,7 @@ import org.joda.time.DateTime;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class GenerateFeedTask extends BaseTask<Void, Pages> implements Task<Void, Pages> {
+public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Task<Pages, Pages> {
 
     /**
      * Task configuration.
@@ -53,12 +53,12 @@ public final class GenerateFeedTask extends BaseTask<Void, Pages> implements Tas
     }
 
     @Override
-    public Void execute() throws Exception {
+    public Pages execute() throws Exception {
         return execute(new Pages());
     }
 
     @Override
-    public Void execute(final Pages previusResult) throws Exception {
+    public Pages execute(final Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
                 config.template,
@@ -80,11 +80,10 @@ public final class GenerateFeedTask extends BaseTask<Void, Pages> implements Tas
                 fmd.render(template).getBytes(config.encoding)
         );
 
-        return null;
+        return previusResult;
     }
 
     private Collection<Map<String, String>> convert(final List<Page> pages) {
-        // TODO Sort pages from old to new.
         final Collection<Map<String, String>> items = Lists.newArrayList();
 
         for (final Page page : pages) {
