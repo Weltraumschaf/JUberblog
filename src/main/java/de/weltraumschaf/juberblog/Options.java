@@ -21,8 +21,6 @@ import java.util.List;
  */
 public final class Options {
 
-    @Parameter(names = {"-d", "--debug"})
-    private boolean debug;
     @Parameter(names = {"-h", "--help"})
     private boolean help;
     @Parameter(names = {"-v", "--version"})
@@ -32,10 +30,6 @@ public final class Options {
      */
     @Parameter
     private List<String> rest = new ArrayList<>();
-
-    boolean isDebug() {
-        return debug;
-    }
 
     boolean isHelp() {
         return help;

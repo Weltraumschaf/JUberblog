@@ -37,7 +37,7 @@ public final class App extends InvokableAdapter {
     /**
      * To obtain environment variables.
      */
-    private final Environments.Env env = Environments.defaultEnv();
+    private final Environments.Env env;
     /**
      * Version information.
      */
@@ -45,14 +45,19 @@ public final class App extends InvokableAdapter {
     private Options options = new Options();
     private Arguments arguments = new Arguments();
 
+    App(final String[] args) {
+        this(args, Environments.defaultEnv());
+    }
+
     /**
      * Dedicated constructor.
      *
      * @param args must not be {@code null}
      */
-    public App(final String[] args) {
+    App(final String[] args, final Environments.Env env) {
         super(args);
-        version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
+        this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
+        this.env = Validate.notNull(env, "env");
     }
 
     /**
@@ -73,7 +78,7 @@ public final class App extends InvokableAdapter {
         System.err.print(Validate.notNull(prefix, "prefix"));
         System.err.println(Validate.notNull(cause, "cause").getMessage());
 
-        if (Validate.notNull(invokable, "invokable").isDebug()) {
+        if (Validate.notNull(invokable, "invokable").isEnvDebug()) {
             cause.printStackTrace(System.err);
         }
 
@@ -84,16 +89,23 @@ public final class App extends InvokableAdapter {
     /**
      * Main entry point of VM.
      *
-     * @param args cli arguments from VM
+     * @param args CLI arguments from VM
      */
     public static void main(final String[] args) {
         final App invokable = new App(args);
 
         try {
-            InvokableAdapter.main(invokable, IOStreams.newDefault(), invokable.isDebug());
+            InvokableAdapter.main(
+                    invokable,
+                    IOStreams.newDefault(),
+                    invokable.isEnvDebug());
         } catch (final UnsupportedEncodingException ex) {
             handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
         }
+    }
+
+    Options getOptions() {
+        return options;
     }
 
     /**
@@ -101,9 +113,9 @@ public final class App extends InvokableAdapter {
      *
      * @return by default {@code false} if environment is not present or false
      */
-    private boolean isDebug() {
+    boolean isEnvDebug() {
         final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
-        return options.isDebug() || "true".equalsIgnoreCase(debug.trim());
+        return "true".equalsIgnoreCase(debug.trim());
     }
 
     @Override
