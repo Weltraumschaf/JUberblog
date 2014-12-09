@@ -117,7 +117,7 @@ public final class App extends InvokableAdapter {
 
         if (options.isHelp()) {
             getIoStreams().println(cliArgs.helpMessage(
-                    "publish [-h] [-v] [-d]",
+                    "create|install|publish [-h] [-v] [-d]",
                     "Commandline tool to manage your blog.",
                     "TODO"));
             return;
