@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog;
 
-import com.beust.jcommander.Parameter;
+import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
@@ -20,6 +20,8 @@ import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.create.CreateSubCommand;
+import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -134,6 +136,12 @@ public final class App extends InvokableAdapter {
         final SubCommand command;
 
         switch (SubCommandName.betterValueOf(arguments.getFirstArgument())) {
+            case CREATE:
+                command = new CreateSubCommand(options, getIoStreams());
+                break;
+            case INSTALL:
+                command = new InstallSubCommand(options, getIoStreams());
+                break;
             case PUBLISH:
                 command = new PublishSubCommand(options, getIoStreams());
                 break;
@@ -151,19 +159,15 @@ public final class App extends InvokableAdapter {
 
     private enum SubCommandName {
 
-        PUBLISH, UNKNOWN;
+        CREATE, INSTALL, PUBLISH, UNKNOWN;
 
         static SubCommandName betterValueOf(final String name) {
             try {
                 return valueOf(name.toUpperCase());
-            } catch(final IllegalArgumentException ex){
+            } catch (final IllegalArgumentException ex) {
                 return UNKNOWN;
             }
         }
-    }
-
-    interface SubCommand {
-        void execute();
     }
 
 }
