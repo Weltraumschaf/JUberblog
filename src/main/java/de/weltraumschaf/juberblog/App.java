@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
@@ -145,31 +146,29 @@ public final class App extends InvokableAdapter {
     }
 
     private void executeSubCommand() throws ApplicationException {
-        final SubCommand command;
+        final SubCommand command = createSubcommand(arguments.getFirstArgument(), options, getIoStreams());
+        command.execute();
+    }
 
-        switch (SubCommandName.betterValueOf(arguments.getFirstArgument())) {
+    static SubCommand createSubcommand(final String commandName, final Options options, final IO io) throws ApplicationException {
+        switch (SubCommandName.betterValueOf(commandName)) {
             case CREATE:
-                command = new CreateSubCommand(options, getIoStreams());
-                break;
+                return new CreateSubCommand(options, io);
             case INSTALL:
-                command = new InstallSubCommand(options, getIoStreams());
-                break;
+                return new InstallSubCommand(options, io);
             case PUBLISH:
-                command = new PublishSubCommand(options, getIoStreams());
-                break;
+                return new PublishSubCommand(options, io);
             case UNKNOWN:
                 throw new ApplicationException(
                         ExitCodeImpl.FATAL,
-                        String.format("Unknown sub command: '%s'!", arguments.getFirstArgument()));
+                        String.format("Unknown sub command: '%s'!", commandName));
             default:
                 throw new IllegalStateException(
                         "Unhandled sub command type given!This must never happen.Please filea bug.");
         }
-
-        command.execute();
     }
 
-    private enum SubCommandName {
+    enum SubCommandName {
 
         CREATE, INSTALL, PUBLISH, UNKNOWN;
 

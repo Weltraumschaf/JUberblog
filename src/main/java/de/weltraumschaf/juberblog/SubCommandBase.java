@@ -19,7 +19,7 @@ import de.weltraumschaf.commons.validate.Validate;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class SubCommandBase {
+public abstract class SubCommandBase implements SubCommand {
 
     private final Options options;
     private final IO io;
@@ -30,11 +30,13 @@ public abstract class SubCommandBase {
         this.io = Validate.notNull(io, "io");
     }
 
-    protected final Options options() {
+    @Override
+    public final Options options() {
         return options;
     }
 
-    protected final IO io() {
+    @Override
+    public final IO io() {
         return io;
     }
 

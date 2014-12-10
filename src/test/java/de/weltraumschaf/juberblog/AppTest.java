@@ -11,7 +11,13 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.system.Environments.Env;
+import de.weltraumschaf.juberblog.App.SubCommandName;
+import de.weltraumschaf.juberblog.create.CreateSubCommand;
+import de.weltraumschaf.juberblog.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -53,5 +59,58 @@ public class AppTest {
         final App sut = new App(new String[0], env);
 
         assertThat(sut.isEnvDebug(), is(false));
+    }
+
+    @Test
+    public void createSubcommand_create() throws ApplicationException {
+        final Options options = new Options();
+        final IO io = mock(IO.class);
+
+        final SubCommand cmd = App.createSubcommand("create", options, io);
+
+        assertThat(cmd, is(instanceOf(CreateSubCommand.class)));
+        assertThat(cmd.options(), is(sameInstance(options)));
+        assertThat(cmd.io(), is(sameInstance(io)));
+    }
+
+    @Test
+    public void createSubcommand_install() throws ApplicationException {
+        final Options options = new Options();
+        final IO io = mock(IO.class);
+
+        final SubCommand cmd = App.createSubcommand("install", options, io);
+
+        assertThat(cmd, is(instanceOf(InstallSubCommand.class)));
+        assertThat(cmd.options(), is(sameInstance(options)));
+        assertThat(cmd.io(), is(sameInstance(io)));
+    }
+
+    @Test
+    public void createSubcommand_publish() throws ApplicationException {
+        final Options options = new Options();
+        final IO io = mock(IO.class);
+
+        final SubCommand cmd = App.createSubcommand("publish", options, io);
+
+        assertThat(cmd, is(instanceOf(PublishSubCommand.class)));
+        assertThat(cmd.options(), is(sameInstance(options)));
+        assertThat(cmd.io(), is(sameInstance(io)));
+    }
+
+    @Test
+    public void SubCommandName_betterValueOf() {
+        assertThat(SubCommandName.betterValueOf("CREATE"), is(App.SubCommandName.CREATE));
+        assertThat(SubCommandName.betterValueOf("create"), is(App.SubCommandName.CREATE));
+        assertThat(SubCommandName.betterValueOf("CreATe"), is(App.SubCommandName.CREATE));
+
+        assertThat(SubCommandName.betterValueOf("INSTALL"), is(App.SubCommandName.INSTALL));
+        assertThat(SubCommandName.betterValueOf("install"), is(App.SubCommandName.INSTALL));
+        assertThat(SubCommandName.betterValueOf("iNStall"), is(App.SubCommandName.INSTALL));
+
+        assertThat(SubCommandName.betterValueOf("PUBLISH"), is(App.SubCommandName.PUBLISH));
+        assertThat(SubCommandName.betterValueOf("publish"), is(App.SubCommandName.PUBLISH));
+        assertThat(SubCommandName.betterValueOf("pUblISh"), is(App.SubCommandName.PUBLISH));
+
+        assertThat(SubCommandName.betterValueOf("foobar"), is(App.SubCommandName.UNKNOWN));
     }
 }

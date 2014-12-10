@@ -9,13 +9,19 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
+
+import de.weltraumschaf.commons.application.IO;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public interface SubCommand {
+
+    Options options();
+
+    IO io();
+
     void execute();
 }

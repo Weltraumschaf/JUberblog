@@ -14,14 +14,13 @@ package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.Options;
-import de.weltraumschaf.juberblog.SubCommand;
 import de.weltraumschaf.juberblog.SubCommandBase;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class PublishSubCommand extends SubCommandBase implements SubCommand {
+public final class PublishSubCommand extends SubCommandBase {
 
     public PublishSubCommand(final Options options, final IO io) {
         super(options, io);
