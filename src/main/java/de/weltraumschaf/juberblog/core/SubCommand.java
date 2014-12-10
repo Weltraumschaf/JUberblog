@@ -9,26 +9,19 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
-package de.weltraumschaf.juberblog.publish;
+package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.core.Options;
-import de.weltraumschaf.juberblog.core.SubCommandBase;
 
 /**
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public final class PublishSubCommand extends SubCommandBase {
+public interface SubCommand {
 
-    public PublishSubCommand(final Options options, final IO io) {
-        super(options, io);
-    }
+    Options options();
 
-    @Override
-    public void execute() {
-        io().println("publish");
-    }
+    IO io();
 
+    void execute();
 }

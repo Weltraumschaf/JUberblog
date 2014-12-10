@@ -11,14 +11,15 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
-import de.weltraumschaf.juberblog.tasks.GenerateFeedTask;
-import de.weltraumschaf.juberblog.tasks.GenerateIndexTask;
-import de.weltraumschaf.juberblog.tasks.GenerateSitemapTask;
-import de.weltraumschaf.juberblog.tasks.PublishTask;
-import de.weltraumschaf.juberblog.tasks.TaskExecutor;
+import de.weltraumschaf.juberblog.publish.GenerateFeedTask;
+import de.weltraumschaf.juberblog.publish.GenerateIndexTask;
+import de.weltraumschaf.juberblog.publish.GenerateSitemapTask;
+import de.weltraumschaf.juberblog.publish.PublishTask;
+import de.weltraumschaf.juberblog.core.TaskExecutor;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
