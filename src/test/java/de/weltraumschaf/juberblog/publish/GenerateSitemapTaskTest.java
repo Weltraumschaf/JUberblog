@@ -27,88 +27,75 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Tests for {@link GenerateIndexTask}.
+ * Tests for {@link GenerateSitemapTask}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class GenerateIndexTaskTest extends JUberblogTestCase {
+public class GenerateSitemapTaskTest extends JUberblogTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     @Test(expected = NullPointerException.class)
     public void constructWithNullThrowsException() {
-        new GenerateIndexTask(null);
+        new GenerateSitemapTask(null);
     }
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
-                ENCODING,
+        final GenerateSitemapTask sut = new GenerateSitemapTask(new GenerateSitemapTask.Config(
+                createPath("site_map.ftl"),
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("index.ftl")));
+                ENCODING));
 
         sut.execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML)
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), is(
-                "<!DOCTYPE html>\n"
-                + "<html>\n"
-                + "    <body>\n"
-                + "        <h1>TODO</h1>\n"
-                + "        <h2>TODO</h2>\n"
-                + "\n"
-                + "        <h3>All Blog Posts</h3>\n"
-                + "<ul>\n"
-                + "    </ul>\n"
-                + "\n"
-                + "    </body>\n"
-                + "</html>"));
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+                + "</urlset>"
+        ));
     }
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
-                ENCODING,
+        final GenerateSitemapTask sut = new GenerateSitemapTask(new GenerateSitemapTask.Config(
+                createPath("site_map.ftl"),
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("index.ftl")));
+                ENCODING));
         final Page.Pages pages = new Page.Pages();
         pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
         pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
 
         sut.execute(pages);
 
-        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML)
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), is(
-                "<!DOCTYPE html>\n"
-                + "<html>\n"
-                + "    <body>\n"
-                + "        <h1>TODO</h1>\n"
-                + "        <h2>TODO</h2>\n"
-                + "\n"
-                + "        <h3>All Blog Posts</h3>\n"
-                + "<ul>\n"
-                + "        <li>\n"
-                + "        <a href=\"link1\">title1</a>\n"
-                + "        <span>(Sat, 29 Nov 2014 00:00:00 +0100)</span>\n"
-                + "    </li>\n"
-                + "    <li>\n"
-                + "        <a href=\"link2\">title2</a>\n"
-                + "        <span>(Sun, 30 Nov 2014 00:00:00 +0100)</span>\n"
-                + "    </li>\n"
-                + "</ul>\n"
-                + "\n"
-                + "    </body>\n"
-                + "</html>"));
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+                + "    <url>\n"
+                + "        <loc>link1</loc>\n"
+                + "        <lastmod>2014-11-29T00:00:00+01:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>link2</loc>\n"
+                + "        <lastmod>2014-11-30T00:00:00+01:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "</urlset>"
+        ));
     }
+
 }
