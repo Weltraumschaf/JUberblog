@@ -11,14 +11,12 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.app.App;
 import de.weltraumschaf.juberblog.core.SubCommand;
 import de.weltraumschaf.juberblog.core.Options;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.system.Environments.Env;
-import de.weltraumschaf.juberblog.app.App.SubCommandName;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
@@ -101,20 +99,4 @@ public class AppTest {
         assertThat(cmd.io(), is(sameInstance(io)));
     }
 
-    @Test
-    public void SubCommandName_betterValueOf() {
-        assertThat(SubCommandName.betterValueOf("CREATE"), is(App.SubCommandName.CREATE));
-        assertThat(SubCommandName.betterValueOf("create"), is(App.SubCommandName.CREATE));
-        assertThat(SubCommandName.betterValueOf("CreATe"), is(App.SubCommandName.CREATE));
-
-        assertThat(SubCommandName.betterValueOf("INSTALL"), is(App.SubCommandName.INSTALL));
-        assertThat(SubCommandName.betterValueOf("install"), is(App.SubCommandName.INSTALL));
-        assertThat(SubCommandName.betterValueOf("iNStall"), is(App.SubCommandName.INSTALL));
-
-        assertThat(SubCommandName.betterValueOf("PUBLISH"), is(App.SubCommandName.PUBLISH));
-        assertThat(SubCommandName.betterValueOf("publish"), is(App.SubCommandName.PUBLISH));
-        assertThat(SubCommandName.betterValueOf("pUblISh"), is(App.SubCommandName.PUBLISH));
-
-        assertThat(SubCommandName.betterValueOf("foobar"), is(App.SubCommandName.UNKNOWN));
-    }
 }

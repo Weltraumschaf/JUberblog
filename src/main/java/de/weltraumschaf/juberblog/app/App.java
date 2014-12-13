@@ -25,6 +25,11 @@ import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.SubCommand.SubCommandName;
+import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.CREATE;
+import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.INSTALL;
+import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.PUBLISH;
+import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.UNKNOWN;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import java.io.IOException;
@@ -125,7 +130,13 @@ public final class App extends InvokableAdapter {
 
     @Override
     public void execute() throws Exception {
+        /**
+         * 1. If args[] empty, then usage.
+         * 2. If args[] size 1, then check if subcommand, else basic option
+         */
+
         setup();
+
 
         if (options.isVersion()) {
             getIoStreams().println(version.getVersion());
@@ -151,7 +162,11 @@ public final class App extends InvokableAdapter {
 
     private void executeSubCommand() throws ApplicationException {
         final SubCommand command = createSubcommand(arguments.getFirstArgument(), options, getIoStreams());
-        command.execute();
+        try {
+            command.execute();
+        } catch (Exception ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
+        }
     }
 
     static SubCommand createSubcommand(final String commandName, final Options options, final IO io) throws ApplicationException {
@@ -169,19 +184,6 @@ public final class App extends InvokableAdapter {
             default:
                 throw new IllegalStateException(
                         "Unhandled sub command type given!This must never happen.Please filea bug.");
-        }
-    }
-
-    enum SubCommandName {
-
-        CREATE, INSTALL, PUBLISH, UNKNOWN;
-
-        static SubCommandName betterValueOf(final String name) {
-            try {
-                return valueOf(name.toUpperCase());
-            } catch (final IllegalArgumentException ex) {
-                return UNKNOWN;
-            }
         }
     }
 

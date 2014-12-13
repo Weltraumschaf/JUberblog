@@ -23,5 +23,22 @@ public interface SubCommand {
 
     IO io();
 
-    void execute();
+    void execute() throws Exception;
+
+    enum SubCommandName {
+
+        CREATE, INSTALL, PUBLISH, UNKNOWN;
+
+        public static SubCommandName betterValueOf(final String name) {
+            try {
+                return valueOf(name.toUpperCase());
+            } catch (final IllegalArgumentException ex) {
+                return UNKNOWN;
+            }
+        }
+
+        public static boolean isSubCommand(final String name) {
+            return UNKNOWN != betterValueOf(name);
+        }
+    }
 }
