@@ -85,7 +85,7 @@
         <maven.findbugs.excludefilterfile>${project.basedir}/src/main/config/findbugs-exclude.xml</maven.findbugs.excludefilterfile>
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
 
-        <dependency.commons.version>1.1.3</dependency.commons.version>
+        <dependency.commons.version>2.0.0-SNAPSHOT</dependency.commons.version>
         <dependency.freemarkerdown.version>1.0.0-SNAPSHOT</dependency.freemarkerdown.version>
         <dependency.joda-time.version>2.3</dependency.joda-time.version>
     </properties>
@@ -104,6 +104,11 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>system</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>testing</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>
         <dependency>
