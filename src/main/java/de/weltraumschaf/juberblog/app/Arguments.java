@@ -76,6 +76,10 @@ final class Arguments {
         return args.length;
     }
 
+    boolean isEmpty() {
+        return size() == 0;
+    }
+
     @Override
     public String toString() {
         return "first: " + getFirstArgument()

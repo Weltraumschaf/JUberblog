@@ -63,6 +63,12 @@ public class ArgumentsTest {
     }
 
     @Test
+    public void isEmpty() {
+        assertThat(new Arguments(new String[] {}).isEmpty(), is(equalTo(true)));
+        assertThat(new Arguments(new String[] {"foo"}).isEmpty(), is(equalTo(false)));
+    }
+
+    @Test
     public void testToString() {
         assertThat(new Arguments(new String[] {"foo", "bar", "baz"}).toString(),
                 is(equalTo("first: foo, tail: [bar, baz]")));
