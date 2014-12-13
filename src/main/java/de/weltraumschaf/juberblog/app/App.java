@@ -25,11 +25,11 @@ import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.SubCommand.SubCommandName;
-import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.CREATE;
-import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.INSTALL;
-import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.PUBLISH;
-import static de.weltraumschaf.juberblog.core.SubCommand.SubCommandName.UNKNOWN;
+import de.weltraumschaf.juberblog.core.SubCommand.Name;
+import static de.weltraumschaf.juberblog.core.SubCommand.Name.CREATE;
+import static de.weltraumschaf.juberblog.core.SubCommand.Name.INSTALL;
+import static de.weltraumschaf.juberblog.core.SubCommand.Name.PUBLISH;
+import static de.weltraumschaf.juberblog.core.SubCommand.Name.UNKNOWN;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import java.io.IOException;
@@ -170,7 +170,7 @@ public final class App extends InvokableAdapter {
     }
 
     static SubCommand createSubcommand(final String commandName, final Options options, final IO io) throws ApplicationException {
-        switch (SubCommandName.betterValueOf(commandName)) {
+        switch (Name.betterValueOf(commandName)) {
             case CREATE:
                 return new CreateSubCommand(options, io);
             case INSTALL:

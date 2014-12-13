@@ -20,7 +20,8 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Options;
-import de.weltraumschaf.juberblog.core.SubCommand.SubCommandName;
+import de.weltraumschaf.juberblog.core.SubCommand;
+import de.weltraumschaf.juberblog.core.SubCommand.Name;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -47,6 +48,7 @@ public final class App2 extends InvokableAdapter {
      * Version information.
      */
     private final Version version;
+    private SubCommand.Factory subCommands = new SubCommand.Factory();
 
     /**
      * Dedicated constructor.
@@ -112,7 +114,7 @@ public final class App2 extends InvokableAdapter {
             return;
         }
 
-        if (SubCommandName.isSubCommand(arguments.getFirstArgument())) {
+        if (Name.isSubCommand(arguments.getFirstArgument())) {
             executeSubCommand();
         } else {
             executeBaseCommand();
@@ -120,7 +122,7 @@ public final class App2 extends InvokableAdapter {
     }
 
     private void executeSubCommand() {
-        final SubCommandName cmd = SubCommandName.betterValueOf(arguments.getFirstArgument());
+        final Name cmd = Name.betterValueOf(arguments.getFirstArgument());
         final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
     }
 
