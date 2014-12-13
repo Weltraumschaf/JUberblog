@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import org.junit.Rule;
@@ -44,14 +43,14 @@ public class App2Test {
     public void showVersionForShortOption() throws Exception {
         App2.main(createSut(new String[] {"-v"}));
 
-        output.expectOut("VERSION");
+        output.expectOut("1.0.0-SNAPSHOT");
     }
 
     @Test
     public void showVersionForLongOption() throws Exception {
         App2.main(createSut(new String[] {"--version"}));
 
-        output.expectOut("VERSION");
+        output.expectOut("1.0.0-SNAPSHOT");
     }
 
     @Test

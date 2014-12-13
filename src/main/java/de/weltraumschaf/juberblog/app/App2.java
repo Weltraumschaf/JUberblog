@@ -13,6 +13,7 @@ package de.weltraumschaf.juberblog.app;
 
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
@@ -32,9 +33,14 @@ public final class App2 extends InvokableAdapter {
     private final JCommanderImproved<Options> cliArgs
             = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
     private final Arguments arguments;
+    /**
+     * Version information.
+     */
+    private final Version version;
 
     App2(final String[] args) {
         super(args);
+        this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
         arguments = new Arguments(args);
     }
 
@@ -84,6 +90,8 @@ public final class App2 extends InvokableAdapter {
 
     @Override
     public void execute() throws Exception {
+        version.load();
+
         if (arguments.isEmpty()) {
             getIoStreams().errorln("USAGE");
             return;
@@ -105,13 +113,12 @@ public final class App2 extends InvokableAdapter {
         final Options opt = cliArgs.gatherOptions(arguments.getAll());
 
         if (opt.isVersion()) {
-            getIoStreams().println("VERSION");
+            getIoStreams().println(version.getVersion());
             return;
         }
 
         if (opt.isHelp()) {
             getIoStreams().println("HELP");
-            return;
         }
     }
 
