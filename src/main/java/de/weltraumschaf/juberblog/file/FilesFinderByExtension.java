@@ -74,7 +74,11 @@ public final class FilesFinderByExtension {
 
         try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory, filter)) {
             for (final Path path : directoryStream) {
-                foundFiles.add(new DataFile(path.toString()));
+                if (Files.isDirectory(path)) {
+                    foundFiles.addAll(find(path));
+                } else {
+                    foundFiles.add(new DataFile(path.toString()));
+                }
             }
         }
 
@@ -106,6 +110,10 @@ public final class FilesFinderByExtension {
 
         @Override
         public boolean accept(final Path file) throws IOException {
+            if (Files.isDirectory(file)) {
+                return true;
+            }
+
             for (final FileNameExtension extension : extensions) {
                 if (file.toString().endsWith(extension.getExtension())) {
                     return true;

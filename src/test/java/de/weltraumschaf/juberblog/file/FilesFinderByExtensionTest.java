@@ -40,13 +40,15 @@ public class FilesFinderByExtensionTest extends JUberblogTestCase {
 
     @Test
     public void findMarkdownFiles() throws URISyntaxException, IOException {
-        final Collection<DataFile> foundFiles = sut.find(createPath("posts"));
+        final Collection<DataFile> foundFiles = sut.find(createPath(""));
 
-        assertThat(foundFiles.size(), is(3));
+        assertThat(foundFiles.size(), is(5));
         assertThat(foundFiles, containsInAnyOrder(
                 new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString()),
                 new DataFile(createPath("posts/2014-06-30T23.25.44_This-is-the-Second-Post.md").toString()),
-                new DataFile(createPath("posts/2014-07-28T17.44.13_This-is-the-Third-Post.md").toString())
+                new DataFile(createPath("posts/2014-07-28T17.44.13_This-is-the-Third-Post.md").toString()),
+                new DataFile(createPath("sites/2014-08-30T15.29.20_Site-One.md").toString()),
+                new DataFile(createPath("sites/2014-09-30T15.29.20_Site-Two.md").toString())
         ));
     }
 
