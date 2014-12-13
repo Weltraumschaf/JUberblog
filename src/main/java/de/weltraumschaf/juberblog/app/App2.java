@@ -30,6 +30,8 @@ import java.io.UnsupportedEncodingException;
  */
 public final class App2 extends InvokableAdapter {
 
+    private static final String USAGE = "create|install|publish [-h] [-v]";
+
     private final JCommanderImproved<Options> cliArgs
             = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
     private final Arguments arguments;
@@ -93,7 +95,7 @@ public final class App2 extends InvokableAdapter {
         version.load();
 
         if (arguments.isEmpty()) {
-            getIoStreams().errorln("USAGE");
+            getIoStreams().errorln(String.format("Usage: %s %s", Constants.COMMAND_NAME.toString(), USAGE));
             return;
         }
 

@@ -36,7 +36,7 @@ public class App2Test {
     public void showUsageIfNoArgument() throws Exception {
         App2.main(createSut(new String[0]));
 
-        output.expectErr("USAGE");
+        output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
     }
 
     @Test
