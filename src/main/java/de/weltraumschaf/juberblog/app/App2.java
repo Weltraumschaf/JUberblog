@@ -31,15 +31,25 @@ import java.io.UnsupportedEncodingException;
 public final class App2 extends InvokableAdapter {
 
     private static final String USAGE = "create|install|publish [-h] [-v]";
-
-    private final JCommanderImproved<Options> cliArgs
+    /**
+     * Command line options parser.
+     */
+    private final JCommanderImproved<Options> optionsProvider
             = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
+    /**
+     * Command line arguments.
+     */
     private final Arguments arguments;
     /**
      * Version information.
      */
     private final Version version;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param args must not be {@code null}
+     */
     App2(final String[] args) {
         super(args);
         this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
@@ -108,11 +118,11 @@ public final class App2 extends InvokableAdapter {
 
     private void executeSubCommand() {
         final SubCommandName cmd = SubCommandName.betterValueOf(arguments.getFirstArgument());
-        final Options opt = cliArgs.gatherOptions(arguments.getTailArguments());
+        final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
     }
 
     private void executeBaseCommand() {
-        final Options opt = cliArgs.gatherOptions(arguments.getAll());
+        final Options opt = optionsProvider.gatherOptions(arguments.getAll());
 
         if (opt.isVersion()) {
             getIoStreams().println(version.getVersion());
