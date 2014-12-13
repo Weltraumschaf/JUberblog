@@ -12,8 +12,6 @@
 package de.weltraumschaf.juberblog.core;
 
 import com.beust.jcommander.Parameter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -25,11 +23,6 @@ public final class Options {
     private boolean help;
     @Parameter(names = {"-v", "--version"})
     private boolean version;
-    /**
-     * Not used, only for suppressing error about main parameter.
-     */
-    @Parameter
-    private List<String> rest = new ArrayList<>();
 
     public boolean isHelp() {
         return help;
