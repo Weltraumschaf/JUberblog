@@ -11,13 +11,6 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.core.SubCommand;
-import de.weltraumschaf.juberblog.core.ExitCodeImpl;
-import de.weltraumschaf.juberblog.core.Options;
-import de.weltraumschaf.juberblog.core.Constants;
-import de.weltraumschaf.juberblog.publish.PublishSubCommand;
-import de.weltraumschaf.commons.application.ApplicationException;
-import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
@@ -25,14 +18,11 @@ import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.Constants;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.core.SubCommand;
 import de.weltraumschaf.juberblog.core.SubCommand.Name;
-import static de.weltraumschaf.juberblog.core.SubCommand.Name.CREATE;
-import static de.weltraumschaf.juberblog.core.SubCommand.Name.INSTALL;
-import static de.weltraumschaf.juberblog.core.SubCommand.Name.PUBLISH;
-import static de.weltraumschaf.juberblog.core.SubCommand.Name.UNKNOWN;
-import de.weltraumschaf.juberblog.create.CreateSubCommand;
-import de.weltraumschaf.juberblog.install.InstallSubCommand;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -42,18 +32,31 @@ import java.io.UnsupportedEncodingException;
  */
 public final class App extends InvokableAdapter {
 
-    private final JCommanderImproved<Options> cliArgs
+    private static final String USAGE = "create|install|publish [-h] [-v]";
+    private static final String DESCRIPTION = "Commandline tool to manage your blog.";
+    private static final String EXAMPLE = "TODO";
+
+    /**
+     * Command line options parser.
+     */
+    private final JCommanderImproved<Options> optionsProvider
             = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
     /**
      * To obtain environment variables.
      */
     private final Environments.Env env;
     /**
+     * Command line arguments.
+     */
+    private final Arguments arguments;
+    /**
      * Version information.
      */
     private final Version version;
-    private Options options = new Options();
-    private Arguments arguments = new Arguments();
+    /**
+     * Provides sub commands.
+     */
+    private SubCommand.Factory subCommands = new SubCommand.Factory();
 
     App(final String[] args) {
         this(args, Environments.defaultEnv());
@@ -68,6 +71,25 @@ public final class App extends InvokableAdapter {
         super(args);
         this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
         this.env = Validate.notNull(env, "env");
+        arguments = new Arguments(args);
+    }
+
+    /**
+     * Main entry point of VM.
+     *
+     * @param args CLI arguments from VM
+     */
+    public static void main(final String[] args) {
+        final App invokable = new App(args);
+
+        try {
+            InvokableAdapter.main(
+                    invokable,
+                    IOStreams.newDefault(),
+                    invokable.isEnvDebug());
+        } catch (final UnsupportedEncodingException ex) {
+            handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
+        }
     }
 
     /**
@@ -96,95 +118,64 @@ public final class App extends InvokableAdapter {
         invokable.exit(Validate.notNull(code, "code").getCode());
     }
 
-    /**
-     * Main entry point of VM.
-     *
-     * @param args CLI arguments from VM
-     */
-    public static void main(final String[] args) {
-        final App invokable = new App(args);
+    @Override
+    public void execute() throws Exception {
+        version.load();
 
-        try {
-            InvokableAdapter.main(
-                    invokable,
-                    IOStreams.newDefault(),
-                    invokable.isEnvDebug());
-        } catch (final UnsupportedEncodingException ex) {
-            handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
+        if (arguments.isEmpty()) {
+            getIoStreams().errorln(String.format("Usage: %s %s", Constants.COMMAND_NAME.toString(), USAGE));
+            return;
+        }
+
+        if (Name.isSubCommand(arguments.getFirstArgument())) {
+            executeSubCommand();
+        } else {
+            executeBaseCommand();
         }
     }
 
-    Options getOptions() {
-        return options;
+    private void executeSubCommand() {
+        final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
+
+        if (opt.isVersion()) {
+            showVersion();
+            return;
+        }
+
+        if (opt.isHelp()) {
+            showHelp();
+            return;
+        }
+
+        final Name cmd = Name.betterValueOf(arguments.getFirstArgument());
+
     }
 
-    /**
-     * Determine if debug is enabled by environment variable {@link Constants#ENVIRONMENT_VARIABLE_DEBUG}.
-     *
-     * @return by default {@code false} if environment is not present or false
-     */
-    boolean isEnvDebug() {
+    private void executeBaseCommand() {
+        final Options opt = optionsProvider.gatherOptions(arguments.getAll());
+
+        if (opt.isVersion()) {
+            showVersion();
+            return;
+        }
+
+        if (opt.isHelp()) {
+            showHelp();
+        }
+    }
+
+    private void showHelp() {
+        getIoStreams().println(optionsProvider.helpMessage(USAGE, DESCRIPTION, EXAMPLE));
+    }
+
+    private void showVersion() {
+        getIoStreams().println(version.getVersion());
+    }
+
+    private boolean isEnvDebug() {
         final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
         return "true".equalsIgnoreCase(debug.trim());
     }
 
-    @Override
-    public void execute() throws Exception {
-        /**
-         * 1. If args[] empty, then usage.
-         * 2. If args[] size 1, then check if subcommand, else basic option
-         */
-
-        setup();
-
-
-        if (options.isVersion()) {
-            getIoStreams().println(version.getVersion());
-            return;
-        }
-
-        if (options.isHelp()) {
-            getIoStreams().println(cliArgs.helpMessage(
-                    "create|install|publish [-h] [-v] [-d]",
-                    "Commandline tool to manage your blog.",
-                    "TODO"));
-            return;
-        }
-
-        executeSubCommand();
-    }
-
-    private void setup() throws IOException {
-        version.load();
-        arguments = new Arguments(getArgs());
-        options = cliArgs.gatherOptions(arguments.getAll());
-    }
-
-    private void executeSubCommand() throws ApplicationException {
-        final SubCommand command = createSubcommand(arguments.getFirstArgument(), options, getIoStreams());
-        try {
-            command.execute();
-        } catch (Exception ex) {
-            throw new ApplicationException(ExitCodeImpl.FATAL, ex.getMessage(), ex);
-        }
-    }
-
-    static SubCommand createSubcommand(final String commandName, final Options options, final IO io) throws ApplicationException {
-        switch (Name.betterValueOf(commandName)) {
-            case CREATE:
-                return new CreateSubCommand(options, io);
-            case INSTALL:
-                return new InstallSubCommand(options, io);
-            case PUBLISH:
-                return new PublishSubCommand(options, io);
-            case UNKNOWN:
-                throw new ApplicationException(
-                        ExitCodeImpl.FATAL,
-                        String.format("Unknown sub command: '%s'!", commandName));
-            default:
-                throw new IllegalStateException(
-                        "Unhandled sub command type given!This must never happen.Please filea bug.");
-        }
-    }
 
 }

@@ -11,20 +11,10 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.core.SubCommand;
-import de.weltraumschaf.juberblog.core.Options;
-import de.weltraumschaf.juberblog.core.Constants;
-import de.weltraumschaf.commons.application.ApplicationException;
-import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.system.Environments.Env;
-import de.weltraumschaf.juberblog.create.CreateSubCommand;
-import de.weltraumschaf.juberblog.install.InstallSubCommand;
-import de.weltraumschaf.juberblog.publish.PublishSubCommand;
+import de.weltraumschaf.commons.system.NullExiter;
+import de.weltraumschaf.commons.testing.CapturedOutput;
+import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link App}.
@@ -33,70 +23,148 @@ import static org.mockito.Mockito.when;
  */
 public class AppTest {
 
-    @Test
-    public void isEnvDebug_true() {
-        final Env env = mock(Env.class);
-        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("true");
+    private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
+    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v]\n"
+            + "\n"
+            + "Commandline tool to manage your blog.\n"
+            + "\n"
+            + "Options\n"
+            + "\n"
+            + "  -v, --version       \n"
+            + "  -h, --help          \n"
+            + "\n"
+            + "Example\n"
+            + "\n"
+            + "  TODO\n"
+            + "\n"
+            + "\n";
 
-        final App sut = new App(new String[0], env);
+    @Rule
+    public final CapturedOutput output = new CapturedOutput();
 
-        assertThat(sut.isEnvDebug(), is(true));
+    private App createSut(final String[] args) {
+        final App sut = new App(args);
+        sut.setExiter(new NullExiter());
+        return sut;
     }
 
     @Test
-    public void isEnvDebug_empty() {
-        final Env env = mock(Env.class);
-        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("");
+    public void showUsageIfNoArgument() throws Exception {
+        App.main(createSut(new String[0]));
 
-        final App sut = new App(new String[0], env);
-
-        assertThat(sut.isEnvDebug(), is(false));
+        output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
     }
 
     @Test
-    public void isEnvDebug_any() {
-        final Env env = mock(Env.class);
-        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("foobar");
+    public void showVersionForShortOption() throws Exception {
+        App.main(createSut(new String[]{"-v"}));
 
-        final App sut = new App(new String[0], env);
-
-        assertThat(sut.isEnvDebug(), is(false));
+        output.expectOut(EXPECTED_VERSION);
     }
 
     @Test
-    public void createSubcommand_create() throws ApplicationException {
-        final Options options = new Options();
-        final IO io = mock(IO.class);
+    public void showVersionForLongOption() throws Exception {
+        App.main(createSut(new String[]{"--version"}));
 
-        final SubCommand cmd = App.createSubcommand("create", options, io);
-
-        assertThat(cmd, is(instanceOf(CreateSubCommand.class)));
-        assertThat(cmd.options(), is(sameInstance(options)));
-        assertThat(cmd.io(), is(sameInstance(io)));
+        output.expectOut(EXPECTED_VERSION);
     }
 
     @Test
-    public void createSubcommand_install() throws ApplicationException {
-        final Options options = new Options();
-        final IO io = mock(IO.class);
+    public void showVersionForCreateSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"create", "-v"}));
 
-        final SubCommand cmd = App.createSubcommand("install", options, io);
-
-        assertThat(cmd, is(instanceOf(InstallSubCommand.class)));
-        assertThat(cmd.options(), is(sameInstance(options)));
-        assertThat(cmd.io(), is(sameInstance(io)));
+        output.expectOut(EXPECTED_VERSION);
     }
 
     @Test
-    public void createSubcommand_publish() throws ApplicationException {
-        final Options options = new Options();
-        final IO io = mock(IO.class);
+    public void showVersionForCreateSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"create", "--version"}));
 
-        final SubCommand cmd = App.createSubcommand("publish", options, io);
+        output.expectOut(EXPECTED_VERSION);
+    }
 
-        assertThat(cmd, is(instanceOf(PublishSubCommand.class)));
-        assertThat(cmd.options(), is(sameInstance(options)));
-        assertThat(cmd.io(), is(sameInstance(io)));
+    @Test
+    public void showVersionForInstallSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"install", "-v"}));
+
+        output.expectOut(EXPECTED_VERSION);
+    }
+
+    @Test
+    public void showVersionForInstallSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"install", "--version"}));
+
+        output.expectOut(EXPECTED_VERSION);
+    }
+
+    @Test
+    public void showVersionForPublishSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"publish", "-v"}));
+
+        output.expectOut(EXPECTED_VERSION);
+    }
+
+    @Test
+    public void showVersionForPublishSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"publish", "--version"}));
+
+        output.expectOut(EXPECTED_VERSION);
+    }
+
+    @Test
+    public void showHelpForShortOption() throws Exception {
+        App.main(createSut(new String[]{"-h"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForLongOption() throws Exception {
+        App.main(createSut(new String[]{"--help"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForCreateSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"create", "-h"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForCreateSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"create", "--help"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForInstallSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"install", "-h"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForInstallSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"install", "--help"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForPublishSubCommandShortOption() throws Exception {
+        App.main(createSut(new String[]{"publish", "-h"}));
+
+        output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void showHelpForPublishSubCommandLongOption() throws Exception {
+        App.main(createSut(new String[]{"publish", "--help"}));
+
+        output.expectOut(EXPECTED_HELP);
     }
 
 }

@@ -75,7 +75,7 @@
     </ciManagement>
 
     <properties>
-        <project.build.mainClass>de.weltraumschaf.juberblog.App</project.build.mainClass>
+        <project.build.mainClass>de.weltraumschaf.juberblog.app.App</project.build.mainClass>
         <project.build.binDirectory>${project.basedir}/bin</project.build.binDirectory>
         <project.build.distDirectory>${project.basedir}/src/site/resources/dist</project.build.distDirectory>
 
