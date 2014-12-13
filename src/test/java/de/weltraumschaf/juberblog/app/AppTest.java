@@ -11,10 +11,16 @@
  */
 package de.weltraumschaf.juberblog.app;
 
+import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
+import de.weltraumschaf.juberblog.core.Constants;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link App}.
@@ -165,6 +171,36 @@ public class AppTest {
         App.main(createSut(new String[]{"publish", "--help"}));
 
         output.expectOut(EXPECTED_HELP);
+    }
+
+    @Test
+    public void isEnvDebug_true() {
+        final Environments.Env env = mock(Environments.Env.class);
+        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("true");
+
+        final App sut = new App(new String[0], env);
+
+        assertThat(sut.isEnvDebug(), is(true));
+    }
+
+    @Test
+    public void isEnvDebug_empty() {
+        final Environments.Env env = mock(Environments.Env.class);
+        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("");
+
+        final App sut = new App(new String[0], env);
+
+        assertThat(sut.isEnvDebug(), is(false));
+    }
+
+    @Test
+    public void isEnvDebug_any() {
+        final Environments.Env env = mock(Environments.Env.class);
+        when(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString())).thenReturn("foobar");
+
+        final App sut = new App(new String[0], env);
+
+        assertThat(sut.isEnvDebug(), is(false));
     }
 
 }

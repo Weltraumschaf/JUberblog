@@ -32,8 +32,17 @@ import java.io.UnsupportedEncodingException;
  */
 public final class App extends InvokableAdapter {
 
+    /**
+     * Command line usage.
+     */
     private static final String USAGE = "create|install|publish [-h] [-v]";
+    /**
+     * Help description.
+     */
     private static final String DESCRIPTION = "Commandline tool to manage your blog.";
+    /**
+     * Help example.
+     */
     private static final String EXAMPLE = "TODO";
 
     /**
@@ -58,6 +67,11 @@ public final class App extends InvokableAdapter {
      */
     private SubCommand.Factory subCommands = new SubCommand.Factory();
 
+    /**
+     * Convenience constructor wit hdefault environment.
+     *
+     * @param args must not be {@code null}
+     */
     App(final String[] args) {
         this(args, Environments.defaultEnv());
     }
@@ -66,6 +80,7 @@ public final class App extends InvokableAdapter {
      * Dedicated constructor.
      *
      * @param args must not be {@code null}
+     * @param env must not be {@code null}
      */
     App(final String[] args, final Environments.Env env) {
         super(args);
@@ -172,7 +187,7 @@ public final class App extends InvokableAdapter {
         getIoStreams().println(version.getVersion());
     }
 
-    private boolean isEnvDebug() {
+    boolean isEnvDebug() {
         final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
         return "true".equalsIgnoreCase(debug.trim());
     }
