@@ -95,8 +95,7 @@ public interface SubCommand {
     /**
      * Creates sub command instances.
      */
-    public static class Factory {
-
+    public interface Factory {
         /**
          * Creates sub command for name.
          * <p>
@@ -108,6 +107,15 @@ public interface SubCommand {
          * @param io must not be {@code null}
          * @return never {@code null}, always new instance
          */
+        SubCommand forName(final Name name, final Options options, final IO io);
+    }
+
+    /**
+     * Default implementation.
+     */
+    public static final class FactoryImpl implements Factory {
+
+        @Override
         public SubCommand forName(final Name name, final Options options, final IO io) {
             switch (Validate.notNull(name, "name")) {
                 case CREATE:

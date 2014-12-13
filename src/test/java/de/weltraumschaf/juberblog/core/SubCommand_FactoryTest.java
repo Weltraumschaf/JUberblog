@@ -22,13 +22,13 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 
 /**
- * Tests for {@link SubCommand.Factory}.
+ * Tests for {@link SubCommand.FactoryImpl}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class SubCommand_FactoryTest {
 
-    private final SubCommand.Factory sut = new SubCommand.Factory();
+    private final SubCommand.FactoryImpl sut = new SubCommand.FactoryImpl();
 
     @Test
     public void forName_CREATE() {

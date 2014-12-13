@@ -11,15 +11,22 @@
  */
 package de.weltraumschaf.juberblog.app;
 
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.core.Constants;
+import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.core.SubCommand;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -201,6 +208,48 @@ public class AppTest {
         final App sut = new App(new String[0], env);
 
         assertThat(sut.isEnvDebug(), is(false));
+    }
+
+    @Test
+    public void execute_CREATE() throws Exception {
+        final App sut = createSut(new String[]{"create"});
+        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final SubCommand cmd = mock(SubCommand.class);
+        when(factory.forName(eq(SubCommand.Name.CREATE), any(Options.class), any(IO.class)))
+                .thenReturn(cmd);
+        sut.setSubCommands(factory);
+
+        App.main(sut);
+
+        verify(cmd, times(1)).execute();
+    }
+
+    @Test
+    public void execute_INSTALL() throws Exception {
+        final App sut = createSut(new String[]{"install"});
+        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final SubCommand cmd = mock(SubCommand.class);
+        when(factory.forName(eq(SubCommand.Name.INSTALL), any(Options.class), any(IO.class)))
+                .thenReturn(cmd);
+        sut.setSubCommands(factory);
+
+        App.main(sut);
+
+        verify(cmd, times(1)).execute();
+    }
+
+    @Test
+    public void execute_PUBLISH() throws Exception {
+        final App sut = createSut(new String[]{"publish"});
+        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final SubCommand cmd = mock(SubCommand.class);
+        when(factory.forName(eq(SubCommand.Name.PUBLISH), any(Options.class), any(IO.class)))
+                .thenReturn(cmd);
+        sut.setSubCommands(factory);
+
+        App.main(sut);
+
+        verify(cmd, times(1)).execute();
     }
 
 }

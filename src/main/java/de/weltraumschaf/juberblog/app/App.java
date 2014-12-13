@@ -65,10 +65,10 @@ public final class App extends InvokableAdapter {
     /**
      * Provides sub commands.
      */
-    private SubCommand.Factory subCommands = new SubCommand.Factory();
+    private SubCommand.Factory subCommands = new SubCommand.FactoryImpl();
 
     /**
-     * Convenience constructor wit hdefault environment.
+     * Convenience constructor with default environment.
      *
      * @param args must not be {@code null}
      */
@@ -149,7 +149,7 @@ public final class App extends InvokableAdapter {
         }
     }
 
-    private void executeSubCommand() {
+    private void executeSubCommand() throws Exception {
         final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
 
         if (opt.isVersion()) {
@@ -162,8 +162,12 @@ public final class App extends InvokableAdapter {
             return;
         }
 
-        final Name cmd = Name.betterValueOf(arguments.getFirstArgument());
-
+        final SubCommand cmd
+                = subCommands.forName(
+                        Name.betterValueOf(arguments.getFirstArgument()),
+                        opt,
+                        getIoStreams());
+        cmd.execute();
     }
 
     private void executeBaseCommand() {
@@ -192,5 +196,8 @@ public final class App extends InvokableAdapter {
         return "true".equalsIgnoreCase(debug.trim());
     }
 
+    void setSubCommands(final SubCommand.Factory subCommands) {
+        this.subCommands = Validate.notNull(subCommands, "subCommands");
+    }
 
 }
