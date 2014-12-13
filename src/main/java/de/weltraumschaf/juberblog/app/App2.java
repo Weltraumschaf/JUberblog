@@ -48,6 +48,9 @@ public final class App2 extends InvokableAdapter {
      * Version information.
      */
     private final Version version;
+    /**
+     * Provides sub commands.
+     */
     private SubCommand.Factory subCommands = new SubCommand.Factory();
 
     /**
@@ -122,21 +125,41 @@ public final class App2 extends InvokableAdapter {
     }
 
     private void executeSubCommand() {
-        final Name cmd = Name.betterValueOf(arguments.getFirstArgument());
         final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
+
+        if (opt.isVersion()) {
+            showVersion();
+            return;
+        }
+
+        if (opt.isHelp()) {
+            showHelp();
+            return;
+        }
+
+        final Name cmd = Name.betterValueOf(arguments.getFirstArgument());
+
     }
 
     private void executeBaseCommand() {
         final Options opt = optionsProvider.gatherOptions(arguments.getAll());
 
         if (opt.isVersion()) {
-            getIoStreams().println(version.getVersion());
+            showVersion();
             return;
         }
 
         if (opt.isHelp()) {
-            getIoStreams().println(optionsProvider.helpMessage(USAGE, DESCRIPTION, EXAMPLE));
+            showHelp();
         }
+    }
+
+    private void showHelp() {
+        getIoStreams().println(optionsProvider.helpMessage(USAGE, DESCRIPTION, EXAMPLE));
+    }
+
+    private void showVersion() {
+        getIoStreams().println(version.getVersion());
     }
 
 
