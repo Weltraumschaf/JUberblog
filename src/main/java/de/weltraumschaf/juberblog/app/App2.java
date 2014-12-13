@@ -31,6 +31,9 @@ import java.io.UnsupportedEncodingException;
 public final class App2 extends InvokableAdapter {
 
     private static final String USAGE = "create|install|publish [-h] [-v]";
+    private static final String DESCRIPTION = "Commandline tool to manage your blog.";
+    private static final String EXAMPLE = "TODO";
+
     /**
      * Command line options parser.
      */
@@ -130,8 +133,9 @@ public final class App2 extends InvokableAdapter {
         }
 
         if (opt.isHelp()) {
-            getIoStreams().println("HELP");
+            getIoStreams().println(optionsProvider.helpMessage(USAGE, DESCRIPTION, EXAMPLE));
         }
     }
+
 
 }

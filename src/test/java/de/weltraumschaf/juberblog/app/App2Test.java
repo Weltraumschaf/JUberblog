@@ -41,30 +41,56 @@ public class App2Test {
 
     @Test
     public void showVersionForShortOption() throws Exception {
-        App2.main(createSut(new String[] {"-v"}));
+        App2.main(createSut(new String[]{"-v"}));
 
         output.expectOut("1.0.0-SNAPSHOT");
     }
 
     @Test
     public void showVersionForLongOption() throws Exception {
-        App2.main(createSut(new String[] {"--version"}));
+        App2.main(createSut(new String[]{"--version"}));
 
         output.expectOut("1.0.0-SNAPSHOT");
     }
 
     @Test
     public void showHelpForShortOption() throws Exception {
-        App2.main(createSut(new String[] {"-h"}));
+        App2.main(createSut(new String[]{"-h"}));
 
-        output.expectOut("HELP");
+        output.expectOut("Usage: juberblog create|install|publish [-h] [-v]\n"
+                + "\n"
+                + "Commandline tool to manage your blog.\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -v, --version       \n"
+                + "  -h, --help          \n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO\n"
+                + "\n"
+                + "\n");
     }
 
     @Test
     public void showHelpForLongOption() throws Exception {
-        App2.main(createSut(new String[] {"--help"}));
+        App2.main(createSut(new String[]{"--help"}));
 
-        output.expectOut("HELP");
+        output.expectOut("Usage: juberblog create|install|publish [-h] [-v]\n"
+                + "\n"
+                + "Commandline tool to manage your blog.\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -v, --version       \n"
+                + "  -h, --help          \n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO\n"
+                + "\n"
+                + "\n");
     }
 
 }
