@@ -72,6 +72,10 @@ final class Arguments {
         return args.clone();
     }
 
+    int size() {
+        return args.length;
+    }
+
     @Override
     public String toString() {
         return "first: " + getFirstArgument()

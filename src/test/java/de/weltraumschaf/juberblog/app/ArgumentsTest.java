@@ -12,7 +12,6 @@
 
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.app.Arguments;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -53,6 +52,14 @@ public class ArgumentsTest {
                 is(equalTo(new String[] {"bar"})));
         assertThat(new Arguments(new String[] {"foo", "bar", "baz"}).getTailArguments(),
                 is(equalTo(new String[] {"bar", "baz"})));
+    }
+
+    @Test
+    public void size() {
+        assertThat(new Arguments(new String[] {}).size(), is(equalTo(0)));
+        assertThat(new Arguments(new String[] {"foo"}).size(), is(equalTo(1)));
+        assertThat(new Arguments(new String[] {"foo", "bar"}).size(), is(equalTo(2)));
+        assertThat(new Arguments(new String[] {"foo", "bar", "baz"}).size(), is(equalTo(3)));
     }
 
     @Test
