@@ -22,7 +22,7 @@ import org.joda.time.DateTimeComparator;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class Page {
+public final class Page {
 
     private final String title;
     private final String link; // TODO Use URI.
