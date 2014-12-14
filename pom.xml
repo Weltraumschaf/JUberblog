@@ -213,6 +213,11 @@
                 <!-- http://wiki.netbeans.org/MavenCodeCoverage -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>java/**/ExitCodeImpl.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
