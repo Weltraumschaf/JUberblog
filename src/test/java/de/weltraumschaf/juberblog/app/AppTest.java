@@ -217,7 +217,7 @@ public class AppTest {
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
-        sut.setSubCommands(factory);
+        sut.injectFactory(factory);
 
         App.main(sut);
 
@@ -230,7 +230,7 @@ public class AppTest {
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
-        sut.setSubCommands(factory);
+        sut.injectFactory(factory);
 
         App.main(sut);
 
@@ -243,7 +243,7 @@ public class AppTest {
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);
-        sut.setSubCommands(factory);
+        sut.injectFactory(factory);
 
         App.main(sut);
 

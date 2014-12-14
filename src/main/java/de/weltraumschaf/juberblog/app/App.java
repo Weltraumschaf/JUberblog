@@ -196,7 +196,7 @@ public final class App extends InvokableAdapter {
         return "true".equalsIgnoreCase(debug.trim());
     }
 
-    void setSubCommands(final SubCommand.Factory subCommands) {
+    void injectFactory(final SubCommand.Factory subCommands) {
         this.subCommands = Validate.notNull(subCommands, "subCommands");
     }
 
