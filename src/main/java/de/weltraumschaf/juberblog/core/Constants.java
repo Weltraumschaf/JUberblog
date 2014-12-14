@@ -24,6 +24,11 @@ public enum Constants {
      * NAme of the command line script.
      */
     COMMAND_NAME("juberblog"),
+    DEFAULT_NEW_LINE(String.format("%n")),
+    /**
+     * System dependent file separator.
+     */
+    DIR_SEP(System.getProperty("file.separator")),
     /**
      * Name of environment variable to enable debug mode.
      */
@@ -32,7 +37,10 @@ public enum Constants {
      * Package base of whole project.
      */
     PACKAGE_BASE("/de/weltraumschaf/juberblog"),
-    DEFAULT_NEW_LINE(String.format("%n"));
+    /**
+     * Location of scaffold directory.
+     */
+    SCAFFOLD_PACKAGE("de.weltraumschaf.juberblog.scaffold");
 
     /**
      * Constant value.
