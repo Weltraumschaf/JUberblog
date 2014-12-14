@@ -11,13 +11,11 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.JUberblog;
-import de.weltraumschaf.juberblog.core.Options;
 import de.weltraumschaf.juberblog.core.SubCommand;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -44,8 +42,9 @@ public class AppTest {
             + "\n"
             + "Options\n"
             + "\n"
-            + "  -v, --version       \n"
-            + "  -h, --help          \n"
+            + "  -v, --version       Show the version.\n"
+            + "  -l, --location      Location of the blog installation.\n"
+            + "  -h, --help          Show this help.\n"
             + "\n"
             + "Example\n"
             + "\n"

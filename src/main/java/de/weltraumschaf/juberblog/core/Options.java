@@ -19,9 +19,9 @@ import com.beust.jcommander.Parameter;
  */
 public final class Options {
 
-    @Parameter(names = {"-h", "--help"})
+    @Parameter(names = {"-h", "--help"}, description = "Show this help.")
     private boolean help;
-    @Parameter(names = {"-v", "--version"})
+    @Parameter(names = {"-v", "--version"}, description = "Show the version.")
     private boolean version;
     /**
      * Where id the blog installed.
