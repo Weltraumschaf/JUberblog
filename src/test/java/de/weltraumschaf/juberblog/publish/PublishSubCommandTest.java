@@ -9,12 +9,14 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.publish;
 
+import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.Options;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -29,6 +31,7 @@ import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link PublishSubCommand}.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class PublishSubCommandTest extends JUberblogTestCase {
@@ -38,22 +41,23 @@ public class PublishSubCommandTest extends JUberblogTestCase {
 
     @Test
     public void execute() throws Exception {
-        final PublishSubCommand sut = new PublishSubCommand(new Options(), mock(IO.class));
-        final Templates templates = new Templates(
-                createPath("layout.ftl"),
-                createPath("post.ftl"),
-                createPath("site.ftl"),
-                createPath("feed.ftl"),
-                createPath("index.ftl"),
-                createPath("site_map.ftl"));
-        sut.setTemplates(templates);
-        final Directories dirs = new Directories(
+        final JUberblog registry = new JUberblog(new Directories(
                 createPath("posts"),
                 createPath("sites"),
                 tmp.getRoot().toPath(),
                 tmp.newFolder("posts").toPath(),
-                tmp.newFolder("sites").toPath());
-        sut.setDirs(dirs);
+                tmp.newFolder("sites").toPath()),
+                new Templates(
+                        createPath("layout.ftl"),
+                        createPath("post.ftl"),
+                        createPath("site.ftl"),
+                        createPath("feed.ftl"),
+                        createPath("index.ftl"),
+                        createPath("site_map.ftl")),
+                new JUberblog.Configuration(),
+                new Options(),
+                mock(IO.class));
+        final PublishSubCommand sut = new PublishSubCommand(registry);
 
         sut.execute();
 
@@ -133,38 +137,38 @@ public class PublishSubCommandTest extends JUberblogTestCase {
                 + "</html>"));
         assertThat(siteMapFile.readContent(ENCODING), is(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-                        + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
-                        + "    <url>\n"
-                        + "        <loc>http://localhost/posts/This-is-the-First-Post.html</loc>\n"
-                        + "        <lastmod>2014-05-30T21:29:20+02:00</lastmod>\n"
-                        + "        <changefreq>daily</changefreq>\n"
-                        + "        <priority>0.8</priority>\n"
-                        + "    </url>\n"
-                        + "    <url>\n"
-                        + "        <loc>http://localhost/posts/This-is-the-Second-Post.html</loc>\n"
-                        + "        <lastmod>2014-06-30T23:25:44+02:00</lastmod>\n"
-                        + "        <changefreq>daily</changefreq>\n"
-                        + "        <priority>0.8</priority>\n"
-                        + "    </url>\n"
-                        + "    <url>\n"
-                        + "        <loc>http://localhost/posts/This-is-the-Third-Post.html</loc>\n"
-                        + "        <lastmod>2014-07-28T17:44:13+02:00</lastmod>\n"
-                        + "        <changefreq>daily</changefreq>\n"
-                        + "        <priority>0.8</priority>\n"
-                        + "    </url>\n"
-                        + "    <url>\n"
-                        + "        <loc>http://localhost/posts/Site-One.html</loc>\n"
-                        + "        <lastmod>2014-08-30T15:29:20+02:00</lastmod>\n"
-                        + "        <changefreq>weekly</changefreq>\n"
-                        + "        <priority>0.5</priority>\n"
-                        + "    </url>\n"
-                        + "    <url>\n"
-                        + "        <loc>http://localhost/posts/Site-Two.html</loc>\n"
-                        + "        <lastmod>2014-09-30T15:29:20+02:00</lastmod>\n"
-                        + "        <changefreq>weekly</changefreq>\n"
-                        + "        <priority>0.5</priority>\n"
-                        + "    </url>\n"
-                        + "</urlset>"));
+                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-First-Post.html</loc>\n"
+                + "        <lastmod>2014-05-30T21:29:20+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-Second-Post.html</loc>\n"
+                + "        <lastmod>2014-06-30T23:25:44+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-Third-Post.html</loc>\n"
+                + "        <lastmod>2014-07-28T17:44:13+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/Site-One.html</loc>\n"
+                + "        <lastmod>2014-08-30T15:29:20+02:00</lastmod>\n"
+                + "        <changefreq>weekly</changefreq>\n"
+                + "        <priority>0.5</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/Site-Two.html</loc>\n"
+                + "        <lastmod>2014-09-30T15:29:20+02:00</lastmod>\n"
+                + "        <changefreq>weekly</changefreq>\n"
+                + "        <priority>0.5</priority>\n"
+                + "    </url>\n"
+                + "</urlset>"));
     }
 
 }

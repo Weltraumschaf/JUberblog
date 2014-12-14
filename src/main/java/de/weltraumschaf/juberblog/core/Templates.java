@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.publish;
+package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.nio.file.Path;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class Templates {
+public final class Templates {
 
     private final Path layoutTemplate;
     private final Path postTemplate;
@@ -27,7 +27,7 @@ final class Templates {
     private final Path indexTemplate;
     private final Path siteMapTemplate;
 
-    Templates(
+    public Templates(
             final Path layoutTemplate,
             final Path postTemplate,
             final Path siteTemplate,
@@ -44,27 +44,27 @@ final class Templates {
         this.siteMapTemplate = Validate.notNull(siteMapTemplate, "siteMapTemplate");
     }
 
-    Path getLayoutTemplate() {
+    public Path getLayoutTemplate() {
         return layoutTemplate;
     }
 
-    Path getPostTemplate() {
+    public Path getPostTemplate() {
         return postTemplate;
     }
 
-    Path getSiteTemplate() {
+    public Path getSiteTemplate() {
         return siteTemplate;
     }
 
-    Path getFeedTemplate() {
+    public Path getFeedTemplate() {
         return feedTemplate;
     }
 
-    Path getIndexTemplate() {
+    public Path getIndexTemplate() {
         return indexTemplate;
     }
 
-    Path getSiteMapTemplate() {
+    public Path getSiteMapTemplate() {
         return siteMapTemplate;
     }
 

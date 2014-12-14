@@ -21,23 +21,26 @@ import de.weltraumschaf.commons.validate.Validate;
  */
 public abstract class SubCommandBase implements SubCommand {
 
-    private final Options options;
-    private final IO io;
+    private final JUberblog registry;
 
-    public SubCommandBase(final Options options, final IO io) {
+    public SubCommandBase(final JUberblog registry) {
         super();
-        this.options = Validate.notNull(options, "options");
-        this.io = Validate.notNull(io, "io");
+        this.registry = Validate.notNull(registry, "registry");
     }
 
     @Override
     public final Options options() {
-        return options;
+        return registry.options();
     }
 
     @Override
     public final IO io() {
-        return io;
+        return registry.io();
+    }
+
+    @Override
+    public JUberblog registry() {
+        return registry;
     }
 
 }

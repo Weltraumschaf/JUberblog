@@ -13,7 +13,7 @@
 package de.weltraumschaf.juberblog.install;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.SubCommandBase;
 
 /**
@@ -22,8 +22,8 @@ import de.weltraumschaf.juberblog.core.SubCommandBase;
  */
 public final class InstallSubCommand  extends SubCommandBase {
 
-    public InstallSubCommand(final Options options, final IO io) {
-        super(options, io);
+    public InstallSubCommand(final JUberblog registry) {
+        super(registry);
     }
 
     @Override

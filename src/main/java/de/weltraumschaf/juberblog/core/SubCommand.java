@@ -38,6 +38,8 @@ public interface SubCommand {
      */
     IO io();
 
+    JUberblog registry();
+
     /**
      * Executes the sub command.
      *
@@ -103,11 +105,10 @@ public interface SubCommand {
          * </p>
          *
          * @param name must not be {@code null}
-         * @param options must not be {@code null}
-         * @param io must not be {@code null}
+         * @param registry must not be {@code null}
          * @return never {@code null}, always new instance
          */
-        SubCommand forName(final Name name, final Options options, final IO io);
+        SubCommand forName(final Name name, final JUberblog registry);
     }
 
     /**
@@ -116,14 +117,14 @@ public interface SubCommand {
     public static final class FactoryImpl implements Factory {
 
         @Override
-        public SubCommand forName(final Name name, final Options options, final IO io) {
+        public SubCommand forName(final Name name, final JUberblog registry) {
             switch (Validate.notNull(name, "name")) {
                 case CREATE:
-                    return new CreateSubCommand(options, io);
+                    return new CreateSubCommand(registry);
                 case INSTALL:
-                    return new InstallSubCommand(options, io);
+                    return new InstallSubCommand(registry);
                 case PUBLISH:
-                    return new PublishSubCommand(options, io);
+                    return new PublishSubCommand(registry);
                 default:
                     throw new IllegalArgumentException(String.format("Unsupported command name: '%s'!", name));
             }

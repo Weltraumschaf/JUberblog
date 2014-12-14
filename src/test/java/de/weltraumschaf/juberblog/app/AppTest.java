@@ -16,6 +16,7 @@ import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.core.Constants;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.Options;
 import de.weltraumschaf.juberblog.core.SubCommand;
 import static org.hamcrest.Matchers.is;
@@ -215,8 +216,7 @@ public class AppTest {
         final App sut = createSut(new String[]{"create"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
-        when(factory.forName(eq(SubCommand.Name.CREATE), any(Options.class), any(IO.class)))
-                .thenReturn(cmd);
+        when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
         sut.setSubCommands(factory);
 
         App.main(sut);
@@ -229,8 +229,7 @@ public class AppTest {
         final App sut = createSut(new String[]{"install"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
-        when(factory.forName(eq(SubCommand.Name.INSTALL), any(Options.class), any(IO.class)))
-                .thenReturn(cmd);
+        when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
         sut.setSubCommands(factory);
 
         App.main(sut);
@@ -243,8 +242,7 @@ public class AppTest {
         final App sut = createSut(new String[]{"publish"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
-        when(factory.forName(eq(SubCommand.Name.PUBLISH), any(Options.class), any(IO.class)))
-                .thenReturn(cmd);
+        when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);
         sut.setSubCommands(factory);
 
         App.main(sut);

@@ -12,8 +12,7 @@
 
 package de.weltraumschaf.juberblog.create;
 
-import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.SubCommandBase;
 
 /**
@@ -22,8 +21,8 @@ import de.weltraumschaf.juberblog.core.SubCommandBase;
  */
 public final class CreateSubCommand  extends SubCommandBase {
 
-    public CreateSubCommand(final Options options, final IO io) {
-        super(options, io);
+    public CreateSubCommand(final JUberblog registry) {
+        super(registry);
     }
 
     @Override

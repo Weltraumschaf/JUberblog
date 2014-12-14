@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.publish;
+package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.nio.file.Path;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-final class Directories {
+public final class Directories {
 
     private final Path postsData;
     private final Path sitesData;
@@ -41,23 +41,23 @@ final class Directories {
         this.siteOutput = Validate.notNull(siteOutput, "siteOutput");
     }
 
-    Path getPostsData() {
+    public Path getPostsData() {
         return postsData;
     }
 
-    Path getSitesData() {
+    public Path getSitesData() {
         return sitesData;
     }
 
-    Path getOutput() {
+    public Path getOutput() {
         return output;
     }
 
-    Path getPostsOutput() {
+    public Path getPostsOutput() {
         return postsOutput;
     }
 
-    Path getSiteOutput() {
+    public Path getSiteOutput() {
         return siteOutput;
     }
 

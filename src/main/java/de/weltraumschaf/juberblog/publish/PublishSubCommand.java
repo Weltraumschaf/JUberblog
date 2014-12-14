@@ -11,9 +11,9 @@
  */
 package de.weltraumschaf.juberblog.publish;
 
-import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.SubCommandBase;
 import de.weltraumschaf.juberblog.core.TaskExecutor;
@@ -27,42 +27,24 @@ public final class PublishSubCommand extends SubCommandBase {
 
     private final TaskExecutor executor = new TaskExecutor();
     private final String encoding = "utf-8";
-    private Templates templates;
-    private Directories dirs;
 
-    public PublishSubCommand(final Options options, final IO io) {
-        super(options, io);
-    }
-
-    public void setTemplates(final Templates templates) {
-        this.templates = Validate.notNull(templates, "templates");
-    }
-
-    public void setDirs(final Directories dirs) {
-        this.dirs = Validate.notNull(dirs, "dirs");
+    public PublishSubCommand(final JUberblog registry) {
+        super(registry);
     }
 
     @Override
     public void execute() throws Exception {
-        if (null == templates) {
-            throw new IllegalStateException("Member 'templates' must not be null! Set it bevore.");
-        }
-
-        if (null == dirs) {
-            throw new IllegalStateException("Member 'dirs' must not be null! Set it bevore.");
-        }
-
         executor.append(new PublishTask(new PublishTask.Config(
                                         encoding,
-                                        dirs.getPostsData(),
-                                        dirs.getPostsOutput(),
-                                        templates.getLayoutTemplate(),
-                                        templates.getPostTemplate(),
+                                        registry().directories().getPostsData(),
+                                        registry().directories().getPostsOutput(),
+                                        registry().templates().getLayoutTemplate(),
+                                        registry().templates().getPostTemplate(),
                                         Page.Type.POST
                                 )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
-                                        templates.getFeedTemplate(),
-                                        dirs.getOutput(),
+                                        registry().templates().getFeedTemplate(),
+                                        registry().directories().getOutput(),
                                         encoding,
                                         "title",
                                         "link",
@@ -72,21 +54,21 @@ public final class PublishSubCommand extends SubCommandBase {
                                 )))
                 .append(new GenerateIndexTask(new GenerateIndexTask.Config(
                                         encoding,
-                                        dirs.getOutput(),
-                                        templates.getLayoutTemplate(),
-                                        templates.getIndexTemplate()
+                                        registry().directories().getOutput(),
+                                        registry().templates().getLayoutTemplate(),
+                                        registry().templates().getIndexTemplate()
                                 )))
                 .append(new PublishTask(new PublishTask.Config(
                                         encoding,
-                                        dirs.getSitesData(),
-                                        dirs.getSiteOutput(),
-                                        templates.getLayoutTemplate(),
-                                        templates.getSiteTemplate(),
+                                        registry().directories().getSitesData(),
+                                        registry().directories().getSiteOutput(),
+                                        registry().templates().getLayoutTemplate(),
+                                        registry().templates().getSiteTemplate(),
                                         Page.Type.SITE
                                 )))
                 .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
-                                        templates.getSiteMapTemplate(),
-                                        dirs.getOutput(),
+                                        registry().templates().getSiteMapTemplate(),
+                                        registry().directories().getOutput(),
                                         encoding)))
                 .execute();
     }

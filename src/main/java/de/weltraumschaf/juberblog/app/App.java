@@ -20,6 +20,7 @@ import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.core.Options;
 import de.weltraumschaf.juberblog.core.SubCommand;
 import de.weltraumschaf.juberblog.core.SubCommand.Name;
@@ -165,8 +166,7 @@ public final class App extends InvokableAdapter {
         final SubCommand cmd
                 = subCommands.forName(
                         Name.betterValueOf(arguments.getFirstArgument()),
-                        opt,
-                        getIoStreams());
+                        JUberblog.generate(opt, getIoStreams()));
         cmd.execute();
     }
 

@@ -32,24 +32,24 @@ public class SubCommand_FactoryTest {
 
     @Test
     public void forName_CREATE() {
-        assertThat(sut.forName(SubCommand.Name.CREATE, new Options(), mock(IO.class)),
+        assertThat(sut.forName(SubCommand.Name.CREATE, mock(JUberblog.class)),
                 is(instanceOf(CreateSubCommand.class)));
     }
 
     @Test
     public void forName_INSTALL() {
-        assertThat(sut.forName(SubCommand.Name.INSTALL, new Options(), mock(IO.class)),
+        assertThat(sut.forName(SubCommand.Name.INSTALL, mock(JUberblog.class)),
                 is(instanceOf(InstallSubCommand.class)));
     }
 
     @Test
     public void forName_PUBLISH() {
-        assertThat(sut.forName(SubCommand.Name.PUBLISH, new Options(), mock(IO.class)),
+        assertThat(sut.forName(SubCommand.Name.PUBLISH, mock(JUberblog.class)),
                 is(instanceOf(PublishSubCommand.class)));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void forName_UNKNOWN() {
-        sut.forName(SubCommand.Name.UNKNOWN, new Options(), mock(IO.class));
+        sut.forName(SubCommand.Name.UNKNOWN, mock(JUberblog.class));
     }
 }
