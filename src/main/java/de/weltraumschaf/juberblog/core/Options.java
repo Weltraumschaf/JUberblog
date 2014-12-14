@@ -23,6 +23,11 @@ public final class Options {
     private boolean help;
     @Parameter(names = {"-v", "--version"})
     private boolean version;
+    /**
+     * Where id the blog installed.
+     */
+    @Parameter(names = {"-l", "--location" }, description = "Location of the blog installation.")
+    private String location;
 
     public boolean isHelp() {
         return help;
@@ -30,6 +35,10 @@ public final class Options {
 
     public boolean isVersion() {
         return version;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
 }
