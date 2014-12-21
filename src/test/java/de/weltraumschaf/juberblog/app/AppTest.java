@@ -70,6 +70,20 @@ public class AppTest {
     }
 
     @Test
+    public void showUsageIfBadSubCommand() {
+        output.expectErr("FATAL: Bad arguments!\nUsage: juberblog create|install|publish [-h] [-v]");
+
+        App.main(createSut(new String[]{"foobar"}));
+    }
+
+    @Test
+    public void showUsageIfBadArgument() {
+        output.expectErr("FATAL: Bad arguments!\nUsage: juberblog create|install|publish [-h] [-v]");
+
+        App.main(createSut(new String[]{"--foobar"}));
+    }
+
+    @Test
     public void showVersionForShortOption() throws Exception {
         output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
@@ -210,6 +224,30 @@ public class AppTest {
         final App sut = new App(new String[0], env);
 
         assertThat(sut.isEnvDebug(), is(false));
+    }
+
+    @Test
+    public void badArgument_CREATE() throws Exception {
+        output.expectErr("FATAL: Unknown option: -x\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+
+        App.main(createSut(new String[]{"create", "-x"}));
+    }
+
+    @Test
+    public void badArgument_INSTALL() throws Exception {
+        output.expectErr("FATAL: Unknown option: -x\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+
+        App.main(createSut(new String[]{"install", "-x"}));
+    }
+
+    @Test
+    public void badArgument_PUBLISH() throws Exception {
+        output.expectErr("FATAL: Unknown option: -x\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+
+        App.main(createSut(new String[]{"publish", "-x"}));
     }
 
     @Test

@@ -29,6 +29,10 @@ public enum ExitCodeImpl implements ExitCode {
      */
     OK(0),
     /**
+     * Bad CLI arguments.
+     */
+    BAD_ARGUMENT(1),
+    /**
      * If on start up system.in, system.out or System.err can't be accessed.
      */
     CANT_READ_IO_STREAMS(255);

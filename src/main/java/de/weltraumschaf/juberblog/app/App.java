@@ -11,6 +11,8 @@
  */
 package de.weltraumschaf.juberblog.app;
 
+import com.beust.jcommander.ParameterException;
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
@@ -120,7 +122,7 @@ public final class App extends InvokableAdapter {
         version.load();
 
         if (arguments.isEmpty()) {
-            getIoStreams().errorln(Options.usage());
+            showUsage();
             return;
         }
 
@@ -131,33 +133,72 @@ public final class App extends InvokableAdapter {
         }
     }
 
-    private void executeMainCommand() {
-        executeBaseCommand(Options.gatherOptions(arguments.getAll()));
+    /**
+     * Executes the main application code here.
+     */
+    private void executeMainCommand() throws ApplicationException {
+        try {
+            if (!executeBaseCommand(Options.gatherOptions(arguments.getAll()))) {
+                showUsage();
+            }
+        } catch (final ParameterException ex) {
+            throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage("Bad arguments!"), ex);
+        }
     }
 
+    /**
+     * Executes a sub command named by fist CLI argument.
+     *
+     * @throws Exception if anything went wrong
+     */
     private void executeSubCommand() throws Exception {
-        final Options opt = Options.gatherOptions(arguments.getTailArguments());
+        final Options cliOptions;
+        try {
+            cliOptions = Options.gatherOptions(arguments.getTailArguments());
+        } catch (final ParameterException ex) {
+            throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(ex.getMessage()), ex);
+        }
 
-        if (executeBaseCommand(opt)) {
+        if (executeBaseCommand(cliOptions)) {
             return;
         }
 
         final SubCommand cmd
                 = subCommands.forName(
                         Name.betterValueOf(arguments.getFirstArgument()),
-                        JUberblog.generate(opt, getIoStreams()));
+                        JUberblog.generate(cliOptions, getIoStreams()));
         cmd.execute();
     }
 
-    private boolean executeBaseCommand(final Options opt) {
-        Validate.notNull(opt, "opt");
+    /**
+     * Appends usage to given message.
+     *
+     * @param msg must not be {@code null} or empty
+     * @return never {@code null} or empty
+     */
+    private String errorMessage(final String msg) {
+        return new StringBuilder()
+                .append(Validate.notEmpty(msg, "msg"))
+                .append(Constants.DEFAULT_NEW_LINE.toString())
+                .append(Options.usage())
+                .toString();
+    }
 
-        if (opt.isVersion()) {
+    /**
+     * Executes stuff common for all commands (e.g. show help or version).
+     *
+     * @param cliOptions must not {@code null}
+     * @return whether to exit the application
+     */
+    private boolean executeBaseCommand(final Options cliOptions) {
+        Validate.notNull(cliOptions, "opt");
+
+        if (cliOptions.isVersion()) {
             showVersion();
             return true;
         }
 
-        if (opt.isHelp()) {
+        if (cliOptions.isHelp()) {
             showHelp();
             return true;
         }
@@ -165,19 +206,42 @@ public final class App extends InvokableAdapter {
         return false;
     }
 
+    /**
+     * Show help message.
+     */
     private void showHelp() {
         getIoStreams().println(Options.helpMessage());
     }
 
+    /**
+     * Show version message.
+     */
     private void showVersion() {
         getIoStreams().println(version.getVersion());
     }
 
+    /**
+     * Show usage message.
+     */
+    private void showUsage() {
+        getIoStreams().errorln(Options.usage());
+    }
+
+    /**
+     * Whether debug output is enabled by environment variable.
+     *
+     * @return {@code true} for enabled, else {@code false}
+     */
     boolean isEnvDebug() {
         final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
         return "true".equalsIgnoreCase(debug.trim());
     }
 
+    /**
+     * Injection point for testing.
+     *
+     * @param subCommands must not be {@code null}
+     */
     void injectFactory(final SubCommand.Factory subCommands) {
         this.subCommands = Validate.notNull(subCommands, "subCommands");
     }
