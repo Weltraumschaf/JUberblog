@@ -24,7 +24,11 @@ public final class Options {
     /**
      * Command line usage.
      */
-    private static final String USAGE = "create|install|publish [-h] [-v] -c <file> -l <dir>";
+    private static final String USAGE
+            = SubCommand.Name.CREATE.name().toLowerCase() + "|"
+            + SubCommand.Name.INSTALL.name().toLowerCase() + "|"
+            + SubCommand.Name.PUBLISH.name().toLowerCase()
+            + " [-h] [-v] -c <file> -l <dir>";
     /**
      * Help description.
      */
