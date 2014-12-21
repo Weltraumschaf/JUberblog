@@ -36,12 +36,13 @@ import static org.mockito.Mockito.when;
 public class AppTest {
 
     private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
-    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v]\n"
+    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"
             + "\n"
             + "Commandline tool to manage your blog.\n"
             + "\n"
             + "Options\n"
             + "\n"
+            + "  -c, --config        Config file to use.\n"
             + "  -v, --version       Show the version.\n"
             + "  -l, --location      Location of the blog installation.\n"
             + "  -h, --help          Show this help.\n"
@@ -63,37 +64,38 @@ public class AppTest {
 
     @Test
     public void showUsageIfNoArgument() throws Exception {
-        App.main(createSut(new String[0]));
-
         output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
+
+        App.main(createSut(new String[0]));
     }
 
     @Test
     public void showVersionForShortOption() throws Exception {
-        App.main(createSut(new String[]{"-v"}));
-
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"-v"}));
     }
 
     @Test
     public void showVersionForLongOption() throws Exception {
-        App.main(createSut(new String[]{"--version"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"--version"}));
     }
 
     @Test
     public void showVersionForCreateSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"create", "-v"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"create", "-v"}));
     }
 
     @Test
     public void showVersionForCreateSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"create", "--version"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"create", "--version"}));
     }
 
     @Test
@@ -105,23 +107,23 @@ public class AppTest {
 
     @Test
     public void showVersionForInstallSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"install", "--version"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"install", "--version"}));
     }
 
     @Test
     public void showVersionForPublishSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"publish", "-v"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"publish", "-v"}));
     }
 
     @Test
     public void showVersionForPublishSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"publish", "--version"}));
-
         output.expectOut(EXPECTED_VERSION);
+
+        App.main(createSut(new String[]{"publish", "--version"}));
     }
 
     @Test

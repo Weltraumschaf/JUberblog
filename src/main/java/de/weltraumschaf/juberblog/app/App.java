@@ -14,7 +14,6 @@ package de.weltraumschaf.juberblog.app;
 import de.weltraumschaf.commons.application.IOStreams;
 import de.weltraumschaf.commons.application.InvokableAdapter;
 import de.weltraumschaf.commons.application.Version;
-import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
@@ -33,24 +32,6 @@ import java.io.UnsupportedEncodingException;
  */
 public final class App extends InvokableAdapter {
 
-    /**
-     * Command line usage.
-     */
-    private static final String USAGE = "create|install|publish [-h] [-v]";
-    /**
-     * Help description.
-     */
-    private static final String DESCRIPTION = "Commandline tool to manage your blog.";
-    /**
-     * Help example.
-     */
-    private static final String EXAMPLE = "TODO";
-
-    /**
-     * Command line options parser.
-     */
-    private final JCommanderImproved<Options> optionsProvider
-            = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
     /**
      * To obtain environment variables.
      */
@@ -139,27 +120,25 @@ public final class App extends InvokableAdapter {
         version.load();
 
         if (arguments.isEmpty()) {
-            getIoStreams().errorln(String.format("Usage: %s %s", Constants.COMMAND_NAME.toString(), USAGE));
+            getIoStreams().errorln(Options.usage());
             return;
         }
 
         if (Name.isSubCommand(arguments.getFirstArgument())) {
             executeSubCommand();
         } else {
-            executeBaseCommand();
+            executeMainCommand();
         }
     }
 
+    private void executeMainCommand() {
+        executeBaseCommand(Options.gatherOptions(arguments.getAll()));
+    }
+
     private void executeSubCommand() throws Exception {
-        final Options opt = optionsProvider.gatherOptions(arguments.getTailArguments());
+        final Options opt = Options.gatherOptions(arguments.getTailArguments());
 
-        if (opt.isVersion()) {
-            showVersion();
-            return;
-        }
-
-        if (opt.isHelp()) {
-            showHelp();
+        if (executeBaseCommand(opt)) {
             return;
         }
 
@@ -170,21 +149,24 @@ public final class App extends InvokableAdapter {
         cmd.execute();
     }
 
-    private void executeBaseCommand() {
-        final Options opt = optionsProvider.gatherOptions(arguments.getAll());
+    private boolean executeBaseCommand(final Options opt) {
+        Validate.notNull(opt, "opt");
 
         if (opt.isVersion()) {
             showVersion();
-            return;
+            return true;
         }
 
         if (opt.isHelp()) {
             showHelp();
+            return true;
         }
+
+        return false;
     }
 
     private void showHelp() {
-        getIoStreams().println(optionsProvider.helpMessage(USAGE, DESCRIPTION, EXAMPLE));
+        getIoStreams().println(Options.helpMessage());
     }
 
     private void showVersion() {
