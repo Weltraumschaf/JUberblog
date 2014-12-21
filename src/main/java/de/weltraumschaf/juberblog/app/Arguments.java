@@ -68,14 +68,29 @@ final class Arguments {
         return Arrays.copyOfRange(args, 1, args.length);
     }
 
+    /**
+     * Get all arguments.
+     *
+     * @return never {@code null}, copy
+     */
     String[] getAll() {
         return args.clone();
     }
 
+    /**
+     * Get number of arguments.
+     *
+     * @return [0 .. n]
+     */
     int size() {
         return args.length;
     }
 
+    /**
+     * Whether there are arguments or not.
+     *
+     * @return {@code true} for no arguments at all, else {@code false}
+     */
     boolean isEmpty() {
         return size() == 0;
     }
