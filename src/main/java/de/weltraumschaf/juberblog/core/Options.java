@@ -16,6 +16,7 @@ import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import java.util.Objects;
 
 /**
+ * The command line options of the application.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
@@ -44,10 +45,16 @@ public final class Options {
     private static final JCommanderImproved<Options> PROVIDER
             = new JCommanderImproved<>(Constants.COMMAND_NAME.toString(), Options.class);
 
+    /**
+     * Option if help is wanted.
+     */
     @Parameter(
             names = {"-h", "--help"},
             description = "Show this help.")
     private boolean help;
+    /**
+     * Option if version is wanted.
+     */
     @Parameter(
             names = {"-v", "--version"},
             description = "Show the version.")
@@ -57,6 +64,7 @@ public final class Options {
      */
     @Parameter(
             names = {"-l", "--location"},
+            // TODO Enable.
             //            required = true,
             description = "Location of the blog installation.")
     private String location = "";
@@ -65,34 +73,71 @@ public final class Options {
      */
     @Parameter(
             names = {"-c", "--config"},
+            // TODO Enable.
             //            required = true,
             description = "Config file to use.")
     private String configurationFile = "";
 
+    /**
+     * Convenience method to gather the CLI options.
+     *
+     * @param args must not be {@code null}
+     * @return never {@code null}
+     */
     public static Options gatherOptions(final String[] args) {
         return PROVIDER.gatherOptions(args);
     }
 
+    /**
+     * Convenience method to get the help message.
+     *
+     * @return never {@code null} or empty
+     */
     public static String helpMessage() {
         return PROVIDER.helpMessage(USAGE, DESCRIPTION, EXAMPLE);
     }
 
+    /**
+     * Convenience method to get the usage.
+     *
+     * @return never {@code null} or empty
+     */
     public static String usage() {
         return String.format("Usage: %s %s", Constants.COMMAND_NAME.toString(), USAGE);
     }
 
+    /**
+     * Whether to display the help message.
+     *
+     * @return {@code true} for show, else {@code false}
+     */
     public boolean isHelp() {
         return help;
     }
 
+    /**
+     * Whether to display the version message.
+     *
+     * @return {@code true} for show, else {@code false}
+     */
     public boolean isVersion() {
         return version;
     }
 
+    /**
+     * Get the location option.
+     *
+     * @return never {@code null}
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * Get the configuration file option.
+     *
+     * @return never {@code null}
+     */
     public String getConfigurationFile() {
         return configurationFile;
     }
