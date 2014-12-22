@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.app;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import com.beust.jcommander.Parameter;
 import de.weltraumschaf.commons.jcommander.JCommanderImproved;
+import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import java.util.Objects;
 
@@ -69,7 +70,7 @@ public final class Options {
             // TODO Enable.
             //            required = true,
             description = "Location of the blog installation.")
-    private String location = "";
+    private String location;
     /**
      * Configuration file argument.
      */
@@ -78,7 +79,26 @@ public final class Options {
             // TODO Enable.
             //            required = true,
             description = "Config file to use.")
-    private String configurationFile = "";
+    private String configurationFile;
+
+    /**
+     * convenience constructor for empty object.
+     */
+    public Options() {
+        this("", "");
+    }
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param location must not be {@code null}
+     * @param configurationFile must not be {@code null}
+     */
+    public Options(final String location, final String configurationFile) {
+        super();
+        this.location = Validate.notNull(location, "location");
+        this.configurationFile = Validate.notNull(configurationFile, "configurationFile");
+    }
 
     /**
      * Convenience method to gather the CLI options.

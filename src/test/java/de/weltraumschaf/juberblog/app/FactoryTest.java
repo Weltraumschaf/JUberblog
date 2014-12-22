@@ -11,13 +11,19 @@
  */
 package de.weltraumschaf.juberblog.app;
 
+import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.app.App.FactoryImpl;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
+import java.nio.file.Paths;
+import java.util.Properties;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -31,28 +37,49 @@ import static org.mockito.Mockito.mock;
  */
 public class FactoryTest {
 
+    private final Directories directories = new Directories(
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."));
+    private final Templates templates = new Templates(
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."),
+            Paths.get("."));
+    private final JUberblog registry = JUberblog.Builder.create()
+                .directories(directories)
+                .templates(templates)
+                .configuration(new Configuration(new Properties()))
+                .options(new Options())
+                .io(mock(IO.class))
+                .product();
+
     private final Factory sut = new FactoryImpl();
 
     @Test
     public void forName_CREATE() {
-        assertThat(sut.forName(SubCommand.Name.CREATE, mock(JUberblog.class)),
+        assertThat(sut.forName(SubCommand.Name.CREATE, registry),
                 is(instanceOf(CreateSubCommand.class)));
     }
 
     @Test
     public void forName_INSTALL() {
-        assertThat(sut.forName(SubCommand.Name.INSTALL, mock(JUberblog.class)),
+        assertThat(sut.forName(SubCommand.Name.INSTALL, registry),
                 is(instanceOf(InstallSubCommand.class)));
     }
 
     @Test
     public void forName_PUBLISH() {
-        assertThat(sut.forName(SubCommand.Name.PUBLISH, mock(JUberblog.class)),
+        assertThat(sut.forName(SubCommand.Name.PUBLISH, registry),
                 is(instanceOf(PublishSubCommand.class)));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void forName_UNKNOWN() {
-        sut.forName(SubCommand.Name.UNKNOWN, mock(JUberblog.class));
+        sut.forName(SubCommand.Name.UNKNOWN, registry);
     }
 }
