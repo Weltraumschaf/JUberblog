@@ -42,22 +42,24 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
-        final JUberblog registry = new JUberblog(new Directories(
-                createPath("posts"),
-                createPath("sites"),
-                tmp.getRoot().toPath(),
-                tmp.newFolder("posts").toPath(),
-                tmp.newFolder("sites").toPath()),
-                new Templates(
-                        createPath("layout.ftl"),
-                        createPath("post.ftl"),
-                        createPath("site.ftl"),
-                        createPath("feed.ftl"),
-                        createPath("index.ftl"),
-                        createPath("site_map.ftl")),
-                new Configuration(new Properties()),
-                new Options(),
-                mock(IO.class));
+        final JUberblog registry = JUberblog.Builder.create()
+                .directories(new Directories(
+                                createPath("posts"),
+                                createPath("sites"),
+                                tmp.getRoot().toPath(),
+                                tmp.newFolder("posts").toPath(),
+                                tmp.newFolder("sites").toPath()))
+                .templates(new Templates(
+                                createPath("layout.ftl"),
+                                createPath("post.ftl"),
+                                createPath("site.ftl"),
+                                createPath("feed.ftl"),
+                                createPath("index.ftl"),
+                                createPath("site_map.ftl")))
+                .configuration(new Configuration(new Properties()))
+                .options(new Options())
+                .io(mock(IO.class))
+                .product();
         final PublishSubCommand sut = new PublishSubCommand(registry);
 
         sut.execute();

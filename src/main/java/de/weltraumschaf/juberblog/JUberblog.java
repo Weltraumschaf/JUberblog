@@ -25,36 +25,49 @@ import java.util.Properties;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class JUberblog {
+public final class JUberblog {
 
     /**
      * Holds important directories.
      */
-    private final Directories dirs;
+    private Directories dirs;
     /**
      * Holds the needed templates.
      */
-    private final Templates tpls;
+    private Templates tpls;
     /**
      * Holds the blog's configuration.
      */
-    private final Configuration cfg;
+    private Configuration cfg;
     /**
      * Holds the command line options.
      */
-    private final Options opt;
+    private Options opt;
     /**
      * Provides I/O for the command line.
      */
-    private final IO io;
+    private IO io;
 
-    public JUberblog(final Directories dirs, final Templates tpls, final Configuration cfg, final Options opt, final IO io) {
+    /**
+     * Use {@link Builder} instead.
+     */
+    private JUberblog() {
         super();
-        this.dirs = Validate.notNull(dirs, "dirs");
-        this.tpls = Validate.notNull(tpls, "tpls");
-        this.cfg = Validate.notNull(cfg, "cfg");
-        this.opt = Validate.notNull(opt, "opt");
-        this.io = Validate.notNull(io, "io");
+    }
+
+    /**
+     * Copies the whole object.
+     *
+     * @return never {@code nul}, always new instance
+     */
+    private JUberblog copy() {
+        final JUberblog copy = new JUberblog();
+        copy.cfg = cfg;
+        copy.dirs = dirs;
+        copy.io = io;
+        copy.opt = opt;
+        copy.tpls = tpls;
+        return copy;
     }
 
     /**
@@ -102,24 +115,153 @@ public class JUberblog {
         return io;
     }
 
+    /**
+     * Creates filled registry.
+     *
+     * @param cliOptions must not be {@code null}
+     * @param io must not be {@code null}
+     * @return never {@code null}
+     */
     public static JUberblog generate(final Options cliOptions, final IO io) {
-        return new JUberblog(
-                new Directories(
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get(".")),
-                new Templates(
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get("."),
-                        Paths.get(".")),
-                new Configuration(new Properties()),
-                cliOptions,
-                io);
+        return JUberblog.Builder.create()
+                .directories(
+                        new Directories(
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get(".")))
+                .templates(
+                        new Templates(
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get("."),
+                                Paths.get(".")))
+                .configuration(new Configuration(new Properties()))
+                .options(cliOptions)
+                .io(io)
+                .product();
+    }
+
+    /**
+     * Builder for less constructor parameters.
+     */
+    public static final class Builder {
+
+        /**
+         * Holds the build values.
+         */
+        private final JUberblog holder = new JUberblog();
+
+        /**
+         * Use {@link #create()} instead.
+         */
+        private Builder() {
+            super();
+        }
+
+        /**
+         * Creates builder.
+         *
+         * @return never {@code null}, always new instance
+         */
+        public static Builder create() {
+            return new Builder();
+        }
+
+        /**
+         * Get the directories.
+         *
+         * @param dirs must not be {@code null}
+         * @return never {@code null}
+         */
+        public Builder directories(final Directories dirs) {
+            holder.dirs = Validate.notNull(dirs, "dirs");
+            return this;
+        }
+
+        /**
+         * Get the templates.
+         *
+         * @param tpls must not be {@code null}
+         * @return never {@code null}
+         */
+        public Builder templates(final Templates tpls) {
+            holder.tpls = Validate.notNull(tpls, "tpls");
+            return this;
+        }
+
+        /**
+         * Get the configuration.
+         *
+         * @param cfg must not be {@code null}
+         * @return never {@code null}
+         */
+        public Builder configuration(final Configuration cfg) {
+            holder.cfg = Validate.notNull(cfg, "cfg");
+            return this;
+        }
+
+        /**
+         * Get the options.
+         *
+         * @param opt must not be {@code null}
+         * @return never {@code null}
+         */
+        public Builder options(final Options opt) {
+            holder.opt = Validate.notNull(opt, "opt");
+            return this;
+        }
+
+        /**
+         * Get the I/O.
+         *
+         * @param io must not be {@code null}
+         * @return never {@code null}
+         */
+        public Builder io(final IO io) {
+            holder.io = Validate.notNull(io, "io");
+            return this;
+        }
+
+        /**
+         * Creates the final product
+         *
+         * @return
+         */
+        public JUberblog product() {
+            return validate(holder.copy());
+        }
+
+        /**
+         * Validates that all fields are not {@code null}.
+         *
+         * @param product must not be {@code null}
+         * @return the validated object itself
+         */
+        private JUberblog validate(final JUberblog product) {
+            Validate.notNull(product, "product");
+            notNull(product.cfg, "Configuration must not be null! Call Builder#configuration(cfg) first.");
+            notNull(product.dirs, "Directories must not be null! Call Builder#directories(dirs) first.");
+            notNull(product.io, "I/O must not be null! Call Builder#io(io) first.");
+            notNull(product.opt, "Options must not be null! Call Builder#options(opt) first.");
+            notNull(product.tpls, "Templates must not be null! Call Builder#templates(tpls) first.");
+            return product;
+        }
+
+        /**
+         * Throws {@link NullPointerException} if passed in object is {@code null}.
+         *
+         * @param o may be {@code null}
+         * @param msg the exception message
+         */
+        private void notNull(final Object o, final String msg) {
+            if (null == o) {
+                throw new NullPointerException(msg);
+            }
+        }
     }
 
 }
