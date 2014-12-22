@@ -17,10 +17,12 @@ import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.Options;
+import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import java.util.Collection;
+import java.util.Properties;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -53,7 +55,7 @@ public class PublishSubCommandTest extends BaseTestCase {
                         createPath("feed.ftl"),
                         createPath("index.ftl"),
                         createPath("site_map.ftl")),
-                new JUberblog.Configuration(),
+                new Configuration(new Properties()),
                 new Options(),
                 mock(IO.class));
         final PublishSubCommand sut = new PublishSubCommand(registry);

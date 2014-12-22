@@ -14,9 +14,11 @@ package de.weltraumschaf.juberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
+import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 /**
  * Registry object to cary around important objects.
@@ -115,12 +117,9 @@ public class JUberblog {
                         Paths.get("."),
                         Paths.get("."),
                         Paths.get(".")),
-                new Configuration(),
+                new Configuration(new Properties()),
                 cliOptions,
                 io);
     }
 
-    public static final class Configuration {
-
-    }
 }
