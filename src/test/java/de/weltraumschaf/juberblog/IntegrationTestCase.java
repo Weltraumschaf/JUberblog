@@ -12,21 +12,26 @@
 
 package de.weltraumschaf.juberblog;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import de.weltraumschaf.commons.system.Exitable;
+import de.weltraumschaf.juberblog.app.App;
+import static org.mockito.Mockito.mock;
 
 /**
- * Some helper stuff.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class JUberblogTestCase {
+public abstract class IntegrationTestCase extends JUberblogTestCase {
 
-    protected static final String ENCODING = "utf-8";
-    protected static final String BASE = "/de/weltraumschaf/juberblog/";
+    private final Exitable exiter = mock(Exitable.class);
 
-    protected final Path createPath(final String name) throws URISyntaxException {
-        return Paths.get(getClass().getResource(BASE + name).toURI());
+    protected final App createApp(final String[] args) {
+        final App app = new App(args);
+        app.setExiter(exiter);
+        return app;
     }
+
+    protected final Exitable getExiter() {
+        return exiter;
+    }
+
 }

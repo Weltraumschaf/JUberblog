@@ -10,23 +10,20 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog;
+package integrationtests;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import de.weltraumschaf.juberblog.IntegrationTestCase;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 /**
- * Some helper stuff.
+ * Tests the publishing of a whole blog.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class JUberblogTestCase {
+public class PublishTest extends IntegrationTestCase {
 
-    protected static final String ENCODING = "utf-8";
-    protected static final String BASE = "/de/weltraumschaf/juberblog/";
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
 
-    protected final Path createPath(final String name) throws URISyntaxException {
-        return Paths.get(getClass().getResource(BASE + name).toURI());
-    }
 }

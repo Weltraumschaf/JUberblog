@@ -15,7 +15,6 @@ import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
-import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import de.weltraumschaf.juberblog.app.JUberblog;
 import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.file.DataFile;

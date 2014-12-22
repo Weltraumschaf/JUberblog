@@ -12,7 +12,6 @@
 package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.juberblog.JUberblogTestCase;
-import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;

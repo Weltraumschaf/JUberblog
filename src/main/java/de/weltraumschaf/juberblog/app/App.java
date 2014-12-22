@@ -53,7 +53,7 @@ public final class App extends InvokableAdapter {
      *
      * @param args must not be {@code null}
      */
-    App(final String[] args) {
+    public App(final String[] args) {
         this(args, Environments.defaultEnv());
     }
 

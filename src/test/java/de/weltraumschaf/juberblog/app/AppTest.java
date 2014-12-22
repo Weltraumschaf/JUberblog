@@ -12,8 +12,8 @@
 package de.weltraumschaf.juberblog.app;
 
 import de.weltraumschaf.commons.system.Environments;
-import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
+import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.core.Constants;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class AppTest {
+public class AppTest extends IntegrationTestCase {
 
     private static final String NL = String.format("%n");
     private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
@@ -55,31 +55,25 @@ public class AppTest {
     @Rule
     public final CapturedOutput output = new CapturedOutput();
 
-    private App createSut(final String[] args) {
-        final App sut = new App(args);
-        sut.setExiter(new NullExiter());
-        return sut;
-    }
-
     @Test
     public void showUsageIfNoArgument() throws Exception {
         output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
 
-        App.main(createSut(new String[0]));
+        App.main(createApp(new String[0]));
     }
 
     @Test
     public void showUsageIfBadSubCommand() {
         output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
-        App.main(createSut(new String[]{"foobar"}));
+        App.main(createApp(new String[]{"foobar"}));
     }
 
     @Test
     public void showUsageIfBadArgument() {
         output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
-        App.main(createSut(new String[]{"--foobar"}));
+        App.main(createApp(new String[]{"--foobar"}));
     }
 
     @Test
@@ -87,33 +81,33 @@ public class AppTest {
         output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"-v"}));
+        App.main(createApp(new String[]{"-v"}));
     }
 
     @Test
     public void showVersionForLongOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"--version"}));
+        App.main(createApp(new String[]{"--version"}));
     }
 
     @Test
     public void showVersionForCreateSubCommandShortOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"create", "-v"}));
+        App.main(createApp(new String[]{"create", "-v"}));
     }
 
     @Test
     public void showVersionForCreateSubCommandLongOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"create", "--version"}));
+        App.main(createApp(new String[]{"create", "--version"}));
     }
 
     @Test
     public void showVersionForInstallSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"install", "-v"}));
+        App.main(createApp(new String[]{"install", "-v"}));
 
         output.expectOut(EXPECTED_VERSION);
     }
@@ -122,75 +116,75 @@ public class AppTest {
     public void showVersionForInstallSubCommandLongOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"install", "--version"}));
+        App.main(createApp(new String[]{"install", "--version"}));
     }
 
     @Test
     public void showVersionForPublishSubCommandShortOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"publish", "-v"}));
+        App.main(createApp(new String[]{"publish", "-v"}));
     }
 
     @Test
     public void showVersionForPublishSubCommandLongOption() throws Exception {
         output.expectOut(EXPECTED_VERSION);
 
-        App.main(createSut(new String[]{"publish", "--version"}));
+        App.main(createApp(new String[]{"publish", "--version"}));
     }
 
     @Test
     public void showHelpForShortOption() throws Exception {
-        App.main(createSut(new String[]{"-h"}));
+        App.main(createApp(new String[]{"-h"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForLongOption() throws Exception {
-        App.main(createSut(new String[]{"--help"}));
+        App.main(createApp(new String[]{"--help"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForCreateSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"create", "-h"}));
+        App.main(createApp(new String[]{"create", "-h"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForCreateSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"create", "--help"}));
+        App.main(createApp(new String[]{"create", "--help"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForInstallSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"install", "-h"}));
+        App.main(createApp(new String[]{"install", "-h"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForInstallSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"install", "--help"}));
+        App.main(createApp(new String[]{"install", "--help"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForPublishSubCommandShortOption() throws Exception {
-        App.main(createSut(new String[]{"publish", "-h"}));
+        App.main(createApp(new String[]{"publish", "-h"}));
 
         output.expectOut(EXPECTED_HELP);
     }
 
     @Test
     public void showHelpForPublishSubCommandLongOption() throws Exception {
-        App.main(createSut(new String[]{"publish", "--help"}));
+        App.main(createApp(new String[]{"publish", "--help"}));
 
         output.expectOut(EXPECTED_HELP);
     }
@@ -230,7 +224,7 @@ public class AppTest {
         output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
-        App.main(createSut(new String[]{"create", "-x"}));
+        App.main(createApp(new String[]{"create", "-x"}));
     }
 
     @Test
@@ -238,7 +232,7 @@ public class AppTest {
         output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
-        App.main(createSut(new String[]{"install", "-x"}));
+        App.main(createApp(new String[]{"install", "-x"}));
     }
 
     @Test
@@ -246,12 +240,12 @@ public class AppTest {
         output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
-        App.main(createSut(new String[]{"publish", "-x"}));
+        App.main(createApp(new String[]{"publish", "-x"}));
     }
 
     @Test
     public void execute_CREATE() throws Exception {
-        final App sut = createSut(new String[]{"create"});
+        final App sut = createApp(new String[]{"create"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
@@ -264,7 +258,7 @@ public class AppTest {
 
     @Test
     public void execute_INSTALL() throws Exception {
-        final App sut = createSut(new String[]{"install"});
+        final App sut = createApp(new String[]{"install"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
@@ -277,7 +271,7 @@ public class AppTest {
 
     @Test
     public void execute_PUBLISH() throws Exception {
-        final App sut = createSut(new String[]{"publish"});
+        final App sut = createApp(new String[]{"publish"});
         final SubCommand.Factory factory = mock(SubCommand.Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);

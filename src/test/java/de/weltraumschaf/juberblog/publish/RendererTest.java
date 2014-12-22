@@ -12,8 +12,6 @@
 package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.juberblog.JUberblogTestCase;
-import de.weltraumschaf.juberblog.publish.Renderer;
-import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -21,7 +19,6 @@ import java.nio.file.Paths;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
