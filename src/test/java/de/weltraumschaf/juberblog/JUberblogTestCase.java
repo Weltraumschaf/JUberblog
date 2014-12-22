@@ -27,6 +27,10 @@ public abstract class JUberblogTestCase {
     protected static final String BASE = "/de/weltraumschaf/juberblog/";
 
     protected final Path createPath(final String name) throws URISyntaxException {
-        return Paths.get(getClass().getResource(BASE + name).toURI());
+        return createPath(BASE, name);
+    }
+
+    protected final Path createPath(final String base, final String name) throws URISyntaxException {
+        return Paths.get(getClass().getResource(base + name).toURI());
     }
 }

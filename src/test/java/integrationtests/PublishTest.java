@@ -13,7 +13,10 @@
 package integrationtests;
 
 import de.weltraumschaf.juberblog.IntegrationTestCase;
+import de.weltraumschaf.juberblog.app.App;
+import java.net.URISyntaxException;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
@@ -25,5 +28,14 @@ public class PublishTest extends IntegrationTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
+
+    @Test
+    public void publishWholeBlog() throws URISyntaxException {
+        App.main(createApp(new String[]{
+            "publish",
+            "-c", createPath("/integrationtests/", "config.properties").toString(),
+            "-l", tmp.getRoot().getAbsolutePath(),
+        }));
+    }
 
 }
