@@ -119,7 +119,7 @@ public final class App extends InvokableAdapter {
         version.load();
 
         if (arguments.isEmpty()) {
-            showUsage();
+            throwBadArgumentError();
             return;
         }
 
@@ -136,10 +136,10 @@ public final class App extends InvokableAdapter {
     private void executeMainCommand() throws ApplicationException {
         try {
             if (!executeBaseCommand(Options.gatherOptions(arguments.getAll()))) {
-                showUsage();
+                throwBadArgumentError();
             }
         } catch (final ParameterException ex) {
-            throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage("Bad arguments!"), ex);
+            throwBadArgumentError(ex);
         }
     }
 
@@ -153,7 +153,8 @@ public final class App extends InvokableAdapter {
         try {
             cliOptions = Options.gatherOptions(arguments.getTailArguments());
         } catch (final ParameterException ex) {
-            throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(ex.getMessage()), ex);
+            throwBadArgumentError(ex.getMessage(), ex);
+            return;
         }
 
         if (executeBaseCommand(cliOptions)) {
@@ -165,6 +166,18 @@ public final class App extends InvokableAdapter {
                         Name.betterValueOf(arguments.getFirstArgument()),
                         JUberblog.generate(cliOptions, getIoStreams()));
         cmd.execute();
+    }
+
+    private void throwBadArgumentError() throws ApplicationException {
+        throwBadArgumentError(null);
+    }
+
+    private void throwBadArgumentError(final ParameterException ex) throws ApplicationException {
+        throwBadArgumentError("Bad arguments!", ex);
+    }
+
+    private void throwBadArgumentError(final String msg, final ParameterException ex) throws ApplicationException {
+        throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(msg), ex);
     }
 
     /**
@@ -220,9 +233,9 @@ public final class App extends InvokableAdapter {
     /**
      * Show usage message.
      */
-    private void showUsage() {
-        getIoStreams().errorln(Options.usage());
-    }
+//    private void showUsage() {
+//        getIoStreams().errorln(Options.usage());
+//    }
 
     /**
      * Whether debug output is enabled by environment variable.

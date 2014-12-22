@@ -1,4 +1,4 @@
-/*
+BAD_ARGUMENT/*
  *  LICENSE
  *
  * "THE BEER-WARE LICENSE" (Revision 43):

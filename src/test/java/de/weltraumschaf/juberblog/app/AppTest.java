@@ -15,6 +15,7 @@ import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.core.Constants;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
@@ -60,6 +61,8 @@ public class AppTest extends IntegrationTestCase {
         output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
 
         App.main(createApp(new String[0]));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -67,6 +70,8 @@ public class AppTest extends IntegrationTestCase {
         output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
         App.main(createApp(new String[]{"foobar"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -74,6 +79,8 @@ public class AppTest extends IntegrationTestCase {
         output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
         App.main(createApp(new String[]{"--foobar"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -82,111 +89,158 @@ public class AppTest extends IntegrationTestCase {
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"-v"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForLongOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"--version"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForCreateSubCommandShortOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"create", "-v"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForCreateSubCommandLongOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"create", "--version"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForInstallSubCommandShortOption() throws Exception {
+        output.expectErr("");
         App.main(createApp(new String[]{"install", "-v"}));
 
         output.expectOut(EXPECTED_VERSION);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForInstallSubCommandLongOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"install", "--version"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForPublishSubCommandShortOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"publish", "-v"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showVersionForPublishSubCommandLongOption() throws Exception {
+        output.expectErr("");
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"publish", "--version"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForShortOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"-h"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForLongOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"--help"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForCreateSubCommandShortOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"create", "-h"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForCreateSubCommandLongOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"create", "--help"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForInstallSubCommandShortOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"install", "-h"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForInstallSubCommandLongOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"install", "--help"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForPublishSubCommandShortOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"publish", "-h"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
     public void showHelpForPublishSubCommandLongOption() throws Exception {
+        output.expectErr("");
+        output.expectOut(EXPECTED_HELP);
+
         App.main(createApp(new String[]{"publish", "--help"}));
 
-        output.expectOut(EXPECTED_HELP);
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
@@ -225,6 +279,8 @@ public class AppTest extends IntegrationTestCase {
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createApp(new String[]{"create", "-x"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -233,6 +289,8 @@ public class AppTest extends IntegrationTestCase {
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createApp(new String[]{"install", "-x"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -241,6 +299,8 @@ public class AppTest extends IntegrationTestCase {
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createApp(new String[]{"publish", "-x"}));
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
     }
 
     @Test
@@ -254,6 +314,7 @@ public class AppTest extends IntegrationTestCase {
         App.main(sut);
 
         verify(cmd, times(1)).execute();
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
@@ -267,6 +328,7 @@ public class AppTest extends IntegrationTestCase {
         App.main(sut);
 
         verify(cmd, times(1)).execute();
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
     @Test
@@ -280,6 +342,7 @@ public class AppTest extends IntegrationTestCase {
         App.main(sut);
 
         verify(cmd, times(1)).execute();
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.OK.getCode());
     }
 
 }
