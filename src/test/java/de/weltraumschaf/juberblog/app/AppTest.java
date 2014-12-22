@@ -14,6 +14,7 @@ package de.weltraumschaf.juberblog.app;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.IntegrationTestCase;
+import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import static org.hamcrest.Matchers.is;
@@ -306,7 +307,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void execute_CREATE() throws Exception {
         final App sut = createApp(new String[]{"create"});
-        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
         sut.injectFactory(factory);
@@ -320,7 +321,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void execute_INSTALL() throws Exception {
         final App sut = createApp(new String[]{"install"});
-        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
         sut.injectFactory(factory);
@@ -334,7 +335,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void execute_PUBLISH() throws Exception {
         final App sut = createApp(new String[]{"publish"});
-        final SubCommand.Factory factory = mock(SubCommand.Factory.class);
+        final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);
         sut.injectFactory(factory);

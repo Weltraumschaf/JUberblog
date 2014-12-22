@@ -22,6 +22,9 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.app.SubCommand.Name;
+import de.weltraumschaf.juberblog.create.CreateSubCommand;
+import de.weltraumschaf.juberblog.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -46,7 +49,7 @@ public final class App extends InvokableAdapter {
     /**
      * Provides sub commands.
      */
-    private SubCommand.Factory subCommands = new SubCommand.FactoryImpl();
+    private Factory subCommands = new FactoryImpl();
 
     /**
      * Convenience constructor with default environment.
@@ -231,13 +234,6 @@ public final class App extends InvokableAdapter {
     }
 
     /**
-     * Show usage message.
-     */
-//    private void showUsage() {
-//        getIoStreams().errorln(Options.usage());
-//    }
-
-    /**
      * Whether debug output is enabled by environment variable.
      *
      * @return {@code true} for enabled, else {@code false}
@@ -252,8 +248,44 @@ public final class App extends InvokableAdapter {
      *
      * @param subCommands must not be {@code null}
      */
-    void injectFactory(final SubCommand.Factory subCommands) {
+    void injectFactory(final Factory subCommands) {
         this.subCommands = Validate.notNull(subCommands, "subCommands");
     }
 
+    /**
+     * Creates sub command instances.
+     */
+    public interface Factory {
+        /**
+         * Creates sub command for name.
+         * <p>
+         * Throws {@link IllegalArgumentException} for unsupported names.
+         * </p>
+         *
+         * @param name must not be {@code null}
+         * @param registry must not be {@code null}
+         * @return never {@code null}, always new instance
+         */
+        SubCommand forName(final Name name, final JUberblog registry);
+    }
+
+    /**
+     * Default implementation.
+     */
+    static final class FactoryImpl implements Factory {
+
+        @Override
+        public SubCommand forName(final Name name, final JUberblog registry) {
+            switch (Validate.notNull(name, "name")) {
+                case CREATE:
+                    return new CreateSubCommand(registry);
+                case INSTALL:
+                    return new InstallSubCommand(registry);
+                case PUBLISH:
+                    return new PublishSubCommand(registry);
+                default:
+                    throw new IllegalArgumentException(String.format("Unsupported command name: '%s'!", name));
+            }
+        }
+    }
 }

@@ -11,8 +11,8 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.app.SubCommand;
-import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.app.App.Factory;
+import de.weltraumschaf.juberblog.app.App.FactoryImpl;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
@@ -23,13 +23,13 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 
 /**
- * Tests for {@link SubCommand.FactoryImpl}.
+ * Tests for {@link FactoryImpl}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class SubCommand_FactoryTest {
+public class FactoryTest {
 
-    private final SubCommand.FactoryImpl sut = new SubCommand.FactoryImpl();
+    private final Factory sut = new FactoryImpl();
 
     @Test
     public void forName_CREATE() {

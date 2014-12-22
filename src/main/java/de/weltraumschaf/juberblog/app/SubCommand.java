@@ -13,9 +13,6 @@ package de.weltraumschaf.juberblog.app;
 
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.create.CreateSubCommand;
-import de.weltraumschaf.juberblog.install.InstallSubCommand;
-import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 
 /**
  * Implementations are a subcommand of the main application.
@@ -94,40 +91,4 @@ public interface SubCommand {
         }
     }
 
-    /**
-     * Creates sub command instances.
-     */
-    public interface Factory {
-        /**
-         * Creates sub command for name.
-         * <p>
-         * Throws {@link IllegalArgumentException} for unsupported names.
-         * </p>
-         *
-         * @param name must not be {@code null}
-         * @param registry must not be {@code null}
-         * @return never {@code null}, always new instance
-         */
-        SubCommand forName(final Name name, final JUberblog registry);
-    }
-
-    /**
-     * Default implementation.
-     */
-    public static final class FactoryImpl implements Factory {
-
-        @Override
-        public SubCommand forName(final Name name, final JUberblog registry) {
-            switch (Validate.notNull(name, "name")) {
-                case CREATE:
-                    return new CreateSubCommand(registry);
-                case INSTALL:
-                    return new InstallSubCommand(registry);
-                case PUBLISH:
-                    return new PublishSubCommand(registry);
-                default:
-                    throw new IllegalArgumentException(String.format("Unsupported command name: '%s'!", name));
-            }
-        }
-    }
 }
