@@ -28,10 +28,6 @@ import java.util.Properties;
 public final class Configuration {
 
     /**
-     * To signal true in configuration.
-     */
-    private static final String TRUE_PROPERY = "true";
-    /**
      * Name of blog headline property.
      */
     private static final String HEADLINE = "headline";
@@ -59,42 +55,6 @@ public final class Configuration {
      * Name of published htdocs directory property.
      */
     private static final String HTDOCS = "htdocs";
-    /**
-     * Name of Twitter consumer key property.
-     */
-    private static final String TWITTER_CONSUMER_KEY = "twitter.consumer_key";
-    /**
-     * Name of Twitter consumer secret property.
-     */
-    private static final String TWITTER_CONSUMER_SECRET = "twitter.consumer_secret";
-    /**
-     * Name of Twitter OAuth token property.
-     */
-    private static final String TWITTER_OAUTH_TOKEN = "twitter.oauth_token";
-    /**
-     * Name of Twitter OAuth secret property.
-     */
-    private static final String TWITTER_OAUTH_TOKEN_SECRET = "twitter.oauth_token_secret";
-    /**
-     * Name of Bitly username property.
-     */
-    private static final String BITLY_USERNAME = "bitly.username";
-    /**
-     * Name of Bitly API key property.
-     */
-    private static final String BITLY_APIKEY = "bitly.apikey";
-    /**
-     * Name of blog API URI property.
-     */
-    private static final String API_URI = "api.url";
-    /**
-     * Name of rating feature switch property.
-     */
-    private static final String FEATURE_RATING = "features.rating";
-    /**
-     * Name of comments feature switch property.
-     */
-    private static final String FEATURE_COMMENTS = "features.comments";
     /**
      * Used to load and parse file.
      */
@@ -213,85 +173,9 @@ public final class Configuration {
         return getProperty(HTDOCS);
     }
 
-    /**
-     * Get the Twitter consumer key.
-     *
-     * @return never {@literal null}
-     */
-    public String getTwitterConsumerKey() {
-        return getProperty(TWITTER_CONSUMER_KEY);
-    }
-
-    /**
-     * Get the Twitter consumer secret.
-     *
-     * @return never {@literal null}
-     */
-    public String getTwitterConsumerSecret() {
-        return getProperty(TWITTER_CONSUMER_SECRET);
-    }
-
-    /**
-     * Get the Twitter OAuth token.
-     *
-     * @return never {@literal null}
-     */
-    public String getTwitterOAuthToken() {
-        return getProperty(TWITTER_OAUTH_TOKEN);
-    }
-
-    /**
-     * Get the Twitter OAuth secret.
-     *
-     * @return never {@literal null}
-     */
-    public String getTwitterOAuthTokenSecret() {
-        return getProperty(TWITTER_OAUTH_TOKEN_SECRET);
-    }
-
-    /**
-     * Get the Bitly username.
-     *
-     * @return never {@literal null}
-     */
-    public String getBitlyUsername() {
-        return getProperty(BITLY_USERNAME);
-    }
-
-    /**
-     * Get the Bitly API key.
-     *
-     * @return never {@literal null}
-     */
-    public String getBitlyApikey() {
-        return getProperty(BITLY_APIKEY);
-    }
-
-    /**
-     * Get the blog API URI.
-     *
-     * @return never {@literal null}
-     */
-    public String getApiUri() {
-        return getProperty(API_URI);
-    }
-
-    /**
-     * Get the if rating feature is enabled.
-     *
-     * @return never {@literal null}
-     */
-    public boolean getFeatureRating() {
-        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_RATING));
-    }
-
-    /**
-     * Get the if comment feature is enabled.
-     *
-     * @return never {@literal null}
-     */
-    public boolean getFeatureComments() {
-        return TRUE_PROPERY.equalsIgnoreCase(getProperty(FEATURE_COMMENTS));
+    @Override
+    public String toString() {
+        return "Configuration{" + "properties=" + properties + '}';
     }
 
 }
