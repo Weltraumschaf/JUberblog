@@ -11,6 +11,7 @@
  */
 package de.weltraumschaf.juberblog.core;
 
+import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import java.nio.file.Paths;

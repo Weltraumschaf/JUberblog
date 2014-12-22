@@ -9,10 +9,12 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.app;
 
+import de.weltraumschaf.juberblog.app.SubCommand;
 import com.beust.jcommander.Parameter;
 import de.weltraumschaf.commons.jcommander.JCommanderImproved;
+import de.weltraumschaf.juberblog.core.Constants;
 import java.util.Objects;
 
 /**

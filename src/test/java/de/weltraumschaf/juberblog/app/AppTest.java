@@ -16,7 +16,6 @@ import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.JUberblog;
-import de.weltraumschaf.juberblog.core.SubCommand;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
@@ -35,23 +34,24 @@ import static org.mockito.Mockito.when;
  */
 public class AppTest {
 
+    private static final String NL = String.format("%n");
     private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
-    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"
-            + "\n"
-            + "Commandline tool to manage your blog.\n"
-            + "\n"
-            + "Options\n"
-            + "\n"
-            + "  -c, --config        Config file to use.\n"
-            + "  -v, --version       Show the version.\n"
-            + "  -l, --location      Location of the blog installation.\n"
-            + "  -h, --help          Show this help.\n"
-            + "\n"
-            + "Example\n"
-            + "\n"
-            + "  TODO\n"
-            + "\n"
-            + "\n";
+    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>" + NL
+            + NL
+            + "Commandline tool to manage your blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -c, --config        Config file to use." + NL
+            + "  -h, --help          Show this help." + NL
+            + "  -l, --location      Location of the blog installation." + NL
+            + "  -v, --version       Show the version." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO" + NL
+            + NL
+            + NL;
 
     @Rule
     public final CapturedOutput output = new CapturedOutput();
@@ -71,14 +71,14 @@ public class AppTest {
 
     @Test
     public void showUsageIfBadSubCommand() {
-        output.expectErr("FATAL: Bad arguments!\nUsage: juberblog create|install|publish [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
         App.main(createSut(new String[]{"foobar"}));
     }
 
     @Test
     public void showUsageIfBadArgument() {
-        output.expectErr("FATAL: Bad arguments!\nUsage: juberblog create|install|publish [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
 
         App.main(createSut(new String[]{"--foobar"}));
     }
@@ -228,7 +228,7 @@ public class AppTest {
 
     @Test
     public void badArgument_CREATE() throws Exception {
-        output.expectErr("FATAL: Unknown option: -x\n"
+        output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createSut(new String[]{"create", "-x"}));
@@ -236,7 +236,7 @@ public class AppTest {
 
     @Test
     public void badArgument_INSTALL() throws Exception {
-        output.expectErr("FATAL: Unknown option: -x\n"
+        output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createSut(new String[]{"install", "-x"}));
@@ -244,7 +244,7 @@ public class AppTest {
 
     @Test
     public void badArgument_PUBLISH() throws Exception {
-        output.expectErr("FATAL: Unknown option: -x\n"
+        output.expectErr("FATAL: Unknown option: -x" + NL
                 + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
 
         App.main(createSut(new String[]{"publish", "-x"}));

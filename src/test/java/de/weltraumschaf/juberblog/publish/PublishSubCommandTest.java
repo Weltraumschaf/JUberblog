@@ -17,7 +17,7 @@ import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.JUberblogTestCase;
 import static de.weltraumschaf.juberblog.JUberblogTestCase.ENCODING;
 import de.weltraumschaf.juberblog.core.JUberblog;
-import de.weltraumschaf.juberblog.core.Options;
+import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;

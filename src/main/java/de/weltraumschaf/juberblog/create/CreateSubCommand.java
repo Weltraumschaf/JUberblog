@@ -13,7 +13,7 @@
 package de.weltraumschaf.juberblog.create;
 
 import de.weltraumschaf.juberblog.core.JUberblog;
-import de.weltraumschaf.juberblog.core.SubCommandBase;
+import de.weltraumschaf.juberblog.app.SubCommandBase;
 
 /**
  *

@@ -10,9 +10,9 @@
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
 
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.core.SubCommand.Name;
+import de.weltraumschaf.juberblog.app.SubCommand.Name;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
