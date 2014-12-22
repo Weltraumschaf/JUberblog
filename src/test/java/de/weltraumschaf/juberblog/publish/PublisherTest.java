@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.publish;
 
-import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.publish.Publisher;
 import de.weltraumschaf.juberblog.file.DataFile;
@@ -32,7 +32,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class PublisherTest extends JUberblogTestCase {
+public class PublisherTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();

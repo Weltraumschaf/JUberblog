@@ -12,8 +12,8 @@
 
 package de.weltraumschaf.juberblog.create;
 
-import de.weltraumschaf.juberblog.app.JUberblog;
-import de.weltraumschaf.juberblog.app.SubCommandBase;
+import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 
 /**
  *

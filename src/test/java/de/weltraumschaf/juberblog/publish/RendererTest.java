@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.publish;
 
-import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -28,7 +28,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class RendererTest extends JUberblogTestCase {
+public class RendererTest extends BaseTestCase {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();

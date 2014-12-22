@@ -11,6 +11,8 @@
  */
 package de.weltraumschaf.juberblog.app;
 
+import de.weltraumschaf.juberblog.cmd.SubCommand;
+import de.weltraumschaf.juberblog.JUberblog;
 import com.beust.jcommander.ParameterException;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IOStreams;
@@ -21,7 +23,7 @@ import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
-import de.weltraumschaf.juberblog.app.SubCommand.Name;
+import de.weltraumschaf.juberblog.cmd.SubCommand.Name;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;

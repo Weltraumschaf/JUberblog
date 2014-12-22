@@ -11,9 +11,9 @@
  */
 package de.weltraumschaf.juberblog.publish;
 
-import de.weltraumschaf.juberblog.app.JUberblog;
+import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.app.SubCommandBase;
+import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.core.TaskExecutor;
 import org.joda.time.DateTime;
 

@@ -34,7 +34,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class ExperimentalTest extends JUberblogTestCase {
+public class ExperimentalTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();

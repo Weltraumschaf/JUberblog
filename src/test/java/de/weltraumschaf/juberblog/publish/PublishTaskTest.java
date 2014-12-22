@@ -15,7 +15,7 @@ import de.weltraumschaf.juberblog.publish.PublishTask;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
-import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import java.util.Collection;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class PublishTaskTest extends JUberblogTestCase {
+public class PublishTaskTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();

@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.file;
 
-import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -28,7 +28,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class FilesFinderByExtensionTest extends JUberblogTestCase {
+public class FilesFinderByExtensionTest extends BaseTestCase {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();

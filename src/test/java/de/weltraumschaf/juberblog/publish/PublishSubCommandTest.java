@@ -14,8 +14,8 @@ package de.weltraumschaf.juberblog.publish;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.JUberblogTestCase;
-import de.weltraumschaf.juberblog.app.JUberblog;
+import de.weltraumschaf.juberblog.BaseTestCase;
+import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class PublishSubCommandTest extends JUberblogTestCase {
+public class PublishSubCommandTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class IntegrationTestCase extends JUberblogTestCase {
+public abstract class IntegrationTestCase extends BaseTestCase {
 
     private final Exitable exiter = mock(Exitable.class);
 

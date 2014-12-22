@@ -12,7 +12,7 @@
 
 package de.weltraumschaf.juberblog.file;
 
-import de.weltraumschaf.juberblog.JUberblogTestCase;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import java.net.URISyntaxException;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class DataFileTest extends JUberblogTestCase {
+public class DataFileTest extends BaseTestCase {
 
     private final DataFile sut = new DataFile(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md").toString());
 

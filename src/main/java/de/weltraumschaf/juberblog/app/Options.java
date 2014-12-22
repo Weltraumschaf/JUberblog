@@ -11,7 +11,7 @@
  */
 package de.weltraumschaf.juberblog.app;
 
-import de.weltraumschaf.juberblog.app.SubCommand;
+import de.weltraumschaf.juberblog.cmd.SubCommand;
 import com.beust.jcommander.Parameter;
 import de.weltraumschaf.commons.jcommander.JCommanderImproved;
 import de.weltraumschaf.juberblog.core.Constants;

@@ -21,7 +21,7 @@ import java.nio.file.Paths;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public abstract class JUberblogTestCase {
+public abstract class BaseTestCase {
 
     protected static final String ENCODING = "utf-8";
     protected static final String BASE = "/de/weltraumschaf/juberblog/";
