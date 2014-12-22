@@ -15,7 +15,6 @@ package de.weltraumschaf.juberblog.app;
 import de.weltraumschaf.juberblog.app.SubCommand;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.JUberblog;
 
 /**
  *

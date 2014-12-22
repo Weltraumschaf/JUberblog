@@ -21,7 +21,6 @@ import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
-import de.weltraumschaf.juberblog.core.JUberblog;
 import de.weltraumschaf.juberblog.app.SubCommand.Name;
 import java.io.UnsupportedEncodingException;
 

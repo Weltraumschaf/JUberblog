@@ -15,7 +15,6 @@ import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.NullExiter;
 import de.weltraumschaf.commons.testing.CapturedOutput;
 import de.weltraumschaf.juberblog.core.Constants;
-import de.weltraumschaf.juberblog.core.JUberblog;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
