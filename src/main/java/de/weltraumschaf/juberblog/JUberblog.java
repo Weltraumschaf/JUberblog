@@ -19,15 +19,31 @@ import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Paths;
 
 /**
+ * Registry object to cary around important objects.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class JUberblog {
 
+    /**
+     * Holds important directories.
+     */
     private final Directories dirs;
+    /**
+     * Holds the needed templates.
+     */
     private final Templates tpls;
+    /**
+     * Holds the blog's configuration.
+     */
     private final Configuration cfg;
+    /**
+     * Holds the command line options.
+     */
     private final Options opt;
+    /**
+     * Provides I/O for the command line.
+     */
     private final IO io;
 
     public JUberblog(final Directories dirs, final Templates tpls, final Configuration cfg, final Options opt, final IO io) {
@@ -39,22 +55,47 @@ public class JUberblog {
         this.io = Validate.notNull(io, "io");
     }
 
+    /**
+     * Get the directories.
+     *
+     * @return never {@code null}
+     */
     public Directories directories() {
         return dirs;
     }
 
+    /**
+     * Get the templates.
+     *
+     * @return never {@code null}
+     */
     public Templates templates() {
         return tpls;
     }
 
+    /**
+     * Get the configuration.
+     *
+     * @return never {@code null}
+     */
     public Configuration configuration() {
         return cfg;
     }
 
+    /**
+     * Get the options.
+     *
+     * @return never {@code null}
+     */
     public Options options() {
         return opt;
     }
 
+    /**
+     * Get the I/O.
+     *
+     * @return never {@code null}
+     */
     public IO io() {
         return io;
     }
