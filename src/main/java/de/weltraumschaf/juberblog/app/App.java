@@ -183,18 +183,41 @@ public final class App extends InvokableAdapter {
         cmd.execute();
     }
 
+    /**
+     * Throw a generic bad CLI argument error.
+     *
+     * @throws ApplicationException always
+     */
     private void throwBadArgumentError() throws ApplicationException {
         throwBadArgumentError((ParameterException)null);
     }
 
+    /**
+     * Throw bad CLI argument error with custom message.
+     *
+     * @param msg additional error message
+     * @throws ApplicationException always
+     */
     private void throwBadArgumentError(final String msg) throws ApplicationException {
         throwBadArgumentError(msg, null);
     }
 
+    /**
+     * Throw a generic bad CLI argument error with exception for debug output the stack trace.
+     * @param ex may be {@code null}
+     * @throws ApplicationException always
+     */
     private void throwBadArgumentError(final ParameterException ex) throws ApplicationException {
         throwBadArgumentError("Bad arguments!", ex);
     }
 
+    /**
+     * Throw bad CLI argument error with custom message with exception for debug output the stack trace.
+     *
+     * @param msg additional error message
+     * @param ex may be {@code null}
+     * @throws ApplicationException always
+     */
     private void throwBadArgumentError(final String msg, final ParameterException ex) throws ApplicationException {
         throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(msg), ex);
     }
