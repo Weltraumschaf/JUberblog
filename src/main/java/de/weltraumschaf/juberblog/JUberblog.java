@@ -11,14 +11,21 @@
  */
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Registry object to cary around important objects.
@@ -121,28 +128,71 @@ public final class JUberblog {
      * @param cliOptions must not be {@code null}
      * @param io must not be {@code null}
      * @return never {@code null}
+     * @throws ApplicationException if not all objects can't be generated
      */
-    public static JUberblog generate(final Options cliOptions, final IO io) {
+    public static JUberblog generate(final Options cliOptions, final IO io) throws ApplicationException {
+        final Configuration configuration = generateConfiguration(cliOptions);
+        final Path locationDir = Paths.get(cliOptions.getLocation());
+
+        if (!Files.isDirectory(locationDir)) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL,
+                    String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
+        }
+
+        final Path dataDir = locationDir.resolve(configuration.getDataDir());
+        final Path outputDir = locationDir.resolve(configuration.getHtdocs());
+        final Path templateDir = locationDir.resolve(configuration.getTemplateDir());
+
         return JUberblog.Builder.create()
                 .directories(
                         new Directories(
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get(".")))
+                                dataDir.resolve("posts"),
+                                dataDir.resolve("sites"),
+                                outputDir,
+                                outputDir.resolve("posts"),
+                                outputDir.resolve("sites")))
                 .templates(
                         new Templates(
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get("."),
-                                Paths.get(".")))
-                .configuration(new Configuration(new Properties()))
+                                templateDir.resolve("layout.ftl"),
+                                templateDir.resolve("post.ftl"),
+                                templateDir.resolve("site.ftl"),
+                                templateDir.resolve("feed.ftl"),
+                                templateDir.resolve("index.ftl"),
+                                templateDir.resolve("site_map.ftl")))
+                .configuration(configuration)
                 .options(cliOptions)
                 .io(io)
                 .product();
+    }
+
+    /**
+     * Loads the configuration from given CLI option.
+     *
+     * @param cliOptions must not be {@code null}
+     * @return never {@code null}, always new instance
+     * @throws ApplicationException if file can't be loaded
+     */
+    private static Configuration generateConfiguration(final Options cliOptions) throws ApplicationException {
+        final Path configFile = Paths.get(Validate.notNull(cliOptions, "cliOptions").getConfigurationFile());
+
+        if (!Files.isRegularFile(configFile)) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL,
+                    String.format("Can't read config file '%s'!", cliOptions.getConfigurationFile()));
+        }
+
+        final Configuration configuration;
+
+        try {
+            configuration = new Configuration(configFile.toString());
+        } catch (final IOException ex) {
+            throw new ApplicationException(
+                    ExitCodeImpl.FATAL,
+                    String.format("Error during read of config file '%s'!", cliOptions.getConfigurationFile()));
+        }
+
+        return configuration;
     }
 
     /**

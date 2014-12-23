@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -177,5 +178,21 @@ public final class Configuration {
     public String toString() {
         return "Configuration{" + "properties=" + properties + '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(properties);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof Configuration)) {
+            return false;
+        }
+
+        final Configuration other = (Configuration) obj;
+        return Objects.equals(properties, other.properties);
+    }
+
 
 }

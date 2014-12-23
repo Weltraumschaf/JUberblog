@@ -308,7 +308,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void execute_CREATE() throws Exception {
-        final App sut = createApp(new String[]{"create"});
+        final App sut = createApp(new String[]{"create", "-c", createPath("config.properties").toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
@@ -322,7 +322,9 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void execute_INSTALL() throws Exception {
-        final App sut = createApp(new String[]{"install"});
+        output.expectErr("");
+
+        final App sut = createApp(new String[]{"install", "-c", createPath("config.properties").toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
@@ -336,7 +338,9 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void execute_PUBLISH() throws Exception {
-        final App sut = createApp(new String[]{"publish"});
+        output.expectErr("");
+
+        final App sut = createApp(new String[]{"publish", "-c", createPath("config.properties").toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);
