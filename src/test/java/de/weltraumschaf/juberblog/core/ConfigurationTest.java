@@ -12,8 +12,6 @@
 
 package de.weltraumschaf.juberblog.core;
 
-import de.weltraumschaf.juberblog.core.Configuration;
-import de.weltraumschaf.juberblog.core.Constants;
 import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;

@@ -11,8 +11,6 @@
  */
 package de.weltraumschaf.juberblog.core;
 
-import de.weltraumschaf.juberblog.core.TaskExecutor;
-import de.weltraumschaf.juberblog.core.Task;
 import org.junit.Test;
 import org.mockito.InOrder;
 import static org.mockito.Mockito.inOrder;

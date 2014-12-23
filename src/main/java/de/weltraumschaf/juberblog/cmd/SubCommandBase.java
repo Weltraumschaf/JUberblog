@@ -13,7 +13,6 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.juberblog.JUberblog;
-import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;

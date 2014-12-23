@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.publish;
 
-import de.weltraumschaf.juberblog.publish.PublishTask;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;

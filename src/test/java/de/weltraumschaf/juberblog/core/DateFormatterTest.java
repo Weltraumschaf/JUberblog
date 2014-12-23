@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.core;
 
-import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.DateFormatter.Format;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;

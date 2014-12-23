@@ -13,7 +13,6 @@ package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.publish.Publisher;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
