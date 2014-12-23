@@ -28,9 +28,7 @@ import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 
 /**
- * Tests for {
- *
- * @lnk JUberblog}.
+ * Tests for {@lnk JUberblog}.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
