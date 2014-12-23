@@ -15,13 +15,25 @@ package de.weltraumschaf.juberblog.core;
 import de.weltraumschaf.commons.validate.Validate;
 
 /**
+ * Common functionality for all tasks.
+ *
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
+ * @param <R> type of return value
+ * @param <P> type of previous result
  */
 public abstract class BaseTask<R, P> implements Task<R, P> {
 
+    /**
+     * Token type class of result from previous task.
+     */
     private final Class<P> typeForPreviusResult;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param typeForPreviusResult must not be {@code null}
+     */
     public BaseTask(final Class<P> typeForPreviusResult) {
         super();
         this.typeForPreviusResult = Validate.notNull(typeForPreviusResult, "typeForPreviusResult");
@@ -32,8 +44,15 @@ public abstract class BaseTask<R, P> implements Task<R, P> {
         return typeForPreviusResult;
     }
 
+    /**
+     * Encapsulates unsafe cast into single location to minimize impact of suppressing the warning.
+     *
+     * @param <T> generic type
+     * @param aClass may be {@code null}
+     * @return may be {@code null}
+     */
     @SuppressWarnings("unchecked")
-    static <T> Class<T> castClass(Class<?> aClass) {
+    static final <T> Class<T> castClass(final Class<?> aClass) {
         return (Class<T>)aClass;
     }
 }
