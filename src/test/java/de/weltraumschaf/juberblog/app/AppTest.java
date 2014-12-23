@@ -19,10 +19,13 @@ import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -58,6 +61,8 @@ public class AppTest extends IntegrationTestCase {
 
     @Rule
     public final CapturedOutput output = new CapturedOutput();
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
     public void showUsageIfNoArgument() throws Exception {
@@ -88,7 +93,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"-v"}));
@@ -98,7 +103,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"--version"}));
@@ -108,7 +113,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForCreateSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"create", "-v"}));
@@ -118,7 +123,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForCreateSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"create", "--version"}));
@@ -128,7 +133,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForInstallSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         App.main(createApp(new String[]{"install", "-v"}));
 
         output.expectOut(EXPECTED_VERSION);
@@ -138,7 +143,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForInstallSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"install", "--version"}));
@@ -148,7 +153,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForPublishSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"publish", "-v"}));
@@ -158,7 +163,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showVersionForPublishSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_VERSION);
 
         App.main(createApp(new String[]{"publish", "--version"}));
@@ -168,7 +173,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"-h"}));
@@ -178,7 +183,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"--help"}));
@@ -188,7 +193,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForCreateSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"create", "-h"}));
@@ -198,7 +203,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForCreateSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"create", "--help"}));
@@ -208,7 +213,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForInstallSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"install", "-h"}));
@@ -218,7 +223,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForInstallSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"install", "--help"}));
@@ -228,7 +233,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForPublishSubCommandShortOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"publish", "-h"}));
@@ -238,7 +243,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showHelpForPublishSubCommandLongOption() throws Exception {
-        output.expectErr("");
+        output.expectErr(equalTo(""));
         output.expectOut(EXPECTED_HELP);
 
         App.main(createApp(new String[]{"publish", "--help"}));
@@ -307,8 +312,39 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
+    public void missingLocation_CREATE() throws Exception {
+        output.expectErr(equalTo("FATAL: No location directory given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+
+        final App sut = createApp(new String[]{
+            "create",
+            "-c", createPath("config.properties").toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void missingConfig_CREATE() throws Exception {
+        output.expectErr(equalTo("FATAL: No configuration file given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+
+        final App sut = createApp(new String[]{
+            "create",
+            "-l", tmp.getRoot().toPath().toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
     public void execute_CREATE() throws Exception {
-        final App sut = createApp(new String[]{"create", "-c", createPath("config.properties").toString()});
+        final App sut = createApp(new String[]{
+            "create",
+            "-c", createPath("config.properties").toString(),
+            "-l", tmp.getRoot().toPath().toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.CREATE), any(JUberblog.class))).thenReturn(cmd);
@@ -321,10 +357,41 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    public void execute_INSTALL() throws Exception {
-        output.expectErr("");
+    public void missingLocation_INSTALL() throws Exception {
+        output.expectErr(equalTo("FATAL: No location directory given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
 
-        final App sut = createApp(new String[]{"install", "-c", createPath("config.properties").toString()});
+        final App sut = createApp(new String[]{
+            "install",
+            "-c", createPath("config.properties").toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void missingConfig_INSTALL() throws Exception {
+        output.expectErr(equalTo("FATAL: No configuration file given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+
+        final App sut = createApp(new String[]{
+            "install",
+            "-l", tmp.getRoot().toPath().toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void execute_INSTALL() throws Exception {
+        output.expectErr(equalTo(""));
+
+        final App sut = createApp(new String[]{
+            "install",
+            "-c", createPath("config.properties").toString(),
+            "-l", tmp.getRoot().toPath().toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.INSTALL), any(JUberblog.class))).thenReturn(cmd);
@@ -337,10 +404,41 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    public void execute_PUBLISH() throws Exception {
-        output.expectErr("");
+    public void missingLocation_PUBLISH() throws Exception {
+        output.expectErr(equalTo("FATAL: No location directory given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
 
-        final App sut = createApp(new String[]{"publish", "-c", createPath("config.properties").toString()});
+        final App sut = createApp(new String[]{
+            "publish",
+            "-c", createPath("config.properties").toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void missingConfig_PUBLISH() throws Exception {
+        output.expectErr(equalTo("FATAL: No configuration file given!\n"
+                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+
+        final App sut = createApp(new String[]{
+            "publish",
+            "-l", tmp.getRoot().toPath().toString()});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void execute_PUBLISH() throws Exception {
+        output.expectErr(equalTo(""));
+
+        final App sut = createApp(new String[]{
+            "publish",
+            "-c", createPath("config.properties").toString(),
+            "-l", tmp.getRoot().toPath().toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(SubCommand.Name.PUBLISH), any(JUberblog.class))).thenReturn(cmd);

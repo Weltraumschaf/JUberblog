@@ -67,8 +67,6 @@ public final class Options {
      */
     @Parameter(
             names = {"-l", "--location"},
-            // TODO Enable.
-            //            required = true,
             description = "Location of the blog installation.")
     private String location;
     /**
@@ -76,8 +74,6 @@ public final class Options {
      */
     @Parameter(
             names = {"-c", "--config"},
-            // TODO Enable.
-            //            required = true,
             description = "Config file to use.")
     private String configurationFile;
 

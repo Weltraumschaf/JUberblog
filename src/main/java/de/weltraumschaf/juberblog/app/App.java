@@ -166,6 +166,16 @@ public final class App extends InvokableAdapter {
             return;
         }
 
+        if (cliOptions.getConfigurationFile().isEmpty()) {
+            throwBadArgumentError("No configuration file given!");
+            return;
+        }
+
+        if (cliOptions.getLocation().isEmpty()) {
+            throwBadArgumentError("No location directory given!");
+            return;
+        }
+
         final SubCommand cmd
                 = subCommands.forName(
                         Name.betterValueOf(arguments.getFirstArgument()),
@@ -174,7 +184,11 @@ public final class App extends InvokableAdapter {
     }
 
     private void throwBadArgumentError() throws ApplicationException {
-        throwBadArgumentError(null);
+        throwBadArgumentError((ParameterException)null);
+    }
+
+    private void throwBadArgumentError(final String msg) throws ApplicationException {
+        throwBadArgumentError(msg, null);
     }
 
     private void throwBadArgumentError(final ParameterException ex) throws ApplicationException {
