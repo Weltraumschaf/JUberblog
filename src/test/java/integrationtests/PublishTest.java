@@ -13,11 +13,14 @@ package integrationtests;
 
 import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.app.App;
+import de.weltraumschaf.juberblog.file.DataFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -42,11 +45,164 @@ public class PublishTest extends IntegrationTestCase {
             "publish",
             "-c", createPath("/integrationtests/", "config.properties").toString(),
             "-l", tmp.getRoot().getAbsolutePath()}));
-        // TODO Assert posts
-        // TODO Assert sites
-        // TODO Assert index
-        // TODO Assert site map
-        // TODO Assert feed
+
+        final DataFile expectedPostOne = new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-First-Post.html");
+        assertThat(expectedPostOne.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>NAME</h1>\n"
+                + "        <h2>DESCRIPTION</h2>\n"
+                + "\n"
+                + "        <article>\n"
+                + "    <h3>This is the First Post</h3><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>\n"
+                + "</article>\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedPostTwo = new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-Second-Post.html");
+        assertThat(expectedPostTwo.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>NAME</h1>\n"
+                + "        <h2>DESCRIPTION</h2>\n"
+                + "\n"
+                + "        <article>\n"
+                + "    <h3>This is the Second Post</h3><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>\n"
+                + "</article>\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedPostThree = new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-Third-Post.html");
+        assertThat(expectedPostThree.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>NAME</h1>\n"
+                + "        <h2>DESCRIPTION</h2>\n"
+                + "\n"
+                + "        <article>\n"
+                + "    <h3>This is the Third Post</h3><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>\n"
+                + "</article>\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedSiteOne = new DataFile(tmp.getRoot().toString() + "/public/sites/Site-One.html");
+        assertThat(expectedSiteOne.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>NAME</h1>\n"
+                + "        <h2>DESCRIPTION</h2>\n"
+                + "\n"
+                + "        <h3>SITE</h3>\n"
+                + "<article>\n"
+                + "    <h3>This is Site One</h3><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>\n"
+                + "</article>\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedSiteTwo = new DataFile(tmp.getRoot().toString() + "/public/sites/Site-Two.html");
+        assertThat(expectedSiteTwo.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>NAME</h1>\n"
+                + "        <h2>DESCRIPTION</h2>\n"
+                + "\n"
+                + "        <h3>SITE</h3>\n"
+                + "<article>\n"
+                + "    <h3>This is Site Two</h3><p>Lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</p>\n"
+                + "</article>\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedIndex = new DataFile(tmp.getRoot().toString() + "/public/index.html");
+        assertThat(expectedIndex.readContent(ENCODING), is("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <body>\n"
+                + "        <h1>TODO</h1>\n"
+                + "        <h2>TODO</h2>\n"
+                + "\n"
+                + "        <h3>All Blog Posts</h3>\n"
+                + "<ul>\n"
+                + "        <li>\n"
+                + "        <a href=\"http://localhost/posts/This-is-the-First-Post.html\">This is the First Post</a>\n"
+                + "        <span>(Fri, 30 May 2014 21:29:20 +0200)</span>\n"
+                + "    </li>\n"
+                + "    <li>\n"
+                + "        <a href=\"http://localhost/posts/This-is-the-Second-Post.html\">This is the Second Post</a>\n"
+                + "        <span>(Mon, 30 Jun 2014 23:25:44 +0200)</span>\n"
+                + "    </li>\n"
+                + "    <li>\n"
+                + "        <a href=\"http://localhost/posts/This-is-the-Third-Post.html\">This is the Third Post</a>\n"
+                + "        <span>(Mon, 28 Jul 2014 17:44:13 +0200)</span>\n"
+                + "    </li>\n"
+                + "</ul>\n"
+                + "\n"
+                + "    </body>\n"
+                + "</html>"));
+        final DataFile expectedSiteMap = new DataFile(tmp.getRoot().toString() + "/public/site_map.xml");
+        assertThat(expectedSiteMap.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-First-Post.html</loc>\n"
+                + "        <lastmod>2014-05-30T21:29:20+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-Second-Post.html</loc>\n"
+                + "        <lastmod>2014-06-30T23:25:44+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/This-is-the-Third-Post.html</loc>\n"
+                + "        <lastmod>2014-07-28T17:44:13+02:00</lastmod>\n"
+                + "        <changefreq>daily</changefreq>\n"
+                + "        <priority>0.8</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/Site-One.html</loc>\n"
+                + "        <lastmod>2014-08-30T15:29:20+02:00</lastmod>\n"
+                + "        <changefreq>weekly</changefreq>\n"
+                + "        <priority>0.5</priority>\n"
+                + "    </url>\n"
+                + "    <url>\n"
+                + "        <loc>http://localhost/posts/Site-Two.html</loc>\n"
+                + "        <lastmod>2014-09-30T15:29:20+02:00</lastmod>\n"
+                + "        <changefreq>weekly</changefreq>\n"
+                + "        <priority>0.5</priority>\n"
+                + "    </url>\n"
+                + "</urlset>"));
+        final DataFile expectedFeed = new DataFile(tmp.getRoot().toString() + "/public/feed.xml");
+        assertThat(expectedFeed.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+                + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
+                + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
+                + "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"
+                + "     version=\"2.0\"\n"
+                + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
+                + "    <channel>\n"
+                + "        <title>title</title>\n"
+                + "        <link>link</link>\n"
+                + "        <description>description</description>\n"
+                + "        <language>language</language>\n"
+                + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
+                + "        <item>\n"
+                + "            <title>This is the First Post</title>\n"
+                + "            <link>http://localhost/posts/This-is-the-First-Post.html</link>\n"
+                + "            <description>This is the first post.</description>\n"
+                + "            <pubDate>Fri, 30 May 2014 21:29:20 +0200</pubDate>\n"
+                + "            <dc:date>2014-05-30T21:29:20+02:00</dc:date>\n"
+                + "        </item>\n"
+                + "        <item>\n"
+                + "            <title>This is the Second Post</title>\n"
+                + "            <link>http://localhost/posts/This-is-the-Second-Post.html</link>\n"
+                + "            <description>This is the second post.</description>\n"
+                + "            <pubDate>Mon, 30 Jun 2014 23:25:44 +0200</pubDate>\n"
+                + "            <dc:date>2014-06-30T23:25:44+02:00</dc:date>\n"
+                + "        </item>\n"
+                + "        <item>\n"
+                + "            <title>This is the Third Post</title>\n"
+                + "            <link>http://localhost/posts/This-is-the-Third-Post.html</link>\n"
+                + "            <description>This is the third post.</description>\n"
+                + "            <pubDate>Mon, 28 Jul 2014 17:44:13 +0200</pubDate>\n"
+                + "            <dc:date>2014-07-28T17:44:13+02:00</dc:date>\n"
+                + "        </item>\n"
+                + "    </channel>\n"
+                + "</rss>"));
     }
 
     private Dirs createDirs() throws IOException {
