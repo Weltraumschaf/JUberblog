@@ -39,7 +39,7 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
-
+    
     @Test
     public void execute() throws Exception {
         final JUberblog registry = JUberblog.Builder.create()
@@ -50,12 +50,12 @@ public class PublishSubCommandTest extends BaseTestCase {
                                 tmp.newFolder("posts").toPath(),
                                 tmp.newFolder("sites").toPath()))
                 .templates(new Templates(
-                                createPath("layout.ftl"),
-                                createPath("post.ftl"),
-                                createPath("site.ftl"),
-                                createPath("feed.ftl"),
-                                createPath("index.ftl"),
-                                createPath("site_map.ftl")))
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
+                                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl")))
                 .configuration(new Configuration(new Properties()))
                 .options(new Options())
                 .io(mock(IO.class))

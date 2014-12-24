@@ -43,7 +43,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
     @Test
     public void execute_noPages() throws Exception {
         final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
-                createPath("feed.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
                 tmp.getRoot().toPath(),
                 ENCODING,
                 "title",
@@ -79,7 +79,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
     @Test
     public void execute_twoPages() throws Exception {
         final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
-                createPath("feed.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
                 tmp.getRoot().toPath(),
                 ENCODING,
                 "title",

@@ -45,8 +45,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
                 ENCODING,
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("index.ftl")));
+                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl")));
 
         sut.execute();
 
@@ -75,8 +75,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
                 ENCODING,
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("index.ftl")));
+                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl")));
         final Page.Pages pages = new Page.Pages();
         pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
         pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));

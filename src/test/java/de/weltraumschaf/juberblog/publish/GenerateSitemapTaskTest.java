@@ -43,7 +43,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
     @Test
     public void execute_noPages() throws Exception {
         final GenerateSitemapTask sut = new GenerateSitemapTask(new GenerateSitemapTask.Config(
-                createPath("site_map.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"),
                 tmp.getRoot().toPath(),
                 ENCODING));
 
@@ -64,7 +64,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
     @Test
     public void execute_twoPages() throws Exception {
         final GenerateSitemapTask sut = new GenerateSitemapTask(new GenerateSitemapTask.Config(
-                createPath("site_map.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"),
                 tmp.getRoot().toPath(),
                 ENCODING));
         final Page.Pages pages = new Page.Pages();

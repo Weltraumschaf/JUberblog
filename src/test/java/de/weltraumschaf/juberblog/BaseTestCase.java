@@ -25,6 +25,7 @@ public abstract class BaseTestCase {
 
     protected static final String ENCODING = "utf-8";
     protected static final String BASE = "/de/weltraumschaf/juberblog/";
+    protected static final String SCAFOLD_PACKAGE_PREFIX = "scaffold/templates/";
 
     protected final Path createPath(final String name) throws URISyntaxException {
         return createPath(BASE, name);

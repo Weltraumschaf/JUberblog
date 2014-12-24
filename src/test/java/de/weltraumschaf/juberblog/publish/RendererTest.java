@@ -36,7 +36,10 @@ public class RendererTest extends BaseTestCase {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
-    final Renderer sut = new Renderer(createPath("layout.ftl"), createPath("post.ftl"), ENCODING);
+    final Renderer sut = new Renderer(
+            createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
+            ENCODING);
 
     public RendererTest() throws IOException, URISyntaxException {
         super();
@@ -44,7 +47,8 @@ public class RendererTest extends BaseTestCase {
 
     @Test
     public void render() throws URISyntaxException, UnsupportedEncodingException, IOException {
-        final Renderer.RendererResult result = sut.render(createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
+        final Renderer.RendererResult result = sut.render(
+                createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
         assertThat(result.getRenderedContent(), is(
                 "<!DOCTYPE html>\n"

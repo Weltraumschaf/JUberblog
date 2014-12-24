@@ -41,8 +41,8 @@ public class PublisherTest extends BaseTestCase {
         final Publisher sut = new Publisher(
                 createPath("posts"),
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("post.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
                 ENCODING,
                 "http://localhost/posts",
                 Page.Type.POST

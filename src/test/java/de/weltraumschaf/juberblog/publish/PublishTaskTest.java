@@ -44,8 +44,8 @@ public class PublishTaskTest extends BaseTestCase {
                 ENCODING,
                 createPath("sites"),
                 tmp.getRoot().toPath(),
-                createPath("layout.ftl"),
-                createPath("site.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
                 Page.Type.SITE
         ));
 
