@@ -274,7 +274,7 @@ public final class JUberblog {
         }
 
         /**
-         * Creates the final product
+         * Creates the final product.
          *
          * @return never {@code null}, always new instance
          */

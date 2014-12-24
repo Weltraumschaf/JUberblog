@@ -32,6 +32,9 @@ import java.util.Map;
  */
 public final class Publisher {
 
+    /**
+     * USed to extract headline.
+     */
     private final Headline headline = new Headline();
     /**
      * Where to find data files.

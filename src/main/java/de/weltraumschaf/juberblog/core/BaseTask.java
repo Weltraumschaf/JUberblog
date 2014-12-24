@@ -53,6 +53,6 @@ public abstract class BaseTask<R, P> implements Task<R, P> {
      */
     @SuppressWarnings("unchecked")
     static final <T> Class<T> castClass(final Class<?> aClass) {
-        return (Class<T>)aClass;
+        return (Class<T>) aClass;
     }
 }

@@ -33,6 +33,6 @@ public final class InstallSubCommand  extends SubCommandBase {
 
     @Override
     public void execute() {
-        io().println("install");// TODO Implement install sub command.
+        io().println("install"); // TODO Implement install sub command.
     }
 }

@@ -191,7 +191,7 @@ public final class App extends InvokableAdapter {
      * @throws ApplicationException always
      */
     private void throwBadArgumentError() throws ApplicationException {
-        throwBadArgumentError((ParameterException)null);
+        throwBadArgumentError((ParameterException) null);
     }
 
     /**

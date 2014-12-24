@@ -24,6 +24,9 @@ public enum Constants {
      * NAme of the command line script.
      */
     COMMAND_NAME("juberblog"),
+    /**
+     * Default new line from system.
+     */
     DEFAULT_NEW_LINE(String.format("%n")),
     /**
      * System dependent file separator.

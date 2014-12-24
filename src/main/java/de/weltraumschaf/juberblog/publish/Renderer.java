@@ -59,8 +59,17 @@ final class Renderer {
      * XXX: Inject one instance from main app.
      */
     private final FreeMarkerDown fmd;
+    /**
+     * Used to collect key values from pre processor.
+     */
     private final Map<String, String> keyValues = Maps.newHashMap();
+    /**
+     * Used to pre process key value instructions.
+     */
     private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
+    /**
+     * Used to extract raw Markdown.
+     */
     private final GetUnprocessedMarkdown interceptor = new GetUnprocessedMarkdown();
     /**
      * Outer part of the two step layout.
@@ -131,6 +140,9 @@ final class Renderer {
          * The rendered content (usually HTML).
          */
         private final String renderedContent;
+        /**
+         * Raw Markdown from rendered file.
+         */
         private final String markdown;
         /**
          * Meta data found by pre processors of FreeMarkerDown.
