@@ -53,6 +53,9 @@ public final class Publisher {
      * Renders the page (Markdown/templates).
      */
     private final Renderer renderer;
+    /**
+     * Type of published pages.
+     */
     private final Type type;
 
     /**
@@ -63,9 +66,18 @@ public final class Publisher {
      * @param layoutTemplateFile must not be {@code null}
      * @param postTemplateFile must not be {@code null}
      * @param encoding must not be {@code null} or empty
+     * @param baseUrlForPages must not be {@code null} or empty
+     * @param type must not be {@code null}
      * @throws IOException
      */
-    public Publisher(final Path inputDir, final Path outputDir, final Path layoutTemplateFile, final Path postTemplateFile, final String encoding, final String baseUrlForPages, final Type type) throws IOException {
+    public Publisher(
+            final Path inputDir,
+            final Path outputDir,
+            final Path layoutTemplateFile,
+            final Path postTemplateFile,
+            final String encoding,
+            final String baseUrlForPages,
+            final Type type) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
         this.outputDir = Validate.notNull(outputDir, "outputDir");

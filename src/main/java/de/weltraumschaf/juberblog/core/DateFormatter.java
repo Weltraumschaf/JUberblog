@@ -21,7 +21,14 @@ import org.joda.time.format.DateTimeFormatter;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class DateFormatter {
+public final class DateFormatter {
+
+    /**
+     * Hidden for pure static utility class.
+     */
+    private DateFormatter() {
+        super();
+    }
 
     /**
      * Formats the given date with a given format.
@@ -44,11 +51,14 @@ public class DateFormatter {
 
         /**
          * Publishing date format for RSS files.
-         *//**
+         */
+        /**
          * Publishing date format for RSS files.
-         *//**
+         */
+        /**
          * Publishing date format for RSS files.
-         *//**
+         */
+        /**
          * Publishing date format for RSS files.
          */
         RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z"),

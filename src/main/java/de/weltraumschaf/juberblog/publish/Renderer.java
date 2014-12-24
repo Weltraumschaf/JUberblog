@@ -141,9 +141,13 @@ final class Renderer {
          * Dedicated constructor.
          *
          * @param renderedContent must not be {@code null}
+         * @param markdown must not be {@code null}
          * @param metaData must not be {@code null}
          */
-        private RendererResult(final String renderedContent, final String markdown, final Map<String, String> metaData) {
+        private RendererResult(
+                final String renderedContent,
+                final String markdown,
+                final Map<String, String> metaData) {
             super();
             this.renderedContent = Validate.notNull(renderedContent, "renderedContent");
             this.markdown = Validate.notNull(markdown, "markdown");
@@ -159,6 +163,11 @@ final class Renderer {
             return renderedContent;
         }
 
+        /**
+         * Get the Markdown from rendered data file.
+         *
+         * @return never {@code null}
+         */
         String getMarkdown() {
             return markdown;
         }
@@ -174,12 +183,18 @@ final class Renderer {
 
     }
 
+    /**
+     * Intercepts the rendering to collected the raw Markdown.
+     */
     private static final class GetUnprocessedMarkdown implements Interceptor {
 
+        /**
+         * Collected Markdown.
+         */
         private String markdown = "";
 
         @Override
-        public void intercept(final ExecutionPoint point, final TemplateModel template, String content) {
+        public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
             final String name = template.getName();
 
             if ("content".equals(name)) {
@@ -187,6 +202,11 @@ final class Renderer {
             }
         }
 
+        /**
+         * Returns the raw Markdown.
+         *
+         * @return never {@code null}
+         */
         private String getMarkdown() {
             return markdown;
         }

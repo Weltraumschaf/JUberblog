@@ -19,18 +19,51 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
 /**
+ * Describes a published page.
+ * <p>
+ * This class is immutable by design.
+ * </p>
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Page {
 
+    /**
+     * The page title.
+     */
     private final String title;
+    /**
+     * The page URL.
+     */
     private final String link; // TODO Use URI.
+    /**
+     * The page description.
+     */
     private final String description;
+    /**
+     * When the page was published.
+     */
     private final DateTime publishingDate;
+    /**
+     * Type of page.
+     */
     private final Type type;
 
-    public Page(final String title, final String link, final String description, final DateTime publishingDate, final Type type) {
+    /**
+     * Dedicated constructor.
+     *
+     * @param title must not be {@code null} or empty
+     * @param link title must not be {@code null}
+     * @param description title must not be {@code null}
+     * @param publishingDate title must not be {@code null}
+     * @param type title must not be {@code null}
+     */
+    public Page(
+            final String title,
+            final String link,
+            final String description,
+            final DateTime publishingDate,
+            final Type type) {
         super();
         this.title = Validate.notEmpty(title, "title");
         this.link = Validate.notNull(link, "link");
@@ -39,22 +72,47 @@ public final class Page {
         this.type = Validate.notNull(type, "type");
     }
 
+    /**
+     * Get the page tile.
+     *
+     * @return never {@code null} or empty
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Get the page URL.
+     *
+     * @return never {@code null}
+     */
     public String getLink() {
         return link;
     }
 
+    /**
+     * Get the page description.
+     *
+     * @return never {@code null}
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Get the page's publishing date.
+     *
+     * @return never {@code null}
+     */
     public DateTime getPublishingDate() {
         return publishingDate;
     }
 
+    /**
+     * Get the page type.
+     *
+     * @return never {@code null}
+     */
     public Type getType() {
         return type;
     }
@@ -89,21 +147,43 @@ public final class Page {
                 + '}';
     }
 
+    /**
+     * Convenience type to collect pages.
+     */
     public static final class Pages extends ArrayList<Page> {
 
+        /**
+         * Default constructor.
+         */
         public Pages() {
             super();
         }
 
     }
 
+    /**
+     * Type of pages.
+     */
     public enum Type {
 
-        POST, SITE;
+        /**
+         * A blog post.
+         */
+        POST,
+        /**
+         * A regular site.
+         */
+        SITE;
     }
 
+    /**
+     * A comparator to sort pages ascending by date.
+     */
     public static final class SortByDateAscending implements Comparator<Page> {
 
+        /**
+         * Delegate for Joda time objects.
+         */
         private final Comparator<Object> jodaCompare = DateTimeComparator.getInstance();
 
         @Override

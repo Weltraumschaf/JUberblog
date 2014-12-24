@@ -28,17 +28,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
+ * Task to generate the index site.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pages, Pages> {
 
+    /**
+     * Task configuration.
+     */
     private final Config config;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param config must not be {@code null}
+     */
     public GenerateIndexTask(final Config config) {
         super(Pages.class);
         this.config = Validate.notNull(config, "config");
@@ -74,34 +82,81 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
         return previusResult;
     }
 
-    private Collection<Map<String, String>> convert(final List<Page> pages) {
+    /**
+     * Convert collection of pages into plain java collections for assigning them to the templates.
+     *
+     * @param pages must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
+    private Collection<Map<String, String>> convert(final Pages pages) {
         final Collection<Map<String, String>> items = Lists.newArrayList();
 
-        for (final Page page : pages) {
+        for (final Page page : Validate.notNull(pages, "pages")) {
             items.add(convert(page));
         }
 
         return Collections.unmodifiableCollection(items);
     }
 
+    /**
+     * Converts a single page into plain java collections for assigning them to the templates.
+     *
+     * @param page must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
     private Map<String, String> convert(final Page page) {
+        Validate.notNull(page, "page");
         final Map<String, String> item = Maps.newHashMap();
         item.put("title", page.getTitle());
         item.put("link", page.getLink());
         item.put("description", page.getDescription());
-        item.put("pubDate", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
-        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
+        item.put(
+                "pubDate",
+                DateFormatter.format(
+                        page.getPublishingDate(),
+                        DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
+        item.put(
+                "dcDate",
+                DateFormatter.format(page.getPublishingDate(),
+                        DateFormatter.Format.W3C_DATE_FORMAT));
         return Collections.unmodifiableMap(item);
     }
 
+    /**
+     * Task configuration.
+     */
     public static final class Config {
 
+        /**
+         * Used to read/write files and as the encoding in the HTML.
+         */
         private final String encoding;
+        /**
+         * Where to store {@literal index.html}.
+         */
         private final Path outputDir;
+        /**
+         * The outer template of the {@literal index.html).
+         */
         private final Path layoutTemplate;
+        /**
+         * The inner template of the {@literal index.html).
+         */
         private final Path indexTemplate;
 
-        public Config(final String encoding, final Path outputDir, final Path layoutTemplate, final Path indexTemplate) {
+        /**
+         * Dedicated constructor.
+         *
+         * @param encoding must not be {@code null} or empty
+         * @param outputDir must not be {@code null}
+         * @param layoutTemplate must not be {@code null}
+         * @param indexTemplate must not be {@code null}
+         */
+        public Config(
+                final String encoding,
+                final Path outputDir,
+                final Path layoutTemplate,
+                final Path indexTemplate) {
             super();
             this.encoding = Validate.notEmpty(encoding, "encoding");
             this.outputDir = Validate.notNull(outputDir, "outputDir");

@@ -285,10 +285,10 @@ public final class App extends InvokableAdapter {
     /**
      * Injection point for testing.
      *
-     * @param subCommands must not be {@code null}
+     * @param newSubCommands must not be {@code null}
      */
-    void injectFactory(final Factory subCommands) {
-        this.subCommands = Validate.notNull(subCommands, "subCommands");
+    void injectFactory(final Factory newSubCommands) {
+        this.subCommands = Validate.notNull(newSubCommands, "factory");
     }
 
     /**

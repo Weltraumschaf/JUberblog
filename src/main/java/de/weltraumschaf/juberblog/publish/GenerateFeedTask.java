@@ -28,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
 
@@ -85,7 +84,13 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         return previusResult;
     }
 
-    private Collection<Map<String, String>> convert(final List<Page> pages) {
+    /**
+     * Convert collection of pages into plain java collections for assigning them to the templates.
+     *
+     * @param pages must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
+    private Collection<Map<String, String>> convert(final Pages pages) {
         final Collection<Map<String, String>> items = Lists.newArrayList();
 
         for (final Page page : pages) {
@@ -95,6 +100,12 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         return Collections.unmodifiableCollection(items);
     }
 
+    /**
+     * Converts a single page into plain java collections for assigning them to the templates.
+     *
+     * @param page must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
     private Map<String, String> convert(final Page page) {
         final Map<String, String> item = Maps.newHashMap();
         item.put("title", page.getTitle());
@@ -105,18 +116,67 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         return Collections.unmodifiableMap(item);
     }
 
+    /**
+     * Task configuration.
+     */
     public static final class Config {
 
+        /**
+         * The template of the XML.
+         */
         private final Path template;
+        /**
+         * Where to store the XML.
+         */
         private final Path outputDir;
+        /**
+         * Encoding to read/write files and for XML.
+         */
         private final String encoding;
+        /**
+         * Blog title.
+         */
         private final String title;
+        /**
+         * Blog URL.
+         */
         private final String link;
+        /**
+         * Blog description.
+         */
         private final String description;
+        /**
+         * Blog language.
+         */
         private final String language;
+        /**
+         * Date of last feed generation.
+         */
         private final DateTime lastBuildDate;
 
-        public Config(final Path template, final Path outputDir, final String encoding, final String title, final String link, final String description, final String language, final DateTime lastBuildDate) {
+        /**
+         * Dedicated constructor.
+         *
+         * XXX: Use builder to reduce constructor parameters.
+         *
+         * @param template must not be {@code null}
+         * @param outputDir must not be {@code null}
+         * @param encoding must not be {@code null} or empty
+         * @param title must not be {@code null} or empty
+         * @param link must not be {@code null} or empty
+         * @param description must not be {@code null} or empty
+         * @param language must not be {@code null} or empty
+         * @param lastBuildDate must not be {@code null}
+         */
+        public Config(
+                final Path template,
+                final Path outputDir,
+                final String encoding,
+                final String title,
+                final String link,
+                final String description,
+                final String language,
+                final DateTime lastBuildDate) {
             super();
             this.template = Validate.notNull(template, "template");
             this.outputDir = Validate.notNull(outputDir, "outputDir");

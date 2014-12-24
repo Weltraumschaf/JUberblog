@@ -19,13 +19,22 @@ import de.weltraumschaf.juberblog.core.Task;
 import java.nio.file.Path;
 
 /**
+ * Task to publish pages.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pages, Pages> {
 
+    /**
+     * Task configuration.
+     */
     private final Config config;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param config must not be {@code null}
+     */
     public PublishTask(final Config config) {
         super(Pages.class);
         this.config = Validate.notNull(config, "config");
@@ -44,7 +53,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 config.layoutTemplate,
                 config.contentTemplate,
                 config.encoding,
-                "http://localhost/posts",
+                "http://localhost/posts", // FIXME Use URI from config.
                 config.type
         );
 
@@ -52,16 +61,55 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
         return previusResult;
     }
 
+    /**
+     * Task configuration.
+     */
     public static final class Config {
 
+        /**
+         * Encoding to read/write files and for XML.
+         */
         private final String encoding;
+        /**
+         * Where to read the Markdown data files.
+         */
         private final Path inputDir;
+        /**
+         * Where to store the HTML pages.
+         */
         private final Path outputDir;
+        /**
+         * Outer template.
+         */
         private final Path layoutTemplate;
+        /**
+         * Inner template.
+         */
         private final Path contentTemplate;
+        /**
+         * Type of published data.
+         */
         private final Type type;
 
-        public Config(final String encoding, final Path inputDir, final Path outputDir, final Path layoutTemplate, final Path contentTemplate, final Type type) {
+        /**
+         * Dedicated constructor.
+         *
+         * XXX: Use builder to reduce constructor parameters.
+         *
+         * @param encoding must not be {@code null} or empty
+         * @param inputDir must not be {@code null}
+         * @param outputDir must not be {@code null}
+         * @param layoutTemplate must not be {@code null}
+         * @param contentTemplate must not be {@code null}
+         * @param type must not be {@code null}
+         */
+        public Config(
+                final String encoding,
+                final Path inputDir,
+                final Path outputDir,
+                final Path layoutTemplate,
+                final Path contentTemplate,
+                final Type type) {
             super();
             this.encoding = Validate.notEmpty(encoding, "encoding");
             this.inputDir = Validate.notNull(inputDir, "inputDir");
