@@ -17,27 +17,37 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
+import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Page;
+import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.Task;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
+ * Task to generate a site map XML.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class GenerateSitemapTask implements Task<Void, Page.Pages> {
+public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<Void, Pages> {
 
+    /**
+     * Task configuration.
+     */
     private final Config config;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param config must not be {@code null}
+     */
     public GenerateSitemapTask(final Config config) {
-        super();
+        super(Pages.class);
         this.config = Validate.notNull(config, "config");
     }
 
@@ -47,7 +57,7 @@ public class GenerateSitemapTask implements Task<Void, Page.Pages> {
     }
 
     @Override
-    public Void execute(final Page.Pages previusResult) throws Exception {
+    public Void execute(final Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
                 config.template,
@@ -65,7 +75,13 @@ public class GenerateSitemapTask implements Task<Void, Page.Pages> {
         return null;
     }
 
-    private Collection<Map<String, String>> convert(final List<Page> pages) {
+    /**
+     * Convert collection of pages into plain java collections for assigning them to the templates.
+     *
+     * @param pages must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
+    private Collection<Map<String, String>> convert(final Pages pages) {
         final Collection<Map<String, String>> items = Lists.newArrayList();
 
         for (final Page page : pages) {
@@ -75,6 +91,12 @@ public class GenerateSitemapTask implements Task<Void, Page.Pages> {
         return Collections.unmodifiableCollection(items);
     }
 
+    /**
+     * Converts a single page into plain java collections for assigning them to the templates.
+     *
+     * @param page must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
     private Map<String, String> convert(final Page page) {
         final Map<String, String> item = Maps.newHashMap();
         item.put("loc", page.getLink());
@@ -92,17 +114,31 @@ public class GenerateSitemapTask implements Task<Void, Page.Pages> {
         return Collections.unmodifiableMap(item);
     }
 
-    @Override
-    public Class<Page.Pages> getDesiredTypeForPreviusResult() {
-        return Page.Pages.class;
-    }
-
+    /**
+     * Task configuration.
+     */
     public static final class Config {
 
+        /**
+         * Template for site map XML.
+         */
         private final Path template;
+        /**
+         * Where to store site map.
+         */
         private final Path outputDir;
+        /**
+         * Used to read/write files and as the encoding in the HTML.
+         */
         private final String encoding;
 
+        /**
+         * Dedicated constructor.
+         *
+         * @param template must not be {@code null}
+         * @param outputDir must not be {@code null}
+         * @param encoding must not be {@code null} or empty
+         */
         public Config(final Path template, final Path outputDir, final String encoding) {
             super();
             this.template = Validate.notNull(template, "template");

@@ -68,7 +68,7 @@ public final class Publisher {
      * @param encoding must not be {@code null} or empty
      * @param baseUrlForPages must not be {@code null} or empty
      * @param type must not be {@code null}
-     * @throws IOException
+     * @throws IOException if templates can't be read
      */
     public Publisher(
             final Path inputDir,

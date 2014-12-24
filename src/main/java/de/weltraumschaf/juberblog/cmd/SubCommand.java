@@ -37,6 +37,11 @@ public interface SubCommand {
      */
     IO io();
 
+    /**
+     * Get the registry with important objects.
+     *
+     * @return never {@code null}
+     */
     JUberblog registry();
 
     /**

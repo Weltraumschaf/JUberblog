@@ -38,6 +38,11 @@ public interface Task<R, P> {
      */
     R execute(P previusResult) throws Exception;
 
+    /**
+     * Get the desired type of consumed previous result (token type pattern).
+     *
+     * @return never {@code null}
+     */
     Class<P> getDesiredTypeForPreviusResult();
 
 }

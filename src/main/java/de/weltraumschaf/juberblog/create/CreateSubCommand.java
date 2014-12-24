@@ -16,17 +16,23 @@ import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 
 /**
+ * Creates a blog post or site.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class CreateSubCommand  extends SubCommandBase {
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param registry must not be {@code null}
+     */
     public CreateSubCommand(final JUberblog registry) {
         super(registry);
     }
 
     @Override
     public void execute() {
-        io().println("create");
+        io().println("create"); // TODO Implement create sub command.
     }
 }

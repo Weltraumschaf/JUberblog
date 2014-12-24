@@ -276,7 +276,7 @@ public final class JUberblog {
         /**
          * Creates the final product
          *
-         * @return
+         * @return never {@code null}, always new instance
          */
         public JUberblog product() {
             return validate(holder.copy());

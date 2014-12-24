@@ -18,13 +18,22 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
 
 /**
+ * Common functionality for sub commands.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public abstract class SubCommandBase implements SubCommand {
 
+    /**
+     * Provides some important objects.
+     */
     private final JUberblog registry;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param registry must not be {@code null}
+     */
     public SubCommandBase(final JUberblog registry) {
         super();
         this.registry = Validate.notNull(registry, "registry");

@@ -96,8 +96,8 @@ final class Renderer {
      * </p>
      *
      * @param content must not be {@code null}
-     * @return
-     * @throws IOException
+     * @return never {@code null}
+     * @throws IOException if content file can't be read
      */
     RendererResult render(final Path content) throws IOException {
         Validate.notNull(content, "content");

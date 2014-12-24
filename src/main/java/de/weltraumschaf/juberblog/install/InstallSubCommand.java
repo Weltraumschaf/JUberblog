@@ -16,17 +16,23 @@ import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 
 /**
+ * Installs a fresh blog.
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class InstallSubCommand  extends SubCommandBase {
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param registry must not be {@code null}
+     */
     public InstallSubCommand(final JUberblog registry) {
         super(registry);
     }
 
     @Override
     public void execute() {
-        io().println("install");
+        io().println("install");// TODO Implement install sub command.
     }
 }

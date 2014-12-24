@@ -18,14 +18,28 @@ import de.weltraumschaf.juberblog.core.TaskExecutor;
 import org.joda.time.DateTime;
 
 /**
+ * Published the blog (pages, sites, index, site map, feed).
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class PublishSubCommand extends SubCommandBase {
 
+    /**
+     * Used to execute some tasks in sequence.
+     */
     private final TaskExecutor executor = new TaskExecutor();
+    /**
+     * Used encoding for I/O.
+     *
+     * TODO: Move into configuration
+     */
     private final String encoding = "utf-8";
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param registry must not be {@code null}
+     */
     public PublishSubCommand(final JUberblog registry) {
         super(registry);
     }

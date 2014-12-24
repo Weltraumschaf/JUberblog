@@ -137,6 +137,8 @@ public final class App extends InvokableAdapter {
 
     /**
      * Executes the main application code here.
+     *
+     * @throws ApplicationException on any application error such as bad arguments
      */
     private void executeMainCommand() throws ApplicationException {
         try {

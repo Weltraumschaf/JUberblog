@@ -55,6 +55,14 @@ public final class TaskExecutor {
         }
     }
 
+    /**
+     * Executes a single task with optional result from previous task.
+     *
+     * @param task must not be {@code null}
+     * @param result may be {@code null}
+     * @return may return {@code null}
+     * @throws Exception if the executed task produces an error
+     */
     private Object executeTask(final Task task, final Object result) throws Exception {
         if (null != result && hasResultExpectedType(task, result)) {
             return executeUnchecked(task, result);
@@ -63,13 +71,31 @@ public final class TaskExecutor {
         }
     }
 
+    /**
+     * Determines if the given result will be consumed by the given task.
+     *
+     * @param task must not be {@code null}
+     * @param result must not be {@code null}
+     * @return {@code true} if task will accepts result, else {@code false}
+     */
     private static boolean hasResultExpectedType(final Task task, final Object result) {
-        return result.getClass().equals(task.getDesiredTypeForPreviusResult());
+        return Validate.notNull(result, "result")
+                .getClass()
+                .equals(
+                        Validate.notNull(task, "task").getDesiredTypeForPreviusResult());
     }
 
+    /**
+     * Used to encapsulate unchecked code in smallest possible scope.
+     *
+     * @param task must not be {@code null}
+     * @param result must not be {@code null}
+     * @return may be {@code null}
+     * @throws Exception if the executed task produces an error
+     */
     @SuppressWarnings("unchecked")
     private Object executeUnchecked(final Task task, final Object result) throws Exception {
-        return task.execute(result);
+        return Validate.notNull(task, "task").execute(Validate.notNull(result, "result"));
     }
 
 }
