@@ -53,36 +53,38 @@ public final class PublishSubCommand extends SubCommandBase {
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getPostTemplate(),
                                         Page.Type.POST
-                                )))
-                .append(new GenerateFeedTask(new GenerateFeedTask.Config(
+                                )));
+                executor.append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         registry().templates().getFeedTemplate(),
                                         registry().directories().getOutput(),
                                         encoding,
-                                        "title",
-                                        "link",
-                                        "description",
-                                        "language",
+                                        registry().configuration().getTitle(),
+                                        registry().configuration().getBaseUri(),
+                                        registry().configuration().getDescription(),
+                                        registry().configuration().getLanguage(),
                                         new DateTime("2014-12-08T20:17:00")
-                                )))
-                .append(new GenerateIndexTask(new GenerateIndexTask.Config(
+                                )));
+                executor.append(new GenerateIndexTask(new GenerateIndexTask.Config(
                                         encoding,
                                         registry().directories().getOutput(),
                                         registry().templates().getLayoutTemplate(),
-                                        registry().templates().getIndexTemplate()
-                                )))
-                .append(new PublishTask(new PublishTask.Config(
+                                        registry().templates().getIndexTemplate(),
+                                        registry().configuration().getTitle(),
+                                        registry().configuration().getDescription()
+                                )));
+                executor.append(new PublishTask(new PublishTask.Config(
                                         encoding,
                                         registry().directories().getSitesData(),
                                         registry().directories().getSiteOutput(),
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getSiteTemplate(),
                                         Page.Type.SITE
-                                )))
-                .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
+                                )));
+                executor.append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                                         registry().templates().getSiteMapTemplate(),
                                         registry().directories().getOutput(),
-                                        encoding)))
-                .execute();
+                                        encoding)));
+                executor.execute();
     }
 
 }

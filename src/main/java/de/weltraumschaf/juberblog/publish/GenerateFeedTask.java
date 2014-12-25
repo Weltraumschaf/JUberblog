@@ -180,7 +180,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             super();
             this.template = Validate.notNull(template, "template");
             this.outputDir = Validate.notNull(outputDir, "outputDir");
-            this.encoding = Validate.notEmpty(encoding, "title");
+            this.encoding = Validate.notEmpty(encoding, "encoding");
             this.title = Validate.notEmpty(title, "title");
             this.link = Validate.notEmpty(link, "link");
             this.description = Validate.notEmpty(description, "description");

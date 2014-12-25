@@ -71,8 +71,8 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
                 config.layoutTemplate.toString(),
                 RenderOptions.WITHOUT_MARKDOWN);
         layout.assignTemplateModel("content", template);
-        layout.assignVariable("name", "TODO");
-        layout.assignVariable("description", "TODO");
+        layout.assignVariable("name", config.name);
+        layout.assignVariable("description", config.description);
         template.assignVariable("posts", convert(previusResult));
         Files.write(
                 config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
@@ -143,6 +143,8 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * The inner template of the {@literal index.html).
          */
         private final Path indexTemplate;
+        private final String name;
+        private final String description;
 
         /**
          * Dedicated constructor.
@@ -156,12 +158,16 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
                 final String encoding,
                 final Path outputDir,
                 final Path layoutTemplate,
-                final Path indexTemplate) {
+                final Path indexTemplate,
+                final String name,
+                final String description) {
             super();
             this.encoding = Validate.notEmpty(encoding, "encoding");
             this.outputDir = Validate.notNull(outputDir, "outputDir");
             this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
             this.indexTemplate = Validate.notNull(indexTemplate, "indexTemplate");
+            this.name = Validate.notEmpty(name, "name");
+            this.description = Validate.notEmpty(description, "description");
         }
 
     }

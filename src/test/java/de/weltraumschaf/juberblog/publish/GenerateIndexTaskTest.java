@@ -46,7 +46,9 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 ENCODING,
                 tmp.getRoot().toPath(),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl")));
+                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
+                "name",
+                "description"));
 
         sut.execute();
 
@@ -59,8 +61,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
-                + "        <h1>TODO</h1>\n"
-                + "        <h2>TODO</h2>\n"
+                + "        <h1>name</h1>\n"
+                + "        <h2>description</h2>\n"
                 + "\n"
                 + "        <h3>All Blog Posts</h3>\n"
                 + "<ul>\n"
@@ -76,7 +78,9 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 ENCODING,
                 tmp.getRoot().toPath(),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl")));
+                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
+                "name",
+                "description"));
         final Page.Pages pages = new Page.Pages();
         pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
         pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
@@ -92,8 +96,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
-                + "        <h1>TODO</h1>\n"
-                + "        <h2>TODO</h2>\n"
+                + "        <h1>name</h1>\n"
+                + "        <h2>description</h2>\n"
                 + "\n"
                 + "        <h3>All Blog Posts</h3>\n"
                 + "<ul>\n"

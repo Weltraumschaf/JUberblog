@@ -31,7 +31,7 @@ public final class Configuration {
     /**
      * Name of blog headline property.
      */
-    private static final String HEADLINE = "headline";
+    private static final String TITLE = "title";
     /**
      * Name of blog description property.
      */
@@ -116,8 +116,8 @@ public final class Configuration {
      *
      * @return never {@literal null}
      */
-    public String getHeadline() {
-        return getProperty(HEADLINE);
+    public String getTitle() {
+        return getProperty(TITLE);
     }
 
     /**

@@ -42,7 +42,7 @@ public class ConfigurationTest {
 
     @Test
     public void getProperties() {
-        assertThat(sut.getHeadline(), is(equalTo("Blog Title")));
+        assertThat(sut.getTitle(), is(equalTo("Blog Title")));
         assertThat(sut.getDescription(), is(equalTo("Blog Description")));
         assertThat(sut.getBaseUri(), is(equalTo("http://uberblog.local/")));
         assertThat(sut.getLanguage(), is(equalTo("en")));

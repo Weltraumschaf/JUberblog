@@ -39,9 +39,14 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
-    
+
     @Test
     public void execute() throws Exception {
+        final Properties config = new Properties();
+        config.setProperty("title", "Blog Title");
+        config.setProperty("description", "Blog Description");
+        config.setProperty("language", "en");
+        config.setProperty("siteUrl", "http://uberblog.local/");
         final JUberblog registry = JUberblog.Builder.create()
                 .directories(new Directories(
                                 createPath("posts"),
@@ -56,7 +61,7 @@ public class PublishSubCommandTest extends BaseTestCase {
                                 createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
                                 createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
                                 createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl")))
-                .configuration(new Configuration(new Properties()))
+                .configuration(new Configuration(config))
                 .options(new Options())
                 .io(mock(IO.class))
                 .product();
@@ -85,10 +90,10 @@ public class PublishSubCommandTest extends BaseTestCase {
                 + "     version=\"2.0\"\n"
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
-                + "        <title>title</title>\n"
-                + "        <link>link</link>\n"
-                + "        <description>description</description>\n"
-                + "        <language>language</language>\n"
+                + "        <title>Blog Title</title>\n"
+                + "        <link>http://uberblog.local/</link>\n"
+                + "        <description>Blog Description</description>\n"
+                + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>This is the First Post</title>\n"
@@ -117,8 +122,8 @@ public class PublishSubCommandTest extends BaseTestCase {
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
-                + "        <h1>TODO</h1>\n"
-                + "        <h2>TODO</h2>\n"
+                + "        <h1>Blog Title</h1>\n"
+                + "        <h2>Blog Description</h2>\n"
                 + "\n"
                 + "        <h3>All Blog Posts</h3>\n"
                 + "<ul>\n"
