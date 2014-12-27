@@ -17,6 +17,7 @@ import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class PublisherTest extends BaseTestCase {
                 createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
                 ENCODING,
-                "http://localhost/posts",
+                URI.create("http://localhost/posts"),
                 Page.Type.POST
         );
 

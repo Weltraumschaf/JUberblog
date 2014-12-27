@@ -13,6 +13,7 @@
 package de.weltraumschaf.juberblog.core;
 
 import java.io.IOException;
+import java.net.URI;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -44,7 +45,7 @@ public class ConfigurationTest {
     public void getProperties() {
         assertThat(sut.getTitle(), is(equalTo("Blog Title")));
         assertThat(sut.getDescription(), is(equalTo("Blog Description")));
-        assertThat(sut.getBaseUri(), is(equalTo("http://uberblog.local/")));
+        assertThat(sut.getBaseUri(), is(equalTo(URI.create("http://uberblog.local/"))));
         assertThat(sut.getLanguage(), is(equalTo("en")));
         assertThat(sut.getDataDir(), is(equalTo("./data")));
         assertThat(sut.getTemplateDir(), is(equalTo("./templates")));

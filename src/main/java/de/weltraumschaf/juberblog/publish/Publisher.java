@@ -20,6 +20,7 @@ import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
 import de.weltraumschaf.juberblog.core.Page.Type;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public final class Publisher {
     /**
      * Base URL of published pages.
      */
-    private final String baseUrlForPages;
+    private final URI baseUrlForPages;
     /**
      * Renders the page (Markdown/templates).
      */
@@ -69,7 +70,7 @@ public final class Publisher {
      * @param layoutTemplateFile must not be {@code null}
      * @param postTemplateFile must not be {@code null}
      * @param encoding must not be {@code null} or empty
-     * @param baseUrlForPages must not be {@code null} or empty
+     * @param baseUrlForPages must not be {@code null}
      * @param type must not be {@code null}
      * @throws IOException if templates can't be read
      */
@@ -79,7 +80,7 @@ public final class Publisher {
             final Path layoutTemplateFile,
             final Path postTemplateFile,
             final String encoding,
-            final String baseUrlForPages,
+            final URI baseUrlForPages,
             final Type type) throws IOException {
         super();
         this.inputDir = Validate.notNull(inputDir, "inputDir");
@@ -90,7 +91,7 @@ public final class Publisher {
                 encoding
         );
         this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.baseUrlForPages = Validate.notEmpty(baseUrlForPages, "baseUrlForPages");
+        this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages");
         this.type = Validate.notNull(type, "type");
     }
 

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -134,8 +135,8 @@ public final class Configuration {
      *
      * @return never {@literal null}
      */
-    public String getBaseUri() {
-        return getProperty(SITE_URI);
+    public URI getBaseUri() {
+        return URI.create(getProperty(SITE_URI));
     }
 
     /**

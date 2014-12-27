@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.Type;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Task;
+import java.net.URI;
 import java.nio.file.Path;
 
 /**
@@ -53,7 +54,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 config.layoutTemplate,
                 config.contentTemplate,
                 config.encoding,
-                "http://localhost/posts", // FIXME Use URI from config.
+                config.baseUrlForPages,
                 config.type
         );
 
@@ -90,6 +91,10 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
          * Type of published data.
          */
         private final Type type;
+        /**
+         * Base URI for published page.
+         */
+        private final URI baseUrlForPages;
 
         /**
          * Dedicated constructor.
@@ -102,6 +107,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param layoutTemplate must not be {@code null}
          * @param contentTemplate must not be {@code null}
          * @param type must not be {@code null}
+         * @param baseUrlForPages must not be {@code null}
          */
         public Config(
                 final String encoding,
@@ -109,7 +115,8 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 final Path outputDir,
                 final Path layoutTemplate,
                 final Path contentTemplate,
-                final Type type) {
+                final Type type,
+                final URI baseUrlForPages) {
             super();
             this.encoding = Validate.notEmpty(encoding, "encoding");
             this.inputDir = Validate.notNull(inputDir, "inputDir");
@@ -117,6 +124,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
             this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
             this.contentTemplate = Validate.notNull(contentTemplate, "contentTemplate");
             this.type = Validate.notNull(type, "type");
+            this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages");
         }
 
     }

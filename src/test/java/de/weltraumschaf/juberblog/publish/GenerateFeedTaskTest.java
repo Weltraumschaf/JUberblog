@@ -17,6 +17,7 @@ import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
+import java.net.URI;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
@@ -47,7 +48,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 tmp.getRoot().toPath(),
                 ENCODING,
                 "title",
-                "link",
+                URI.create("http://www.myblog.com"),
                 "description",
                 "language",
                 new DateTime("2014-12-01")));
@@ -68,7 +69,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
                 + "        <title>title</title>\n"
-                + "        <link>link</link>\n"
+                + "        <link>http://www.myblog.com</link>\n"
                 + "        <description>description</description>\n"
                 + "        <language>language</language>\n"
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
@@ -83,7 +84,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 tmp.getRoot().toPath(),
                 ENCODING,
                 "title",
-                "link",
+                URI.create("http://www.myblog.com"),
                 "description",
                 "language",
                 new DateTime("2014-12-01")));
@@ -107,7 +108,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
                 + "        <title>title</title>\n"
-                + "        <link>link</link>\n"
+                + "        <link>http://www.myblog.com</link>\n"
                 + "        <description>description</description>\n"
                 + "        <language>language</language>\n"
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"

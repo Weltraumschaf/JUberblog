@@ -24,6 +24,7 @@ import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Task;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -68,7 +69,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
                 RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable("encoding", config.encoding);
         template.assignVariable("title", config.title);
-        template.assignVariable("link", config.link);
+        template.assignVariable("link", config.link.toString());
         template.assignVariable("description", config.description);
         template.assignVariable("language", config.language);
         template.assignVariable(
@@ -140,7 +141,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         /**
          * Blog URL.
          */
-        private final String link;
+        private final URI link;
         /**
          * Blog description.
          */
@@ -163,7 +164,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
          * @param outputDir must not be {@code null}
          * @param encoding must not be {@code null} or empty
          * @param title must not be {@code null} or empty
-         * @param link must not be {@code null} or empty
+         * @param link must not be {@code null}
          * @param description must not be {@code null} or empty
          * @param language must not be {@code null} or empty
          * @param lastBuildDate must not be {@code null}
@@ -173,7 +174,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
                 final Path outputDir,
                 final String encoding,
                 final String title,
-                final String link,
+                final URI link,
                 final String description,
                 final String language,
                 final DateTime lastBuildDate) {
@@ -182,7 +183,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             this.outputDir = Validate.notNull(outputDir, "outputDir");
             this.encoding = Validate.notEmpty(encoding, "encoding");
             this.title = Validate.notEmpty(title, "title");
-            this.link = Validate.notEmpty(link, "link");
+            this.link = Validate.notNull(link, "link");
             this.description = Validate.notEmpty(description, "description");
             this.language = Validate.notEmpty(language, "language");
             this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");

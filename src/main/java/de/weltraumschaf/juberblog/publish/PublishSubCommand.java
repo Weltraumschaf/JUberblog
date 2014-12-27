@@ -52,7 +52,8 @@ public final class PublishSubCommand extends SubCommandBase {
                                         registry().directories().getPostsOutput(),
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getPostTemplate(),
-                                        Page.Type.POST
+                                        Page.Type.POST,
+                                        registry().configuration().getBaseUri().resolve("posts")
                                 )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         registry().templates().getFeedTemplate(),
@@ -78,7 +79,8 @@ public final class PublishSubCommand extends SubCommandBase {
                                         registry().directories().getSiteOutput(),
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getSiteTemplate(),
-                                        Page.Type.SITE
+                                        Page.Type.SITE,
+                                        registry().configuration().getBaseUri().resolve("sites")
                                 )))
                 .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                                         registry().templates().getSiteMapTemplate(),
