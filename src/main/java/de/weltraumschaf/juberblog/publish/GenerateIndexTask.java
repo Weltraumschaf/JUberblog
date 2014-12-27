@@ -143,7 +143,13 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * The inner template of the {@literal index.html).
          */
         private final Path indexTemplate;
+        /**
+         * The name of the blog.
+         */
         private final String name;
+        /**
+         * The description of the blog.
+         */
         private final String description;
 
         /**
@@ -153,6 +159,8 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param outputDir must not be {@code null}
          * @param layoutTemplate must not be {@code null}
          * @param indexTemplate must not be {@code null}
+         * @param name must not be {@code null} or empty
+         * @param description must not be {@code null} or empty
          */
         public Config(
                 final String encoding,

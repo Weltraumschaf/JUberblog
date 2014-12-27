@@ -53,8 +53,8 @@ public final class PublishSubCommand extends SubCommandBase {
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getPostTemplate(),
                                         Page.Type.POST
-                                )));
-                executor.append(new GenerateFeedTask(new GenerateFeedTask.Config(
+                                )))
+                .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         registry().templates().getFeedTemplate(),
                                         registry().directories().getOutput(),
                                         encoding,
@@ -63,28 +63,28 @@ public final class PublishSubCommand extends SubCommandBase {
                                         registry().configuration().getDescription(),
                                         registry().configuration().getLanguage(),
                                         new DateTime("2014-12-08T20:17:00")
-                                )));
-                executor.append(new GenerateIndexTask(new GenerateIndexTask.Config(
+                                )))
+                .append(new GenerateIndexTask(new GenerateIndexTask.Config(
                                         encoding,
                                         registry().directories().getOutput(),
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getIndexTemplate(),
                                         registry().configuration().getTitle(),
                                         registry().configuration().getDescription()
-                                )));
-                executor.append(new PublishTask(new PublishTask.Config(
+                                )))
+                .append(new PublishTask(new PublishTask.Config(
                                         encoding,
                                         registry().directories().getSitesData(),
                                         registry().directories().getSiteOutput(),
                                         registry().templates().getLayoutTemplate(),
                                         registry().templates().getSiteTemplate(),
                                         Page.Type.SITE
-                                )));
-                executor.append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
+                                )))
+                .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                                         registry().templates().getSiteMapTemplate(),
                                         registry().directories().getOutput(),
-                                        encoding)));
-                executor.execute();
+                                        encoding)))
+                .execute();
     }
 
 }
