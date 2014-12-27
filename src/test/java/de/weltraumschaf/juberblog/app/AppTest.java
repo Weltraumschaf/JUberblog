@@ -54,7 +54,8 @@ public class AppTest extends IntegrationTestCase {
             + NL
             + "Example" + NL
             + NL
-            + "  TODO" + NL
+            + "  Publish the whole blog:" + NL
+            + "    juberblog publish -l path/to/your/blog -c path/to/your/config.properties" + NL
             + NL
             + NL;
 

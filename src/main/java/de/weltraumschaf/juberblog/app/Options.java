@@ -26,6 +26,11 @@ import java.util.Objects;
 public final class Options {
 
     /**
+     * New line string.
+     */
+    public static final String NL = Constants.DEFAULT_NEW_LINE.toString();
+
+    /**
      * Command line usage.
      */
     private static final String USAGE
@@ -40,7 +45,10 @@ public final class Options {
     /**
      * Help example.
      */
-    private static final String EXAMPLE = "TODO";
+    private static final String EXAMPLE
+            = "Publish the whole blog:" + NL
+            + "    " + Constants.COMMAND_NAME.toString() + " " + SubCommand.Name.PUBLISH.name().toLowerCase()
+            + " -l path/to/your/blog -c path/to/your/config.properties";
 
     /**
      * Command line options parser.
