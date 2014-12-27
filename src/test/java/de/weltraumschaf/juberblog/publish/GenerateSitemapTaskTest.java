@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
+import java.net.URI;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -68,8 +69,8 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
                 tmp.getRoot().toPath(),
                 ENCODING));
         final Page.Pages pages = new Page.Pages();
-        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
-        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
+        pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), Page.Type.POST));
+        pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), Page.Type.POST));
 
         sut.execute(pages);
 
@@ -82,13 +83,13 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
                 + "    <url>\n"
-                + "        <loc>link1</loc>\n"
+                + "        <loc>http://www.myblog.com/link1</loc>\n"
                 + "        <lastmod>2014-11-29T00:00:00+01:00</lastmod>\n"
                 + "        <changefreq>daily</changefreq>\n"
                 + "        <priority>0.8</priority>\n"
                 + "    </url>\n"
                 + "    <url>\n"
-                + "        <loc>link2</loc>\n"
+                + "        <loc>http://www.myblog.com/link2</loc>\n"
                 + "        <lastmod>2014-11-30T00:00:00+01:00</lastmod>\n"
                 + "        <changefreq>daily</changefreq>\n"
                 + "        <priority>0.8</priority>\n"

@@ -98,8 +98,9 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
      * @return never {@code null}, unmodifiable
      */
     private Map<String, String> convert(final Page page) {
+        // XXX: Code duplication de.weltraumschaf.juberblog.publish.GenerateIndexTask.convert(de.weltraumschaf.juberblog.core.Page):java.util.Map<java.lang.String,java.lang.String>
         final Map<String, String> item = Maps.newHashMap();
-        item.put("loc", page.getLink());
+        item.put("loc", page.getLink().toString());
         // XXX Introduce last mod date.
         item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
 

@@ -110,7 +110,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
     private Map<String, String> convert(final Page page) {
         final Map<String, String> item = Maps.newHashMap();
         item.put("title", page.getTitle());
-        item.put("link", page.getLink());
+        item.put("link", page.getLink().toString());
         item.put("description", page.getDescription());
         item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
         item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));

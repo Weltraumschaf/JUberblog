@@ -91,7 +91,7 @@ public final class Publisher {
                 encoding
         );
         this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages");
+        this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages").normalize();
         this.type = Validate.notNull(type, "type");
     }
 
@@ -119,10 +119,22 @@ public final class Publisher {
                     ? metaData.get("Description")
                     : ""; // TODO Extract excerpt from Markdown.
 
+            final URI baseUrl;
+
+            switch (type) {
+                case SITE:
+                    baseUrl = baseUrlForPages.resolve("/sites/").normalize();
+                    break;
+                case POST:
+                    baseUrl = baseUrlForPages.resolve("/posts/").normalize();
+                    break;
+                default:
+                    throw new IllegalStateException(String.format("Unsupported page type '%s'!", type));
+            }
             // XXX: Emit errors if something of this is not available.
             publishedPages.add(new Page(
                     headline.find(result.getMarkdown()),
-                    baseUrlForPages + "/" + outputBaseName,
+                    baseUrl.resolve(outputBaseName).normalize(),
                     description,
                     foundData.getCreationDate(),
                     type));

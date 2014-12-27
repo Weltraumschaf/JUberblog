@@ -89,8 +89,8 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 "language",
                 new DateTime("2014-12-01")));
         final Pages pages = new Pages();
-        pages.add(new Page("title1", "link1", "desc1", new DateTime("2014-11-29"), Page.Type.POST));
-        pages.add(new Page("title2", "link2", "desc2", new DateTime("2014-11-30"), Page.Type.POST));
+        pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), Page.Type.POST));
+        pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), Page.Type.POST));
 
         sut.execute(pages);
 
@@ -114,14 +114,14 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>title1</title>\n"
-                + "            <link>link1</link>\n"
+                + "            <link>http://www.myblog.com/link1</link>\n"
                 + "            <description>desc1</description>\n"
                 + "            <pubDate>Sat, 29 Nov 2014 00:00:00 +0100</pubDate>\n"
                 + "            <dc:date>2014-11-29T00:00:00+01:00</dc:date>\n"
                 + "        </item>\n"
                 + "        <item>\n"
                 + "            <title>title2</title>\n"
-                + "            <link>link2</link>\n"
+                + "            <link>http://www.myblog.com/link2</link>\n"
                 + "            <description>desc2</description>\n"
                 + "            <pubDate>Sun, 30 Nov 2014 00:00:00 +0100</pubDate>\n"
                 + "            <dc:date>2014-11-30T00:00:00+01:00</dc:date>\n"

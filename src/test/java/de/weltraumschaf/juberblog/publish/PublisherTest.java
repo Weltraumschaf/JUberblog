@@ -45,7 +45,7 @@ public class PublisherTest extends BaseTestCase {
                 createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
                 ENCODING,
-                URI.create("http://localhost/posts"),
+                URI.create("http://localhost"),
                 Page.Type.POST
         );
 
@@ -54,17 +54,17 @@ public class PublisherTest extends BaseTestCase {
         assertThat(pages, containsInAnyOrder(
                 new Page(
                         "This is the First Post",
-                        "http://localhost/posts/This-is-the-First-Post.html",
+                        URI.create("http://localhost/posts/This-is-the-First-Post.html"),
                         "This is the first post.",
                         new DateTime("2014-05-30T21:29:20"), Page.Type.POST),
                 new Page(
                         "This is the Second Post",
-                        "http://localhost/posts/This-is-the-Second-Post.html",
+                        URI.create("http://localhost/posts/This-is-the-Second-Post.html"),
                         "This is the second post.",
                         new DateTime("2014-06-30T23:25:44"), Page.Type.POST),
                 new Page(
                         "This is the Third Post",
-                        "http://localhost/posts/This-is-the-Third-Post.html",
+                        URI.create("http://localhost/posts/This-is-the-Third-Post.html"),
                         "This is the third post.",
                         new DateTime("2014-07-28T17:44:13"), Page.Type.POST)
         ));

@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public final class Page {
     /**
      * The page URL.
      */
-    private final String link; // TODO Use URI.
+    private final URI link;
     /**
      * The page description.
      */
@@ -60,7 +61,7 @@ public final class Page {
      */
     public Page(
             final String title,
-            final String link,
+            final URI link,
             final String description,
             final DateTime publishingDate,
             final Type type) {
@@ -86,7 +87,7 @@ public final class Page {
      *
      * @return never {@code null}
      */
-    public String getLink() {
+    public URI getLink() {
         return link;
     }
 

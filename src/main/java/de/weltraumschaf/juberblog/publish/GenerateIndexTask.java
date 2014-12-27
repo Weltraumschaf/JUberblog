@@ -105,10 +105,11 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
      * @return never {@code null}, unmodifiable
      */
     private Map<String, String> convert(final Page page) {
+        // XXX: Code duplication de.weltraumschaf.juberblog.publish.GenerateSitemapTask.convert(de.weltraumschaf.juberblog.core.Page):java.util.Map<java.lang.String,java.lang.String>
         Validate.notNull(page, "page");
         final Map<String, String> item = Maps.newHashMap();
         item.put("title", page.getTitle());
-        item.put("link", page.getLink());
+        item.put("link", page.getLink().toString());
         item.put("description", page.getDescription());
         item.put(
                 "pubDate",
