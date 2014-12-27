@@ -65,6 +65,8 @@ public final class Publisher {
     /**
      * Dedicated constructor.
      *
+     * XXX: Use builder to reduce constructor parameters.
+     *
      * @param inputDir must not be {@code null}
      * @param outputDir must not be {@code null}
      * @param layoutTemplateFile must not be {@code null}
