@@ -117,12 +117,22 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
             Validate.notNull(directories, "directories");
             Validate.notNull(configuration, "configuration");
             this.encoding = configuration.getEncoding();
-            this.inputDir = directories.getPostsData();
-            this.outputDir = directories.getPostsOutput();
             this.layoutTemplate = templates.getLayoutTemplate();
-            this.contentTemplate = templates.getPostTemplate();
             this.type = Validate.notNull(type, "type");
             this.baseUrlForPages = configuration.getBaseUri();
+
+            // XXX: Move into publisher.
+            if (type == Type.POST) {
+                this.inputDir = directories.getPostsData();
+                this.outputDir = directories.getPostsOutput();
+                this.contentTemplate = templates.getPostTemplate();
+            } else if (type == Type.SITE) {
+                this.inputDir = directories.getSitesData();
+                this.outputDir = directories.getSitesOutput();
+                this.contentTemplate = templates.getSiteTemplate();
+            } else {
+                throw new IllegalArgumentException(String.format("Bad type '%s'!", type));
+            }
         }
 
         /**

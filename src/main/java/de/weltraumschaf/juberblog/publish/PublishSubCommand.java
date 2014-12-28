@@ -58,13 +58,10 @@ public final class PublishSubCommand extends SubCommandBase {
                                         configuration()
                                 )))
                 .append(new PublishTask(new PublishTask.Config(
-                                        configuration().getEncoding(),
-                                        directories().getSitesData(),
-                                        directories().getSiteOutput(),
-                                        templates().getLayoutTemplate(),
-                                        templates().getSiteTemplate(),
-                                        Page.Type.SITE,
-                                        configuration().getBaseUri().resolve("sites")
+                                        templates(),
+                                        directories(),
+                                        configuration(),
+                                        Page.Type.SITE
                                 )))
                 .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                                         templates(),

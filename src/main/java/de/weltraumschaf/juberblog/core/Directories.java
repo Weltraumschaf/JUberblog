@@ -107,7 +107,7 @@ public final class Directories {
      *
      * @return never {@code null}
      */
-    public Path getSiteOutput() {
+    public Path getSitesOutput() {
         return siteOutput;
     }
 
