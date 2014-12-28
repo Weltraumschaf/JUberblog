@@ -9,12 +9,12 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.ws.rs.core.UriBuilder;
 
 /**
  * Provides URIs based on a base URI.
@@ -26,15 +26,15 @@ public final class Uris {
     /**
      * Name of sites sub directory.
      */
-    private static final String SITES_DIR = Constants.SITES_DIR.toString() + "/";
+    private static final String SITES_DIR = "/" + Constants.SITES_DIR.toString();
     /**
      * Name of posts sub directory.
      */
-    private static final String POSTS_DIR = Constants.POSTS_DIR.toString() + "/";
+    private static final String POSTS_DIR = "/" + Constants.POSTS_DIR.toString();
     /**
      * Name of drafts sub directory.
      */
-    private static final String DRAFTS_DIR = Constants.DRAFTS_DIR.toString() + "/";
+    private static final String DRAFTS_DIR = "/" + Constants.DRAFTS_DIR.toString();
     /**
      * Base URI.
      */
@@ -76,7 +76,10 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI posts() {
-        return base.resolve(POSTS_DIR);
+        return  UriBuilder
+                .fromUri(base)
+                .path(POSTS_DIR)
+                .build();
     }
 
     /**
@@ -85,7 +88,10 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI sites() {
-        return base.resolve(SITES_DIR);
+        return UriBuilder
+                .fromUri(base)
+                .path(SITES_DIR)
+                .build();
     }
 
     /**
@@ -94,7 +100,10 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI drafts() {
-        return base.resolve(DRAFTS_DIR);
+        return UriBuilder
+                .fromUri(base)
+                .path(DRAFTS_DIR)
+                .build();
     }
 
     /**
@@ -103,7 +112,10 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI draftSites() {
-        return drafts().resolve(SITES_DIR);
+        return UriBuilder
+                .fromUri(drafts())
+                .path(SITES_DIR)
+                .build();
     }
 
     /**
@@ -112,7 +124,10 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI draftPosts() {
-        return drafts().resolve(POSTS_DIR);
+        return UriBuilder
+                .fromUri(drafts())
+                .path(POSTS_DIR)
+                .build();
     }
 
 }

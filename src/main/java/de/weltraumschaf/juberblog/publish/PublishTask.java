@@ -122,7 +122,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
             this.layoutTemplate = templates.getLayoutTemplate();
             this.contentTemplate = templates.getPostTemplate();
             this.type = Validate.notNull(type, "type");
-            this.baseUrlForPages = configuration.getBaseUri().resolve("posts");
+            this.baseUrlForPages = configuration.getBaseUri();
         }
 
         /**

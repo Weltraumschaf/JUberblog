@@ -19,6 +19,7 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
 import de.weltraumschaf.juberblog.core.Page.Type;
+import de.weltraumschaf.juberblog.core.Uris;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -107,6 +108,7 @@ public final class Publisher {
      * @throws IOException on any file IO error
      */
     public Pages publish() throws IOException {
+        final Uris uris = new Uris(baseUrlForPages);
         final Pages publishedPages = new Pages();
 
         for (final DataFile foundData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
@@ -125,10 +127,10 @@ public final class Publisher {
 
             switch (type) {
                 case SITE:
-                    baseUrl = baseUrlForPages.resolve("/sites/").normalize();
+                    baseUrl = uris.sites();
                     break;
                 case POST:
-                    baseUrl = baseUrlForPages.resolve("/posts/").normalize();
+                    baseUrl =uris.posts();
                     break;
                 default:
                     throw new IllegalStateException(String.format("Unsupported page type '%s'!", type));
