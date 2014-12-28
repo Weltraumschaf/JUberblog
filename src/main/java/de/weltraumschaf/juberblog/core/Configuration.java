@@ -25,6 +25,8 @@ import java.util.Properties;
  *
  * Abstracts the configuration properties file.
  *
+ * TODO: Add validation.
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Configuration {
@@ -57,6 +59,10 @@ public final class Configuration {
      * Name of published htdocs directory property.
      */
     private static final String HTDOCS = "htdocs";
+    /**
+     * Name of encoding property.
+     */
+    private static final String ENCODING = "encoding";
     /**
      * Used to load and parse file.
      */
@@ -173,6 +179,15 @@ public final class Configuration {
      */
     public String getHtdocs() {
         return getProperty(HTDOCS);
+    }
+
+    /**
+     * Get the encoding.
+     *
+     * @return never {@literal null}
+     */
+    public String getEncoding() {
+        return getProperty(ENCODING);
     }
 
     @Override

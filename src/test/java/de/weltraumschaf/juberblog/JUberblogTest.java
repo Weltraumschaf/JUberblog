@@ -68,6 +68,7 @@ public class JUberblogTest extends BaseTestCase {
         config.setProperty("dataDir", "data");
         config.setProperty("tplDir", "templates");
         config.setProperty("htdocs", "public");
+        config.setProperty("encoding", "UTF-8");
         assertThat(product.configuration(), is(new Configuration(config)));
     }
 
