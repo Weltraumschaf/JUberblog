@@ -50,13 +50,9 @@ public final class PublishSubCommand extends SubCommandBase {
                                         configuration().getBaseUri().resolve("posts")
                                 )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
-                                        templates().getFeedTemplate(),
-                                        directories().getOutput(),
-                                        configuration().getEncoding(),
-                                        configuration().getTitle(),
-                                        configuration().getBaseUri(),
-                                        configuration().getDescription(),
-                                        configuration().getLanguage(),
+                                        templates(),
+                                        directories(),
+                                        configuration(),
                                         new DateTime("2014-12-08T20:17:00")
                                 )))
                 .append(new GenerateIndexTask(new GenerateIndexTask.Config(

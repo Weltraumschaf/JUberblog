@@ -23,7 +23,10 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
+import de.weltraumschaf.juberblog.core.Templates;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,7 +50,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
     /**
      * Dedicated constructor.
      *
-     * @param config  must not be {@code null}
+     * @param config must not be {@code null}
      */
     public GenerateFeedTask(final Config config) {
         super(Pages.class);
@@ -158,7 +161,30 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         /**
          * Dedicated constructor.
          *
-         * XXX: Use builder to reduce constructor parameters.
+         * @param templates must not be {@code null}
+         * @param directories must not be {@code null}
+         * @param configuration must not be {@code null}
+         * @param lastBuildDate must not be {@code null}
+         */
+        public Config(
+                final Templates templates,
+                final Directories directories,
+                final Configuration configuration,
+                final DateTime lastBuildDate) {
+            super();
+            Validate.notNull(configuration, "configuration");
+            this.template = Validate.notNull(templates, "templates").getFeedTemplate();
+            this.outputDir = Validate.notNull(directories, "directories").getOutput();
+            this.encoding = configuration.getEncoding();
+            this.title= configuration.getTitle();
+            this.link = configuration.getBaseUri();
+            this.description = configuration.getDescription();
+            this.language = configuration.getLanguage();
+            this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");
+        }
+
+        /**
+         * Dedicated constructor.
          *
          * @param template must not be {@code null}
          * @param outputDir must not be {@code null}
@@ -169,6 +195,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
          * @param language must not be {@code null} or empty
          * @param lastBuildDate must not be {@code null}
          */
+        @Deprecated
         public Config(
                 final Path template,
                 final Path outputDir,

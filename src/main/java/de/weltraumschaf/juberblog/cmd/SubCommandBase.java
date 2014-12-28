@@ -52,17 +52,17 @@ public abstract class SubCommandBase implements SubCommand {
     }
 
     @Override
-    public Templates templates() {
+    public final Templates templates() {
         return registry().templates();
     }
 
     @Override
-    public Directories directories() {
+    public final Directories directories() {
         return registry().directories();
     }
 
     @Override
-    public Configuration configuration() {
+    public final Configuration configuration() {
         return registry().configuration();
     }
 
