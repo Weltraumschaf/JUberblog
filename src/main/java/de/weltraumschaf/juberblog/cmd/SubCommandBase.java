@@ -9,13 +9,15 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.Templates;
 
 /**
  * Common functionality for sub commands.
@@ -41,17 +43,30 @@ public abstract class SubCommandBase implements SubCommand {
 
     @Override
     public final Options options() {
-        return registry.options();
+        return registry().options();
     }
 
     @Override
     public final IO io() {
-        return registry.io();
+        return registry().io();
     }
 
     @Override
-    public JUberblog registry() {
-        return registry;
+    public Templates templates() {
+        return registry().templates();
     }
 
+    @Override
+    public Directories directories() {
+        return registry().directories();
+    }
+
+    @Override
+    public Configuration configuration() {
+        return registry().configuration();
+    }
+
+    private JUberblog registry() {
+        return registry;
+    }
 }

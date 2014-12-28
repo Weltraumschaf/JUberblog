@@ -134,7 +134,7 @@ public class PublishTest extends IntegrationTestCase {
                 + "    </body>\n"
                 + "</html>"));
         final DataFile expectedSiteMap = new DataFile(tmp.getRoot().toString() + "/public/site_map.xml");
-        assertThat(expectedSiteMap.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+        assertThat(expectedSiteMap.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
                 + "    <url>\n"
                 + "        <loc>http://uberblog.local/posts/This-is-the-First-Post.html</loc>\n"
@@ -168,7 +168,7 @@ public class PublishTest extends IntegrationTestCase {
                 + "    </url>\n"
                 + "</urlset>"));
         final DataFile expectedFeed = new DataFile(tmp.getRoot().toString() + "/public/feed.xml");
-        assertThat(expectedFeed.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+        assertThat(expectedFeed.readContent(ENCODING), is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
                 + "     xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n"

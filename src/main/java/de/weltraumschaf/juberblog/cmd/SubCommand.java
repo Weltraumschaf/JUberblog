@@ -15,6 +15,9 @@ import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.Templates;
 
 /**
  * Implementations are a subcommand of the main application.
@@ -38,11 +41,25 @@ public interface SubCommand {
     IO io();
 
     /**
-     * Get the registry with important objects.
+     * Get all important templates,
      *
      * @return never {@code null}
      */
-    JUberblog registry();
+    public Templates templates();
+
+    /**
+     * Get all important directories,
+     *
+     * @return never {@code null}
+     */
+    public Directories directories();
+
+    /**
+     * Get all important configurations,
+     *
+     * @return never {@code null}
+     */
+    public Configuration configuration();
 
     /**
      * Executes the sub command.
@@ -55,6 +72,7 @@ public interface SubCommand {
      * Maps literal sub command names to types.
      */
     enum Name {
+
         /**
          * Create sub command.
          */

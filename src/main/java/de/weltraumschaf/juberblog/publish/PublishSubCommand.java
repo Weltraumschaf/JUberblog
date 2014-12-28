@@ -28,12 +28,6 @@ public final class PublishSubCommand extends SubCommandBase {
      * Used to execute some tasks in sequence.
      */
     private final TaskExecutor executor = new TaskExecutor();
-    /**
-     * Used encoding for I/O.
-     *
-     * TODO: Move into configuration
-     */
-    private final String encoding = "utf-8";
 
     /**
      * Dedicated constructor.
@@ -47,45 +41,45 @@ public final class PublishSubCommand extends SubCommandBase {
     @Override
     public void execute() throws Exception {
         executor.append(new PublishTask(new PublishTask.Config(
-                                        encoding,
-                                        registry().directories().getPostsData(),
-                                        registry().directories().getPostsOutput(),
-                                        registry().templates().getLayoutTemplate(),
-                                        registry().templates().getPostTemplate(),
+                                        configuration().getEncoding(),
+                                        directories().getPostsData(),
+                                        directories().getPostsOutput(),
+                                        templates().getLayoutTemplate(),
+                                        templates().getPostTemplate(),
                                         Page.Type.POST,
-                                        registry().configuration().getBaseUri().resolve("posts")
+                                        configuration().getBaseUri().resolve("posts")
                                 )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
-                                        registry().templates().getFeedTemplate(),
-                                        registry().directories().getOutput(),
-                                        encoding,
-                                        registry().configuration().getTitle(),
-                                        registry().configuration().getBaseUri(),
-                                        registry().configuration().getDescription(),
-                                        registry().configuration().getLanguage(),
+                                        templates().getFeedTemplate(),
+                                        directories().getOutput(),
+                                        configuration().getEncoding(),
+                                        configuration().getTitle(),
+                                        configuration().getBaseUri(),
+                                        configuration().getDescription(),
+                                        configuration().getLanguage(),
                                         new DateTime("2014-12-08T20:17:00")
                                 )))
                 .append(new GenerateIndexTask(new GenerateIndexTask.Config(
-                                        encoding,
-                                        registry().directories().getOutput(),
-                                        registry().templates().getLayoutTemplate(),
-                                        registry().templates().getIndexTemplate(),
-                                        registry().configuration().getTitle(),
-                                        registry().configuration().getDescription()
+                                        configuration().getEncoding(),
+                                        directories().getOutput(),
+                                        templates().getLayoutTemplate(),
+                                        templates().getIndexTemplate(),
+                                        configuration().getTitle(),
+                                        configuration().getDescription()
                                 )))
                 .append(new PublishTask(new PublishTask.Config(
-                                        encoding,
-                                        registry().directories().getSitesData(),
-                                        registry().directories().getSiteOutput(),
-                                        registry().templates().getLayoutTemplate(),
-                                        registry().templates().getSiteTemplate(),
+                                        configuration().getEncoding(),
+                                        directories().getSitesData(),
+                                        directories().getSiteOutput(),
+                                        templates().getLayoutTemplate(),
+                                        templates().getSiteTemplate(),
                                         Page.Type.SITE,
-                                        registry().configuration().getBaseUri().resolve("sites")
+                                        configuration().getBaseUri().resolve("sites")
                                 )))
                 .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
-                                        registry().templates().getSiteMapTemplate(),
-                                        registry().directories().getOutput(),
-                                        encoding)))
+                                        templates().getSiteMapTemplate(),
+                                        directories().getOutput(),
+                                        configuration().getEncoding())))
                 .execute();
     }
 
