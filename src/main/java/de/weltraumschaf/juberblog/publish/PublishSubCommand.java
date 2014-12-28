@@ -56,12 +56,9 @@ public final class PublishSubCommand extends SubCommandBase {
                                         new DateTime("2014-12-08T20:17:00")
                                 )))
                 .append(new GenerateIndexTask(new GenerateIndexTask.Config(
-                                        configuration().getEncoding(),
-                                        directories().getOutput(),
-                                        templates().getLayoutTemplate(),
-                                        templates().getIndexTemplate(),
-                                        configuration().getTitle(),
-                                        configuration().getDescription()
+                                        templates(),
+                                        directories(),
+                                        configuration()
                                 )))
                 .append(new PublishTask(new PublishTask.Config(
                                         configuration().getEncoding(),

@@ -23,12 +23,16 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
+import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import org.joda.time.DateTime;
 
 /**
  * Task to generate the index site.
@@ -156,6 +160,29 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
         /**
          * Dedicated constructor.
          *
+         * @param templates must not be {@code null}
+         * @param directories must not be {@code null}
+         * @param configuration must not be {@code null}
+         */
+        public Config(
+                final Templates templates,
+                final Directories directories,
+                final Configuration configuration) {
+            super();
+            Validate.notNull(templates, "templates");
+            Validate.notNull(directories, "directories");
+            Validate.notNull(configuration, "configuration");
+            this.encoding = configuration.getEncoding();
+            this.outputDir =directories.getOutput();
+            this.layoutTemplate = templates.getLayoutTemplate();
+            this.indexTemplate = templates.getIndexTemplate();
+            this.name = configuration.getTitle();
+            this.description = configuration.getDescription();
+        }
+
+        /**
+         * Dedicated constructor.
+         *
          * @param encoding must not be {@code null} or empty
          * @param outputDir must not be {@code null}
          * @param layoutTemplate must not be {@code null}
@@ -163,6 +190,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param name must not be {@code null} or empty
          * @param description must not be {@code null} or empty
          */
+        @Deprecated
         public Config(
                 final String encoding,
                 final Path outputDir,
