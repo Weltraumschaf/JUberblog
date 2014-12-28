@@ -16,7 +16,9 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -36,6 +38,13 @@ public class GenerateIndexTaskTest extends BaseTestCase {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
+    private GenerateIndexTask.Config createTaskConfig() throws URISyntaxException, IOException {
+        return new GenerateIndexTask.Config(
+                createTemplates(),
+                createDirs(tmp),
+                createConfig());
+    }
+
     @Test(expected = NullPointerException.class)
     public void constructWithNullThrowsException() {
         new GenerateIndexTask(null);
@@ -43,13 +52,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
-                ENCODING,
-                tmp.getRoot().toPath(),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
-                "name",
-                "description"));
+        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig());
 
         sut.execute();
 
@@ -62,8 +65,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
-                + "        <h1>name</h1>\n"
-                + "        <h2>description</h2>\n"
+                + "        <h1>Blog Title</h1>\n"
+                + "        <h2>Blog Description</h2>\n"
                 + "\n"
                 + "        <h3>All Blog Posts</h3>\n"
                 + "<ul>\n"
@@ -75,13 +78,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(new GenerateIndexTask.Config(
-                ENCODING,
-                tmp.getRoot().toPath(),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
-                "name",
-                "description"));
+        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig());
         final Page.Pages pages = new Page.Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), Page.Type.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), Page.Type.POST));
@@ -97,8 +94,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
                 "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "    <body>\n"
-                + "        <h1>name</h1>\n"
-                + "        <h2>description</h2>\n"
+                + "        <h1>Blog Title</h1>\n"
+                + "        <h2>Blog Description</h2>\n"
                 + "\n"
                 + "        <h3>All Blog Posts</h3>\n"
                 + "<ul>\n"

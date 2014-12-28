@@ -32,7 +32,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import org.joda.time.DateTime;
 
 /**
  * Task to generate the index site.
@@ -178,33 +177,6 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             this.indexTemplate = templates.getIndexTemplate();
             this.name = configuration.getTitle();
             this.description = configuration.getDescription();
-        }
-
-        /**
-         * Dedicated constructor.
-         *
-         * @param encoding must not be {@code null} or empty
-         * @param outputDir must not be {@code null}
-         * @param layoutTemplate must not be {@code null}
-         * @param indexTemplate must not be {@code null}
-         * @param name must not be {@code null} or empty
-         * @param description must not be {@code null} or empty
-         */
-        @Deprecated
-        public Config(
-                final String encoding,
-                final Path outputDir,
-                final Path layoutTemplate,
-                final Path indexTemplate,
-                final String name,
-                final String description) {
-            super();
-            this.encoding = Validate.notEmpty(encoding, "encoding");
-            this.outputDir = Validate.notNull(outputDir, "outputDir");
-            this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
-            this.indexTemplate = Validate.notNull(indexTemplate, "indexTemplate");
-            this.name = Validate.notEmpty(name, "name");
-            this.description = Validate.notEmpty(description, "description");
         }
 
     }

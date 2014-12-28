@@ -135,35 +135,5 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
             }
         }
 
-        /**
-         * Dedicated constructor.
-         *
-         * @param encoding must not be {@code null} or empty
-         * @param inputDir must not be {@code null}
-         * @param outputDir must not be {@code null}
-         * @param layoutTemplate must not be {@code null}
-         * @param contentTemplate must not be {@code null}
-         * @param type must not be {@code null}
-         * @param baseUrlForPages must not be {@code null}
-         */
-        @Deprecated
-        public Config(
-                final String encoding,
-                final Path inputDir,
-                final Path outputDir,
-                final Path layoutTemplate,
-                final Path contentTemplate,
-                final Type type,
-                final URI baseUrlForPages) {
-            super();
-            this.encoding = Validate.notEmpty(encoding, "encoding");
-            this.inputDir = Validate.notNull(inputDir, "inputDir");
-            this.outputDir = Validate.notNull(outputDir, "outputDir");
-            this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
-            this.contentTemplate = Validate.notNull(contentTemplate, "contentTemplate");
-            this.type = Validate.notNull(type, "type");
-            this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages");
-        }
-
     }
 }

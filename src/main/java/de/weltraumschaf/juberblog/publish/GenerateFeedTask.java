@@ -183,37 +183,5 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");
         }
 
-        /**
-         * Dedicated constructor.
-         *
-         * @param template must not be {@code null}
-         * @param outputDir must not be {@code null}
-         * @param encoding must not be {@code null} or empty
-         * @param title must not be {@code null} or empty
-         * @param link must not be {@code null}
-         * @param description must not be {@code null} or empty
-         * @param language must not be {@code null} or empty
-         * @param lastBuildDate must not be {@code null}
-         */
-        @Deprecated
-        public Config(
-                final Path template,
-                final Path outputDir,
-                final String encoding,
-                final String title,
-                final URI link,
-                final String description,
-                final String language,
-                final DateTime lastBuildDate) {
-            super();
-            this.template = Validate.notNull(template, "template");
-            this.outputDir = Validate.notNull(outputDir, "outputDir");
-            this.encoding = Validate.notEmpty(encoding, "encoding");
-            this.title = Validate.notEmpty(title, "title");
-            this.link = Validate.notNull(link, "link");
-            this.description = Validate.notEmpty(description, "description");
-            this.language = Validate.notEmpty(language, "language");
-            this.lastBuildDate = Validate.notNull(lastBuildDate, "lastBuildDate");
-        }
     }
 }

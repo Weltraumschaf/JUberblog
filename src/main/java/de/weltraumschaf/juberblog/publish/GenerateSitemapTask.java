@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import org.joda.time.DateTime;
 
 /**
  * Task to generate a site map XML.
@@ -154,19 +153,5 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
             this.encoding = Validate.notNull(configuration, "configuration").getEncoding();
         }
 
-        /**
-         * Dedicated constructor.
-         *
-         * @param template must not be {@code null}
-         * @param outputDir must not be {@code null}
-         * @param encoding must not be {@code null} or empty
-         */
-        @Deprecated
-        public Config(final Path template, final Path outputDir, final String encoding) {
-            super();
-            this.template = Validate.notNull(template, "template");
-            this.outputDir = Validate.notNull(outputDir, "outputDir");
-            this.encoding = Validate.notEmpty(encoding, "title");
-        }
     }
 }

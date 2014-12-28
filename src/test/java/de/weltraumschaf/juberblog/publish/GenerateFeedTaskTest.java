@@ -12,13 +12,19 @@
 package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Properties;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
@@ -36,6 +42,14 @@ public class GenerateFeedTaskTest extends BaseTestCase {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
+    private GenerateFeedTask.Config createTaskConfig() throws URISyntaxException, IOException {
+        return new GenerateFeedTask.Config(
+                createTemplates(),
+                createDirs(tmp),
+                createConfig(),
+                new DateTime("2014-12-01"));
+    }
+
     @Test(expected = NullPointerException.class)
     public void constructWithNullThrowsException() {
         new GenerateFeedTask(null);
@@ -43,15 +57,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
-                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
-                tmp.getRoot().toPath(),
-                ENCODING,
-                "title",
-                URI.create("http://www.myblog.com"),
-                "description",
-                "language",
-                new DateTime("2014-12-01")));
+        final GenerateFeedTask sut = new GenerateFeedTask(createTaskConfig());
 
         sut.execute();
 
@@ -68,10 +74,10 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     version=\"2.0\"\n"
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
-                + "        <title>title</title>\n"
-                + "        <link>http://www.myblog.com</link>\n"
-                + "        <description>description</description>\n"
-                + "        <language>language</language>\n"
+                + "        <title>Blog Title</title>\n"
+                + "        <link>http://www.myblog.com/</link>\n"
+                + "        <description>Blog Description</description>\n"
+                + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>"));
@@ -79,15 +85,8 @@ public class GenerateFeedTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(new GenerateFeedTask.Config(
-                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
-                tmp.getRoot().toPath(),
-                ENCODING,
-                "title",
-                URI.create("http://www.myblog.com"),
-                "description",
-                "language",
-                new DateTime("2014-12-01")));
+        final GenerateFeedTask sut = new GenerateFeedTask(createTaskConfig());
+
         final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), Page.Type.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), Page.Type.POST));
@@ -107,10 +106,10 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     version=\"2.0\"\n"
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
-                + "        <title>title</title>\n"
-                + "        <link>http://www.myblog.com</link>\n"
-                + "        <description>description</description>\n"
-                + "        <language>language</language>\n"
+                + "        <title>Blog Title</title>\n"
+                + "        <link>http://www.myblog.com/</link>\n"
+                + "        <description>Blog Description</description>\n"
+                + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>title1</title>\n"
