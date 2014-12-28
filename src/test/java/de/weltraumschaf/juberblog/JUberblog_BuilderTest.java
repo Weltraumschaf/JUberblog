@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class JUberblog_BuilderTest {
+public class JUberblog_BuilderTest extends BaseTestCase {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -50,7 +50,7 @@ public class JUberblog_BuilderTest {
             Paths.get("."),
             Paths.get("."),
             Paths.get("."));
-    private final Configuration configuration = new Configuration(new Properties());
+    private final Configuration configuration = new Configuration(createProperties());
     private final Options options = new Options();
     private final IO io = mock(IO.class);
 

@@ -12,6 +12,7 @@
 package de.weltraumschaf.juberblog.app;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.App.Factory;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-public class FactoryTest {
+public class FactoryTest extends BaseTestCase {
 
     private final Directories directories = new Directories(
             Paths.get("."),
@@ -53,7 +54,7 @@ public class FactoryTest {
     private final JUberblog registry = JUberblog.Builder.create()
                 .directories(directories)
                 .templates(templates)
-                .configuration(new Configuration(new Properties()))
+                .configuration(new Configuration(createProperties()))
                 .options(new Options())
                 .io(mock(IO.class))
                 .product();

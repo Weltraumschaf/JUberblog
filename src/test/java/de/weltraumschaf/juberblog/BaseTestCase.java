@@ -61,12 +61,20 @@ public abstract class BaseTestCase {
     }
 
     protected final Configuration createConfig() {
+        return new Configuration(createProperties());
+    }
+
+    protected final Properties createProperties() {
         final Properties config = new Properties();
-        config.setProperty("title", "Blog Title");
+        config.setProperty("dataDir", "/data");
         config.setProperty("description", "Blog Description");
+        config.setProperty("encoding", "utf-8");
+        config.setProperty("htdocs", "/htdocs");
         config.setProperty("language", "en");
         config.setProperty("siteUrl", "http://www.myblog.com/");
-        config.setProperty("encoding", "utf-8");
-        return new Configuration(config);
+        config.setProperty("tplDir", "/templates");
+        config.setProperty("title", "Blog Title");
+
+        return config;
     }
 }

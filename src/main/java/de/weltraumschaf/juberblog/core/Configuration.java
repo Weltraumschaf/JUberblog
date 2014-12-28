@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -25,8 +26,6 @@ import java.util.Properties;
  *
  * Abstracts the configuration properties file.
  *
- * TODO: Add validation.
- *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Configuration {
@@ -34,35 +33,41 @@ public final class Configuration {
     /**
      * Name of blog headline property.
      */
-    private static final String TITLE = "title";
+    static final String TITLE = "title";
     /**
      * Name of blog description property.
      */
-    private static final String DESCRIPTION = "description";
+    static final String DESCRIPTION = "description";
     /**
      * Name of site base URI property.
      */
-    private static final String SITE_URI = "siteUrl";
+    static final String SITE_URI = "siteUrl";
     /**
      * Name of site language property.
      */
-    private static final String LANGUAGE = "language";
+    static final String LANGUAGE = "language";
     /**
      * Name of data directory property.
+     *
+     * TODO: Rename to dataDirectory.
      */
-    private static final String DATA_DIR = "dataDir";
+    static final String DATA_DIR = "dataDir";
     /**
      * Name of template directory property.
+     *
+     * TODO: Rename to temlateDirectory.
      */
-    private static final String TEMPLATE_DIR = "tplDir";
+    static final String TEMPLATE_DIR = "tplDir";
     /**
      * Name of published htdocs directory property.
+     *
+     * TODO: Rename to publicDirectory.
      */
-    private static final String HTDOCS = "htdocs";
+    static final String HTDOCS = "htdocs";
     /**
      * Name of encoding property.
      */
-    private static final String ENCODING = "encoding";
+    static final String ENCODING = "encoding";
     /**
      * Used to load and parse file.
      */
@@ -86,8 +91,7 @@ public final class Configuration {
      */
     public Configuration(final Properties p) {
         super();
-        Validate.notNull(p);
-        properties = p;
+        properties = validate(Validate.notNull(p));
     }
 
     /**
@@ -97,7 +101,7 @@ public final class Configuration {
      * @return never {@code null}
      * @throws IOException if configuration file can not be loaded
      */
-    public static Properties load(final String filename) throws IOException {
+    static Properties load(final String filename) throws IOException {
         Validate.notNull(filename, "filename");
         final Properties properties = new Properties();
 
@@ -105,6 +109,38 @@ public final class Configuration {
             properties.load(in);
             return properties;
         }
+    }
+
+    /**
+     * Validates that all important properties are set and not empty.
+     * <p>
+     * Throws an {@link IllegalArgumentException} if a property is {@code null} or empty.
+     * </p>
+     *
+     * @param input must not be {@code null}
+     * @return same as input
+     */
+    static Properties validate(final Properties input) {
+        for (final String propertyName : Arrays.asList(
+                DATA_DIR,
+                DESCRIPTION,
+                ENCODING,
+                HTDOCS,
+                LANGUAGE,
+                SITE_URI,
+                TEMPLATE_DIR,
+                TITLE
+        )) {
+            try {
+                Validate.notEmpty(input.getProperty(propertyName));
+            } catch (final IllegalArgumentException | NullPointerException ex) {
+                throw new IllegalArgumentException(String.format(
+                        "The configuration property '%s' must not be empty or missing!",
+                        propertyName));
+            }
+        }
+
+        return input;
     }
 
     /**
@@ -209,6 +245,5 @@ public final class Configuration {
         final Configuration other = (Configuration) obj;
         return Objects.equals(properties, other.properties);
     }
-
 
 }
