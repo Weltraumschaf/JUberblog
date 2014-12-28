@@ -70,9 +70,9 @@ public final class PublishSubCommand extends SubCommandBase {
                                         configuration().getBaseUri().resolve("sites")
                                 )))
                 .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
-                                        templates().getSiteMapTemplate(),
-                                        directories().getOutput(),
-                                        configuration().getEncoding())))
+                                        templates(),
+                                        directories(),
+                                        configuration())))
                 .execute();
     }
 

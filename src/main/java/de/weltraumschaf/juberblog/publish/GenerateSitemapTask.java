@@ -18,16 +18,20 @@ import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.core.BaseTask;
+import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.DateFormatter;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.Task;
+import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import org.joda.time.DateTime;
 
 /**
  * Task to generate a site map XML.
@@ -136,10 +140,28 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         /**
          * Dedicated constructor.
          *
+         * @param templates must not be {@code null}
+         * @param directories must not be {@code null}
+         * @param configuration must not be {@code null}
+         */
+        public Config(
+                final Templates templates,
+                final Directories directories,
+                final Configuration configuration) {
+            super();
+            this.template = Validate.notNull(templates, "templates").getSiteMapTemplate();
+            this.outputDir = Validate.notNull(directories, "directories").getOutput();
+            this.encoding = Validate.notNull(configuration, "configuration").getEncoding();
+        }
+
+        /**
+         * Dedicated constructor.
+         *
          * @param template must not be {@code null}
          * @param outputDir must not be {@code null}
          * @param encoding must not be {@code null} or empty
          */
+        @Deprecated
         public Config(final Path template, final Path outputDir, final String encoding) {
             super();
             this.template = Validate.notNull(template, "template");
