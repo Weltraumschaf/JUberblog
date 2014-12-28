@@ -43,7 +43,19 @@ public enum Constants {
     /**
      * Location of scaffold directory.
      */
-    SCAFFOLD_PACKAGE("de.weltraumschaf.juberblog.scaffold");
+    SCAFFOLD_PACKAGE("de.weltraumschaf.juberblog.scaffold"),
+    /**
+     * Name of sites sub directory.
+     */
+    SITES_DIR("sites"),
+    /**
+     * Name of posts sub directory.
+     */
+    POSTS_DIR("posts"),
+    /**
+     * Name of drafts sub directory.
+     */
+    DRAFTS_DIR("drafts");
 
     /**
      * Constant value.
