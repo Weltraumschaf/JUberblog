@@ -76,9 +76,22 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI posts() {
-        return  UriBuilder
+        return UriBuilder
                 .fromUri(base)
                 .path(POSTS_DIR)
+                .build();
+    }
+
+    /**
+     * Constructs URI for an post.
+     *
+     * @param filename must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    public URI post(final String filename) {
+        return UriBuilder
+                .fromUri(posts())
+                .path(Validate.notEmpty(filename, "filename"))
                 .build();
     }
 
@@ -91,6 +104,19 @@ public final class Uris {
         return UriBuilder
                 .fromUri(base)
                 .path(SITES_DIR)
+                .build();
+    }
+
+    /**
+     * Constructs URI for an post.
+     *
+     * @param filename must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    public URI site(final String filename) {
+        return UriBuilder
+                .fromUri(sites())
+                .path(Validate.notEmpty(filename, "filename"))
                 .build();
     }
 

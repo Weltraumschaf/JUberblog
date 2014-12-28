@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog.core;
 
 import java.net.URISyntaxException;
@@ -46,6 +45,16 @@ public class UrisTest {
         assertThat(sut.drafts().toASCIIString(), is(equalTo("http://www.foobar.com/drafts")));
         assertThat(sut.draftPosts().toASCIIString(), is(equalTo("http://www.foobar.com/drafts/posts")));
         assertThat(sut.draftSites().toASCIIString(), is(equalTo("http://www.foobar.com/drafts/sites")));
+    }
+
+    @Test
+    public void post() {
+        assertThat(sut.post("foo.html").toString(), is(equalTo("http://www.foobar.com/posts/foo.html")));
+    }
+
+    @Test
+    public void site() {
+        assertThat(sut.site("foo.html").toString(), is(equalTo("http://www.foobar.com/sites/foo.html")));
     }
 
 }
