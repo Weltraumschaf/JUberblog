@@ -15,7 +15,10 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.Type;
 import de.weltraumschaf.juberblog.core.BaseTask;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
+import de.weltraumschaf.juberblog.core.Templates;
 import java.net.URI;
 import java.nio.file.Path;
 
@@ -99,7 +102,31 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
         /**
          * Dedicated constructor.
          *
-         * XXX: Use builder to reduce constructor parameters.
+         * @param templates must not be {@code null}
+         * @param directories must not be {@code null}
+         * @param configuration must not be {@code null}
+         * @param type must not be {@code null}
+         */
+        public Config(
+                final Templates templates,
+                final Directories directories,
+                final Configuration configuration,
+                final Type type) {
+            super();
+            Validate.notNull(templates, "templates");
+            Validate.notNull(directories, "directories");
+            Validate.notNull(configuration, "configuration");
+            this.encoding = configuration.getEncoding();
+            this.inputDir = directories.getPostsData();
+            this.outputDir = directories.getPostsOutput();
+            this.layoutTemplate = templates.getLayoutTemplate();
+            this.contentTemplate = templates.getPostTemplate();
+            this.type = Validate.notNull(type, "type");
+            this.baseUrlForPages = configuration.getBaseUri().resolve("posts");
+        }
+
+        /**
+         * Dedicated constructor.
          *
          * @param encoding must not be {@code null} or empty
          * @param inputDir must not be {@code null}
@@ -109,6 +136,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param type must not be {@code null}
          * @param baseUrlForPages must not be {@code null}
          */
+        @Deprecated
         public Config(
                 final String encoding,
                 final Path inputDir,

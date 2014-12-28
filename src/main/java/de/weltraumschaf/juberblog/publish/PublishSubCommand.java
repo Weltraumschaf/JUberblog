@@ -41,13 +41,10 @@ public final class PublishSubCommand extends SubCommandBase {
     @Override
     public void execute() throws Exception {
         executor.append(new PublishTask(new PublishTask.Config(
-                                        configuration().getEncoding(),
-                                        directories().getPostsData(),
-                                        directories().getPostsOutput(),
-                                        templates().getLayoutTemplate(),
-                                        templates().getPostTemplate(),
-                                        Page.Type.POST,
-                                        configuration().getBaseUri().resolve("posts")
+                                        templates(),
+                                        directories(),
+                                        configuration(),
+                                        Page.Type.POST
                                 )))
                 .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                                         templates(),
