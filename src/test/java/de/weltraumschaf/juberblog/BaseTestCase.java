@@ -12,6 +12,8 @@
 
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -76,5 +78,15 @@ public abstract class BaseTestCase {
         config.setProperty(Configuration.TITLE, "Blog Title");
 
         return config;
+    }
+
+    protected final JUberblog createRegistry(final TemporaryFolder tmp, final Options options, final IO io) throws URISyntaxException, IOException {
+        return JUberblog.Builder.create()
+                .directories(createDirs(tmp))
+                .templates(createTemplates())
+                .configuration(createConfig())
+                .options(options)
+                .io(io)
+                .product();
     }
 }

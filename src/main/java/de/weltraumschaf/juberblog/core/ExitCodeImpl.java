@@ -29,9 +29,25 @@ public enum ExitCodeImpl implements ExitCode {
      */
     OK(0),
     /**
-     * Bad CLI arguments.
+     * Unspecified fatal error occurred.
      */
-    BAD_ARGUMENT(1),
+    UNKNOWN_COMMAND(1),
+    /**
+     * Too few command line arguments.
+     */
+    TOO_FEW_ARGUMENTS(2),
+    /**
+     * Can't load configuration file.
+     */
+    CANT_LOAD_CONFIG(3),
+    /**
+     * Indicates a missing command line argument.
+     */
+    MISSING_ARGUMENT(4),
+    /**
+     * Indicates an invalid command line argument.
+     */
+    BAD_ARGUMENT(5),
     /**
      * If on start up system.in, system.out or System.err can't be accessed.
      */

@@ -42,6 +42,7 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
+        // XXX: Use fram parent class.
         final Properties config = new Properties();
         config.setProperty(Configuration.TITLE, "Blog Title");
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");
