@@ -71,6 +71,26 @@ public final class Options {
             description = "Show the version.")
     private boolean version;
     /**
+     * Whether to force installation.
+     */
+    @Parameter(
+        names = {"-f", "--force" },
+        description = "Forced instsallation will install into non empty direcotry and overwrites existing files.")
+    private boolean force;
+    /**
+     * Whether to update installation.
+     */
+    @Parameter(
+        names = {"-u", "--update" },
+        description = "Updates an installation. Already existing files will be backed up.")
+    private boolean update;
+    /**
+     * Verbose flag.
+     */
+    @Parameter(names = {"--verbose"}, description = "Tell you more.")
+    private boolean verbose;
+
+    /**
      * Where is the blog installed.
      */
     @Parameter(
@@ -149,6 +169,19 @@ public final class Options {
     public boolean isVersion() {
         return version;
     }
+
+    public boolean isForce() {
+        return force;
+    }
+
+    public boolean isUpdate() {
+        return update;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
 
     /**
      * Get the location option.

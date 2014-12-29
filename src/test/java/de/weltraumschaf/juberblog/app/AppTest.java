@@ -48,6 +48,11 @@ public class AppTest extends IntegrationTestCase {
             + "Options" + NL
             + NL
             + "  -c, --config        Config file to use." + NL
+            + "  -u, --update        Updates an installation. Already existing files will be backed" + NL
+            + "                      up." + NL
+            + "      --verbose       Tell you more." + NL
+            + "  -f, --force         Forced instsallation will install into non empty direcotry" + NL
+            + "                      and overwrites existing files." + NL
             + "  -h, --help          Show this help." + NL
             + "  -l, --location      Location of the blog installation." + NL
             + "  -v, --version       Show the version." + NL
