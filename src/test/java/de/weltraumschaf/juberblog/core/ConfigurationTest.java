@@ -65,7 +65,7 @@ public class ConfigurationTest extends BaseTestCase {
         assertThat(propes.getProperty(Configuration.DATA_DIR), is("/data"));
         assertThat(propes.getProperty(Configuration.DESCRIPTION), is("Blog Description"));
         assertThat(propes.getProperty(Configuration.ENCODING), is("utf-8"));
-        assertThat(propes.getProperty(Configuration.HTDOCS), is("/htdocs"));
+        assertThat(propes.getProperty(Configuration.PUBLIC_DIR), is("/htdocs"));
         assertThat(propes.getProperty(Configuration.LANGUAGE), is("en"));
         assertThat(propes.getProperty(Configuration.SITE_URI), is("http://www.myblog.com/"));
         assertThat(propes.getProperty(Configuration.TEMPLATE_DIR), is("/templates"));
@@ -141,7 +141,7 @@ public class ConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyHtdocs() {
         final Properties config = createProperties();
-        config.remove(Configuration.HTDOCS);
+        config.remove(Configuration.PUBLIC_DIR);
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'publicDirectory' must not be empty or missing!");

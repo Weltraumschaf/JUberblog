@@ -49,7 +49,7 @@ public class PublishSubCommandTest extends BaseTestCase {
         config.setProperty(Configuration.SITE_URI, "http://uberblog.local/");
         config.setProperty(Configuration.ENCODING, "utf-8");
         config.setProperty(Configuration.DATA_DIR, "/");
-        config.setProperty(Configuration.HTDOCS, "/");
+        config.setProperty(Configuration.PUBLIC_DIR, "/");
         config.setProperty(Configuration.TEMPLATE_DIR, "/");
         final JUberblog registry = JUberblog.Builder.create()
                 .directories(new Directories(

@@ -69,7 +69,7 @@ public abstract class BaseTestCase {
         config.setProperty(Configuration.DATA_DIR, "/data");
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");
         config.setProperty(Configuration.ENCODING, "utf-8");
-        config.setProperty(Configuration.HTDOCS, "/htdocs");
+        config.setProperty(Configuration.PUBLIC_DIR, "/htdocs");
         config.setProperty(Configuration.LANGUAGE, "en");
         config.setProperty(Configuration.SITE_URI, "http://www.myblog.com/");
         config.setProperty(Configuration.TEMPLATE_DIR, "/templates");

@@ -65,7 +65,7 @@ public class JUberblogTest extends BaseTestCase {
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");
         config.setProperty(Configuration.SITE_URI, "http://uberblog.local/");
         config.setProperty(Configuration.ENCODING, "UTF-8");
-        config.setProperty(Configuration.HTDOCS, "public");
+        config.setProperty(Configuration.PUBLIC_DIR, "public");
         config.setProperty(Configuration.LANGUAGE, "en");
         config.setProperty(Configuration.DATA_DIR, "data");
         config.setProperty(Configuration.TEMPLATE_DIR, "templates");

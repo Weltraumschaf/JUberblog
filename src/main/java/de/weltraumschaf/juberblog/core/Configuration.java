@@ -56,10 +56,8 @@ public final class Configuration {
     public static final String TEMPLATE_DIR = "temlateDirectory";
     /**
      * Name of published public directory property.
-     *
-     * TODO: Rename to PUBLIC_DIR.
      */
-    public static final String HTDOCS = "publicDirectory";
+    public static final String PUBLIC_DIR = "publicDirectory";
     /**
      * Name of encoding property.
      */
@@ -117,11 +115,10 @@ public final class Configuration {
      * @return same as input
      */
     static Properties validate(final Properties input) {
-        for (final String propertyName : Arrays.asList(
-                DATA_DIR,
+        for (final String propertyName : Arrays.asList(DATA_DIR,
                 DESCRIPTION,
                 ENCODING,
-                HTDOCS,
+                PUBLIC_DIR,
                 LANGUAGE,
                 SITE_URI,
                 TEMPLATE_DIR,
@@ -210,7 +207,7 @@ public final class Configuration {
      * @return never {@literal null}
      */
     public String getHtdocs() {
-        return getProperty(HTDOCS);
+        return getProperty(PUBLIC_DIR);
     }
 
     /**
