@@ -66,14 +66,14 @@ public abstract class BaseTestCase {
 
     protected final Properties createProperties() {
         final Properties config = new Properties();
-        config.setProperty("dataDir", "/data");
-        config.setProperty("description", "Blog Description");
-        config.setProperty("encoding", "utf-8");
-        config.setProperty("htdocs", "/htdocs");
-        config.setProperty("language", "en");
-        config.setProperty("siteUrl", "http://www.myblog.com/");
-        config.setProperty("tplDir", "/templates");
-        config.setProperty("title", "Blog Title");
+        config.setProperty(Configuration.DATA_DIR, "/data");
+        config.setProperty(Configuration.DESCRIPTION, "Blog Description");
+        config.setProperty(Configuration.ENCODING, "utf-8");
+        config.setProperty(Configuration.HTDOCS, "/htdocs");
+        config.setProperty(Configuration.LANGUAGE, "en");
+        config.setProperty(Configuration.SITE_URI, "http://www.myblog.com/");
+        config.setProperty(Configuration.TEMPLATE_DIR, "/templates");
+        config.setProperty(Configuration.TITLE, "Blog Title");
 
         return config;
     }

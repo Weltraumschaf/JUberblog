@@ -61,14 +61,14 @@ public class JUberblogTest extends BaseTestCase {
                 location.resolve("templates/index.ftl"),
                 location.resolve("templates/site_map.ftl"))));
         final Properties config = new Properties();
-        config.setProperty("title", "Blog Title");
-        config.setProperty("description", "Blog Description");
-        config.setProperty("siteUrl", "http://uberblog.local/");
-        config.setProperty("encoding", "UTF-8");
-        config.setProperty("htdocs", "public");
-        config.setProperty("language", "en");
-        config.setProperty("dataDir", "data");
-        config.setProperty("tplDir", "templates");
+        config.setProperty(Configuration.TITLE, "Blog Title");
+        config.setProperty(Configuration.DESCRIPTION, "Blog Description");
+        config.setProperty(Configuration.SITE_URI, "http://uberblog.local/");
+        config.setProperty(Configuration.ENCODING, "UTF-8");
+        config.setProperty(Configuration.HTDOCS, "public");
+        config.setProperty(Configuration.LANGUAGE, "en");
+        config.setProperty(Configuration.DATA_DIR, "data");
+        config.setProperty(Configuration.TEMPLATE_DIR, "templates");
         assertThat(product.configuration(), is(new Configuration(config)));
     }
 

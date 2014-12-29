@@ -43,14 +43,14 @@ public class PublishSubCommandTest extends BaseTestCase {
     @Test
     public void execute() throws Exception {
         final Properties config = new Properties();
-        config.setProperty("title", "Blog Title");
-        config.setProperty("description", "Blog Description");
-        config.setProperty("language", "en");
-        config.setProperty("siteUrl", "http://uberblog.local/");
-        config.setProperty("encoding", "utf-8");
-        config.setProperty("dataDir", "/");
-        config.setProperty("htdocs", "/");
-        config.setProperty("tplDir", "/");
+        config.setProperty(Configuration.TITLE, "Blog Title");
+        config.setProperty(Configuration.DESCRIPTION, "Blog Description");
+        config.setProperty(Configuration.LANGUAGE, "en");
+        config.setProperty(Configuration.SITE_URI, "http://uberblog.local/");
+        config.setProperty(Configuration.ENCODING, "utf-8");
+        config.setProperty(Configuration.DATA_DIR, "/");
+        config.setProperty(Configuration.HTDOCS, "/");
+        config.setProperty(Configuration.TEMPLATE_DIR, "/");
         final JUberblog registry = JUberblog.Builder.create()
                 .directories(new Directories(
                                 createPath("posts"),

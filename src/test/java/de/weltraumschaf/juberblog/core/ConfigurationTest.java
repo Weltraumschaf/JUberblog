@@ -122,7 +122,7 @@ public class ConfigurationTest extends BaseTestCase {
         config.remove(Configuration.DATA_DIR);
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The configuration property 'dataDir' must not be empty or missing!");
+        thrown.expectMessage("The configuration property 'dataDirectory' must not be empty or missing!");
 
         Configuration.validate(config);
     }
@@ -133,7 +133,7 @@ public class ConfigurationTest extends BaseTestCase {
         config.remove(Configuration.TEMPLATE_DIR);
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The configuration property 'tplDir' must not be empty or missing!");
+        thrown.expectMessage("The configuration property 'temlateDirectory' must not be empty or missing!");
 
         final Properties propes = Configuration.validate(config);
     }
@@ -144,7 +144,7 @@ public class ConfigurationTest extends BaseTestCase {
         config.remove(Configuration.HTDOCS);
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The configuration property 'htdocs' must not be empty or missing!");
+        thrown.expectMessage("The configuration property 'publicDirectory' must not be empty or missing!");
 
         Configuration.validate(config);
     }

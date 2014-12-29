@@ -33,41 +33,37 @@ public final class Configuration {
     /**
      * Name of blog headline property.
      */
-    static final String TITLE = "title";
+    public static final String TITLE = "title";
     /**
      * Name of blog description property.
      */
-    static final String DESCRIPTION = "description";
+    public static final String DESCRIPTION = "description";
     /**
      * Name of site base URI property.
      */
-    static final String SITE_URI = "siteUrl";
+    public static final String SITE_URI = "siteUrl";
     /**
      * Name of site language property.
      */
-    static final String LANGUAGE = "language";
+    public static final String LANGUAGE = "language";
     /**
      * Name of data directory property.
-     *
-     * TODO: Rename to dataDirectory.
      */
-    static final String DATA_DIR = "dataDir";
+    public static final String DATA_DIR = "dataDirectory";
     /**
      * Name of template directory property.
-     *
-     * TODO: Rename to temlateDirectory.
      */
-    static final String TEMPLATE_DIR = "tplDir";
+    public static final String TEMPLATE_DIR = "temlateDirectory";
     /**
-     * Name of published htdocs directory property.
+     * Name of published public directory property.
      *
-     * TODO: Rename to publicDirectory.
+     * TODO: Rename to PUBLIC_DIR.
      */
-    static final String HTDOCS = "htdocs";
+    public static final String HTDOCS = "publicDirectory";
     /**
      * Name of encoding property.
      */
-    static final String ENCODING = "encoding";
+    public static final String ENCODING = "encoding";
     /**
      * Used to load and parse file.
      */
