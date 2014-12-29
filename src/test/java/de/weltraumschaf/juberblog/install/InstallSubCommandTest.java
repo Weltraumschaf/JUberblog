@@ -26,7 +26,6 @@ import org.apache.commons.io.FileUtils;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -40,7 +39,6 @@ import static org.mockito.Mockito.verify;
  *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
-@Ignore
 public class InstallSubCommandTest extends BaseTestCase {
 
     private static final Collection<String> EXPECTED_FILES = Arrays.asList(
@@ -49,7 +47,6 @@ public class InstallSubCommandTest extends BaseTestCase {
             "data/drafts/sites/README",
             "data/posts/README",
             "data/sites/README",
-            "public/css/main.css",
             "public/css/README",
             "public/drafts/posts/README",
             "public/drafts/sites/README",
@@ -67,7 +64,9 @@ public class InstallSubCommandTest extends BaseTestCase {
             "templates/layout.ftl",
             "templates/post.ftl",
             "templates/site.ftl",
-            "templates/site_map.ftl"
+            "templates/site_map.ftl",
+            "sass/_normalize.scss",
+            "sass/main.scss"
     );
 
     @Rule
@@ -206,9 +205,6 @@ public class InstallSubCommandTest extends BaseTestCase {
         verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/css/README to "
                 + getRootDir()
                 + "/public/css/README ...");
-        verify(io, times(1)).println("Copy file /de/weltraumschaf/juberblog/scaffold/public/css/main.css to "
-                + getRootDir()
-                + "/public/css/main.css ...");
         verify(io, times(1)).println("Create directory "
                 + getRootDir()
                 + "/data");
@@ -246,6 +242,17 @@ public class InstallSubCommandTest extends BaseTestCase {
                 "Copy file /de/weltraumschaf/juberblog/scaffold/configuration/configuration.sample.properties to "
                 + getRootDir()
                 + "/configuration/configuration.sample.properties ...");
+        verify(io, times(1)).println("Create directory "
+                + getRootDir()
+                + "/sass");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/sass/_normalize.scss to "
+                + getRootDir()
+                + "/sass/_normalize.scss ...");
+        verify(io, times(1)).println(
+                "Copy file /de/weltraumschaf/juberblog/scaffold/sass/main.scss to "
+                + getRootDir()
+                + "/sass/main.scss ...");
 
         final Collection<File> installedFiles = FileUtils.listFiles(tmp.getRoot(), null, true);
         assertThat(installedFiles.toString(), installedFiles, hasSize(EXPECTED_FILES.size()));
