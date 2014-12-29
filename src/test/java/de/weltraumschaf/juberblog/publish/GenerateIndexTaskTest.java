@@ -41,7 +41,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
     private GenerateIndexTask.Config createTaskConfig() throws URISyntaxException, IOException {
         return new GenerateIndexTask.Config(
                 createTemplates(),
-                createDirs(tmp),
+                createDirs(tmp, false),
                 createConfig());
     }
 

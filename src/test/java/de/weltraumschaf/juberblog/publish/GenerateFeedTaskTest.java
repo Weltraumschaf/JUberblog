@@ -12,11 +12,8 @@
 package de.weltraumschaf.juberblog.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
-import de.weltraumschaf.juberblog.core.Configuration;
-import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
-import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -24,7 +21,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Properties;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
@@ -45,7 +41,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
     private GenerateFeedTask.Config createTaskConfig() throws URISyntaxException, IOException {
         return new GenerateFeedTask.Config(
                 createTemplates(),
-                createDirs(tmp),
+                createDirs(tmp, false),
                 createConfig(),
                 new DateTime("2014-12-01"));
     }

@@ -41,7 +41,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
     private GenerateSitemapTask.Config createTaskConfig() throws URISyntaxException, IOException {
         return new GenerateSitemapTask.Config(
                 createTemplates(),
-                createDirs(tmp),
+                createDirs(tmp, false),
                 createConfig());
     }
 

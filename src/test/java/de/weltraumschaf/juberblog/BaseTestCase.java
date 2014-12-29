@@ -9,7 +9,6 @@
  *
  * Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
  */
-
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.IO;
@@ -43,13 +42,28 @@ public abstract class BaseTestCase {
         return Paths.get(getClass().getResource(base + name).toURI());
     }
 
-    protected final  Directories createDirs(final TemporaryFolder tmp) throws IOException, URISyntaxException {
+    protected final Directories createDirs(final TemporaryFolder tmp) throws IOException, URISyntaxException {
+        return createDirs(tmp, true);
+    }
+
+    protected final Directories createDirs(final TemporaryFolder tmp, final boolean createOutputDirs) throws IOException, URISyntaxException {
+        final Path postsOutput;
+        final Path siteOutput;
+
+        if (createOutputDirs) {
+            postsOutput = tmp.newFolder("posts").toPath();
+            siteOutput = tmp.newFolder("sites").toPath();
+        } else {
+            postsOutput = createPath("posts");
+            siteOutput = createPath("sites");
+        }
+
         return new Directories(
                 createPath("posts"),
                 createPath("sites"),
                 tmp.getRoot().toPath(),
-                tmp.newFolder("posts").toPath(),
-                tmp.newFolder("sites").toPath());
+                postsOutput,
+                siteOutput);
     }
 
     protected final Templates createTemplates() throws URISyntaxException {
@@ -80,9 +94,9 @@ public abstract class BaseTestCase {
         return config;
     }
 
-    protected final JUberblog createRegistry(final TemporaryFolder tmp, final Options options, final IO io) throws URISyntaxException, IOException {
+    protected final JUberblog createRegistry(final TemporaryFolder tmp, final Options options, final IO io, final boolean createOutputDirs) throws URISyntaxException, IOException {
         return JUberblog.Builder.create()
-                .directories(createDirs(tmp))
+                .directories(createDirs(tmp, createOutputDirs))
                 .templates(createTemplates())
                 .configuration(createConfig())
                 .options(options)
