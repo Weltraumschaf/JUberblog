@@ -130,12 +130,12 @@ public final class Templates {
     @Override
     public int hashCode() {
         return Objects.hash(
-                layoutTemplate.toString(),
-                postTemplate.toString(),
-                siteTemplate.toString(),
-                feedTemplate.toString(),
-                indexTemplate.toString(),
-                siteMapTemplate.toString()
+                layoutTemplate,
+                postTemplate,
+                siteTemplate,
+                feedTemplate,
+                indexTemplate,
+                siteMapTemplate
         );
     }
 
@@ -146,12 +146,12 @@ public final class Templates {
         }
 
         final Templates other = (Templates) obj;
-        return Objects.equals(layoutTemplate.toString(), other.layoutTemplate.toString())
-                && Objects.equals(postTemplate.toString(), other.postTemplate.toString())
-                && Objects.equals(siteTemplate.toString(), other.siteTemplate.toString())
-                && Objects.equals(feedTemplate.toString(), other.feedTemplate.toString())
-                && Objects.equals(indexTemplate.toString(), other.indexTemplate.toString())
-                && Objects.equals(siteMapTemplate.toString(), other.siteMapTemplate.toString());
+        return Objects.equals(layoutTemplate, other.layoutTemplate)
+                && Objects.equals(postTemplate, other.postTemplate)
+                && Objects.equals(siteTemplate, other.siteTemplate)
+                && Objects.equals(feedTemplate, other.feedTemplate)
+                && Objects.equals(indexTemplate, other.indexTemplate)
+                && Objects.equals(siteMapTemplate, other.siteMapTemplate);
     }
 
     @Override

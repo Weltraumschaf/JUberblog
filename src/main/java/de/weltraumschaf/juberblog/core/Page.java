@@ -25,6 +25,8 @@ import org.joda.time.DateTimeComparator;
  * This class is immutable by design.
  * </p>
  *
+ * XXX: Move into publish package.
+ * 
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Page {
