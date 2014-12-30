@@ -76,8 +76,7 @@ final class CopyDirectoryVisitor extends SimpleFileVisitor<Path> {
         }
 
         this.targetDir = targetDir;
-        Validate.notNull(prefixToStrip, "prefixToStrip");
-        this.prefix = prefixToStrip;
+        this.prefix = Validate.notNull(prefixToStrip, "prefixToStrip");
         this.io = Validate.notNull(io);
         this.verbose = verbose;
         this.strategy = Validate.notNull(strategy);
@@ -133,7 +132,7 @@ final class CopyDirectoryVisitor extends SimpleFileVisitor<Path> {
      * @param file must not be {@code null}
      * @return never {@code null}
      */
-    private String baseName(final Path file) {
+    String baseName(final Path file) {
         return Validate.notNull(file, "file").toString().replace(prefix, "");
     }
 
@@ -142,7 +141,7 @@ final class CopyDirectoryVisitor extends SimpleFileVisitor<Path> {
      *
      * @param msg should not be {@code null} or empty
      */
-    private void println(final String msg) {
+    void println(final String msg) {
         if (verbose) {
             io.println(msg);
         }
