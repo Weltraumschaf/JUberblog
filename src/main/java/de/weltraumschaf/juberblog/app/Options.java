@@ -74,15 +74,15 @@ public final class Options {
      * Whether to force installation.
      */
     @Parameter(
-        names = {"-f", "--force" },
-        description = "Forced instsallation will install into non empty direcotry and overwrites existing files.")
+            names = {"-f", "--force"},
+            description = "Forced instsallation will install into non empty direcotry and overwrites existing files.")
     private boolean force;
     /**
      * Whether to update installation.
      */
     @Parameter(
-        names = {"-u", "--update" },
-        description = "Updates an installation. Already existing files will be backed up.")
+            names = {"-u", "--update"},
+            description = "Updates an installation. Already existing files will be backed up.")
     private boolean update;
     /**
      * Verbose flag.
@@ -170,18 +170,32 @@ public final class Options {
         return version;
     }
 
+    /**
+     * Whether to force installation.
+     *
+     * @return {@code true} for force, else {@code false}
+     */
     public boolean isForce() {
         return force;
     }
 
+    /**
+     * Whether to update installation.
+     *
+     * @return {@code true} for update, else {@code false}
+     */
     public boolean isUpdate() {
         return update;
     }
 
+    /**
+     * Whether to display verbose messages.
+     *
+     * @return {@code true} for verbosing, else {@code false}
+     */
     public boolean isVerbose() {
         return verbose;
     }
-
 
     /**
      * Get the location option.
@@ -203,7 +217,14 @@ public final class Options {
 
     @Override
     public int hashCode() {
-        return Objects.hash(configurationFile, help, location, version);
+        return Objects.hash(
+                configurationFile,
+                help,
+                location,
+                force,
+                update,
+                verbose,
+                version);
     }
 
     @Override
@@ -216,6 +237,9 @@ public final class Options {
         return Objects.equals(configurationFile, other.configurationFile)
                 && Objects.equals(help, other.help)
                 && Objects.equals(location, other.location)
+                && Objects.equals(force, other.force)
+                && Objects.equals(update, other.update)
+                && Objects.equals(verbose, other.verbose)
                 && Objects.equals(version, other.version);
     }
 

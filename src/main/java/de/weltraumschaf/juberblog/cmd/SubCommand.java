@@ -11,7 +11,6 @@
  */
 package de.weltraumschaf.juberblog.cmd;
 
-import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.app.Options;
@@ -41,25 +40,25 @@ public interface SubCommand {
     IO io();
 
     /**
-     * Get all important templates,
+     * Get all important templates.
      *
      * @return never {@code null}
      */
-    public Templates templates();
+    Templates templates();
 
     /**
-     * Get all important directories,
+     * Get all important directories.
      *
      * @return never {@code null}
      */
-    public Directories directories();
+    Directories directories();
 
     /**
-     * Get all important configurations,
+     * Get all important configurations.
      *
      * @return never {@code null}
      */
-    public Configuration configuration();
+    Configuration configuration();
 
     /**
      * Executes the sub command.

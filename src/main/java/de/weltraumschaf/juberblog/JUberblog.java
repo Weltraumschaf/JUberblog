@@ -152,7 +152,8 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if not all objects can't be generated
      */
-    private static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration) throws ApplicationException {
+    private static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration)
+            throws ApplicationException {
         final Path locationDir = findLocationDir(cliOptions);
         final Path dataDir = findDataDir(locationDir, configuration);
         final Path outputDir = findOutputDir(locationDir, configuration);
@@ -205,6 +206,7 @@ public final class JUberblog {
      *
      * @param cliOptions must not be {@code null}
      * @return never {@code null}
+     * @throws ApplicationException if location is not a directory
      */
     private static Path findLocationDir(final Options cliOptions) throws ApplicationException {
         final Path locationDir = Paths.get(cliOptions.getLocation());

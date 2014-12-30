@@ -52,36 +52,21 @@ public final class Directories {
      */
     private final Path siteOutput;
 
-    public Directories(final Path dataDir, final Path outputDir) {
-        this(dataDir.resolve(POSTS_DIR_NAME),
-                dataDir.resolve(SITES_DIR_NAME),
-                outputDir,
-                outputDir.resolve(POSTS_DIR_NAME),
-                outputDir.resolve(SITES_DIR_NAME)
-        );
-    }
-
     /**
      * Dedicated constructor.
      *
-     * @param postsData must not be {@code null}
-     * @param sitesData must not be {@code null}
-     * @param output must not be {@code null}
-     * @param postsOutput must not be {@code null}
-     * @param siteOutput must not be {@code null}
+     * @param dataDir must not be {@code null}
+     * @param outputDir must not be {@code null}
      */
-    private Directories(
-            final Path postsData,
-            final Path sitesData,
-            final Path output,
-            final Path postsOutput,
-            final Path siteOutput) {
+    public Directories(final Path dataDir, final Path outputDir) {
         super();
-        this.postsData = Validate.notNull(postsData, "postsData");
-        this.sitesData = Validate.notNull(sitesData, "sitesData");
-        this.output = Validate.notNull(output, "output");
-        this.postsOutput = Validate.notNull(postsOutput, "postsOutput");
-        this.siteOutput = Validate.notNull(siteOutput, "siteOutput");
+        Validate.notNull(dataDir, "dataDir");
+        Validate.notNull(outputDir, "outputDir");
+        this.postsData = dataDir.resolve(POSTS_DIR_NAME);
+        this.sitesData = dataDir.resolve(SITES_DIR_NAME);
+        this.output = outputDir;
+        this.postsOutput = outputDir.resolve(POSTS_DIR_NAME);
+        this.siteOutput = outputDir.resolve(SITES_DIR_NAME);
     }
 
     /**

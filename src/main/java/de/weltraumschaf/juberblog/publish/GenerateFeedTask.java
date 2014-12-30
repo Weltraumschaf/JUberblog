@@ -176,7 +176,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             this.template = Validate.notNull(templates, "templates").getFeedTemplate();
             this.outputDir = Validate.notNull(directories, "directories").getOutput();
             this.encoding = configuration.getEncoding();
-            this.title= configuration.getTitle();
+            this.title = configuration.getTitle();
             this.link = configuration.getBaseUri();
             this.description = configuration.getDescription();
             this.language = configuration.getLanguage();

@@ -66,6 +66,11 @@ public abstract class SubCommandBase implements SubCommand {
         return registry().configuration();
     }
 
+    /**
+     * Getter for registry.
+     *
+     * @return never {@code null}
+     */
     private JUberblog registry() {
         return registry;
     }

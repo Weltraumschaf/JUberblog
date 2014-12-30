@@ -130,7 +130,7 @@ public final class Publisher {
                     pageUrl = uris.site(outputBaseName);
                     break;
                 case POST:
-                    pageUrl =uris.post(outputBaseName);
+                    pageUrl = uris.post(outputBaseName);
                     break;
                 default:
                     throw new IllegalStateException(String.format("Unsupported page type '%s'!", type));

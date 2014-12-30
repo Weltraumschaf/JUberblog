@@ -172,7 +172,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             Validate.notNull(directories, "directories");
             Validate.notNull(configuration, "configuration");
             this.encoding = configuration.getEncoding();
-            this.outputDir =directories.getOutput();
+            this.outputDir = directories.getOutput();
             this.layoutTemplate = templates.getLayoutTemplate();
             this.indexTemplate = templates.getIndexTemplate();
             this.name = configuration.getTitle();
