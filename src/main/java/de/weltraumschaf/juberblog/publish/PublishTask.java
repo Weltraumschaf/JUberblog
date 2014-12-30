@@ -52,12 +52,9 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
     @Override
     public Pages execute(final Pages previusResult) throws Exception {
         final Publisher publisher = new Publisher(
-                config.inputDir,
-                config.outputDir,
-                config.layoutTemplate,
-                config.contentTemplate,
-                config.encoding,
-                config.baseUrlForPages,
+                config.templates,
+                config.directories,
+                config.configuration,
                 config.type
         );
 
@@ -70,34 +67,13 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
      */
     public static final class Config {
 
-        /**
-         * Encoding to read/write files and for XML.
-         */
-        private final String encoding;
-        /**
-         * Where to read the Markdown data files.
-         */
-        private final Path inputDir;
-        /**
-         * Where to store the HTML pages.
-         */
-        private final Path outputDir;
-        /**
-         * Outer template.
-         */
-        private final Path layoutTemplate;
-        /**
-         * Inner template.
-         */
-        private final Path contentTemplate;
+        final Templates templates;
+        final Directories directories;
+        final Configuration configuration;
         /**
          * Type of published data.
          */
         private final Type type;
-        /**
-         * Base URI for published page.
-         */
-        private final URI baseUrlForPages;
 
         /**
          * Dedicated constructor.
@@ -113,26 +89,10 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 final Configuration configuration,
                 final Type type) {
             super();
-            Validate.notNull(templates, "templates");
-            Validate.notNull(directories, "directories");
-            Validate.notNull(configuration, "configuration");
-            this.encoding = configuration.getEncoding();
-            this.layoutTemplate = templates.getLayoutTemplate();
+            this.templates = Validate.notNull(templates, "templates");
+            this.directories = Validate.notNull(directories, "directories");
+            this.configuration = Validate.notNull(configuration, "configuration");
             this.type = Validate.notNull(type, "type");
-            this.baseUrlForPages = configuration.getBaseUri();
-
-            // XXX: Move into publisher.
-            if (type == Type.POST) {
-                this.inputDir = directories.getPostsData();
-                this.outputDir = directories.getPostsOutput();
-                this.contentTemplate = templates.getPostTemplate();
-            } else if (type == Type.SITE) {
-                this.inputDir = directories.getSitesData();
-                this.outputDir = directories.getSitesOutput();
-                this.contentTemplate = templates.getSiteTemplate();
-            } else {
-                throw new IllegalArgumentException(String.format("Bad type '%s'!", type));
-            }
         }
 
     }

@@ -40,12 +40,9 @@ public class PublisherTest extends BaseTestCase {
     @Test
     public void publishPosts() throws URISyntaxException, IOException {
         final Publisher sut = new Publisher(
-                createPath("posts"),
-                tmp.getRoot().toPath(),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
-                ENCODING,
-                URI.create("http://localhost"),
+                createTemplates(),
+                createDirs(tmp),
+                createConfig(),
                 Page.Type.POST
         );
 
@@ -54,26 +51,26 @@ public class PublisherTest extends BaseTestCase {
         assertThat(pages, containsInAnyOrder(
                 new Page(
                         "This is the First Post",
-                        URI.create("http://localhost/posts/This-is-the-First-Post.html"),
+                        URI.create("http://www.myblog.com/posts/This-is-the-First-Post.html"),
                         "This is the first post.",
                         new DateTime("2014-05-30T21:29:20"), Page.Type.POST),
                 new Page(
                         "This is the Second Post",
-                        URI.create("http://localhost/posts/This-is-the-Second-Post.html"),
+                        URI.create("http://www.myblog.com/posts/This-is-the-Second-Post.html"),
                         "This is the second post.",
                         new DateTime("2014-06-30T23:25:44"), Page.Type.POST),
                 new Page(
                         "This is the Third Post",
-                        URI.create("http://localhost/posts/This-is-the-Third-Post.html"),
+                        URI.create("http://www.myblog.com/posts/This-is-the-Third-Post.html"),
                         "This is the third post.",
                         new DateTime("2014-07-28T17:44:13"), Page.Type.POST)
         ));
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(3));
-        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/This-is-the-First-Post.html");
-        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/This-is-the-Second-Post.html");
-        final DataFile expectedThree = new DataFile(tmp.getRoot().toString() + "/This-is-the-Third-Post.html");
+        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-First-Post.html");
+        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-Second-Post.html");
+        final DataFile expectedThree = new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-Third-Post.html");
         assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree));
         assertThat(
                 expectedOne.readContent(ENCODING),

@@ -15,10 +15,13 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
 import de.weltraumschaf.juberblog.core.Page.Type;
+import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Uris;
 import java.io.IOException;
 import java.net.URI;
@@ -63,39 +66,38 @@ public final class Publisher {
      */
     private final Type type;
 
-    /**
-     * Dedicated constructor.
-     *
-     * XXX: Use builder to reduce constructor parameters.
-     *
-     * @param inputDir must not be {@code null}
-     * @param outputDir must not be {@code null}
-     * @param layoutTemplateFile must not be {@code null}
-     * @param postTemplateFile must not be {@code null}
-     * @param encoding must not be {@code null} or empty
-     * @param baseUrlForPages must not be {@code null}
-     * @param type must not be {@code null}
-     * @throws IOException if templates can't be read
-     */
     public Publisher(
-            final Path inputDir,
-            final Path outputDir,
-            final Path layoutTemplateFile,
-            final Path postTemplateFile,
-            final String encoding,
-            final URI baseUrlForPages,
+            final Templates templates,
+            final Directories directories,
+            final Configuration configuration,
             final Type type) throws IOException {
         super();
-        this.inputDir = Validate.notNull(inputDir, "inputDir");
-        this.outputDir = Validate.notNull(outputDir, "outputDir");
-        this.renderer = new Renderer(
-                Validate.notNull(layoutTemplateFile, "layoutTemplateFile"),
-                Validate.notNull(postTemplateFile, "postTemplateFile"),
-                encoding
-        );
-        this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.baseUrlForPages = Validate.notNull(baseUrlForPages, "baseUrlForPages");
+        Validate.notNull(templates, "templates");
+        Validate.notNull(directories, "directories");
+        Validate.notNull(configuration, "configuration");
+        this.encoding = configuration.getEncoding();
         this.type = Validate.notNull(type, "type");
+        this.baseUrlForPages = configuration.getBaseUri();
+
+        if (type == Type.POST) {
+            this.inputDir = directories.getPostsData();
+            this.outputDir = directories.getPostsOutput();
+            this.renderer = new Renderer(
+                    templates.getLayoutTemplate(),
+                    templates.getPostTemplate(),
+                    encoding
+            );
+        } else if (type == Type.SITE) {
+            this.inputDir = directories.getSitesData();
+            this.outputDir = directories.getSitesOutput();
+            this.renderer = new Renderer(
+                    templates.getLayoutTemplate(),
+                    templates.getSiteTemplate(),
+                    encoding
+            );
+        } else {
+            throw new IllegalArgumentException(String.format("Bad type '%s'!", type));
+        }
     }
 
     /**
