@@ -42,7 +42,6 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
-        // XXX: Use from parent class.
         final Properties config = new Properties();
         config.setProperty(Configuration.TITLE, "Blog Title");
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");
@@ -52,19 +51,9 @@ public class PublishSubCommandTest extends BaseTestCase {
         config.setProperty(Configuration.DATA_DIR, "/");
         config.setProperty(Configuration.PUBLIC_DIR, "/");
         config.setProperty(Configuration.TEMPLATE_DIR, "/");
-        tmp.newFolder("posts");
-        tmp.newFolder("sites");
         final JUberblog registry = JUberblog.Builder.create()
-                .directories(new Directories(
-                                createPath("."),
-                                tmp.getRoot().toPath()))
-                .templates(new Templates(
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
-                                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl")))
+                .directories(createDirs(tmp))
+                .templates(createTemplates())
                 .configuration(new Configuration(config))
                 .options(new Options())
                 .io(mock(IO.class))
