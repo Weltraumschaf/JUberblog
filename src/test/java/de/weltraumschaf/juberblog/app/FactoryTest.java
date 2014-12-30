@@ -40,9 +40,6 @@ public class FactoryTest extends BaseTestCase {
 
     private final Directories directories = new Directories(
             Paths.get("."),
-            Paths.get("."),
-            Paths.get("."),
-            Paths.get("."),
             Paths.get("."));
     private final Templates templates = new Templates(
             Paths.get("."),

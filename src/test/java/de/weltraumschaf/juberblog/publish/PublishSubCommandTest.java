@@ -42,7 +42,7 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
-        // XXX: Use fram parent class.
+        // XXX: Use from parent class.
         final Properties config = new Properties();
         config.setProperty(Configuration.TITLE, "Blog Title");
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");
@@ -52,13 +52,12 @@ public class PublishSubCommandTest extends BaseTestCase {
         config.setProperty(Configuration.DATA_DIR, "/");
         config.setProperty(Configuration.PUBLIC_DIR, "/");
         config.setProperty(Configuration.TEMPLATE_DIR, "/");
+        tmp.newFolder("posts");
+        tmp.newFolder("sites");
         final JUberblog registry = JUberblog.Builder.create()
                 .directories(new Directories(
-                                createPath("posts"),
-                                createPath("sites"),
-                                tmp.getRoot().toPath(),
-                                tmp.newFolder("posts").toPath(),
-                                tmp.newFolder("sites").toPath()))
+                                createPath("."),
+                                tmp.getRoot().toPath()))
                 .templates(new Templates(
                                 createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
                                 createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),

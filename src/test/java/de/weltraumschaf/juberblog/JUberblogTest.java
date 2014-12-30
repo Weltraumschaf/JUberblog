@@ -48,11 +48,8 @@ public class JUberblogTest extends BaseTestCase {
         assertThat(product.options(), is(options));
         assertThat(product.io(), is(io));
         assertThat(product.directories(), is(new Directories(
-                location.resolve("data/posts"),
-                location.resolve("data/sites"),
-                location.resolve("public"),
-                location.resolve("public/posts"),
-                location.resolve("public/sites"))));
+                location.resolve("data"),
+                location.resolve("public"))));
         assertThat(product.templates(), is(new Templates(
                 location.resolve("templates/layout.ftl"),
                 location.resolve("templates/post.ftl"),

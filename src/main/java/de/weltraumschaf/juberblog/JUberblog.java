@@ -131,11 +131,28 @@ public final class JUberblog {
         return generate(cliOptions, io, generateConfiguration(cliOptions));
     }
 
-    public static JUberblog generateWithoutConfig(final Options cliOptions, final IO io) throws ApplicationException {
+    /**
+     * Creates filled registry, but without loading configuration from file.
+     *
+     * @param cliOptions must not be {@code null}
+     * @param io must not be {@code null}
+     * @return never {@code null}
+     * @throws ApplicationException if not all objects can't be generated
+     */
+    public static JUberblog generateDefaultConfig(final Options cliOptions, final IO io) throws ApplicationException {
         return generate(cliOptions, io, Configuration.DEFAULT);
     }
 
-    public static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration) throws ApplicationException {
+    /**
+     * Creates filled registry with a given configuration.
+     *
+     * @param cliOptions must not be {@code null}
+     * @param io must not be {@code null}
+     * @param configuration must not be {@code null}
+     * @return never {@code null}
+     * @throws ApplicationException if not all objects can't be generated
+     */
+    private static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration) throws ApplicationException {
         final Path locationDir = findLocationDir(cliOptions);
         final Path dataDir = findDataDir(locationDir, configuration);
         final Path outputDir = findOutputDir(locationDir, configuration);
@@ -150,30 +167,63 @@ public final class JUberblog {
                 .product();
     }
 
+    /**
+     * Finds template directory based on location of blog.
+     *
+     * @param locationDir must not be {@code null}
+     * @param configuration must not be {@code null}
+     * @return never {@code null}
+     */
     private static Path findTemplateDir(final Path locationDir, final Configuration configuration) {
         return locationDir.resolve(configuration.getTemplateDir());
     }
 
+    /**
+     * Finds output directory based on location of blog.
+     *
+     * @param locationDir must not be {@code null}
+     * @param configuration must not be {@code null}
+     * @return never {@code null}
+     */
     private static Path findOutputDir(final Path locationDir, final Configuration configuration) {
         return locationDir.resolve(configuration.getHtdocs());
     }
 
+    /**
+     * Finds data directory based on location of blog.
+     *
+     * @param locationDir must not be {@code null}
+     * @param configuration must not be {@code null}
+     * @return never {@code null}
+     */
     private static Path findDataDir(final Path locationDir, final Configuration configuration) {
         return locationDir.resolve(configuration.getDataDir());
     }
 
-
-
+    /**
+     * Finds location directory of blog.
+     *
+     * @param cliOptions must not be {@code null}
+     * @return never {@code null}
+     */
     private static Path findLocationDir(final Options cliOptions) throws ApplicationException {
         final Path locationDir = Paths.get(cliOptions.getLocation());
+
         if (!Files.isDirectory(locationDir)) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
                     String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
         }
+
         return locationDir;
     }
 
+    /**
+     * Creates template directory object.
+     *
+     * @param templateDir  must not be {@code null}
+     * @return never {@code null}
+     */
     private static Templates createTemplate(final Path templateDir) {
         return new Templates(
                 templateDir.resolve("layout.ftl"),
@@ -184,13 +234,15 @@ public final class JUberblog {
                 templateDir.resolve("site_map.ftl"));
     }
 
+    /**
+     * Creates directories object.
+     *
+     * @param dataDir  must not be {@code null}
+     * @param outputDir  must not be {@code null}
+     * @return never {@code null}
+     */
     private static Directories createDirs(final Path dataDir, final Path outputDir) {
-        return new Directories(
-                dataDir.resolve("posts"),
-                dataDir.resolve("sites"),
-                outputDir,
-                outputDir.resolve("posts"),
-                outputDir.resolve("sites"));
+        return new Directories(dataDir, outputDir);
     }
 
     /**

@@ -23,6 +23,15 @@ import java.util.Objects;
 public final class Directories {
 
     /**
+     * Name of sites sub directory.
+     */
+    private static final String SITES_DIR_NAME = "sites";
+    /**
+     * Name of posts sub directory.
+     */
+    private static final String POSTS_DIR_NAME = "posts";
+
+    /**
      * Where to find the post's Markdown files.
      */
     private final Path postsData;
@@ -43,6 +52,15 @@ public final class Directories {
      */
     private final Path siteOutput;
 
+    public Directories(final Path dataDir, final Path outputDir) {
+        this(dataDir.resolve(POSTS_DIR_NAME),
+                dataDir.resolve(SITES_DIR_NAME),
+                outputDir,
+                outputDir.resolve(POSTS_DIR_NAME),
+                outputDir.resolve(SITES_DIR_NAME)
+        );
+    }
+
     /**
      * Dedicated constructor.
      *
@@ -52,7 +70,7 @@ public final class Directories {
      * @param postsOutput must not be {@code null}
      * @param siteOutput must not be {@code null}
      */
-    public Directories(
+    private Directories(
             final Path postsData,
             final Path sitesData,
             final Path output,

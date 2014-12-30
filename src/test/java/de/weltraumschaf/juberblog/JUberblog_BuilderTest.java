@@ -17,7 +17,6 @@ import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Paths;
-import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
@@ -38,9 +37,6 @@ public class JUberblog_BuilderTest extends BaseTestCase {
     public final ExpectedException thrown = ExpectedException.none();
 
     private final Directories directories = new Directories(
-            Paths.get("."),
-            Paths.get("."),
-            Paths.get("."),
             Paths.get("."),
             Paths.get("."));
     private final Templates templates = new Templates(

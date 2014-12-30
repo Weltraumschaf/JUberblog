@@ -177,7 +177,7 @@ public final class App extends InvokableAdapter {
         final JUberblog registry;
 
         if (subCommandName == Name.INSTALL) {
-            registry = JUberblog.generateWithoutConfig(cliOptions, getIoStreams());
+            registry = JUberblog.generateDefaultConfig(cliOptions, getIoStreams());
         } else {
             if (cliOptions.getConfigurationFile().isEmpty()) {
                 throwBadArgumentError("No configuration file given!");

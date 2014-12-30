@@ -47,23 +47,14 @@ public abstract class BaseTestCase {
     }
 
     protected final Directories createDirs(final TemporaryFolder tmp, final boolean createOutputDirs) throws IOException, URISyntaxException {
-        final Path postsOutput;
-        final Path siteOutput;
-
         if (createOutputDirs) {
-            postsOutput = tmp.newFolder("posts").toPath();
-            siteOutput = tmp.newFolder("sites").toPath();
-        } else {
-            postsOutput = createPath("posts");
-            siteOutput = createPath("sites");
+            tmp.newFolder("posts");
+            tmp.newFolder("sites");
         }
 
         return new Directories(
-                createPath("posts"),
-                createPath("sites"),
-                tmp.getRoot().toPath(),
-                postsOutput,
-                siteOutput);
+                createPath("."),
+                tmp.getRoot().toPath());
     }
 
     protected final Templates createTemplates() throws URISyntaxException {
