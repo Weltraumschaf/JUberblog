@@ -174,17 +174,21 @@ public final class App extends InvokableAdapter {
         }
 
         final Name subCommandName = Name.betterValueOf(arguments.getFirstArgument());
+        final JUberblog registry;
 
-        if (subCommandName != Name.INSTALL) {
+        if (subCommandName == Name.INSTALL) {
+            registry = JUberblog.generateWithoutConfig(cliOptions, getIoStreams());
+        } else {
             if (cliOptions.getConfigurationFile().isEmpty()) {
                 throwBadArgumentError("No configuration file given!");
                 return;
             }
+
+            registry = JUberblog.generate(cliOptions, getIoStreams());
         }
 
-        final SubCommand cmd
-                = subCommands.forName(subCommandName, JUberblog.generate(cliOptions, getIoStreams()));
-        cmd.execute();
+
+        subCommands.forName(subCommandName, registry).execute();
     }
 
     /**

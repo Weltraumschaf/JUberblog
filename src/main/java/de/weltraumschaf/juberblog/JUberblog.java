@@ -128,39 +128,69 @@ public final class JUberblog {
      * @throws ApplicationException if not all objects can't be generated
      */
     public static JUberblog generate(final Options cliOptions, final IO io) throws ApplicationException {
-        final Configuration configuration = generateConfiguration(cliOptions);
-        final Path locationDir = Paths.get(cliOptions.getLocation());
+        return generate(cliOptions, io, generateConfiguration(cliOptions));
+    }
 
+    public static JUberblog generateWithoutConfig(final Options cliOptions, final IO io) throws ApplicationException {
+        return generate(cliOptions, io, Configuration.DEFAULT);
+    }
+
+    public static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration) throws ApplicationException {
+        final Path locationDir = findLocationDir(cliOptions);
+        final Path dataDir = findDataDir(locationDir, configuration);
+        final Path outputDir = findOutputDir(locationDir, configuration);
+        final Path templateDir = findTemplateDir(locationDir, configuration);
+
+        return JUberblog.Builder.create()
+                .directories(createDirs(dataDir, outputDir))
+                .templates(createTemplate(templateDir))
+                .configuration(configuration)
+                .options(cliOptions)
+                .io(io)
+                .product();
+    }
+
+    private static Path findTemplateDir(final Path locationDir, final Configuration configuration) {
+        return locationDir.resolve(configuration.getTemplateDir());
+    }
+
+    private static Path findOutputDir(final Path locationDir, final Configuration configuration) {
+        return locationDir.resolve(configuration.getHtdocs());
+    }
+
+    private static Path findDataDir(final Path locationDir, final Configuration configuration) {
+        return locationDir.resolve(configuration.getDataDir());
+    }
+
+
+
+    private static Path findLocationDir(final Options cliOptions) throws ApplicationException {
+        final Path locationDir = Paths.get(cliOptions.getLocation());
         if (!Files.isDirectory(locationDir)) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
                     String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
         }
+        return locationDir;
+    }
 
-        final Path dataDir = locationDir.resolve(configuration.getDataDir());
-        final Path outputDir = locationDir.resolve(configuration.getHtdocs());
-        final Path templateDir = locationDir.resolve(configuration.getTemplateDir());
+    private static Templates createTemplate(final Path templateDir) {
+        return new Templates(
+                templateDir.resolve("layout.ftl"),
+                templateDir.resolve("post.ftl"),
+                templateDir.resolve("site.ftl"),
+                templateDir.resolve("feed.ftl"),
+                templateDir.resolve("index.ftl"),
+                templateDir.resolve("site_map.ftl"));
+    }
 
-        return JUberblog.Builder.create()
-                .directories(
-                        new Directories(
-                                dataDir.resolve("posts"),
-                                dataDir.resolve("sites"),
-                                outputDir,
-                                outputDir.resolve("posts"),
-                                outputDir.resolve("sites")))
-                .templates(
-                        new Templates(
-                                templateDir.resolve("layout.ftl"),
-                                templateDir.resolve("post.ftl"),
-                                templateDir.resolve("site.ftl"),
-                                templateDir.resolve("feed.ftl"),
-                                templateDir.resolve("index.ftl"),
-                                templateDir.resolve("site_map.ftl")))
-                .configuration(configuration)
-                .options(cliOptions)
-                .io(io)
-                .product();
+    private static Directories createDirs(final Path dataDir, final Path outputDir) {
+        return new Directories(
+                dataDir.resolve("posts"),
+                dataDir.resolve("sites"),
+                outputDir,
+                outputDir.resolve("posts"),
+                outputDir.resolve("sites"));
     }
 
     /**

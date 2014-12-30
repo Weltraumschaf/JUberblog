@@ -63,6 +63,23 @@ public final class Configuration {
      */
     public static final String ENCODING = "encoding";
     /**
+     * Default configuration.
+     */
+    public static final Configuration DEFAULT;
+    static {
+        final Properties emptyConfig = new Properties();
+        emptyConfig.setProperty(TITLE, "blog title");
+        emptyConfig.setProperty(DESCRIPTION, "blog description");
+        emptyConfig.setProperty(SITE_URI, "http://www.myblog.com/");
+        emptyConfig.setProperty(LANGUAGE, "en");
+        emptyConfig.setProperty(DATA_DIR, "data");
+        emptyConfig.setProperty(TEMPLATE_DIR, "templates");
+        emptyConfig.setProperty(PUBLIC_DIR, "public");
+        emptyConfig.setProperty(ENCODING, "utf-8");
+        DEFAULT = new Configuration(emptyConfig);
+    }
+
+    /**
      * Used to load and parse file.
      */
     private final Properties properties;
