@@ -168,20 +168,22 @@ public final class App extends InvokableAdapter {
             return;
         }
 
-        if (cliOptions.getConfigurationFile().isEmpty()) {
-            throwBadArgumentError("No configuration file given!");
-            return;
-        }
-
         if (cliOptions.getLocation().isEmpty()) {
             throwBadArgumentError("No location directory given!");
             return;
         }
 
+        final Name subCommandName = Name.betterValueOf(arguments.getFirstArgument());
+
+        if (subCommandName != Name.INSTALL) {
+            if (cliOptions.getConfigurationFile().isEmpty()) {
+                throwBadArgumentError("No configuration file given!");
+                return;
+            }
+        }
+
         final SubCommand cmd
-                = subCommands.forName(
-                        Name.betterValueOf(arguments.getFirstArgument()),
-                        JUberblog.generate(cliOptions, getIoStreams()));
+                = subCommands.forName(subCommandName, JUberblog.generate(cliOptions, getIoStreams()));
         cmd.execute();
     }
 
@@ -206,6 +208,7 @@ public final class App extends InvokableAdapter {
 
     /**
      * Throw a generic bad CLI argument error with exception for debug output the stack trace.
+     *
      * @param ex may be {@code null}
      * @throws ApplicationException always
      */
@@ -297,6 +300,7 @@ public final class App extends InvokableAdapter {
      * Creates sub command instances.
      */
     public interface Factory {
+
         /**
          * Creates sub command for name.
          * <p>

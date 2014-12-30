@@ -41,7 +41,7 @@ public class AppTest extends IntegrationTestCase {
 
     private static final String NL = String.format("%n");
     private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
-    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>" + NL
+    private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]" + NL
             + NL
             + "Commandline tool to manage your blog." + NL
             + NL
@@ -71,7 +71,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showUsageIfNoArgument() throws Exception {
-        output.expectErr("Usage: juberblog create|install|publish [-h] [-v]");
+        output.expectErr("Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[0]));
 
@@ -80,7 +80,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showUsageIfBadSubCommand() {
-        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"foobar"}));
 
@@ -89,7 +89,7 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void showUsageIfBadArgument() {
-        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"--foobar"}));
 
@@ -289,7 +289,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_CREATE() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"create", "-x"}));
 
@@ -299,7 +299,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_INSTALL() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"install", "-x"}));
 
@@ -309,7 +309,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_PUBLISH() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>");
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"publish", "-x"}));
 
@@ -319,7 +319,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_CREATE() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "create",
@@ -333,7 +333,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_CREATE() throws Exception {
         output.expectErr(equalTo("FATAL: No configuration file given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "create",
@@ -364,25 +364,11 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_INSTALL() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "install",
             "-c", createPath("config.properties").toString()});
-
-        App.main(sut);
-
-        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
-    }
-
-    @Test
-    public void missingConfig_INSTALL() throws Exception {
-        output.expectErr(equalTo("FATAL: No configuration file given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
-
-        final App sut = createApp(new String[]{
-            "install",
-            "-l", tmp.getRoot().toPath().toString()});
 
         App.main(sut);
 
@@ -411,7 +397,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_PUBLISH() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "publish",
@@ -425,7 +411,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_PUBLISH() throws Exception {
         output.expectErr(equalTo("FATAL: No configuration file given!\n"
-                + "Usage: juberblog create|install|publish [-h] [-v] -c <file> -l <dir>\n"));
+                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "publish",

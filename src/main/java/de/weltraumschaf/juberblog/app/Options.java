@@ -37,7 +37,7 @@ public final class Options {
             = SubCommand.Name.CREATE.name().toLowerCase() + "|"
             + SubCommand.Name.INSTALL.name().toLowerCase() + "|"
             + SubCommand.Name.PUBLISH.name().toLowerCase()
-            + " [-h] [-v] -c <file> -l <dir>";
+            + " -l <dir> [-c <file>] [-h] [-v]";
     /**
      * Help description.
      */
