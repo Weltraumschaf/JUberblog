@@ -12,7 +12,12 @@
 
 package de.weltraumschaf.juberblog.core;
 
+import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.Page.Pages;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Common functionality for all tasks.
@@ -54,5 +59,31 @@ public abstract class BaseTask<R, P> implements Task<R, P> {
     @SuppressWarnings("unchecked")
     static final <T> Class<T> castClass(final Class<?> aClass) {
         return (Class<T>) aClass;
+    }
+
+    /**
+     * Convert collection of pages into plain java collections for assigning them to the templates.
+     *
+     * @param pages must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
+    protected final Collection<Map<String, String>> convert(final Pages pages) {
+        final Collection<Map<String, String>> items = Lists.newArrayList();
+
+        for (final Page page : pages) {
+            items.add(convert(page));
+        }
+
+        return Collections.unmodifiableCollection(items);
+    }
+
+    /**
+     * Converts a single page into plain java collections for assigning them to the templates.
+     *
+     * @param page must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     */
+    protected Map<String, String> convert(final Page page) {
+        return Collections.emptyMap();
     }
 }

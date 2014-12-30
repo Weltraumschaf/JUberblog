@@ -12,7 +12,6 @@
 package de.weltraumschaf.juberblog.publish;
 
 import com.beust.jcommander.internal.Maps;
-import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
@@ -28,7 +27,6 @@ import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -78,30 +76,8 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         return null;
     }
 
-    /**
-     * Convert collection of pages into plain java collections for assigning them to the templates.
-     *
-     * @param pages must not be {@code null}
-     * @return never {@code null}, unmodifiable
-     */
-    private Collection<Map<String, String>> convert(final Pages pages) {
-        final Collection<Map<String, String>> items = Lists.newArrayList();
-
-        for (final Page page : pages) {
-            items.add(convert(page));
-        }
-
-        return Collections.unmodifiableCollection(items);
-    }
-
-    /**
-     * Converts a single page into plain java collections for assigning them to the templates.
-     *
-     * @param page must not be {@code null}
-     * @return never {@code null}, unmodifiable
-     */
-    private Map<String, String> convert(final Page page) {
-        // XXX: Code duplication de.weltraumschaf.juberblog.publish.GenerateIndexTask.convert(de.weltraumschaf.juberblog.core.Page):java.util.Map<java.lang.String,java.lang.String>
+    @Override
+    protected Map<String, String> convert(final Page page) {
         final Map<String, String> item = Maps.newHashMap();
         item.put("loc", page.getLink().toString());
         // XXX Introduce last mod date.
