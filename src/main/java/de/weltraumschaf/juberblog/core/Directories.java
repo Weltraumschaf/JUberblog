@@ -117,11 +117,11 @@ public final class Directories {
     @Override
     public int hashCode() {
         return Objects.hash(
-                postsData.toString(),
-                sitesData.toString(),
-                output.toString(),
-                postsOutput.toString(),
-                siteOutput.toString());
+                postsData,
+                sitesData,
+                output,
+                postsOutput,
+                siteOutput);
     }
 
     @Override
@@ -132,21 +132,21 @@ public final class Directories {
 
         final Directories other = (Directories) obj;
 
-        return Objects.equals(postsData.toString(), other.postsData.toString())
-                && Objects.equals(sitesData.toString(), other.sitesData.toString())
-                && Objects.equals(output.toString(), other.output.toString())
-                && Objects.equals(postsOutput.toString(), other.postsOutput.toString())
-                && Objects.equals(siteOutput.toString(), other.siteOutput.toString());
+        return Objects.equals(postsData, other.postsData)
+                && Objects.equals(sitesData, other.sitesData)
+                && Objects.equals(output, other.output)
+                && Objects.equals(postsOutput, other.postsOutput)
+                && Objects.equals(siteOutput, other.siteOutput);
     }
 
     @Override
     public String toString() {
         return "Directories{"
-                + "postsData=" + postsData.toString() + ", "
-                + "sitesData=" + sitesData.toString() + ", "
-                + "output=" + output.toString() + ", "
-                + "postsOutput=" + postsOutput.toString() + ", "
-                + "siteOutput=" + siteOutput.toString()
+                + "postsData=" + postsData + ", "
+                + "sitesData=" + sitesData + ", "
+                + "output=" + output + ", "
+                + "postsOutput=" + postsOutput + ", "
+                + "siteOutput=" + siteOutput
                 + '}';
     }
 
