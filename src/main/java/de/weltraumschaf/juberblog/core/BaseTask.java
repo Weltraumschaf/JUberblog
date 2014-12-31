@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * Common functionality for all tasks.
  *
- *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  * @param <R> type of return value
  * @param <P> type of previous result
