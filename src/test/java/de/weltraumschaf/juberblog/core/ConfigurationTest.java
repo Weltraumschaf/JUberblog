@@ -15,6 +15,7 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Properties;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -45,6 +46,27 @@ public class ConfigurationTest extends BaseTestCase {
                 + PACKAGE.replace(".", DIR_SEP)
                 + DIR_SEP + "configuration.sample.properties";
         sut = new Configuration(fileName);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void construct_withNullAsProperties() throws IOException {
+        new Configuration((Properties) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void construct_withNullAsFileName() throws IOException {
+        new Configuration((String) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void construct_withEmptyAFileName() throws IOException {
+        new Configuration("");
+    }
+
+    @Test
+    public void equalsContract() {
+        EqualsVerifier.forClass(Configuration.class)
+                .verify();
     }
 
     @Test

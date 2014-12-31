@@ -113,7 +113,7 @@ public final class Configuration {
      * @throws IOException if configuration file can not be loaded
      */
     static Properties load(final String filename) throws IOException {
-        Validate.notNull(filename, "filename");
+        Validate.notEmpty(filename, "filename");
         final Properties properties = new Properties();
 
         try (final InputStream in = new FileInputStream(new File(filename))) {
