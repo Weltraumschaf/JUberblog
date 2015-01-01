@@ -53,6 +53,7 @@ public class BaseTaskTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
+    @SuppressWarnings("unchecked")
     public void convert_pages_returnUnmodifiable() {
         sut.convert(new Pages()).add(mock(Map.class));
     }
@@ -61,7 +62,7 @@ public class BaseTaskTest {
         final Pages pages = new Pages();
         pages.add(new Page("title one", URI.create("/foo"), "", new DateTime(), Page.Type.POST));
         pages.add(new Page("title two", URI.create("/bar"), "", new DateTime(), Page.Type.POST));
-        
+
         Collection<Map<String, String>> result = new BaseTaskWithConvertStub().convert(pages);
 
         assertThat(result, hasSize(2));

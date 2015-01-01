@@ -37,7 +37,8 @@ public class TemplatesTest {
             Paths.get("siteTemplate"),
             Paths.get("feedTemplate"),
             Paths.get("indexTemplate"),
-            Paths.get("siteMapTemplate")
+            Paths.get("siteMapTemplate"),
+            Paths.get("create/post_or_site")
     );
 
     @Test
@@ -47,6 +48,7 @@ public class TemplatesTest {
 
         new Templates(
                 null,
+                mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
@@ -65,6 +67,7 @@ public class TemplatesTest {
                 mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
+                mock(Path.class),
                 mock(Path.class));
     }
 
@@ -77,6 +80,7 @@ public class TemplatesTest {
                 mock(Path.class),
                 mock(Path.class),
                 null,
+                mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
                 mock(Path.class));
@@ -93,6 +97,7 @@ public class TemplatesTest {
                 mock(Path.class),
                 null,
                 mock(Path.class),
+                mock(Path.class),
                 mock(Path.class));
     }
 
@@ -107,6 +112,7 @@ public class TemplatesTest {
                 mock(Path.class),
                 mock(Path.class),
                 null,
+                mock(Path.class),
                 mock(Path.class));
     }
 
@@ -116,6 +122,22 @@ public class TemplatesTest {
         thrown.expectMessage("siteMapTemplate");
 
         new Templates(
+                mock(Path.class),
+                mock(Path.class),
+                mock(Path.class),
+                mock(Path.class),
+                mock(Path.class),
+                null,
+                mock(Path.class));
+    }
+
+    @Test
+    public void construct_withNullAscreateSiteOrPostTemplate() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage("createSiteOrPostTemplate");
+
+        new Templates(
+                mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
                 mock(Path.class),
@@ -170,6 +192,11 @@ public class TemplatesTest {
     @Test
     public void getSiteMapTemplate() {
         assertThat(sut.getSiteMapTemplate().toString(), is("siteMapTemplate"));
+    }
+
+    @Test
+    public void getCreateSiteOrPostTemplate() {
+        assertThat(sut.getCreateSiteOrPostTemplate().toString(), is("create/post_or_site"));
     }
 
 }

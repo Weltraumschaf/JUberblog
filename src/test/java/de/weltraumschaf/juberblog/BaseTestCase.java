@@ -64,7 +64,8 @@ public abstract class BaseTestCase {
                 createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
                 createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"));
+                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"),
+                createPath(SCAFOLD_PACKAGE_PREFIX + "create/post_or_site.md.ftl"));
     }
 
     protected final Configuration createConfig() {

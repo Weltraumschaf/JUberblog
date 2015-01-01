@@ -110,6 +110,11 @@
         </dependency>
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>string</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>testing</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>

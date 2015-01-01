@@ -63,6 +63,8 @@ public class DirectoriesTest {
                 "Directories{"
                 + "postsData=/blog/data/posts, "
                 + "sitesData=/blog/data/sites, "
+                + "postsDraftData=/blog/data/drafts/posts, "
+                + "sitesDraftData=/blog/data/drafts/sites, "
                 + "output=/blog/public, "
                 + "postsOutput=/blog/public/posts, "
                 + "siteOutput=/blog/public/sites}"));
@@ -93,4 +95,13 @@ public class DirectoriesTest {
         assertThat(sut.getSitesOutput().toString(), is("/blog/public/sites"));
     }
 
+    @Test
+    public void getPostsDraftData() {
+        assertThat(sut.getPostsDraftData().toString(), is("/blog/data/drafts/posts"));
+    }
+
+    @Test
+    public void getSitesDraftData() {
+        assertThat(sut.getSitesDraftData().toString(), is("/blog/data/drafts/sites"));
+    }
 }

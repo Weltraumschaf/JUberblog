@@ -46,6 +46,7 @@ public final class Templates {
      * Template for site map XML.
      */
     private final Path siteMapTemplate;
+    private final Path createSiteOrPostTemplate;
 
     /**
      * Dedicated constructor.
@@ -56,6 +57,7 @@ public final class Templates {
      * @param feedTemplate must not be {@code null}
      * @param indexTemplate must not be {@code null}
      * @param siteMapTemplate must not be {@code null}
+     * @param createSiteOrPostTemplate must not be {@code null}
      */
     public Templates(
             final Path layoutTemplate,
@@ -63,7 +65,8 @@ public final class Templates {
             final Path siteTemplate,
             final Path feedTemplate,
             final Path indexTemplate,
-            final Path siteMapTemplate) {
+            final Path siteMapTemplate,
+            final Path createSiteOrPostTemplate) {
         super();
         this.layoutTemplate = Validate.notNull(layoutTemplate, "layoutTemplate");
         this.postTemplate = Validate.notNull(postTemplate, "postTemplate");
@@ -71,6 +74,7 @@ public final class Templates {
         this.feedTemplate = Validate.notNull(feedTemplate, "feedTemplate");
         this.indexTemplate = Validate.notNull(indexTemplate, "indexTemplate");
         this.siteMapTemplate = Validate.notNull(siteMapTemplate, "siteMapTemplate");
+        this.createSiteOrPostTemplate = Validate.notNull(createSiteOrPostTemplate, "createSiteOrPostTemplate");
     }
 
     /**
@@ -125,6 +129,9 @@ public final class Templates {
      */
     public Path getSiteMapTemplate() {
         return siteMapTemplate;
+    }
+    public Path getCreateSiteOrPostTemplate() {
+        return createSiteOrPostTemplate;
     }
 
     @Override

@@ -55,7 +55,9 @@ public class AppTest extends IntegrationTestCase {
             + "                      and overwrites existing files." + NL
             + "  -h, --help          Show this help." + NL
             + "  -l, --location      Location of the blog installation." + NL
+            + "  -s, --site          Create site." + NL
             + "  -v, --version       Show the version." + NL
+            + "  -d, --draft         Create site/post as draft." + NL
             + NL
             + "Example" + NL
             + NL

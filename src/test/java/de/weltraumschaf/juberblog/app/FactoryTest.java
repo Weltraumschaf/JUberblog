@@ -24,7 +24,6 @@ import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import java.nio.file.Paths;
-import java.util.Properties;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -42,6 +41,7 @@ public class FactoryTest extends BaseTestCase {
             Paths.get("."),
             Paths.get("."));
     private final Templates templates = new Templates(
+            Paths.get("."),
             Paths.get("."),
             Paths.get("."),
             Paths.get("."),

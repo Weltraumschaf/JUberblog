@@ -89,7 +89,17 @@ public final class Options {
      */
     @Parameter(names = {"--verbose"}, description = "Tell you more.")
     private boolean verbose;
+    /**
+     * Draft flag.
+     */
+    @Parameter(names = {"-d", "--draft" }, description = "Create site/post as draft.")
+    private boolean draft;
 
+    /**
+     * Site flag.
+     */
+    @Parameter(names = {"-s", "--site" }, description = "Create site.")
+    private boolean site;
     /**
      * Where is the blog installed.
      */
@@ -191,10 +201,28 @@ public final class Options {
     /**
      * Whether to display verbose messages.
      *
-     * @return {@code true} for verbosing, else {@code false}
+     * @return {@code true} for verbose output, else {@code false}
      */
     public boolean isVerbose() {
         return verbose;
+    }
+
+    /**
+     * Whether to create a draft.
+     *
+     * @return {@code true} for draft, {@code false} for not
+     */
+    public boolean isDraft() {
+        return draft;
+    }
+
+    /**
+     * Whether to create a site or a post.
+     *
+     * @return {@code true} for site, {@code false} for post
+     */
+    public boolean isSite() {
+        return site;
     }
 
     /**
@@ -224,7 +252,9 @@ public final class Options {
                 force,
                 update,
                 verbose,
-                version);
+                version,
+                draft,
+                site);
     }
 
     @Override
@@ -240,7 +270,9 @@ public final class Options {
                 && Objects.equals(force, other.force)
                 && Objects.equals(update, other.update)
                 && Objects.equals(verbose, other.verbose)
-                && Objects.equals(version, other.version);
+                && Objects.equals(version, other.version)
+                && Objects.equals(draft, other.draft)
+                && Objects.equals(site, other.site);
     }
 
 }

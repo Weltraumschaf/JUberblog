@@ -45,6 +45,7 @@ public class JUberblog_BuilderTest extends BaseTestCase {
             Paths.get("."),
             Paths.get("."),
             Paths.get("."),
+            Paths.get("."),
             Paths.get("."));
     private final Configuration configuration = new Configuration(createProperties());
     private final Options options = new Options();

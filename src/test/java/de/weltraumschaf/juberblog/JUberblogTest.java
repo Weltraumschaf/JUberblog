@@ -56,7 +56,8 @@ public class JUberblogTest extends BaseTestCase {
                 location.resolve("templates/site.ftl"),
                 location.resolve("templates/feed.ftl"),
                 location.resolve("templates/index.ftl"),
-                location.resolve("templates/site_map.ftl"))));
+                location.resolve("templates/site_map.ftl"),
+                location.resolve("templates/create/post_or_site.md.ftl"))));
         final Properties config = new Properties();
         config.setProperty(Configuration.TITLE, "Blog Title");
         config.setProperty(Configuration.DESCRIPTION, "Blog Description");

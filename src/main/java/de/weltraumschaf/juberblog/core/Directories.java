@@ -31,6 +31,8 @@ public final class Directories {
      */
     private static final String POSTS_DIR_NAME = "posts";
 
+    private static final String DRAFTS_DIR_NAME = "drafts";
+
     /**
      * Where to find the post's Markdown files.
      */
@@ -39,6 +41,8 @@ public final class Directories {
      * Where to find the site's Markdown files.
      */
     private final Path sitesData;
+    private final Path postsDraftData;
+    private final Path sitesDraftData;
     /**
      * Where to store published files.
      */
@@ -64,6 +68,8 @@ public final class Directories {
         Validate.notNull(outputDir, "outputDir");
         this.postsData = dataDir.resolve(POSTS_DIR_NAME);
         this.sitesData = dataDir.resolve(SITES_DIR_NAME);
+        this.postsDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(POSTS_DIR_NAME);
+        this.sitesDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(SITES_DIR_NAME);
         this.output = outputDir;
         this.postsOutput = outputDir.resolve(POSTS_DIR_NAME);
         this.siteOutput = outputDir.resolve(SITES_DIR_NAME);
@@ -85,6 +91,14 @@ public final class Directories {
      */
     public Path getSitesData() {
         return sitesData;
+    }
+
+    public Path getPostsDraftData() {
+        return postsDraftData;
+    }
+
+    public Path getSitesDraftData() {
+        return sitesDraftData;
     }
 
     /**
@@ -119,6 +133,8 @@ public final class Directories {
         return Objects.hash(
                 postsData,
                 sitesData,
+                postsDraftData,
+                sitesDraftData,
                 output,
                 postsOutput,
                 siteOutput);
@@ -134,6 +150,8 @@ public final class Directories {
 
         return Objects.equals(postsData, other.postsData)
                 && Objects.equals(sitesData, other.sitesData)
+                && Objects.equals(postsDraftData, other.postsDraftData)
+                && Objects.equals(sitesDraftData, other.sitesDraftData)
                 && Objects.equals(output, other.output)
                 && Objects.equals(postsOutput, other.postsOutput)
                 && Objects.equals(siteOutput, other.siteOutput);
@@ -144,6 +162,8 @@ public final class Directories {
         return "Directories{"
                 + "postsData=" + postsData + ", "
                 + "sitesData=" + sitesData + ", "
+                + "postsDraftData=" + postsDraftData + ", "
+                + "sitesDraftData=" + sitesDraftData + ", "
                 + "output=" + output + ", "
                 + "postsOutput=" + postsOutput + ", "
                 + "siteOutput=" + siteOutput

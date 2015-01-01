@@ -233,7 +233,8 @@ public final class JUberblog {
                 templateDir.resolve("site.ftl"),
                 templateDir.resolve("feed.ftl"),
                 templateDir.resolve("index.ftl"),
-                templateDir.resolve("site_map.ftl"));
+                templateDir.resolve("site_map.ftl"),
+                templateDir.resolve("create/post_or_site.md.ftl"));
     }
 
     /**
