@@ -701,29 +701,6 @@ final class ReflectionHelper {
     }
 
     /**
-     * Create a {@link javax.ws.rs.core.GenericType generic type} information for a given
-     * Java {@code instance}.
-     * <p>
-     * If the supplied instance is an instance of {@link javax.ws.rs.core.GenericEntity}, the generic type
-     * information will be computed using the {@link javax.ws.rs.core.GenericEntity#getType()}
-     * information. Otherwise the {@code instance.getClass()} will be used.
-     * </p>
-     *
-     *
-     * @param instance Java instance for which the {@code GenericType} description should be created.
-     * @return {@code GenericType} describing the Java {@code instance}.
-     */
-    public static GenericType genericTypeFor(Object instance) {
-        GenericType genericType;
-        if (instance instanceof GenericEntity) {
-            genericType = new GenericType(((GenericEntity) instance).getType());
-        } else {
-            genericType = (instance == null) ? null : new GenericType(instance.getClass());
-        }
-        return genericType;
-    }
-
-    /**
      * Determine whether a given method is {@code setter}.
      *
      * @param method method to be examined.
@@ -790,36 +767,36 @@ final class ReflectionHelper {
      * @return the parameterized class arguments, or null if the generic
      *         interface type is not a parameterized type.
      */
-    public static Class[] getParameterizedClassArguments(DeclaringClassInterfacePair p) {
-        if (p.genericInterface instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) p.genericInterface;
-            Type[] as = pt.getActualTypeArguments();
-            Class[] cas = new Class[as.length];
-
-            for (int i = 0; i < as.length; i++) {
-                Type a = as[i];
-                if (a instanceof Class) {
-                    cas[i] = (Class) a;
-                } else if (a instanceof ParameterizedType) {
-                    pt = (ParameterizedType) a;
-                    cas[i] = (Class) pt.getRawType();
-                } else if (a instanceof TypeVariable) {
-                    final TypeVariable tv = (TypeVariable) a;
-                    ClassTypePair ctp = resolveTypeVariable(p.concreteClass, p.declaringClass, tv);
-                    cas[i] = (ctp != null) ? ctp.rawClass() : (Class<?>) (tv.getBounds()[0]);
-                } else if (a instanceof GenericArrayType) {
-                    final GenericArrayType gat = (GenericArrayType) a;
-                    Type t = gat.getGenericComponentType();
-                    if (t instanceof Class) {
-                        cas[i] = getArrayForComponentType((Class<?>) t);
-                    }
-                }
-            }
-            return cas;
-        } else {
-            return null;
-        }
-    }
+//    public static Class[] getParameterizedClassArguments(DeclaringClassInterfacePair p) {
+//        if (p.genericInterface instanceof ParameterizedType) {
+//            ParameterizedType pt = (ParameterizedType) p.genericInterface;
+//            Type[] as = pt.getActualTypeArguments();
+//            Class[] cas = new Class[as.length];
+//
+//            for (int i = 0; i < as.length; i++) {
+//                Type a = as[i];
+//                if (a instanceof Class) {
+//                    cas[i] = (Class) a;
+//                } else if (a instanceof ParameterizedType) {
+//                    pt = (ParameterizedType) a;
+//                    cas[i] = (Class) pt.getRawType();
+//                } else if (a instanceof TypeVariable) {
+//                    final TypeVariable tv = (TypeVariable) a;
+//                    ClassTypePair ctp = resolveTypeVariable(p.concreteClass, p.declaringClass, tv);
+//                    cas[i] = (ctp != null) ? ctp.rawClass() : (Class<?>) (tv.getBounds()[0]);
+//                } else if (a instanceof GenericArrayType) {
+//                    final GenericArrayType gat = (GenericArrayType) a;
+//                    Type t = gat.getGenericComponentType();
+//                    if (t instanceof Class) {
+//                        cas[i] = getArrayForComponentType((Class<?>) t);
+//                    }
+//                }
+//            }
+//            return cas;
+//        } else {
+//            return null;
+//        }
+//    }
 
     /**
      * Get the parameterized type arguments for a declaring class that
@@ -829,33 +806,33 @@ final class ReflectionHelper {
      * @return the parameterized type arguments, or null if the generic
      *         interface type is not a parameterized type.
      */
-    public static Type[] getParameterizedTypeArguments(DeclaringClassInterfacePair p) {
-        if (p.genericInterface instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) p.genericInterface;
-            Type[] as = pt.getActualTypeArguments();
-            Type[] ras = new Type[as.length];
-
-            for (int i = 0; i < as.length; i++) {
-                Type a = as[i];
-                if (a instanceof Class) {
-                    ras[i] = a;
-                } else if (a instanceof ParameterizedType) {
-                    ras[i] = a;
-                } else if (a instanceof TypeVariable) {
-                    ClassTypePair ctp = resolveTypeVariable(p.concreteClass, p.declaringClass, (TypeVariable) a);
-                    if (ctp == null) {
-                        throw new IllegalArgumentException(
-                                String.format("Unable to resolve generic type value of %s for an instance of %s."
-                                        , p.genericInterface, p.concreteClass));
-                    }
-                    ras[i] = ctp.type();
-                }
-            }
-            return ras;
-        } else {
-            return null;
-        }
-    }
+//    public static Type[] getParameterizedTypeArguments(DeclaringClassInterfacePair p) {
+//        if (p.genericInterface instanceof ParameterizedType) {
+//            ParameterizedType pt = (ParameterizedType) p.genericInterface;
+//            Type[] as = pt.getActualTypeArguments();
+//            Type[] ras = new Type[as.length];
+//
+//            for (int i = 0; i < as.length; i++) {
+//                Type a = as[i];
+//                if (a instanceof Class) {
+//                    ras[i] = a;
+//                } else if (a instanceof ParameterizedType) {
+//                    ras[i] = a;
+//                } else if (a instanceof TypeVariable) {
+//                    ClassTypePair ctp = resolveTypeVariable(p.concreteClass, p.declaringClass, (TypeVariable) a);
+//                    if (ctp == null) {
+//                        throw new IllegalArgumentException(
+//                                String.format("Unable to resolve generic type value of %s for an instance of %s."
+//                                        , p.genericInterface, p.concreteClass));
+//                    }
+//                    ras[i] = ctp.type();
+//                }
+//            }
+//            return ras;
+//        } else {
+//            return null;
+//        }
+//    }
 
     /**
      * Find the declaring class that implements or extends an interface.
@@ -911,180 +888,6 @@ final class ReflectionHelper {
             }
         }
         return null;
-    }
-
-    /**
-     * Resolve generic type parameter(s) of a raw class and it's generic type
-     * based on the class that declares the generic type parameter(s) to be resolved
-     * and a concrete implementation of the declaring class.
-     *
-     * @param concreteClass       concrete implementation of the declaring class.
-     * @param declaringClass      class declaring the generic type parameter(s) to be
-     *                            resolved.
-     * @param rawResolvedType     raw class of the generic type to be resolved.
-     * @param genericResolvedType generic type information of th type to be resolved.
-     * @return a pair of class and the generic type values with the the resolved
-     *         generic parameter types.
-     */
-    public static ClassTypePair resolveGenericType(final Class concreteClass, final Class declaringClass,
-                                                   final Class rawResolvedType, final Type genericResolvedType) {
-        if (genericResolvedType instanceof TypeVariable) {
-            ClassTypePair ct = resolveTypeVariable(
-                    concreteClass,
-                    declaringClass,
-                    (TypeVariable) genericResolvedType);
-
-            if (ct != null) {
-                return ct;
-            }
-        } else if (genericResolvedType instanceof ParameterizedType) {
-            final ParameterizedType pt = (ParameterizedType) genericResolvedType;
-            final Type[] ptts = pt.getActualTypeArguments();
-            boolean modified = false;
-            for (int i = 0; i < ptts.length; i++) {
-                ClassTypePair ct =
-                        resolveGenericType(concreteClass, declaringClass, (Class) pt.getRawType(), ptts[i]);
-                if (ct.type() != ptts[i]) {
-                    ptts[i] = ct.type();
-                    modified = true;
-                }
-            }
-            if (modified) {
-                ParameterizedType rpt = new ParameterizedType() {
-
-                    @Override
-                    public Type[] getActualTypeArguments() {
-                        return ptts.clone();
-                    }
-
-                    @Override
-                    public Type getRawType() {
-                        return pt.getRawType();
-                    }
-
-                    @Override
-                    public Type getOwnerType() {
-                        return pt.getOwnerType();
-                    }
-                };
-                return ClassTypePair.of((Class<?>) pt.getRawType(), rpt);
-            }
-        } else if (genericResolvedType instanceof GenericArrayType) {
-            GenericArrayType gat = (GenericArrayType) genericResolvedType;
-            final ClassTypePair ct =
-                    resolveGenericType(concreteClass, declaringClass, null, gat.getGenericComponentType());
-            if (gat.getGenericComponentType() != ct.type()) {
-                try {
-                    Class ac = ReflectionHelper.getArrayForComponentType(ct.rawClass());
-                    return ClassTypePair.of(ac);
-                } catch (Exception e) {
-                    LOGGER.log(Level.FINEST, "", e);
-                }
-            }
-        }
-
-        return ClassTypePair.of(rawResolvedType, genericResolvedType);
-    }
-
-    /**
-     * Given a type variable resolve the Java class of that variable.
-     *
-     * @param c  the concrete class from which all type variables are resolved.
-     * @param dc the declaring class where the type variable was defined.
-     * @param tv the type variable.
-     * @return the resolved Java class and type, otherwise null if the type variable
-     *         could not be resolved.
-     */
-    public static ClassTypePair resolveTypeVariable(Class<?> c, Class<?> dc, TypeVariable tv) {
-        return resolveTypeVariable(c, dc, tv, new HashMap<TypeVariable, Type>());
-    }
-
-    private static ClassTypePair resolveTypeVariable(Class<?> c, Class<?> dc, TypeVariable tv,
-                                                     Map<TypeVariable, Type> map) {
-        Type[] gis = c.getGenericInterfaces();
-        for (Type gi : gis) {
-            if (gi instanceof ParameterizedType) {
-                // process pt of interface
-                ParameterizedType pt = (ParameterizedType) gi;
-                ClassTypePair ctp = resolveTypeVariable(pt, (Class<?>) pt.getRawType(), dc, tv, map);
-                if (ctp != null) {
-                    return ctp;
-                }
-            }
-        }
-
-        Type gsc = c.getGenericSuperclass();
-        if (gsc instanceof ParameterizedType) {
-            // process pt of class
-            ParameterizedType pt = (ParameterizedType) gsc;
-            return resolveTypeVariable(pt, c.getSuperclass(), dc, tv, map);
-        } else if (gsc instanceof Class) {
-            return resolveTypeVariable(c.getSuperclass(), dc, tv, map);
-        }
-        return null;
-    }
-
-    private static ClassTypePair resolveTypeVariable(ParameterizedType pt, Class<?> c, Class<?> dc, TypeVariable tv,
-                                                     Map<TypeVariable, Type> map) {
-        Type[] typeArguments = pt.getActualTypeArguments();
-
-        TypeVariable[] typeParameters = c.getTypeParameters();
-
-        Map<TypeVariable, Type> subMap = new HashMap<TypeVariable, Type>();
-        for (int i = 0; i < typeArguments.length; i++) {
-            // Substitute a type variable with the Java class
-            final Type typeArgument = typeArguments[i];
-            if (typeArgument instanceof TypeVariable) {
-                Type t = map.get(typeArgument);
-                subMap.put(typeParameters[i], t);
-            } else {
-                subMap.put(typeParameters[i], typeArgument);
-            }
-        }
-
-        if (c == dc) {
-            Type t = subMap.get(tv);
-            if (t instanceof Class) {
-                return ClassTypePair.of((Class) t);
-            } else if (t instanceof GenericArrayType) {
-                GenericArrayType gat = (GenericArrayType) t;
-                t = gat.getGenericComponentType();
-                if (t instanceof Class) {
-                    c = (Class<?>) t;
-                    try {
-                        return ClassTypePair.of(getArrayForComponentType(c));
-                    } catch (Exception ignored) {
-                        // ignored
-                    }
-                    return null;
-                } else if (t instanceof ParameterizedType) {
-                    Type rt = ((ParameterizedType) t).getRawType();
-                    if (rt instanceof Class) {
-                        c = (Class<?>) rt;
-                    } else {
-                        return null;
-                    }
-                    try {
-                        return ClassTypePair.of(getArrayForComponentType(c), gat);
-                    } catch (Exception e) {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            } else if (t instanceof ParameterizedType) {
-                pt = (ParameterizedType) t;
-                if (pt.getRawType() instanceof Class) {
-                    return ClassTypePair.of((Class<?>) pt.getRawType(), pt);
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        } else {
-            return resolveTypeVariable(c, dc, tv, subMap);
-        }
     }
 
     /**

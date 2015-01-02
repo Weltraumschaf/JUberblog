@@ -582,27 +582,25 @@ class UriComponent {
         }
     }
 
-    private static final class PathSegmentImpl implements PathSegment {
+    private static final class PathSegment {
 
-        private static final PathSegment EMPTY_PATH_SEGMENT = new PathSegmentImpl("", false);
+        private static final PathSegment EMPTY_PATH_SEGMENT = new PathSegment("", false);
         private final String path;
         private final MultivaluedMap<String, String> matrixParameters;
 
-        PathSegmentImpl(String path, boolean decode) {
+        PathSegment(String path, boolean decode) {
             this(path, decode, new MultivaluedStringMap());
         }
 
-        PathSegmentImpl(String path, boolean decode, MultivaluedMap<String, String> matrixParameters) {
+        PathSegment(String path, boolean decode, MultivaluedMap<String, String> matrixParameters) {
             this.path = (decode) ? UriComponent.decode(path, UriComponent.Type.PATH_SEGMENT) : path;
             this.matrixParameters = matrixParameters;
         }
 
-        @Override
         public String getPath() {
             return path;
         }
 
-        @Override
         public MultivaluedMap<String, String> getMatrixParameters() {
             return matrixParameters;
         }
@@ -663,13 +661,13 @@ class UriComponent {
             if (e > s) {
                 decodePathSegment(segments, path.substring(s, e), decode);
             } else if (e == s) {
-                segments.add(PathSegmentImpl.EMPTY_PATH_SEGMENT);
+                segments.add(PathSegment.EMPTY_PATH_SEGMENT);
             }
         } while (e != -1);
         if (s < path.length()) {
             decodePathSegment(segments, path.substring(s), decode);
         } else {
-            segments.add(PathSegmentImpl.EMPTY_PATH_SEGMENT);
+            segments.add(PathSegment.EMPTY_PATH_SEGMENT);
         }
         return segments;
     }
@@ -684,12 +682,12 @@ class UriComponent {
     public static void decodePathSegment(List<PathSegment> segments, String segment, boolean decode) {
         int colon = segment.indexOf(';');
         if (colon != -1) {
-            segments.add(new PathSegmentImpl(
+            segments.add(new PathSegment(
                     (colon == 0) ? "" : segment.substring(0, colon),
                     decode,
                     decodeMatrix(segment, decode)));
         } else {
-            segments.add(new PathSegmentImpl(
+            segments.add(new PathSegment(
                     segment,
                     decode));
         }
