@@ -354,38 +354,6 @@ public final class UriBuilder extends BaseUriBuilder {
     }
 
     @Override
-    public UriBuilder path(Class resource, String methodName) {
-        checkSsp();
-        if (resource == null) {
-            throw new IllegalArgumentException("Parameter 'resource' must not be null!");
-        }
-        if (methodName == null) {
-            throw new IllegalArgumentException("Parameter 'methodName' must not be null!");
-        }
-
-        Method[] methods = AccessController.doPrivileged(ReflectionHelper.getMethodsPA(resource));
-        Method found = null;
-        for (Method m : methods) {
-            if (methodName.equals(m.getName())) {
-                if (found == null) {
-                    found = m;
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            }
-        }
-
-        if (found == null) {
-            throw new IllegalArgumentException(String.format("The method named \"%s\" is not specified by %s.",
-                    methodName, resource));
-        }
-
-        appendPath(getPath(found));
-
-        return this;
-    }
-
-    @Override
     public UriBuilder path(Method method) {
         checkSsp();
         if (method == null) {
