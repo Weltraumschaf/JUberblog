@@ -16,7 +16,7 @@
 
 package de.weltraumschaf.juberblog.uri;
 
-import static de.weltraumschaf.juberblog.uri.Preconditions.*;
+import de.weltraumschaf.commons.validate.Validate;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ final class Ints {
    */
   public static int checkedCast(long value) {
     int result = (int) value;
-    checkArgument(result == value, "Out of range: %s", value);
+    Validate.isTrue(result == value, String.format("Out of range: %s", value));
     return result;
   }
 
@@ -163,8 +163,8 @@ final class Ints {
    * @param target the array to search for as a sub-sequence of {@code array}
    */
   public static int indexOf(int[] array, int[] target) {
-    checkNotNull(array, "array");
-    checkNotNull(target, "target");
+    Validate.notNull(array, "array");
+    Validate.notNull(target, "target");
     if (target.length == 0) {
       return 0;
     }
@@ -214,7 +214,7 @@ final class Ints {
    * @throws IllegalArgumentException if {@code array} is empty
    */
   public static int min(int... array) {
-    checkArgument(array.length > 0);
+    Validate.isTrue(array.length > 0, "Given arguments must not be empty!");
     int min = array[0];
     for (int i = 1; i < array.length; i++) {
       if (array[i] < min) {
@@ -233,7 +233,7 @@ final class Ints {
    * @throws IllegalArgumentException if {@code array} is empty
    */
   public static int max(int... array) {
-    checkArgument(array.length > 0);
+    Validate.isTrue(array.length > 0, "Given arguments must not be empty!");
     int max = array[0];
     for (int i = 1; i < array.length; i++) {
       if (array[i] > max) {
@@ -298,8 +298,8 @@ final class Ints {
    * @throws IllegalArgumentException if {@code bytes} has fewer than 4 elements
    */
   public static int fromByteArray(byte[] bytes) {
-    checkArgument(bytes.length >= BYTES,
-        "array too small: %s < %s", bytes.length, BYTES);
+    Validate.isTrue(bytes.length >= BYTES,
+        String.format("array too small: %s < %s", bytes.length, BYTES));
     return fromBytes(bytes[0], bytes[1], bytes[2], bytes[3]);
   }
 
@@ -332,8 +332,8 @@ final class Ints {
    */
   public static int[] ensureCapacity(
       int[] array, int minLength, int padding) {
-    checkArgument(minLength >= 0, "Invalid minLength: %s", minLength);
-    checkArgument(padding >= 0, "Invalid padding: %s", padding);
+    Validate.isTrue(minLength >= 0, String.format("Invalid minLength: %s", minLength));
+    Validate.isTrue(padding >= 0, String.format("Invalid padding: %s", padding));
     return (array.length < minLength)
         ? copyOf(array, minLength + padding)
         : array;
@@ -356,7 +356,7 @@ final class Ints {
    * @param array an array of {@code int} values, possibly empty
    */
   public static String join(String separator, int... array) {
-    checkNotNull(separator);
+    Validate.notNull(separator);
     if (array.length == 0) {
       return "";
     }
@@ -429,8 +429,8 @@ final class Ints {
     int len = boxedArray.length;
     int[] array = new int[len];
     for (int i = 0; i < len; i++) {
-      // checkNotNull for GWT (do not optimize)
-      array[i] = ((Number) checkNotNull(boxedArray[i])).intValue();
+      // Validate.notNull for GWT (do not optimize)
+      array[i] = ((Number) Validate.notNull(boxedArray[i])).intValue();
     }
     return array;
   }
@@ -481,7 +481,7 @@ final class Ints {
     }
 
     @Override public Integer get(int index) {
-      checkElementIndex(index, size());
+      Validate.checkElementIndex(index, size());
       return array[start + index];
     }
 
@@ -514,16 +514,16 @@ final class Ints {
     }
 
     @Override public Integer set(int index, Integer element) {
-      checkElementIndex(index, size());
+      Validate.checkElementIndex(index, size());
       int oldValue = array[start + index];
-      // checkNotNull for GWT (do not optimize)
-      array[start + index] = checkNotNull(element);
+      // Validate.notNull for GWT (do not optimize)
+      array[start + index] = Validate.notNull(element);
       return oldValue;
     }
 
     @Override public List<Integer> subList(int fromIndex, int toIndex) {
       int size = size();
-      checkPositionIndexes(fromIndex, toIndex, size);
+      Validate.checkPositionIndexes(fromIndex, toIndex, size);
       if (fromIndex == toIndex) {
         return Collections.emptyList();
       }
