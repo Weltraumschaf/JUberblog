@@ -229,8 +229,8 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>java/**/ExitCodeImpl.class</exclude>
-                        <exclude>java/de/weltraumschaf/juberblog/uri/*</exclude>
+                        <exclude>**/ExitCodeImpl.class</exclude>
+                        <exclude>**/de/weltraumschaf/juberblog/uri/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
