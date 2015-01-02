@@ -171,6 +171,7 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
      * @throws NullPointerException if the supplied array of new values is {@code null}.
      */
     @Override
+    @SafeVarargs
     public final void addAll(K key, V... newValues) {
         if (newValues == null) {
             throw new NullPointerException("Supplied array of values must not be null.");

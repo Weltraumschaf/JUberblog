@@ -91,6 +91,7 @@ interface MultivaluedMap<K, V> extends Map<K, List<V>> {
      * @throws NullPointerException if the supplied array of new values is {@code null}.
      * @since 2.0
      */
+    @SuppressWarnings("unchecked")
     void addAll(K key, V... newValues);
 
     /**
