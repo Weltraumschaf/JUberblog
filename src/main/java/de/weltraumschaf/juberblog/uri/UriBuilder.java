@@ -37,730 +37,869 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package de.weltraumschaf.juberblog.uri;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.AccessController;
+import java.util.List;
 import java.util.Map;
 
+import de.weltraumschaf.commons.guava.Maps;
+
 /**
- * URI template-aware utility class for building URIs from their components. See
- * {@link javax.ws.rs.Path#value} for an explanation of URI templates.
- *
- * <p>Builder methods perform contextual encoding of characters not permitted in
- * the corresponding URI component following the rules of the
- * <a href="http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1">application/x-www-form-urlencoded</a>
- * media type for query parameters and
- * <a href="http://ietf.org/rfc/rfc3986.txt">RFC 3986</a> for all other
- * components. Note that only characters not permitted in a particular component
- * are subject to encoding so, e.g., a path supplied to one of the {@code path}
- * methods may contain matrix parameters or multiple path segments since the
- * separators are legal characters and will not be encoded. Percent encoded
- * values are also recognized where allowed and will not be double encoded.</p>
- *
- * <p>URI templates are allowed in most components of a URI but their value is
- * restricted to a particular component. E.g.
- * <blockquote><code>UriBuilder.fromPath("{arg1}").build("foo#bar");</code></blockquote>
- * would result in encoding of the '#' such that the resulting URI is
- * "foo%23bar". To create a URI "foo#bar" use
- * <blockquote><code>UriBuilder.fromPath("{arg1}").fragment("{arg2}").build("foo", "bar")</code></blockquote>
- * instead. URI template names and delimiters are never encoded but their
- * values are encoded when a URI is built.
- * Template parameter regular expressions are ignored when building a URI, i.e.
- * no validation is performed.
+ * A Jersey implementation of {@link BaseUriBuilder}.
  *
  * @author Paul Sandoz
- * @author Marc Hadley
- * @see java.net.URI
- * @see javax.ws.rs.Path
- * @since 1.0
+ * @author Martin Matula (martin.matula at oracle.com)
+ * @author Miroslav Fuksa (miroslav.fuksa at oracle.com)
  */
-abstract class UriBuilder {
+public final class UriBuilder extends BaseUriBuilder {
+
+    // All fields should be in the percent-encoded form
+    private String scheme;
+    private String ssp;
+    private String authority;
+    private String userInfo;
+    private String host;
+    private String port;
+    private final StringBuilder path;
+    private MultivaluedMap<String, String> matrixParams;
+    private final StringBuilder query;
+    private MultivaluedMap<String, String> queryParams;
+    private String fragment;
 
     /**
-     * Protected constructor, use one of the static <code>from<i>Xxx</i>(...)</code>
-     * methods to obtain an instance.
+     * Create new implementation of {@code BaseUriBuilder}.
      */
-    protected UriBuilder() {
+    public UriBuilder() {
+        path = new StringBuilder();
+        query = new StringBuilder();
     }
 
-    /**
-     * Creates a new instance of UriBuilder.
-     *
-     * @return a new instance of UriBuilder.
-     */
-    protected static UriBuilder newInstance() {
-        return new JerseyUriBuilder();
+    private UriBuilder(UriBuilder that) {
+        this.scheme = that.scheme;
+        this.ssp = that.ssp;
+        this.authority = that.authority;
+        this.userInfo = that.userInfo;
+        this.host = that.host;
+        this.port = that.port;
+        this.path = new StringBuilder(that.path);
+        this.matrixParams = that.matrixParams == null ? null : new MultivaluedStringMap(that.matrixParams);
+        this.query = new StringBuilder(that.query);
+        this.queryParams = that.queryParams == null ? null : new MultivaluedStringMap(that.queryParams);
+        this.fragment = that.fragment;
     }
 
-    /**
-     * Create a new instance initialized from an existing URI.
-     *
-     * @param uri a URI that will be used to initialize the UriBuilder.
-     * @return a new UriBuilder.
-     * @throws IllegalArgumentException if uri is {@code null}.
-     */
-    public static UriBuilder fromUri(URI uri) {
-        return newInstance().uri(uri);
-    }
-
-    /**
-     * Create a new instance initialized from an existing URI.
-     *
-     * @param uriTemplate a URI template that will be used to initialize the UriBuilder, may
-     *                    contain URI parameters.
-     * @return a new UriBuilder.
-     * @throws IllegalArgumentException if {@code uriTemplate} is not a valid URI template or
-     *                                  is {@code null}.
-     */
-    public static UriBuilder fromUri(String uriTemplate) {
-        return newInstance().uri(uriTemplate);
-    }
-
-    /**
-     * Create a new instance initialized from a Link.
-     *
-     * @param link a Link that will be used to initialize the UriBuilder, only
-     *             its URI is used.
-     * @return a new UriBuilder
-     * @throws IllegalArgumentException if link is {@code null}
-     * @since 2.0
-     */
-    public static UriBuilder fromLink(Link link) {
-        if (link == null) {
-            throw new IllegalArgumentException("The provider 'link' parameter value is 'null'.");
-        }
-        return UriBuilder.fromUri(link.getUri());
-    }
-
-    /**
-     * Create a new instance representing a relative URI initialized from a
-     * URI path.
-     *
-     * @param path a URI path that will be used to initialize the UriBuilder,
-     *             may contain URI template parameters.
-     * @return a new UriBuilder.
-     * @throws IllegalArgumentException if path is {@code null}.
-     */
-    public static UriBuilder fromPath(String path) throws IllegalArgumentException {
-        return newInstance().path(path);
-    }
-
-    /**
-     * Create a new instance representing a relative URI initialized from a
-     * root resource class.
-     *
-     * @param resource a root resource whose {@link javax.ws.rs.Path} value will
-     *                 be used to initialize the UriBuilder.
-     * @return a new UriBuilder.
-     * @throws IllegalArgumentException if resource is not annotated with
-     *                                  {@link javax.ws.rs.Path} or resource is {@code null}.
-     */
-    public static UriBuilder fromResource(Class<?> resource) {
-        return newInstance().path(resource);
-    }
-
-    /**
-     * Create a new instance representing a relative URI initialized from a
-     * {@link javax.ws.rs.Path}-annotated method.
-     *
-     * This method can only be used in cases where there is a single method with the
-     * specified name that is annotated with {@link javax.ws.rs.Path}.
-     *
-     * @param resource the resource containing the method.
-     * @param method   the name of the method whose {@link javax.ws.rs.Path} value will be
-     *                 used to obtain the path to append.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if resource or method is {@code null},
-     *                                  or there is more than or less than one variant of the method annotated with
-     *                                  {@link javax.ws.rs.Path}.
-     * @since 2.0
-     */
-    public static UriBuilder fromMethod(Class<?> resource, String method) {
-        return newInstance().path(resource, method);
-    }
-
-    /**
-     * Create a copy of the UriBuilder preserving its state. This is a more
-     * efficient means of creating a copy than constructing a new UriBuilder
-     * from a URI returned by the {@link #build(Object...)} method.
-     *
-     * @return a copy of the UriBuilder.
-     */
-    @SuppressWarnings("CloneDoesntDeclareCloneNotSupportedException")
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public abstract UriBuilder clone();
+    public UriBuilder clone() {
+        return new UriBuilder(this);
+    }
+
+    @Override
+    public UriBuilder uri(URI uri) {
+        if (uri == null) {
+            throw new IllegalArgumentException("Parameter 'uri' must not be null!");
+        }
+
+        if (uri.getRawFragment() != null) {
+            fragment = uri.getRawFragment();
+        }
+
+        if (uri.isOpaque()) {
+            scheme = uri.getScheme();
+            ssp = uri.getRawSchemeSpecificPart();
+            return this;
+        }
+
+        if (uri.getScheme() == null) {
+            if (ssp != null) {
+                if (uri.getRawSchemeSpecificPart() != null) {
+                    ssp = uri.getRawSchemeSpecificPart();
+                    return this;
+                }
+            }
+        } else {
+            scheme = uri.getScheme();
+        }
+
+        ssp = null;
+        if (uri.getRawAuthority() != null) {
+            if (uri.getRawUserInfo() == null && uri.getHost() == null && uri.getPort() == -1) {
+                authority = uri.getRawAuthority();
+                userInfo = null;
+                host = null;
+                port = null;
+            } else {
+                authority = null;
+                if (uri.getRawUserInfo() != null) {
+                    userInfo = uri.getRawUserInfo();
+                }
+                if (uri.getHost() != null) {
+                    host = uri.getHost();
+                }
+                if (uri.getPort() != -1) {
+                    port = String.valueOf(uri.getPort());
+                }
+            }
+        }
+
+        if (uri.getRawPath() != null && uri.getRawPath().length() > 0) {
+            path.setLength(0);
+            path.append(uri.getRawPath());
+        }
+        if (uri.getRawQuery() != null && uri.getRawQuery().length() > 0) {
+            query.setLength(0);
+            query.append(uri.getRawQuery());
+
+        }
+
+        return this;
+    }
+
+    @Override
+    public UriBuilder uri(String uriTemplate) {
+        if (uriTemplate == null) {
+            throw new IllegalArgumentException("parameter 'uriTemplate' must not be null!");
+        }
+
+        UriParser parser = new UriParser(uriTemplate);
+        parser.parse();
+
+        final String parsedScheme = parser.getScheme();
+        if (parsedScheme != null) {
+            scheme(parsedScheme);
+        } else if (ssp != null) {
+            // The previously set scheme was opaque and uriTemplate does not contain a scheme part.
+            // However, the scheme might have already changed, as demonstrated in
+            // JerseyUriBuilderTest.testChangeUriStringAfterChangingOpaqueSchemeToHttp().
+            // So to be safe, we need to erase the existing internal SSP value and
+            // re-parse the new uriTemplate using the current scheme and try to set the SSP
+            // again using the re-parsed data.
+            // See also JERSEY-1457 and related test.
+            ssp = null;
+            parser = new UriParser(scheme + ":" + uriTemplate);
+            parser.parse();
+        }
+
+        schemeSpecificPart(parser);
+
+        final String parserFragment = parser.getFragment();
+        if (parserFragment != null) {
+            fragment(parserFragment);
+        }
+
+        return this;
+    }
 
     /**
-     * Copies the non-null components of the supplied URI to the UriBuilder replacing
-     * any existing values for those components.
+     * Set scheme specific part from the URI parser.
      *
-     * @param uri the URI to copy components from.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the {@code uri} parameter is {@code null}.
+     * @param parser initialized URI parser.
      */
-    public abstract UriBuilder uri(URI uri);
+    private void schemeSpecificPart(UriParser parser) {
+        if (parser.isOpaque()) {
+            if (parser.getSsp() != null) {
+                this.authority = this.host = this.port = null;
+                this.path.setLength(0);
+                this.query.setLength(0);
 
-    /**
-     * Parses the {@code uriTemplate} string and copies the parsed components of the supplied
-     * URI to the UriBuilder replacing any existing values for those components.
-     *
-     * @param uriTemplate a URI template that will be used to initialize the UriBuilder, may
-     *                    contain URI parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if {@code uriTemplate} is not a valid URI template or
-     *                                  is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder uri(String uriTemplate);
+                // TODO encode or validate scheme specific part
+                this.ssp = parser.getSsp();
+            }
+            return;
+        }
 
-    /**
-     * Set the URI scheme.
-     *
-     * @param scheme the URI scheme, may contain URI template parameters.
-     *               A {@code null} value will unset the URI scheme, but will
-     *               not unset the any scheme-specific-part components.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if scheme is invalid.
-     */
-    public abstract UriBuilder scheme(String scheme);
+        this.ssp = null;
+        if (parser.getAuthority() != null) {
+            if (parser.getUserInfo() == null && parser.getHost() == null && parser.getPort() == null) {
+                this.authority = encode(parser.getAuthority(), UriComponent.Type.AUTHORITY);
+                this.userInfo = null;
+                this.host = null;
+                this.port = null;
+            } else {
+                this.authority = null;
+                if (parser.getUserInfo() != null) {
+                    userInfo(parser.getUserInfo());
+                }
+                if (parser.getHost() != null) {
+                    host(parser.getHost());
+                }
+                if (parser.getPort() != null) {
+                    this.port = parser.getPort();
+                }
+            }
+        }
 
-    /**
-     * Set the URI scheme-specific-part (see {@link java.net.URI}). This
-     * method will overwrite any existing
-     * values for authority, user-info, host, port and path.
-     *
-     * @param ssp the URI scheme-specific-part, may contain URI template parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if ssp cannot be parsed or is {@code null}.
-     */
-    public abstract UriBuilder schemeSpecificPart(String ssp);
+        if (parser.getPath() != null) {
+            this.path.setLength(0);
+            path(parser.getPath());
+        }
+        if (parser.getQuery() != null) {
+            this.query.setLength(0);
+            this.query.append(parser.getQuery());
+        }
+    }
 
-    /**
-     * Set the URI user-info.
-     *
-     * @param ui the URI user-info, may contain URI template parameters.
-     *           A {@code null} value will unset userInfo component of the URI.
-     * @return the updated UriBuilder.
-     */
-    public abstract UriBuilder userInfo(String ui);
+    @Override
+    public UriBuilder scheme(String scheme) {
+        if (scheme != null) {
+            this.scheme = scheme;
+            UriComponent.validate(scheme, UriComponent.Type.SCHEME, true);
+        } else {
+            this.scheme = null;
+        }
+        return this;
+    }
 
-    /**
-     * Set the URI host.
-     *
-     * @param host the URI host, may contain URI template parameters.
-     *             A {@code null} value will unset the host component of the URI, but
-     *             will not unset other authority component parts
-     *             ({@link #userInfo(String) user info} or {@link #port(int) port}).
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if host is invalid.
-     */
-    public abstract UriBuilder host(String host);
+    @Override
+    public UriBuilder schemeSpecificPart(String ssp) {
+        if (ssp == null) {
+            throw new IllegalArgumentException("Supplied scheme-specific part parameter is null.");
+        }
 
-    /**
-     * Set the URI port.
-     *
-     * @param port the URI port, a value of -1 will unset an explicit port.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if port is invalid.
-     */
-    public abstract UriBuilder port(int port);
+        UriParser parser = new UriParser((scheme != null) ? scheme + ":" + ssp : ssp);
+        parser.parse();
 
-    /**
-     * Set the URI path. This method will overwrite
-     * any existing path and associated matrix parameters.
-     * Existing '/' characters are preserved thus a single value can
-     * represent multiple URI path segments.
-     *
-     * @param path the path, may contain URI template parameters.
-     *             A {@code null} value will unset the path component of the URI.
-     * @return the updated UriBuilder.
-     */
-    public abstract UriBuilder replacePath(String path);
+        if (parser.getScheme() != null && !parser.getScheme().equals(scheme)) {
+            throw new IllegalStateException(
+                    String.format("Supplied scheme-specific URI part \"%s\" contains unexpected URI Scheme component: %s.",
+                            ssp, parser.getScheme()));
+        }
+        if (parser.getFragment() != null) {
+            throw new IllegalStateException(
+                    String.format("Supplied scheme-specific URI part \"%s\" contains URI Fragment component: %s.",
+                            ssp, parser.getFragment()));
+        }
 
-    /**
-     * Append path to the existing path.
-     * When constructing the final path, a '/' separator will be inserted
-     * between the existing path and the supplied path if necessary.
-     * Existing '/' characters are preserved thus a single value can
-     * represent multiple URI path segments.
-     *
-     * @param path the path, may contain URI template parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if path is {@code null}.
-     */
-    public abstract UriBuilder path(String path);
+        schemeSpecificPart(parser);
 
-    /**
-     * Append the path from a Path-annotated class to the
-     * existing path.
-     * When constructing the final path, a '/' separator will be inserted
-     * between the existing path and the supplied path if necessary.
-     *
-     * @param resource a resource whose {@link javax.ws.rs.Path} value will be
-     *                 used to obtain the path to append.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if resource is {@code null}, or
-     *                                  if resource is not annotated with {@link javax.ws.rs.Path}.
-     */
-    public abstract UriBuilder path(Class resource);
+        return this;
+    }
 
-    /**
-     * Append the path from a Path-annotated method to the
-     * existing path.
-     * When constructing the final path, a '/' separator will be inserted
-     * between the existing path and the supplied path if necessary.
-     * This method is a convenience shortcut to {@code path(Method)}, it
-     * can only be used in cases where there is a single method with the
-     * specified name that is annotated with {@link javax.ws.rs.Path}.
-     *
-     * @param resource the resource containing the method.
-     * @param method   the name of the method whose {@link javax.ws.rs.Path} value will be
-     *                 used to obtain the path to append.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if resource or method is {@code null},
-     *                                  or there is more than or less than one variant of the method annotated with
-     *                                  {@link javax.ws.rs.Path}.
-     */
-    public abstract UriBuilder path(Class resource, String method);
+    @Override
+    public UriBuilder userInfo(String ui) {
+        checkSsp();
+        this.userInfo = (ui != null)
+                ? encode(ui, UriComponent.Type.USER_INFO) : null;
+        return this;
+    }
 
-    /**
-     * Append the path from a {@link javax.ws.rs.Path}-annotated method to the
-     * existing path.
-     * When constructing the final path, a '/' separator will be inserted
-     * between the existing path and the supplied path if necessary.
-     *
-     * @param method a method whose {@link javax.ws.rs.Path} value will be
-     *               used to obtain the path to append to the existing path.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if method is {@code null} or is
-     *                                  not annotated with a {@link javax.ws.rs.Path}.
-     */
-    public abstract UriBuilder path(Method method);
+    @Override
+    public UriBuilder host(String host) {
+        checkSsp();
+        if (host != null) {
+            if (host.length() == 0) {
+                throw new IllegalArgumentException("Invalid host name.");
+            }
+            if (InetAddresses.isMappedIPv4Address(host) || InetAddresses.isUriInetAddress(host)) {
+                this.host = host;
+            } else {
+                this.host = encode(host, UriComponent.Type.HOST);
+            }
+        } else {
+            // null is used to reset host setting
+            this.host = null;
+        }
+        return this;
+    }
 
-    /**
-     * Append path segments to the existing path.
-     * When constructing the final path, a '/' separator will be inserted
-     * between the existing path and the first path segment if necessary and
-     * each supplied segment will also be separated by '/'.
-     * Existing '/' characters are encoded thus a single value can
-     * only represent a single URI path segment.
-     *
-     * @param segments the path segment values, each may contain URI template
-     *                 parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if segments or any element of segments
-     *                                  is {@code null}.
-     */
-    public abstract UriBuilder segment(String... segments);
+    @Override
+    public UriBuilder port(int port) {
+        checkSsp();
+        if (port < -1) // -1 is used to reset port setting and since URI allows
+        // as port any positive integer, so do we.
+        {
+            throw new IllegalArgumentException("Invalid port value.");
+        }
+        this.port = port == -1 ? null : String.valueOf(port);
+        return this;
+    }
 
-    /**
-     * Set the matrix parameters of the current final segment of the current URI path.
-     * This method will overwrite any existing matrix parameters on the current final
-     * segment of the current URI path. Note that the matrix parameters
-     * are tied to a particular path segment; subsequent addition of path segments
-     * will not affect their position in the URI path.
-     *
-     * @param matrix the matrix parameters, may contain URI template parameters.
-     *               A {@code null} value will remove all matrix parameters of the current final segment
-     *               of the current URI path.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if matrix cannot be parsed.
-     * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
-     */
-    public abstract UriBuilder replaceMatrix(String matrix);
+    @Override
+    public UriBuilder replacePath(String path) {
+        checkSsp();
+        this.path.setLength(0);
+        if (path != null) {
+            appendPath(path);
+        }
+        return this;
+    }
 
-    /**
-     * Append a matrix parameter to the existing set of matrix parameters of
-     * the current final segment of the URI path. If multiple values are supplied
-     * the parameter will be added once per value. Note that the matrix parameters
-     * are tied to a particular path segment; subsequent addition of path segments
-     * will not affect their position in the URI path.
-     *
-     * @param name   the matrix parameter name, may contain URI template parameters.
-     * @param values the matrix parameter value(s), each object will be converted.
-     *               to a {@code String} using its {@code toString()} method. Stringified
-     *               values may contain URI template parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if name or values is {@code null}.
-     * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
-     */
-    public abstract UriBuilder matrixParam(String name, Object... values);
+    @Override
+    public UriBuilder path(String path) {
+        checkSsp();
+        appendPath(path);
+        return this;
+    }
 
-    /**
-     * Replace the existing value(s) of a matrix parameter on
-     * the current final segment of the URI path. If multiple values are supplied
-     * the parameter will be added once per value. Note that the matrix parameters
-     * are tied to a particular path segment; subsequent addition of path segments
-     * will not affect their position in the URI path.
-     *
-     * @param name   the matrix parameter name, may contain URI template parameters.
-     * @param values the matrix parameter value(s), each object will be converted.
-     *               to a {@code String} using its {@code toString()} method. Stringified
-     *               values may contain URI template parameters. If {@code values} is empty
-     *               or {@code null} then all current values of the parameter are removed.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if name is {@code null}.
-     * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
-     */
-    public abstract UriBuilder replaceMatrixParam(String name, Object... values);
+    @SuppressWarnings("unchecked")
+    @Override
+    public BaseUriBuilder path(Class resource) throws IllegalArgumentException {
+        checkSsp();
+        if (resource == null) {
+            throw new IllegalArgumentException("Parameter 'resource' must not be null!");
+        }
 
-    /**
-     * Set the URI query string. This method will overwrite any existing query
-     * parameters.
-     *
-     * @param query the URI query string, may contain URI template parameters.
-     *              A {@code null} value will remove all query parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if query cannot be parsed.
-     */
-    public abstract UriBuilder replaceQuery(String query);
+        Path p = Path.class.cast(resource.getAnnotation(Path.class));
+        if (p == null) {
+            throw new IllegalArgumentException(
+                    String.format("The class, %s is not annotated with @Path.", resource));
+        }
+        appendPath(p);
+        return this;
+    }
 
-    /**
-     * Append a query parameter to the existing set of query parameters. If
-     * multiple values are supplied the parameter will be added once per value.
-     *
-     * @param name   the query parameter name, may contain URI template parameters.
-     * @param values the query parameter value(s), each object will be converted
-     *               to a {@code String} using its {@code toString()} method. Stringified
-     *               values may contain URI template parameters.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if name or values is {@code null}.
-     */
-    public abstract UriBuilder queryParam(String name, Object... values);
+    @Override
+    public UriBuilder path(Class resource, String methodName) {
+        checkSsp();
+        if (resource == null) {
+            throw new IllegalArgumentException("Parameter 'resource' must not be null!");
+        }
+        if (methodName == null) {
+            throw new IllegalArgumentException("Parameter 'methodName' must not be null!");
+        }
 
-    /**
-     * Replace the existing value(s) of a query parameter. If
-     * multiple values are supplied the parameter will be added once per value.
-     *
-     * @param name   the query parameter name, may contain URI template parameters.
-     * @param values the query parameter value(s), each object will be converted
-     *               to a {@code String} using its {@code toString()} method. Stringified
-     *               values may contain URI template parameters. If {@code values} is empty
-     *               or {@code null} then all current values of the parameter are removed.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if name is {@code null}.
-     */
-    public abstract UriBuilder replaceQueryParam(String name, Object... values);
+        Method[] methods = AccessController.doPrivileged(ReflectionHelper.getMethodsPA(resource));
+        Method found = null;
+        for (Method m : methods) {
+            if (methodName.equals(m.getName())) {
+                if (found == null) {
+                    found = m;
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
 
-    /**
-     * Set the URI fragment.
-     *
-     * @param fragment the URI fragment, may contain URI template parameters.
-     *                 A {@code null} value will remove any existing fragment.
-     * @return the updated UriBuilder.
-     */
-    public abstract UriBuilder fragment(String fragment);
+        if (found == null) {
+            throw new IllegalArgumentException(String.format("The method named \"%s\" is not specified by %s.",
+                    methodName, resource));
+        }
 
-    /**
-     * Resolve a URI template with a given {@code name} in this {@code UriBuilder} instance
-     * using a supplied value.
-     *
-     * In case a {@code null} template name or value is entered a {@link IllegalArgumentException}
-     * is thrown.
-     *
-     * @param name  name of the URI template.
-     * @param value value to be used to resolve the template.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the resolved template name or value is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplate(String name, Object value);
+        appendPath(getPath(found));
 
-    /**
-     * Resolve a URI template with a given {@code name} in this {@code UriBuilder} instance
-     * using a supplied value.
-     *
-     * In case a {@code null} template name or value is entered a {@link IllegalArgumentException}
-     * is thrown.
-     *
-     * @param name              name of the URI template.
-     * @param value             value to be used to resolve the template.
-     * @param encodeSlashInPath if {@code true}, the slash ({@code '/'}) characters
-     *                          in template values will be encoded if the template
-     *                          is placed in the URI path component, otherwise the slash
-     *                          characters will not be encoded in path templates.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the resolved template name or value is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplate(String name, Object value, boolean encodeSlashInPath);
+        return this;
+    }
 
-    /**
-     * Resolve a URI template with a given {@code name} in this {@code UriBuilder} instance
-     * using a supplied encoded value.
-     *
-     * A template with a matching name will be replaced by the supplied value.
-     * Value is converted to {@code String} using its {@code toString()} method and is then
-     * encoded to match the rules of the URI component to which they pertain.  All % characters in
-     * the stringified values that are not followed by two hexadecimal numbers will be encoded.
-     *
-     * In case a {@code null} template name or encoded value is entered a {@link IllegalArgumentException}
-     * is thrown.
-     *
-     * @param name  name of the URI template.
-     * @param value encoded value to be used to resolve the template.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the resolved template name or encoded value is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplateFromEncoded(String name, Object value);
+    @Override
+    public UriBuilder path(Method method) {
+        checkSsp();
+        if (method == null) {
+            throw new IllegalArgumentException("Parameter 'method' must not be null!");
+        }
+        appendPath(getPath(method));
+        return this;
+    }
 
-    /**
-     * Resolve one or more URI templates in this {@code UriBuilder} instance using supplied
-     * name-value pairs.
-     *
-     * A call to the method with an empty parameter map is ignored.
-     *
-     * @param templateValues a map of URI template names and their values.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the name-value map or any of the names or values
-     *                                  in the map is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplates(Map<String, Object> templateValues);
+    private Path getPath(AnnotatedElement ae) {
+        Path p = ae.getAnnotation(Path.class);
+        if (p == null) {
+            throw new IllegalArgumentException(
+                    String.format("The annotated element \"{0}\" is not annotated with @Path.", ae));
+        }
+        return p;
+    }
 
-    /**
-     * Resolve one or more URI templates in this {@code UriBuilder} instance using supplied
-     * name-value pairs.
-     *
-     * A call to the method with an empty parameter map is ignored.
-     *
-     * @param templateValues    a map of URI template names and their values.
-     * @param encodeSlashInPath if {@code true}, the slash ({@code '/'}) characters
-     *                          in template values will be encoded if the template
-     *                          is placed in the URI path component, otherwise the slash
-     *                          characters will not be encoded in path templates.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the name-value map or any of the names or values
-     *                                  in the map is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplates(Map<String, Object> templateValues, boolean encodeSlashInPath)
-            throws IllegalArgumentException;
+    @Override
+    public UriBuilder segment(String... segments) throws IllegalArgumentException {
+        checkSsp();
+        if (segments == null) {
+            throw new IllegalArgumentException("Parameter 'segments' must not be null!");
+        }
 
-    /**
-     * Resolve one or more URI templates in this {@code UriBuilder} instance using supplied
-     * name-value pairs.
-     *
-     * All templates  with their name matching one of the keys in the supplied map will be replaced
-     * by the value in the supplied map. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain.  All % characters in
-     * the stringified values that are not followed by two hexadecimal numbers
-     * will be encoded.
-     *
-     * A call to the method with an empty parameter map is ignored.
-     *
-     * @param templateValues a map of URI template names and their values.
-     * @return the updated UriBuilder.
-     * @throws IllegalArgumentException if the name-value map or any of the names or values
-     *                                  in the map is {@code null}.
-     * @since 2.0
-     */
-    public abstract UriBuilder resolveTemplatesFromEncoded(Map<String, Object> templateValues);
+        for (String segment : segments) {
+            appendPath(segment, true);
+        }
+        return this;
+    }
 
-    /**
-     * Build a URI.
-     *
-     * Any URI template parameters will be replaced by the value in
-     * the supplied map. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain.  All {@code '%'} characters
-     * in the stringified values will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     * <p>
-     * NOTE: By default all {@code '/'} characters in the stringified values will be
-     * encoded in path templates, i.e. the result is identical to invoking
-     * {@link #buildFromMap(java.util.Map, boolean) buildFromMap(valueMap, true)}.
-     * To override this behavior use {@code buildFromMap(valueMap, false)} instead.
-     * </p>
-     *
-     * @param values a map of URI template parameter names and values.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a template parameter value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #buildFromMap(java.util.Map, boolean)
-     * @see #buildFromEncodedMap(java.util.Map)
-     */
-    public abstract URI buildFromMap(Map<String, ?> values);
+    @Override
+    public UriBuilder replaceMatrix(String matrix) {
+        checkSsp();
+        int i = path.lastIndexOf("/");
+        if (i != -1) {
+            i = 0;
+        }
+        i = path.indexOf(";", i);
+        if (i != -1) {
+            path.setLength(i + 1);
+        } else {
+            path.append(';');
+        }
 
-    /**
-     * Build a URI.
-     *
-     * Any URI template parameters will be replaced by the value in
-     * the supplied map. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain.  All {@code '%'} characters
-     * in the stringified values will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     * <p>
-     * The {@code encodeSlashInPath} parameter may be used to override the default
-     * encoding of {@code '/'} characters in the stringified template values
-     * in cases when the template is part of the URI path component when using
-     * the {@link #buildFromMap(java.util.Map)} method. If the {@code encodeSlashInPath}
-     * parameter is set to {@code true} (default), the slash ({@code '/'}) characters in
-     * parameter values will be encoded if the template is placed in the URI path component.
-     * If set to {@code false} the default encoding behavior is overridden an slash characters
-     * in template values will not be encoded when used to substitute path templates.
-     * </p>
-     *
-     * @param values            a map of URI template parameter names and values.
-     * @param encodeSlashInPath if {@code true}, the slash ({@code '/'}) characters
-     *                          in parameter values will be encoded if the template
-     *                          is placed in the URI path component, otherwise the slash
-     *                          characters will not be encoded in path templates.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a template parameter value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #buildFromMap(java.util.Map)
-     * @see #buildFromEncodedMap(java.util.Map)
-     */
-    public abstract URI buildFromMap(Map<String, ?> values, boolean encodeSlashInPath)
-            throws IllegalArgumentException, UriBuilderException;
+        if (matrix != null) {
+            path.append(encode(matrix, UriComponent.Type.PATH));
+        }
+        return this;
+    }
 
-    /**
-     * Build a URI.
-     *
-     * Any URI template parameters will be replaced by the value in
-     * the supplied map. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain.  All % characters in
-     * the stringified values that are not followed by two hexadecimal numbers
-     * will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     *
-     * @param values a map of URI template parameter names and values.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a template parameter value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #buildFromMap(java.util.Map)
-     * @see #buildFromMap(java.util.Map, boolean)
-     * @since 2.0
-     */
-    public abstract URI buildFromEncodedMap(Map<String, ?> values)
-            throws IllegalArgumentException, UriBuilderException;
+    @Override
+    public UriBuilder matrixParam(String name, Object... values) {
+        checkSsp();
+        if (name == null) {
+            throw new IllegalArgumentException("Parameter 'name' must not be null!");
+        }
+        if (values == null) {
+            throw new IllegalArgumentException("Parameter 'value' must not be null!");
+        }
+        if (values.length == 0) {
+            return this;
+        }
 
-    /**
-     * Build a URI, using the supplied values in order to replace any URI
-     * template parameters. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain. All '%' characters
-     * in the stringified values will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     * <p>
-     * All instances of the same template parameter
-     * will be replaced by the same value that corresponds to the position of the
-     * first instance of the template parameter. e.g. the template "{a}/{b}/{a}"
-     * with values {"x", "y", "z"} will result in the the URI "x/y/x", <i>not</i>
-     * "x/y/z".
-     * </p>
-     * <p>
-     * NOTE: By default all {@code '/'} characters in the stringified values will be
-     * encoded in path templates, i.e. the result is identical to invoking
-     * {@link #build(Object[], boolean)} build(values, true)}.
-     * To override this behavior use {@code build(values, false)} instead.
-     * </p>
-     *
-     * @param values a list of URI template parameter values.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #build(Object[], boolean)
-     * @see #buildFromEncoded(Object...)
-     */
-    public abstract URI build(Object... values)
-            throws IllegalArgumentException, UriBuilderException;
+        name = encode(name, UriComponent.Type.MATRIX_PARAM);
+        if (matrixParams == null) {
+            for (Object value : values) {
+                path.append(';').append(name);
 
-    /**
-     * Build a URI, using the supplied values in order to replace any URI
-     * template parameters. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain. All '%' characters
-     * in the stringified values will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     * <p>
-     * All instances of the same template parameter
-     * will be replaced by the same value that corresponds to the position of the
-     * first instance of the template parameter. e.g. the template "{a}/{b}/{a}"
-     * with values {"x", "y", "z"} will result in the the URI "x/y/x", <i>not</i>
-     * "x/y/z".
-     * </p>
-     * <p>
-     * The {@code encodeSlashInPath} parameter may be used to override the default
-     * encoding of {@code '/'} characters in the stringified template values
-     * in cases when the template is part of the URI path component when using
-     * the {@link #build(Object[])} method. If the {@code encodeSlashInPath}
-     * parameter is set to {@code true} (default), the slash ({@code '/'}) characters in
-     * parameter values will be encoded if the template is placed in the URI path component.
-     * If set to {@code false} the default encoding behavior is overridden an slash characters
-     * in template values will not be encoded when used to substitute path templates.
-     * </p>
-     *
-     * @param values            a list of URI template parameter values.
-     * @param encodeSlashInPath if {@code true}, the slash ({@code '/'}) characters
-     *                          in parameter values will be encoded if the template
-     *                          is placed in the URI path component, otherwise the slash
-     *                          characters will not be encoded in path templates.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #build(Object[])
-     * @see #buildFromEncoded(Object...)
-     * @since 2.0
-     */
-    public abstract URI build(Object[] values, boolean encodeSlashInPath)
-            throws IllegalArgumentException, UriBuilderException;
+                if (value == null) {
+                    throw new IllegalArgumentException("One or more of matrix value parameters are null.");
+                }
 
-    /**
-     * Build a URI.
-     * Any URI templates parameters will be replaced with the supplied values in
-     * order. Values are converted to {@code String} using
-     * their {@code toString()} method and are then encoded to match the
-     * rules of the URI component to which they pertain. All % characters in
-     * the stringified values that are not followed by two hexadecimal numbers
-     * will be encoded.
-     * The state of the builder is unaffected; this method may be called
-     * multiple times on the same builder instance.
-     * <p>All instances of the same template parameter
-     * will be replaced by the same value that corresponds to the position of the
-     * first instance of the template parameter. e.g. the template "{a}/{b}/{a}"
-     * with values {"x", "y", "z"} will result in the the URI "x/y/x", <i>not</i>
-     * "x/y/z".
-     *
-     * @param values a list of URI template parameter values.
-     * @return the URI built from the UriBuilder.
-     * @throws IllegalArgumentException if there are any URI template parameters
-     *                                  without a supplied value, or if a value is {@code null}.
-     * @throws UriBuilderException      if a URI cannot be constructed based on the
-     *                                  current state of the builder.
-     * @see #build(Object[])
-     * @see #build(Object[], boolean)
-     */
-    public abstract URI buildFromEncoded(Object... values)
-            throws IllegalArgumentException, UriBuilderException;
+                final String stringValue = value.toString();
+                if (stringValue.length() > 0) {
+                    path.append('=').append(encode(stringValue, UriComponent.Type.MATRIX_PARAM));
+                }
+            }
+        } else {
+            for (Object value : values) {
+                if (value == null) {
+                    throw new IllegalArgumentException("One or more of matrix value parameters are null.");
+                }
 
-    /**
-     * Get the URI template string represented by this URI builder.
-     *
-     * @return the URI template string for this URI builder.
-     * @since 2.0
-     */
-    public abstract String toTemplate();
+                matrixParams.add(name, encode(value.toString(), UriComponent.Type.MATRIX_PARAM));
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public UriBuilder replaceMatrixParam(String name, Object... values) {
+        checkSsp();
+
+        if (name == null) {
+            throw new IllegalArgumentException("Parameter 'name' must not be null!");
+        }
+
+        if (matrixParams == null) {
+            int i = path.lastIndexOf("/");
+            if (i == -1) {
+                i = 0;
+            }
+            matrixParams = UriComponent.decodeMatrix(path.substring(i), false);
+            i = path.indexOf(";", i);
+            if (i != -1) {
+                path.setLength(i);
+            }
+        }
+
+        name = encode(name, UriComponent.Type.MATRIX_PARAM);
+        matrixParams.remove(name);
+        if (values != null) {
+            for (Object value : values) {
+                if (value == null) {
+                    throw new IllegalArgumentException("One or more of matrix value parameters are null.");
+                }
+
+                matrixParams.add(name, encode(value.toString(), UriComponent.Type.MATRIX_PARAM));
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public UriBuilder replaceQuery(String query) {
+        checkSsp();
+        this.query.setLength(0);
+        if (query != null) {
+            this.query.append(encode(query, UriComponent.Type.QUERY));
+        }
+        return this;
+    }
+
+    @Override
+    public UriBuilder queryParam(String name, Object... values) {
+        checkSsp();
+        if (name == null) {
+            throw new IllegalArgumentException("Parameter 'name' must not be null!");
+        }
+        if (values == null) {
+            throw new IllegalArgumentException("Parameter 'values' must not be null!");
+        }
+        if (values.length == 0) {
+            return this;
+        }
+
+        name = encode(name, UriComponent.Type.QUERY_PARAM);
+        if (queryParams == null) {
+            for (Object value : values) {
+                if (query.length() > 0) {
+                    query.append('&');
+                }
+                query.append(name);
+
+                if (value == null) {
+                    throw new IllegalArgumentException("One or more of query value parameters are null.");
+                }
+
+                query.append('=').append(encode(value.toString(), UriComponent.Type.QUERY_PARAM));
+            }
+        } else {
+            for (Object value : values) {
+                if (value == null) {
+                    throw new IllegalArgumentException("One or more of query value parameters are null.");
+                }
+
+                queryParams.add(name, encode(value.toString(), UriComponent.Type.QUERY_PARAM));
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public UriBuilder replaceQueryParam(String name, Object... values) {
+        checkSsp();
+
+        if (queryParams == null) {
+            queryParams = UriComponent.decodeQuery(query.toString(), false, false);
+            query.setLength(0);
+        }
+
+        name = encode(name, UriComponent.Type.QUERY_PARAM);
+        queryParams.remove(name);
+
+        if (values == null) {
+            return this;
+        }
+
+        for (Object value : values) {
+            if (value == null) {
+                throw new IllegalArgumentException("One or more of query value parameters are null.");
+            }
+
+            queryParams.add(name, encode(value.toString(), UriComponent.Type.QUERY_PARAM));
+        }
+        return this;
+    }
+
+    @Override
+    public UriBuilder resolveTemplate(String name, Object value) throws IllegalArgumentException {
+        resolveTemplate(name, value, true, true);
+
+        return this;
+    }
+
+    @Override
+    public UriBuilder resolveTemplate(String name, Object value, boolean encodeSlashInPath) {
+        resolveTemplate(name, value, true, encodeSlashInPath);
+        return this;
+    }
+
+    @Override
+    public UriBuilder resolveTemplateFromEncoded(String name, Object value) {
+        resolveTemplate(name, value, false, false);
+        return this;
+    }
+
+    private UriBuilder resolveTemplate(String name, Object value, boolean encode, boolean encodeSlashInPath) {
+        if (name == null) {
+            throw new IllegalArgumentException("Parameter 'name' must not be null!");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Parameter 'value' must not be null!");
+        }
+
+        Map<String, Object> templateValues = Maps.newHashMap();
+        templateValues.put(name, value);
+        resolveTemplates(templateValues, encode, encodeSlashInPath);
+        return this;
+    }
+
+
+    @Override
+    public UriBuilder resolveTemplates(Map<String, Object> templateValues) throws IllegalArgumentException {
+        resolveTemplates(templateValues, true, true);
+        return this;
+    }
+
+    @Override
+    public UriBuilder resolveTemplates(Map<String, Object> templateValues, boolean encodeSlashInPath) throws
+            IllegalArgumentException {
+        resolveTemplates(templateValues, true, encodeSlashInPath);
+        return this;
+    }
+
+    @Override
+    public UriBuilder resolveTemplatesFromEncoded(Map<String, Object> templateValues) {
+        resolveTemplates(templateValues, false, false);
+        return this;
+    }
+
+
+    private UriBuilder resolveTemplates(Map<String, Object> templateValues, boolean encode, boolean encodeSlashInPath) {
+        if (templateValues == null) {
+            throw new IllegalArgumentException("Parameter 'templateValues' must not be null!");
+        } else {
+            for (Map.Entry entry : templateValues.entrySet()) {
+                if (entry.getKey() == null || entry.getValue() == null) {
+                    throw new IllegalArgumentException("One or more of template keys or values are null.");
+                }
+            }
+        }
+
+        scheme = UriTemplate.resolveTemplateValues(UriComponent.Type.SCHEME, scheme, false, templateValues);
+        userInfo = UriTemplate.resolveTemplateValues(UriComponent.Type.USER_INFO, userInfo, encode, templateValues);
+        host = UriTemplate.resolveTemplateValues(UriComponent.Type.HOST, host, encode, templateValues);
+        port = UriTemplate.resolveTemplateValues(UriComponent.Type.PORT, port, false, templateValues);
+        authority = UriTemplate.resolveTemplateValues(UriComponent.Type.AUTHORITY, authority, encode, templateValues);
+
+        // path template values are treated as path segments unless encodeSlashInPath is false.
+        UriComponent.Type pathComponent = (encodeSlashInPath) ? UriComponent.Type.PATH_SEGMENT : UriComponent.Type.PATH;
+        final String newPath = UriTemplate.resolveTemplateValues(pathComponent, path.toString(), encode, templateValues);
+        path.setLength(0);
+        path.append(newPath);
+
+        final String newQuery = UriTemplate.resolveTemplateValues(UriComponent.Type.QUERY_PARAM, query.toString(), encode,
+                templateValues);
+        query.setLength(0);
+        query.append(newQuery);
+
+        fragment = UriTemplate.resolveTemplateValues(UriComponent.Type.FRAGMENT, fragment, encode, templateValues);
+
+        return this;
+    }
+
+
+    @Override
+    public UriBuilder fragment(String fragment) {
+        this.fragment = (fragment != null)
+                ? encode(fragment, UriComponent.Type.FRAGMENT)
+                : null;
+        return this;
+    }
+
+    private void checkSsp() {
+        if (ssp != null) {
+            throw new IllegalArgumentException("Schema specific part is opaque.");
+        }
+    }
+
+    private void appendPath(Path path) {
+        if (path == null) {
+            throw new IllegalArgumentException("Parameter 'path' must not be null!");
+        }
+
+        appendPath(path.value());
+    }
+
+    private void appendPath(String path) {
+        appendPath(path, false);
+    }
+
+    private void appendPath(String segments, boolean isSegment) {
+        if (segments == null) {
+            throw new IllegalArgumentException("Parameter 'segments' must not be null!");
+        }
+        if (segments.length() == 0) {
+            return;
+        }
+
+        // Encode matrix parameters on current path segment
+        encodeMatrix();
+
+        segments = encode(segments,
+                (isSegment) ? UriComponent.Type.PATH_SEGMENT : UriComponent.Type.PATH);
+
+        final boolean pathEndsInSlash = path.length() > 0 && path.charAt(path.length() - 1) == '/';
+        final boolean segmentStartsWithSlash = segments.charAt(0) == '/';
+
+        if (path.length() > 0 && !pathEndsInSlash && !segmentStartsWithSlash) {
+            path.append('/');
+        } else if (pathEndsInSlash && segmentStartsWithSlash) {
+            segments = segments.substring(1);
+            if (segments.length() == 0) {
+                return;
+            }
+        }
+
+        path.append(segments);
+    }
+
+    private void encodeMatrix() {
+        if (matrixParams == null || matrixParams.isEmpty()) {
+            return;
+        }
+
+        for (Map.Entry<String, List<String>> e : matrixParams.entrySet()) {
+            String name = e.getKey();
+
+            for (String value : e.getValue()) {
+                path.append(';').append(name);
+                if (value.length() > 0) {
+                    path.append('=').append(value);
+                }
+            }
+        }
+        matrixParams = null;
+    }
+
+    private void encodeQuery() {
+        if (queryParams == null || queryParams.isEmpty()) {
+            return;
+        }
+
+        for (Map.Entry<String, List<String>> e : queryParams.entrySet()) {
+            String name = e.getKey();
+
+            for (String value : e.getValue()) {
+                if (query.length() > 0) {
+                    query.append('&');
+                }
+                query.append(name).append('=').append(value);
+            }
+        }
+        queryParams = null;
+    }
+
+    private String encode(String s, UriComponent.Type type) {
+        return UriComponent.contextualEncode(s, type, true);
+    }
+
+    @Override
+    public URI buildFromMap(Map<String, ?> values) {
+        return _buildFromMap(true, true, values);
+    }
+
+    @Override
+    public URI buildFromMap(Map<String, ?> values, boolean encodeSlashInPath) {
+        return _buildFromMap(true, encodeSlashInPath, values);
+    }
+
+    @Override
+    public URI buildFromEncodedMap(Map<String, ?> values) throws IllegalArgumentException, UriBuilderException {
+        return _buildFromMap(false, false, values);
+    }
+
+    private URI _buildFromMap(boolean encode, boolean encodeSlashInPath, Map<String, ?> values) {
+        if (ssp != null) {
+            throw new IllegalArgumentException("Schema specific part is opaque.");
+        }
+
+        encodeMatrix();
+        encodeQuery();
+
+        String uri = UriTemplate.createURI(
+                scheme, authority,
+                userInfo, host, port,
+                path.toString(), query.toString(), fragment, values, encode, encodeSlashInPath);
+        return createURI(uri);
+    }
+
+    @Override
+    public URI build(Object... values) {
+        return _build(true, true, values);
+    }
+
+    @Override
+    public URI build(Object[] values, boolean encodeSlashInPath) {
+        return _build(true, encodeSlashInPath, values);
+    }
+
+    @Override
+    public URI buildFromEncoded(Object... values) {
+        return _build(false, false, values);
+    }
+
+    @Override
+    public String toTemplate() {
+        encodeMatrix();
+        encodeQuery();
+
+        StringBuilder sb = new StringBuilder();
+
+        if (scheme != null) {
+            sb.append(scheme).append(':');
+        }
+
+        if (ssp != null) {
+            sb.append(ssp);
+        } else {
+            boolean hasAuthority = false;
+            if (userInfo != null || host != null || port != null) {
+                hasAuthority = true;
+                sb.append("//");
+
+                if (userInfo != null && userInfo.length() > 0) {
+                    sb.append(userInfo).append('@');
+                }
+
+                if (host != null) {
+                    // TODO check IPv6 address
+                    sb.append(host);
+                }
+
+                if (port != null) {
+                    sb.append(':').append(port);
+                }
+            } else if (authority != null) {
+                hasAuthority = true;
+                sb.append("//").append(authority);
+            }
+
+            if (path.length() > 0) {
+                if (sb.length() > 0 && path.charAt(0) != '/') {
+                    sb.append("/");
+                }
+                sb.append(path);
+            } else if (hasAuthority && (query.length() > 0 || (fragment != null && fragment.length() > 0))) {
+                // if has authority and query or fragment and no path value, we need to append root '/' to the path
+                // see URI RFC 3986 section 3.3
+                sb.append("/");
+            }
+
+            if (query.length() > 0) {
+                sb.append('?').append(query);
+            }
+        }
+
+        if (fragment != null && fragment.length() > 0) {
+            sb.append('#').append(fragment);
+        }
+
+        return sb.toString();
+    }
+
+    private URI _build(boolean encode, boolean encodeSlashInPath, Object... values) {
+        if (values == null || values.length == 0) {
+            return createURI(create());
+        }
+
+        if (ssp != null) {
+            throw new IllegalArgumentException("Schema specific part is opaque.");
+        }
+
+        encodeMatrix();
+        encodeQuery();
+
+        String uri = UriTemplate.createURI(
+                scheme, authority,
+                userInfo, host, port,
+                path.toString(), query.toString(), fragment, values, encode, encodeSlashInPath);
+        return createURI(uri);
+    }
+
+    private String create() {
+        return UriComponent.encodeTemplateNames(toTemplate());
+    }
+
+    private URI createURI(String uri) {
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException ex) {
+            throw new UriBuilderException(ex);
+        }
+    }
 }

@@ -94,9 +94,9 @@ abstract class Link {
      * Convenience method that returns a {@link javax.ws.rs.core.UriBuilder}
      * initialized with this link's underlying URI.
      *
-     * @return UriBuilder initialized using underlying URI.
+     * @return BaseUriBuilder initialized using underlying URI.
      */
-    public abstract UriBuilder getUriBuilder();
+    public abstract BaseUriBuilder getUriBuilder();
 
     /**
      * Returns the value associated with the link {@code rel} param, or
@@ -232,7 +232,7 @@ abstract class Link {
          * @param uriBuilder underlying URI builder.
          * @return the updated builder.
          */
-        public Builder uriBuilder(UriBuilder uriBuilder);
+        public Builder uriBuilder(BaseUriBuilder uriBuilder);
 
         /**
          * Convenience method to set a link relation. More than one {@code rel} value can
