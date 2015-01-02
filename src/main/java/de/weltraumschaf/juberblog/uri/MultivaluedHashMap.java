@@ -130,7 +130,7 @@ class MultivaluedHashMap<K, V> extends AbstractMultivaluedMap<K, V> implements S
      * Constructs an empty multivalued hash map with the default initial capacity
      * ({@code 16}) and the default load factor ({@code 0.75}).
      */
-    public MultivaluedHashMap() {
+     MultivaluedHashMap() {
         super(new HashMap<K, List<V>>());
     }
 
@@ -141,7 +141,7 @@ class MultivaluedHashMap<K, V> extends AbstractMultivaluedMap<K, V> implements S
      * @param initialCapacity the initial capacity.
      * @throws IllegalArgumentException if the initial capacity is negative.
      */
-    public MultivaluedHashMap(int initialCapacity) {
+     MultivaluedHashMap(int initialCapacity) {
         super(new HashMap<K, List<V>>(initialCapacity));
     }
 
@@ -154,7 +154,7 @@ class MultivaluedHashMap<K, V> extends AbstractMultivaluedMap<K, V> implements S
      * @throws IllegalArgumentException if the initial capacity is negative
      *                                  or the load factor is nonpositive
      */
-    public MultivaluedHashMap(int initialCapacity, float loadFactor) {
+     MultivaluedHashMap(int initialCapacity, float loadFactor) {
         super(new HashMap<K, List<V>>(initialCapacity, loadFactor));
     }
 
@@ -167,14 +167,14 @@ class MultivaluedHashMap<K, V> extends AbstractMultivaluedMap<K, V> implements S
      *            multivalued map.
      * @throws NullPointerException if the specified map is {@code null}
      */
-    public MultivaluedHashMap(MultivaluedMap<? extends K, ? extends V> map) {
+     MultivaluedHashMap(MultivaluedMap<? extends K, ? extends V> map) {
         this();
         putAll(map);
     }
 
     /**
      * This private method is used by the copy constructor to avoid exposing
-     * additional generic parameters through the public API documentation.
+     * additional generic parameters through the  API documentation.
      *
      * @param <T> any subclass of K
      * @param <U> any subclass of V
@@ -194,7 +194,7 @@ class MultivaluedHashMap<K, V> extends AbstractMultivaluedMap<K, V> implements S
      *            multivalued map.
      * @throws NullPointerException if the specified map is {@code null}
      */
-    public MultivaluedHashMap(Map<? extends K, ? extends V> map) {
+     MultivaluedHashMap(Map<? extends K, ? extends V> map) {
         this();
         for (Map.Entry<? extends K, ? extends V> e : map.entrySet()) {
             this.putSingle(e.getKey(), e.getValue());

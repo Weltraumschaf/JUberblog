@@ -56,7 +56,7 @@ final class CharacterIterator {
      *
      * @param s String trough which the iterator iterates.
      */
-    public CharacterIterator(final String s) {
+     CharacterIterator(final String s) {
         this.s = s;
         this.pos = -1;
     }
@@ -66,7 +66,7 @@ final class CharacterIterator {
      *
      * @return True if there is a character which can be retrieved by {@link #next()}, false otherwise.
      */
-    public boolean hasNext() {
+     boolean hasNext() {
         return pos < s.length() - 1;
     }
 
@@ -76,7 +76,7 @@ final class CharacterIterator {
      * @return Next character.
      * @throws RuntimeException The method might throw exception when there is no more character to be retrieved.
      */
-    public char next() {
+     char next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -89,7 +89,7 @@ final class CharacterIterator {
      *
      * @return Next character.
      */
-    public char peek() {
+     char peek() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -102,7 +102,7 @@ final class CharacterIterator {
      *
      * @return current position of the iterator
      */
-    public int pos() {
+     int pos() {
         return pos;
     }
 
@@ -111,7 +111,7 @@ final class CharacterIterator {
      *
      * @return String which initialized this iterator.
      */
-    public String getInput() {
+     String getInput() {
         return s;
     }
 
@@ -120,7 +120,7 @@ final class CharacterIterator {
      *
      * @param newPosition New position for the iterator.
      */
-    public void setPosition(int newPosition) {
+     void setPosition(int newPosition) {
         if (newPosition > this.s.length() - 1) {
             throw new IndexOutOfBoundsException("Given position " + newPosition + " is outside the input string range.");
         }
@@ -132,7 +132,7 @@ final class CharacterIterator {
      *
      * @return Character from current position.
      */
-    public char current() {
+     char current() {
         if (pos == -1) {
             throw new IllegalStateException("Iterator not used yet.");
         }

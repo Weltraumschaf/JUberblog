@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * http://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * http://glassfish.java.net//CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -94,7 +94,7 @@ class UriTemplateParser {
      * @throws IllegalArgumentException if the template is null, an empty string
      *         or does not conform to a JAX-RS URI template.
      */
-    public UriTemplateParser(final String template) throws IllegalArgumentException {
+     UriTemplateParser(final String template) throws IllegalArgumentException {
         if (template == null || template.length() == 0) {
             throw new IllegalArgumentException();
         }
@@ -115,7 +115,7 @@ class UriTemplateParser {
      *
      * @return the template.
      */
-    public final String getTemplate() {
+     final String getTemplate() {
         return template;
     }
 
@@ -124,7 +124,7 @@ class UriTemplateParser {
      *
      * @return the pattern.
      */
-    public final Pattern getPattern() {
+     final Pattern getPattern() {
         return pattern;
     }
 
@@ -136,7 +136,7 @@ class UriTemplateParser {
      *
      * @return the normalized template.
      */
-    public final String getNormalizedTemplate() {
+     final String getNormalizedTemplate() {
         return normalizedTemplate.toString();
     }
 
@@ -145,7 +145,7 @@ class UriTemplateParser {
      *
      * @return the map of template names to patterns.
      */
-    public final Map<String, Pattern> getNameToPattern() {
+     final Map<String, Pattern> getNameToPattern() {
         return nameToPattern;
     }
 
@@ -154,7 +154,7 @@ class UriTemplateParser {
      *
      * @return the list of template names.
      */
-    public final List<String> getNames() {
+     final List<String> getNames() {
         return names;
     }
 
@@ -163,7 +163,7 @@ class UriTemplateParser {
      *
      * @return the capturing group counts.
      */
-    public final List<Integer> getGroupCounts() {
+     final List<Integer> getGroupCounts() {
         return groupCounts;
     }
 
@@ -176,7 +176,7 @@ class UriTemplateParser {
      *
      * @return the group indexes to capturing groups.
      */
-    public final int[] getGroupIndexes() {
+     final int[] getGroupIndexes() {
         if (names.isEmpty()) {
             return EMPTY_INT_ARRAY;
         }
@@ -199,7 +199,7 @@ class UriTemplateParser {
      *
      * @return the number of explicit regular expressions.
      */
-    public final int getNumberOfExplicitRegexes() {
+     final int getNumberOfExplicitRegexes() {
         return numOfExplicitRegexes;
     }
 
@@ -208,7 +208,7 @@ class UriTemplateParser {
      *
      * @return the number of literal characters.
      */
-    public final int getNumberOfLiteralCharacters() {
+     final int getNumberOfLiteralCharacters() {
         return literalCharacters;
     }
 

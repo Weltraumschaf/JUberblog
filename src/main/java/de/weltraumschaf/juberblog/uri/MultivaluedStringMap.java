@@ -56,19 +56,19 @@ final class MultivaluedStringMap extends MultivaluedHashMap<String, String> {
 
     static final long serialVersionUID = -6052320403766368902L;
 
-    public MultivaluedStringMap(MultivaluedMap<? extends String, ? extends String> map) {
+     MultivaluedStringMap(MultivaluedMap<? extends String, ? extends String> map) {
         super(map);
     }
 
-    public MultivaluedStringMap(int initialCapacity, float loadFactor) {
+     MultivaluedStringMap(int initialCapacity, float loadFactor) {
         super(initialCapacity, loadFactor);
     }
 
-    public MultivaluedStringMap(int initialCapacity) {
+     MultivaluedStringMap(int initialCapacity) {
         super(initialCapacity);
     }
 
-    public MultivaluedStringMap() {
+     MultivaluedStringMap() {
         super();
     }
 
@@ -82,7 +82,7 @@ final class MultivaluedStringMap extends MultivaluedHashMap<String, String> {
         values.add(0, "");
     }
 
-    public final <A> A getFirst(String key, Class<A> type) {
+     final <A> A getFirst(String key, Class<A> type) {
         String value = getFirst(key);
         if (value == null) {
             return null;
@@ -102,7 +102,7 @@ final class MultivaluedStringMap extends MultivaluedHashMap<String, String> {
     }
 
     @SuppressWarnings("unchecked")
-    public final <A> A getFirst(String key, A defaultValue) {
+     final <A> A getFirst(String key, A defaultValue) {
         String value = getFirst(key);
         if (value == null) {
             return defaultValue;

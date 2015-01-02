@@ -46,8 +46,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Abstract skeleton implementation of a {@link MultivaluedMap} that is backed
- * by a [key, multi-value] store represented as a {@link Map Map&lt;K, List&lt;V&gt;&gt;}.
+ * Abstract skeleton implementation of a {@link MultivaluedMap} that is backed by a [key, multi-value] store represented
+ * as a {@link Map Map&lt;K, List&lt;V&gt;&gt;}.
  *
  * @param <K> the type of keys maintained by this map.
  * @param <V> the type of mapped values.
@@ -61,15 +61,12 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     protected final Map<K, List<V>> store;
 
     /**
-     * Initialize the backing store in the abstract parent multivalued map
-     * implementation.
+     * Initialize the backing store in the abstract parent multivalued map implementation.
      *
-     * @param store the backing {@link Map} to be used as a [key, multi-value]
-     *              store. Must not be {@code null}.
-     * @throws NullPointerException in case the underlying {@code store} parameter
-     *                              is {@code null}.
+     * @param store the backing {@link Map} to be used as a [key, multi-value] store. Must not be {@code null}.
+     * @throws NullPointerException in case the underlying {@code store} parameter is {@code null}.
      */
-    public AbstractMultivaluedMap(Map<K, List<V>> store) {
+    AbstractMultivaluedMap(Map<K, List<V>> store) {
         if (store == null) {
             throw new NullPointerException("Underlying store must not be 'null'.");
         }
@@ -77,18 +74,16 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Set the value for the key to be a one item list consisting of the supplied
-     * value. Any existing values will be replaced.
+     * Set the value for the key to be a one item list consisting of the supplied value. Any existing values will be
+     * replaced.
      * <p />
-     * NOTE: This implementation ignores {@code null} values; A supplied value
-     * of {@code null} is ignored and not added to the purged value list.
-     * As a result of such operation, empty value list would  be registered for
-     * the supplied key. Overriding implementations may modify this behavior by
-     * redefining the {@link #addNull(java.util.List)} method.
+     * NOTE: This implementation ignores {@code null} values; A supplied value of {@code null} is ignored and not added
+     * to the purged value list. As a result of such operation, empty value list would be registered for the supplied
+     * key. Overriding implementations may modify this behavior by redefining the {@link #addNull(java.util.List)}
+     * method.
      *
-     * @param key   the key
-     * @param value the single value of the key. If the value is {@code null} it
-     *              will be ignored.
+     * @param key the key
+     * @param value the single value of the key. If the value is {@code null} it will be ignored.
      */
     @Override
     public final void putSingle(K key, V value) {
@@ -105,12 +100,10 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     /**
      * Define the behavior for adding a {@code null} values to the value list.
      * <p />
-     * Default implementation is a no-op, i.e. the {@code null} values are ignored.
-     * Overriding implementations may modify this behavior by providing their
-     * own definitions of this method.
+     * Default implementation is a no-op, i.e. the {@code null} values are ignored. Overriding implementations may
+     * modify this behavior by providing their own definitions of this method.
      *
-     * @param values value list where the {@code null} value addition is being
-     *               requested.
+     * @param values value list where the {@code null} value addition is being requested.
      */
     @SuppressWarnings("UnusedParameters")
     protected void addNull(List<V> values) {
@@ -118,15 +111,12 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Define the behavior for adding a {@code null} values to the first position
-     * in the value list.
+     * Define the behavior for adding a {@code null} values to the first position in the value list.
      * <p />
-     * Default implementation is a no-op, i.e. the {@code null} values are ignored.
-     * Overriding implementations may modify this behavior by providing their
-     * own definitions of this method.
+     * Default implementation is a no-op, i.e. the {@code null} values are ignored. Overriding implementations may
+     * modify this behavior by providing their own definitions of this method.
      *
-     * @param values value list where the {@code null} value addition is being
-     *               requested.
+     * @param values value list where the {@code null} value addition is being requested.
      */
     @SuppressWarnings("UnusedParameters")
     protected void addFirstNull(List<V> values) {
@@ -136,12 +126,11 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     /**
      * Add a value to the current list of values for the supplied key.
      * <p />
-     * NOTE: This implementation ignores {@code null} values; A supplied value
-     * of {@code null} is ignored and not added to the value list. Overriding
-     * implementations may modify this behavior by redefining the
+     * NOTE: This implementation ignores {@code null} values; A supplied value of {@code null} is ignored and not added
+     * to the value list. Overriding implementations may modify this behavior by redefining the
      * {@link #addNull(java.util.List)} method.
      *
-     * @param key   the key
+     * @param key the key
      * @param value the value to be added.
      */
     @Override
@@ -156,17 +145,15 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Add multiple values to the current list of values for the supplied key. If
-     * the supplied array of new values is empty, method returns immediately.
-     * Method throws a {@code NullPointerException} if the supplied array of values
+     * Add multiple values to the current list of values for the supplied key. If the supplied array of new values is
+     * empty, method returns immediately. Method throws a {@code NullPointerException} if the supplied array of values
      * is {@code null}.
      * <p />
-     * NOTE: This implementation ignores {@code null} values; Any of the supplied values
-     * of {@code null} is ignored and not added to the value list. Overriding
-     * implementations may modify this behavior by redefining the
+     * NOTE: This implementation ignores {@code null} values; Any of the supplied values of {@code null} is ignored and
+     * not added to the value list. Overriding implementations may modify this behavior by redefining the
      * {@link #addNull(java.util.List)} method.
      *
-     * @param key       the key.
+     * @param key the key.
      * @param newValues the values to be added.
      * @throws NullPointerException if the supplied array of new values is {@code null}.
      */
@@ -192,17 +179,15 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Add all the values from the supplied value list to the current list of
-     * values for the supplied key. If the supplied value list is empty, method
-     * returns immediately. Method throws a {@code NullPointerException} if the
+     * Add all the values from the supplied value list to the current list of values for the supplied key. If the
+     * supplied value list is empty, method returns immediately. Method throws a {@code NullPointerException} if the
      * supplied array of values is {@code null}.
      * <p />
-     * NOTE: This implementation ignores {@code null} values; Any {@code null} value
-     * in the supplied value list is ignored and not added to the value list. Overriding
-     * implementations may modify this behavior by redefining the
+     * NOTE: This implementation ignores {@code null} values; Any {@code null} value in the supplied value list is
+     * ignored and not added to the value list. Overriding implementations may modify this behavior by redefining the
      * {@link #addNull(java.util.List)} method.
      *
-     * @param key       the key.
+     * @param key the key.
      * @param valueList the list of values to be added.
      * @throws NullPointerException if the supplied value list is {@code null}.
      */
@@ -237,15 +222,13 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Add a value to the first position in the current list of values for the
-     * supplied key.
+     * Add a value to the first position in the current list of values for the supplied key.
      * <p />
-     * NOTE: This implementation ignores {@code null} values; A supplied value
-     * of {@code null} is ignored and not added to the purged value list. Overriding
-     * implementations may modify this behavior by redefining the
+     * NOTE: This implementation ignores {@code null} values; A supplied value of {@code null} is ignored and not added
+     * to the purged value list. Overriding implementations may modify this behavior by redefining the
      * {@link #addFirstNull(java.util.List)} method.
      *
-     * @param key   the key
+     * @param key the key
      * @param value the value to be added.
      */
     @Override
@@ -260,16 +243,13 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     }
 
     /**
-     * Return a non-null list of values for a given key. The returned list may be
-     * empty.
+     * Return a non-null list of values for a given key. The returned list may be empty.
      * <p />
-     * If there is no entry for the key in the map, a new empty {@link List}
-     * instance is created, registered within the map to hold the values of
-     * the key and returned from the method.
+     * If there is no entry for the key in the map, a new empty {@link List} instance is created, registered within the
+     * map to hold the values of the key and returned from the method.
      *
      * @param key the key.
-     * @return value list registered with the key. The method is guaranteed to never
-     *         return {@code null}.
+     * @return value list registered with the key. The method is guaranteed to never return {@code null}.
      */
     protected final List<V> getValues(K key) {
         List<V> l = store.get(key);
@@ -288,8 +268,7 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     /**
      * {@inheritDoc }
      * <p />
-     * This implementation delegates the method call to to the the underlying
-     * [key, multi-value] store.
+     * This implementation delegates the method call to to the the underlying [key, multi-value] store.
      *
      * @return a hash code value for the underlying [key, multi-value] store.
      */
@@ -301,11 +280,10 @@ abstract class AbstractMultivaluedMap<K, V> implements MultivaluedMap<K, V> {
     /**
      * {@inheritDoc }
      * <p />
-     * This implementation delegates the method call to to the the underlying
-     * [key, multi-value] store.
+     * This implementation delegates the method call to to the the underlying [key, multi-value] store.
      *
-     * @return {@code true} if the specified object is equal to the underlying
-     *         [key, multi-value] store, {@code false} otherwise.
+     * @return {@code true} if the specified object is equal to the underlying [key, multi-value] store, {@code false}
+     * otherwise.
      */
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

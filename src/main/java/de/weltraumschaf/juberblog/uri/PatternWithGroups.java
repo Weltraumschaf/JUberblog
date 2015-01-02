@@ -47,9 +47,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * A pattern for matching a string against a regular expression
- * and returning capturing group values for any capturing groups present in
- * the expression.
+ * A pattern for matching a string against a regular expression and returning capturing group values for any capturing
+ * groups present in the expression.
  *
  * #renamed com.sun.jersey.api.uri.UriPattern
  *
@@ -61,7 +60,7 @@ class PatternWithGroups {
     /**
      * The empty pattern that matches the null or empty string.
      */
-    public static final PatternWithGroups EMPTY = new PatternWithGroups();
+    static final PatternWithGroups EMPTY = new PatternWithGroups();
     /**
      * The regular expression for matching and obtaining capturing group values.
      */
@@ -76,7 +75,7 @@ class PatternWithGroups {
     private final int[] groupIndexes;
 
     /**
-     *  Construct an empty pattern.
+     * Construct an empty pattern.
      */
     protected PatternWithGroups() {
         this.regex = "";
@@ -87,27 +86,23 @@ class PatternWithGroups {
     /**
      * Construct a new pattern.
      *
-     * @param regex the regular expression. If the expression is null or an
-     *        empty string then the pattern will only match a null or empty
-     *        string.
-     * @throws java.util.regex.PatternSyntaxException if the
-     *         regular expression could not be compiled
+     * @param regex the regular expression. If the expression is null or an empty string then the pattern will only
+     * match a null or empty string.
+     * @throws java.util.regex.PatternSyntaxException if the regular expression could not be compiled
      */
-    public PatternWithGroups(final String regex) throws PatternSyntaxException {
+    PatternWithGroups(final String regex) throws PatternSyntaxException {
         this(regex, EMPTY_INT_ARRAY);
     }
 
     /**
      * Construct a new pattern.
      *
-     * @param regex the regular expression. If the expression is null or an
-     *        empty string then the pattern will only match a null or empty
-     *        string.
+     * @param regex the regular expression. If the expression is null or an empty string then the pattern will only
+     * match a null or empty string.
      * @param groupIndexes the array of group indexes to capturing groups.
-     * @throws java.util.regex.PatternSyntaxException if the
-     *         regular expression could not be compiled
+     * @throws java.util.regex.PatternSyntaxException if the regular expression could not be compiled
      */
-    public PatternWithGroups(final String regex, final int[] groupIndexes) throws PatternSyntaxException {
+    PatternWithGroups(final String regex, final int[] groupIndexes) throws PatternSyntaxException {
         this(compile(regex), groupIndexes);
     }
 
@@ -118,10 +113,10 @@ class PatternWithGroups {
     /**
      * Construct a new pattern.
      *
-     * @param regexPattern  the regular expression pattern
+     * @param regexPattern the regular expression pattern
      * @throws IllegalArgumentException if the regexPattern is null.
      */
-    public PatternWithGroups(final Pattern regexPattern) throws IllegalArgumentException {
+    PatternWithGroups(final Pattern regexPattern) throws IllegalArgumentException {
         this(regexPattern, EMPTY_INT_ARRAY);
     }
 
@@ -132,7 +127,7 @@ class PatternWithGroups {
      * @param groupIndexes the array of group indexes to capturing groups.
      * @throws IllegalArgumentException if the regexPattern is null.
      */
-    public PatternWithGroups(final Pattern regexPattern, final int[] groupIndexes) throws IllegalArgumentException {
+    PatternWithGroups(final Pattern regexPattern, final int[] groupIndexes) throws IllegalArgumentException {
         if (regexPattern == null) {
             throw new IllegalArgumentException();
         }
@@ -147,7 +142,7 @@ class PatternWithGroups {
      *
      * @return the regular expression.
      */
-    public final String getRegex() {
+    final String getRegex() {
         return regex;
     }
 
@@ -156,7 +151,7 @@ class PatternWithGroups {
      *
      * @return the group indexes.
      */
-    public final int[] getGroupIndexes() {
+    final int[] getGroupIndexes() {
         return groupIndexes;
     }
 
@@ -270,7 +265,7 @@ class PatternWithGroups {
      * @param cs the char sequence to match against the template.
      * @return the match result, otherwise null if no match occurs.
      */
-    public final MatchResult match(final CharSequence cs) {
+    final MatchResult match(final CharSequence cs) {
         // Check for match against the empty pattern
         if (cs == null) {
             return (regexPattern == null) ? EMPTY_STRING_MATCH_RESULT : null;
@@ -294,18 +289,16 @@ class PatternWithGroups {
     /**
      * Match against the pattern.
      * <p>
-     * If a matched then the capturing group values
-     * (if any) will be added to a list passed in as parameter.
+     * If a matched then the capturing group values (if any) will be added to a list passed in as parameter.
      *
      * @param cs the char sequence to match against the template.
-     * @param groupValues the list to add the values of a pattern's
-     *        capturing groups if matching is successful. The values are added
-     *        in the same order as the pattern's capturing groups. The list
-     *        is cleared before values are added.
+     * @param groupValues the list to add the values of a pattern's capturing groups if matching is successful. The
+     * values are added in the same order as the pattern's capturing groups. The list is cleared before values are
+     * added.
      * @return true if the char sequence matches the pattern, otherwise false.
      * @throws IllegalArgumentException if the group values is null.
      */
-    public final boolean match(final CharSequence cs, final List<String> groupValues) throws IllegalArgumentException {
+    final boolean match(final CharSequence cs, final List<String> groupValues) throws IllegalArgumentException {
         if (groupValues == null) {
             throw new IllegalArgumentException();
         }
@@ -336,29 +329,25 @@ class PatternWithGroups {
 
         // TODO check for consistency of different capturing groups
         // that must have the same value
-
         return true;
     }
 
     /**
      * Match against the pattern.
      * <p>
-     * If a matched then the capturing group values
-     * (if any) will be added to a list passed in as parameter.
+     * If a matched then the capturing group values (if any) will be added to a list passed in as parameter.
      *
      * @param cs the char sequence to match against the template.
-     * @param groupNames the list names associated with a pattern's
-     *        capturing groups. The names MUST be in the same order as the
-     *        pattern's capturing groups and the size MUST be equal to or
-     *        less than the number of capturing groups.
-     * @param groupValues the map to add the values of a pattern's
-     *        capturing groups if matching is successful. A values is put
-     *        into the map using the group name associated with the
-     *        capturing group. The map is cleared before values are added.
+     * @param groupNames the list names associated with a pattern's capturing groups. The names MUST be in the same
+     * order as the pattern's capturing groups and the size MUST be equal to or less than the number of capturing
+     * groups.
+     * @param groupValues the map to add the values of a pattern's capturing groups if matching is successful. A values
+     * is put into the map using the group name associated with the capturing group. The map is cleared before values
+     * are added.
      * @return true if the matches the pattern, otherwise false.
      * @throws IllegalArgumentException if group values is null.
      */
-    public final boolean match(
+    final boolean match(
             final CharSequence cs,
             final List<String> groupNames,
             final Map<String, String> groupValues) throws IllegalArgumentException {

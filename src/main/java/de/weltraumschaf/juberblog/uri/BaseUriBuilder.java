@@ -95,7 +95,7 @@ abstract class BaseUriBuilder {
      * @return a new BaseUriBuilder.
      * @throws IllegalArgumentException if uri is {@code null}.
      */
-    public static BaseUriBuilder fromUri(URI uri) {
+    static BaseUriBuilder fromUri(URI uri) {
         return newInstance().uri(uri);
     }
 
@@ -106,7 +106,7 @@ abstract class BaseUriBuilder {
      * @return a new BaseUriBuilder.
      * @throws IllegalArgumentException if {@code uriTemplate} is not a valid URI template or is {@code null}.
      */
-    public static BaseUriBuilder fromUri(String uriTemplate) {
+    static BaseUriBuilder fromUri(String uriTemplate) {
         return newInstance().uri(uriTemplate);
     }
 
@@ -118,7 +118,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if link is {@code null}
      * @since 2.0
      */
-    public static BaseUriBuilder fromLink(Link link) {
+    static BaseUriBuilder fromLink(Link link) {
         if (link == null) {
             throw new IllegalArgumentException("The provider 'link' parameter value is 'null'.");
         }
@@ -132,7 +132,7 @@ abstract class BaseUriBuilder {
      * @return a new BaseUriBuilder.
      * @throws IllegalArgumentException if path is {@code null}.
      */
-    public static BaseUriBuilder fromPath(String path) throws IllegalArgumentException {
+    static BaseUriBuilder fromPath(String path) throws IllegalArgumentException {
         return newInstance().path(path);
     }
 
@@ -145,7 +145,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if resource is not annotated with {@link javax.ws.rs.Path} or resource is
      * {@code null}.
      */
-    public static BaseUriBuilder fromResource(Class<?> resource) {
+    static BaseUriBuilder fromResource(Class<?> resource) {
         return newInstance().path(resource);
     }
 
@@ -167,7 +167,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if the {@code uri} parameter is {@code null}.
      */
-    public abstract BaseUriBuilder uri(URI uri);
+    abstract BaseUriBuilder uri(URI uri);
 
     /**
      * Parses the {@code uriTemplate} string and copies the parsed components of the supplied URI to the BaseUriBuilder
@@ -178,7 +178,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if {@code uriTemplate} is not a valid URI template or is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder uri(String uriTemplate);
+    abstract BaseUriBuilder uri(String uriTemplate);
 
     /**
      * Set the URI scheme.
@@ -188,7 +188,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if scheme is invalid.
      */
-    public abstract BaseUriBuilder scheme(String scheme);
+    abstract BaseUriBuilder scheme(String scheme);
 
     /**
      * Set the URI scheme-specific-part (see {@link java.net.URI}). This method will overwrite any existing values for
@@ -198,7 +198,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if ssp cannot be parsed or is {@code null}.
      */
-    public abstract BaseUriBuilder schemeSpecificPart(String ssp);
+    abstract BaseUriBuilder schemeSpecificPart(String ssp);
 
     /**
      * Set the URI user-info.
@@ -207,7 +207,7 @@ abstract class BaseUriBuilder {
      * component of the URI.
      * @return the updated BaseUriBuilder.
      */
-    public abstract BaseUriBuilder userInfo(String ui);
+    abstract BaseUriBuilder userInfo(String ui);
 
     /**
      * Set the URI host.
@@ -218,7 +218,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if host is invalid.
      */
-    public abstract BaseUriBuilder host(String host);
+    abstract BaseUriBuilder host(String host);
 
     /**
      * Set the URI port.
@@ -227,7 +227,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if port is invalid.
      */
-    public abstract BaseUriBuilder port(int port);
+    abstract BaseUriBuilder port(int port);
 
     /**
      * Set the URI path. This method will overwrite any existing path and associated matrix parameters. Existing '/'
@@ -237,7 +237,7 @@ abstract class BaseUriBuilder {
      * the URI.
      * @return the updated BaseUriBuilder.
      */
-    public abstract BaseUriBuilder replacePath(String path);
+    abstract BaseUriBuilder replacePath(String path);
 
     /**
      * Append path to the existing path. When constructing the final path, a '/' separator will be inserted between the
@@ -248,7 +248,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if path is {@code null}.
      */
-    public abstract BaseUriBuilder path(String path);
+    abstract BaseUriBuilder path(String path);
 
     /**
      * Append the path from a Path-annotated class to the existing path. When constructing the final path, a '/'
@@ -259,7 +259,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if resource is {@code null}, or if resource is not annotated with
      * {@link javax.ws.rs.Path}.
      */
-    public abstract BaseUriBuilder path(Class resource);
+    abstract BaseUriBuilder path(Class resource);
 
     /**
      * Append the path from a {@link javax.ws.rs.Path}-annotated method to the existing path. When constructing the
@@ -270,7 +270,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if method is {@code null} or is not annotated with a {@link javax.ws.rs.Path}.
      */
-    public abstract BaseUriBuilder path(Method method);
+    abstract BaseUriBuilder path(Method method);
 
     /**
      * Append path segments to the existing path. When constructing the final path, a '/' separator will be inserted
@@ -282,7 +282,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if segments or any element of segments is {@code null}.
      */
-    public abstract BaseUriBuilder segment(String... segments);
+    abstract BaseUriBuilder segment(String... segments);
 
     /**
      * Set the matrix parameters of the current final segment of the current URI path. This method will overwrite any
@@ -296,7 +296,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if matrix cannot be parsed.
      * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
      */
-    public abstract BaseUriBuilder replaceMatrix(String matrix);
+    abstract BaseUriBuilder replaceMatrix(String matrix);
 
     /**
      * Append a matrix parameter to the existing set of matrix parameters of the current final segment of the URI path.
@@ -311,7 +311,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if name or values is {@code null}.
      * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
      */
-    public abstract BaseUriBuilder matrixParam(String name, Object... values);
+    abstract BaseUriBuilder matrixParam(String name, Object... values);
 
     /**
      * Replace the existing value(s) of a matrix parameter on the current final segment of the URI path. If multiple
@@ -326,7 +326,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if name is {@code null}.
      * @see <a href="http://www.w3.org/DesignIssues/MatrixURIs.html">Matrix URIs</a>
      */
-    public abstract BaseUriBuilder replaceMatrixParam(String name, Object... values);
+    abstract BaseUriBuilder replaceMatrixParam(String name, Object... values);
 
     /**
      * Set the URI query string. This method will overwrite any existing query parameters.
@@ -336,7 +336,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if query cannot be parsed.
      */
-    public abstract BaseUriBuilder replaceQuery(String query);
+    abstract BaseUriBuilder replaceQuery(String query);
 
     /**
      * Append a query parameter to the existing set of query parameters. If multiple values are supplied the parameter
@@ -348,7 +348,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if name or values is {@code null}.
      */
-    public abstract BaseUriBuilder queryParam(String name, Object... values);
+    abstract BaseUriBuilder queryParam(String name, Object... values);
 
     /**
      * Replace the existing value(s) of a query parameter. If multiple values are supplied the parameter will be added
@@ -361,7 +361,7 @@ abstract class BaseUriBuilder {
      * @return the updated BaseUriBuilder.
      * @throws IllegalArgumentException if name is {@code null}.
      */
-    public abstract BaseUriBuilder replaceQueryParam(String name, Object... values);
+    abstract BaseUriBuilder replaceQueryParam(String name, Object... values);
 
     /**
      * Set the URI fragment.
@@ -370,7 +370,7 @@ abstract class BaseUriBuilder {
      * existing fragment.
      * @return the updated BaseUriBuilder.
      */
-    public abstract BaseUriBuilder fragment(String fragment);
+    abstract BaseUriBuilder fragment(String fragment);
 
     /**
      * Resolve a URI template with a given {@code name} in this {@code BaseUriBuilder} instance using a supplied value.
@@ -383,7 +383,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the resolved template name or value is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplate(String name, Object value);
+    abstract BaseUriBuilder resolveTemplate(String name, Object value);
 
     /**
      * Resolve a URI template with a given {@code name} in this {@code BaseUriBuilder} instance using a supplied value.
@@ -399,7 +399,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the resolved template name or value is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplate(String name, Object value, boolean encodeSlashInPath);
+    abstract BaseUriBuilder resolveTemplate(String name, Object value, boolean encodeSlashInPath);
 
     /**
      * Resolve a URI template with a given {@code name} in this {@code BaseUriBuilder} instance using a supplied encoded
@@ -418,7 +418,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the resolved template name or encoded value is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplateFromEncoded(String name, Object value);
+    abstract BaseUriBuilder resolveTemplateFromEncoded(String name, Object value);
 
     /**
      * Resolve one or more URI templates in this {@code BaseUriBuilder} instance using supplied name-value pairs.
@@ -430,7 +430,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the name-value map or any of the names or values in the map is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplates(Map<String, Object> templateValues);
+    abstract BaseUriBuilder resolveTemplates(Map<String, Object> templateValues);
 
     /**
      * Resolve one or more URI templates in this {@code BaseUriBuilder} instance using supplied name-value pairs.
@@ -445,7 +445,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the name-value map or any of the names or values in the map is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplates(Map<String, Object> templateValues, boolean encodeSlashInPath)
+    abstract BaseUriBuilder resolveTemplates(Map<String, Object> templateValues, boolean encodeSlashInPath)
             throws IllegalArgumentException;
 
     /**
@@ -463,7 +463,7 @@ abstract class BaseUriBuilder {
      * @throws IllegalArgumentException if the name-value map or any of the names or values in the map is {@code null}.
      * @since 2.0
      */
-    public abstract BaseUriBuilder resolveTemplatesFromEncoded(Map<String, Object> templateValues);
+    abstract BaseUriBuilder resolveTemplatesFromEncoded(Map<String, Object> templateValues);
 
     /**
      * Build a URI.
@@ -486,7 +486,7 @@ abstract class BaseUriBuilder {
      * @see #buildFromMap(java.util.Map, boolean)
      * @see #buildFromEncodedMap(java.util.Map)
      */
-    public abstract URI buildFromMap(Map<String, ?> values);
+    abstract URI buildFromMap(Map<String, ?> values);
 
     /**
      * Build a URI.
@@ -515,7 +515,7 @@ abstract class BaseUriBuilder {
      * @see #buildFromMap(java.util.Map)
      * @see #buildFromEncodedMap(java.util.Map)
      */
-    public abstract URI buildFromMap(Map<String, ?> values, boolean encodeSlashInPath)
+    abstract URI buildFromMap(Map<String, ?> values, boolean encodeSlashInPath)
             throws IllegalArgumentException, UriBuilderException;
 
     /**
@@ -536,7 +536,7 @@ abstract class BaseUriBuilder {
      * @see #buildFromMap(java.util.Map, boolean)
      * @since 2.0
      */
-    public abstract URI buildFromEncodedMap(Map<String, ?> values)
+    abstract URI buildFromEncodedMap(Map<String, ?> values)
             throws IllegalArgumentException, UriBuilderException;
 
     /**
@@ -564,7 +564,7 @@ abstract class BaseUriBuilder {
      * @see #build(Object[], boolean)
      * @see #buildFromEncoded(Object...)
      */
-    public abstract URI build(Object... values)
+    abstract URI build(Object... values)
             throws IllegalArgumentException, UriBuilderException;
 
     /**
@@ -599,7 +599,7 @@ abstract class BaseUriBuilder {
      * @see #buildFromEncoded(Object...)
      * @since 2.0
      */
-    public abstract URI build(Object[] values, boolean encodeSlashInPath)
+    abstract URI build(Object[] values, boolean encodeSlashInPath)
             throws IllegalArgumentException, UriBuilderException;
 
     /**
@@ -622,7 +622,7 @@ abstract class BaseUriBuilder {
      * @see #build(Object[])
      * @see #build(Object[], boolean)
      */
-    public abstract URI buildFromEncoded(Object... values)
+    abstract URI buildFromEncoded(Object... values)
             throws IllegalArgumentException, UriBuilderException;
 
     /**
@@ -631,5 +631,5 @@ abstract class BaseUriBuilder {
      * @return the URI template string for this URI builder.
      * @since 2.0
      */
-    public abstract String toTemplate();
+    abstract String toTemplate();
 }
