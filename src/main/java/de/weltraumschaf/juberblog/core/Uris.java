@@ -12,10 +12,9 @@
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.uri.JerseyUriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.ws.rs.core.UriBuilder;
-import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 
 /**
  * Provides URIs based on a base URI.
