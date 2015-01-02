@@ -161,7 +161,9 @@ public class TemplatesTest {
                 + "siteTemplate=siteTemplate, "
                 + "feedTemplate=feedTemplate, "
                 + "indexTemplate=indexTemplate, "
-                + "siteMapTemplate=siteMapTemplate}"));
+                + "siteMapTemplate=siteMapTemplate, "
+                + "createSiteOrPostTemplate=create/post_or_site"
+                + "}"));
     }
 
     @Test

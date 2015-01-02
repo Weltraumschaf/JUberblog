@@ -30,7 +30,9 @@ public final class Directories {
      * Name of posts sub directory.
      */
     private static final String POSTS_DIR_NAME = "posts";
-
+/**
+     * Name of drafts sub directory.
+     */
     private static final String DRAFTS_DIR_NAME = "drafts";
 
     /**
@@ -41,7 +43,13 @@ public final class Directories {
      * Where to find the site's Markdown files.
      */
     private final Path sitesData;
+    /**
+     * Where to find the draft post's Markdown files.
+     */
     private final Path postsDraftData;
+    /**
+     * Where to find the draft site's Markdown files.
+     */
     private final Path sitesDraftData;
     /**
      * Where to store published files.
@@ -93,10 +101,20 @@ public final class Directories {
         return sitesData;
     }
 
+    /**
+     * Where to find the sites drafts data files.
+     *
+     * @return never {@code null}
+     */
     public Path getPostsDraftData() {
         return postsDraftData;
     }
 
+    /**
+     * Where to find the posts drafts data files.
+     *
+     * @return never {@code null}
+     */
     public Path getSitesDraftData() {
         return sitesDraftData;
     }

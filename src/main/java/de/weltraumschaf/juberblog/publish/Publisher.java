@@ -66,6 +66,15 @@ public final class Publisher {
      */
     private final Type type;
 
+    /**
+     * Dedicated constructor.
+     *
+     * @param templates must not be {@code null}
+     * @param directories must not be {@code null}
+     * @param configuration must not be {@code null}
+     * @param type must not be {@code null}
+     * @throws IOException if any template can't be read
+     */
     public Publisher(
             final Templates templates,
             final Directories directories,

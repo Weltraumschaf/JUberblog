@@ -108,7 +108,9 @@ final class Scaffold {
         try (final FileSystem fs = createJarFileSystem(URI.create(src.getJarLocation()))) {
             final String scaffold = src.getResourceLocation();
             final Path sourceDir = fs.getPath(scaffold);
-            Files.walkFileTree(sourceDir, new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, verbose, type));
+            Files.walkFileTree(
+                    sourceDir,
+                    new CopyDirectoryVisitor(target.toPath(), STRIPPED_PREFIX, io, verbose, type));
         }
     }
 

@@ -19,8 +19,6 @@ import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
-import java.net.URI;
-import java.nio.file.Path;
 
 /**
  * Task to publish pages.
@@ -67,9 +65,18 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
      */
     public static final class Config {
 
-        final Templates templates;
-        final Directories directories;
-        final Configuration configuration;
+       /**
+        * Where to find template files.
+        */
+        private final Templates templates;
+        /**
+         * Where to find important directories.
+         */
+        private final Directories directories;
+        /**
+         * The blog configuration.
+         */
+        private final Configuration configuration;
         /**
          * Type of published data.
          */

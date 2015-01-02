@@ -26,7 +26,7 @@ import org.joda.time.DateTimeComparator;
  * </p>
  *
  * XXX: Move into publish package.
- * 
+ *
  * @author Sven Strittmatter <weltraumschaf@googlemail.com>
  */
 public final class Page {
