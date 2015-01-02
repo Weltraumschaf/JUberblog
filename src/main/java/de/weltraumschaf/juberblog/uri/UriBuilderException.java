@@ -48,7 +48,7 @@ package de.weltraumschaf.juberblog.uri;
  * @author Marc Hadley
  * @since 1.0
  */
-class UriBuilderException extends java.lang.RuntimeException {
+public final class UriBuilderException extends java.lang.RuntimeException {
 
     private static final long serialVersionUID = 956255913370721193L;
 
