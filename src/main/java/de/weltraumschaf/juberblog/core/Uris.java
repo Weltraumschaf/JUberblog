@@ -15,6 +15,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.ws.rs.core.UriBuilder;
+import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 
 /**
  * Provides URIs based on a base URI.
@@ -76,8 +77,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI posts() {
-        return UriBuilder
-                .fromUri(base)
+        return new JerseyUriBuilder()
+                .uri(base)
                 .path(POSTS_DIR)
                 .build();
     }
@@ -89,8 +90,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI post(final String filename) {
-        return UriBuilder
-                .fromUri(posts())
+        return new JerseyUriBuilder()
+                .uri(posts())
                 .path(Validate.notEmpty(filename, "filename"))
                 .build();
     }
@@ -101,8 +102,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI sites() {
-        return UriBuilder
-                .fromUri(base)
+        return new JerseyUriBuilder()
+                .uri(base)
                 .path(SITES_DIR)
                 .build();
     }
@@ -114,8 +115,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI site(final String filename) {
-        return UriBuilder
-                .fromUri(sites())
+        return new JerseyUriBuilder()
+                .uri(sites())
                 .path(Validate.notEmpty(filename, "filename"))
                 .build();
     }
@@ -126,8 +127,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI drafts() {
-        return UriBuilder
-                .fromUri(base)
+        return new JerseyUriBuilder()
+                .uri(base)
                 .path(DRAFTS_DIR)
                 .build();
     }
@@ -138,8 +139,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI draftSites() {
-        return UriBuilder
-                .fromUri(drafts())
+        return new JerseyUriBuilder()
+                .uri(drafts())
                 .path(SITES_DIR)
                 .build();
     }
@@ -150,8 +151,8 @@ public final class Uris {
      * @return never {@code null}
      */
     public URI draftPosts() {
-        return UriBuilder
-                .fromUri(drafts())
+        return new JerseyUriBuilder()
+                .uri(drafts())
                 .path(POSTS_DIR)
                 .build();
     }
