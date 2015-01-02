@@ -328,44 +328,6 @@ final class InetAddresses {
   }
 
   /**
-   * Returns the string representation of an {@link InetAddress}.
-   *
-   * <p>For IPv4 addresses, this is identical to
-   * {@link InetAddress#getHostAddress()}, but for IPv6 addresses, the output
-   * follows <a href="http://tools.ietf.org/html/rfc5952">RFC 5952</a>
-   * section 4.  The main difference is that this method uses "::" for zero
-   * compression, while Java's version uses the uncompressed form.
-   *
-   * <p>This method uses hexadecimal for all IPv6 addresses, including
-   * IPv4-mapped IPv6 addresses such as "::c000:201".  The output does not
-   * include a Scope ID.
-   *
-   * @param ip {@link InetAddress} to be converted to an address string
-   * @return {@code String} containing the text-formatted IP address
-   * @since 10.0
-   */
-  public static String toAddrString(InetAddress ip) {
-    Validate.notNull(ip);
-    if (ip instanceof Inet4Address) {
-      // For IPv4, Java's formatting is good enough.
-      return ip.getHostAddress();
-    }
-
-    if (!(ip instanceof Inet6Address)) {
-      throw new IllegalArgumentException();
-    }
-
-    byte[] bytes = ip.getAddress();
-    int[] hextets = new int[IPV6_PART_COUNT];
-    for (int i = 0; i < hextets.length; i++) {
-      hextets[i] = Ints.fromBytes(
-          (byte) 0, (byte) 0, bytes[2 * i], bytes[2 * i + 1]);
-    }
-    compressLongestRunOfZeroes(hextets);
-    return hextetsToIPv6String(hextets);
-  }
-
-  /**
    * Identify and mark the longest run of zeroes in an IPv6 address.
    *
    * <p>Only runs of two or more hextets are considered.  In case of a tie, the
@@ -429,38 +391,6 @@ final class InetAddresses {
       lastWasNumber = thisIsNumber;
     }
     return buf.toString();
-  }
-
-  /**
-   * Returns the string representation of an {@link InetAddress} suitable
-   * for inclusion in a URI.
-   *
-   * <p>For IPv4 addresses, this is identical to
-   * {@link InetAddress#getHostAddress()}, but for IPv6 addresses it
-   * compresses zeroes and surrounds the text with square brackets; for example
-   * {@code "[2001:db8::1]"}.
-   *
-   * <p>Per section 3.2.2 of
-   * <a target="_parent"
-   *    href="http://tools.ietf.org/html/rfc3986#section-3.2.2"
-   *  >http://tools.ietf.org/html/rfc3986</a>,
-   * a URI containing an IPv6 string literal is of the form
-   * {@code "http://[2001:db8::1]:8888/index.html"}.
-   *
-   * <p>Use of either {@link InetAddresses#toAddrString},
-   * {@link InetAddress#getHostAddress()}, or this method is recommended over
-   * {@link InetAddress#toString()} when an IP address string literal is
-   * desired.  This is because {@link InetAddress#toString()} prints the
-   * hostname and the IP address string joined by a "/".
-   *
-   * @param ip {@link InetAddress} to be converted to URI string literal
-   * @return {@code String} containing URI-safe string literal
-   */
-  public static String toUriString(InetAddress ip) {
-    if (ip instanceof Inet6Address) {
-      return "[" + toAddrString(ip) + "]";
-    }
-    return toAddrString(ip);
   }
 
   /**
@@ -557,20 +487,6 @@ final class InetAddresses {
   }
 
   /**
-   * Returns the IPv4 address embedded in an IPv4 compatible address.
-   *
-   * @param ip {@link Inet6Address} to be examined for an embedded IPv4 address
-   * @return {@link Inet4Address} of the embedded IPv4 address
-   * @throws IllegalArgumentException if the argument is not a valid IPv4 compatible address
-   */
-  public static Inet4Address getCompatIPv4Address(Inet6Address ip) {
-    Validate.isTrue(isCompatIPv4Address(ip),
-        String.format("Address '%s' is not IPv4-compatible.", toAddrString(ip)));
-
-    return getInet4Address(Arrays.copyOfRange(ip.getAddress(), 12, 16));
-  }
-
-  /**
    * Evaluates whether the argument is a 6to4 address.
    *
    * <p>6to4 addresses begin with the {@code "2002::/16"} prefix.
@@ -587,20 +503,6 @@ final class InetAddresses {
   public static boolean is6to4Address(Inet6Address ip) {
     byte[] bytes = ip.getAddress();
     return (bytes[0] == (byte) 0x20) && (bytes[1] == (byte) 0x02);
-  }
-
-  /**
-   * Returns the IPv4 address embedded in a 6to4 address.
-   *
-   * @param ip {@link Inet6Address} to be examined for embedded IPv4 in 6to4 address
-   * @return {@link Inet4Address} of embedded IPv4 in 6to4 address
-   * @throws IllegalArgumentException if the argument is not a valid IPv6 6to4 address
-   */
-  public static Inet4Address get6to4IPv4Address(Inet6Address ip) {
-    Validate.isTrue(is6to4Address(ip),
-        String.format("Address '%s' is not a 6to4 address.", toAddrString(ip)));
-
-    return getInet4Address(Arrays.copyOfRange(ip.getAddress(), 2, 6));
   }
 
   /**
@@ -715,20 +617,6 @@ final class InetAddresses {
   }
 
   /**
-   * Returns the IPv4 address embedded in an ISATAP address.
-   *
-   * @param ip {@link Inet6Address} to be examined for embedded IPv4 in ISATAP address
-   * @return {@link Inet4Address} of embedded IPv4 in an ISATAP address
-   * @throws IllegalArgumentException if the argument is not a valid IPv6 ISATAP address
-   */
-  public static Inet4Address getIsatapIPv4Address(Inet6Address ip) {
-    Validate.isTrue(isIsatapAddress(ip),
-        String.format("Address '%s' is not an ISATAP address.", toAddrString(ip)));
-
-    return getInet4Address(Arrays.copyOfRange(ip.getAddress(), 12, 16));
-  }
-
-  /**
    * Examines the Inet6Address to determine if it is an IPv6 address of one
    * of the specified address types that contain an embedded IPv4 address.
    *
@@ -782,17 +670,6 @@ final class InetAddresses {
       return true;
     }
     return false;
-  }
-
-  /**
-   * Returns an Inet4Address having the integer value specified by
-   * the argument.
-   *
-   * @param address {@code int}, the 32bit integer address to be converted
-   * @return {@link Inet4Address} equivalent of the argument
-   */
-  public static Inet4Address fromInteger(int address) {
-    return getInet4Address(Ints.toByteArray(address));
   }
 
   /**
