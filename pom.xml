@@ -86,8 +86,8 @@
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
 
         <analisys.exclude.uri>de/weltraumschaf/juberblog/uri/</analisys.exclude.uri>
-        <sonar.exclusions>${analisys.exclude.uri}.*</sonar.exclusions>
-        <sonar.coverage.exclusions>${analisys.exclude.uri}.*</sonar.coverage.exclusions>
+        <sonar.exclusions>**/${analisys.exclude.uri}.*</sonar.exclusions>
+        <sonar.coverage.exclusions>**/${analisys.exclude.uri}.*</sonar.coverage.exclusions>
 
         <dependency.commons.version>2.0.0-SNAPSHOT</dependency.commons.version>
         <dependency.freemarkerdown.version>1.0.0-SNAPSHOT</dependency.freemarkerdown.version>
