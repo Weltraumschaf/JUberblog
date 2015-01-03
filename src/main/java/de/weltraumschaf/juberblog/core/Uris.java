@@ -12,7 +12,7 @@
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.uri.UriBuilder;
+import de.weltraumschaf.commons.uri.UriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 

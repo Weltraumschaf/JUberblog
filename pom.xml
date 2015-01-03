@@ -85,10 +85,6 @@
         <maven.findbugs.excludefilterfile>${project.basedir}/src/main/config/findbugs-exclude.xml</maven.findbugs.excludefilterfile>
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
 
-        <analisys.exclude.uri>de/weltraumschaf/juberblog/uri/</analisys.exclude.uri>
-        <sonar.exclusions>de/weltraumschaf/juberblog/uri/**/*</sonar.exclusions>
-        <!--<sonar.coverage.exclusions>**/juberblog/uri/.class</sonar.coverage.exclusions>-->
-
         <dependency.commons.version>2.0.0-SNAPSHOT</dependency.commons.version>
         <dependency.freemarkerdown.version>1.0.0-SNAPSHOT</dependency.freemarkerdown.version>
         <dependency.joda-time.version>2.3</dependency.joda-time.version>
@@ -120,6 +116,11 @@
         <dependency>
             <groupId>de.weltraumschaf.commons</groupId>
             <artifactId>testing</artifactId>
+            <version>${dependency.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.weltraumschaf.commons</groupId>
+            <artifactId>uri</artifactId>
             <version>${dependency.commons.version}</version>
         </dependency>
         <dependency>
@@ -234,7 +235,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/ExitCodeImpl.class</exclude>
-                        <exclude>**/${analisys.exclude.uri}*.class</exclude>
+                        <exclude>**/de/weltraumschaf/juberblog/uri/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
