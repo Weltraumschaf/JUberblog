@@ -31,29 +31,29 @@ public class AppTest extends IntegrationTestCase {
     private static final String NL = String.format("%n");
     private static final String EXPECTED_VERSION = "1.0.0-SNAPSHOT";
     private static final String EXPECTED_HELP = "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]" + NL
-            + NL
-            + "Commandline tool to manage your blog." + NL
-            + NL
-            + "Options" + NL
-            + NL
-            + "  -c, --config        Config file to use." + NL
-            + "  -u, --update        Updates an installation. Already existing files will be backed" + NL
-            + "                      up." + NL
-            + "      --verbose       Tell you more." + NL
-            + "  -f, --force         Forced instsallation will install into non empty direcotry" + NL
-            + "                      and overwrites existing files." + NL
-            + "  -h, --help          Show this help." + NL
-            + "  -l, --location      Location of the blog installation." + NL
-            + "  -s, --site          Create site." + NL
-            + "  -v, --version       Show the version." + NL
-            + "  -d, --draft         Create site/post as draft." + NL
-            + NL
-            + "Example" + NL
-            + NL
-            + "  Publish the whole blog:" + NL
-            + "    juberblog publish -l path/to/your/blog -c path/to/your/config.properties" + NL
-            + NL
-            + NL;
+        + NL
+        + "Commandline tool to manage your blog." + NL
+        + NL
+        + "Options" + NL
+        + NL
+        + "  -c, --config        Config file to use." + NL
+        + "  -u, --update        Updates an installation. Already existing files will be backed" + NL
+        + "                      up." + NL
+        + "      --verbose       Tell you more." + NL
+        + "  -f, --force         Forced instsallation will install into non empty direcotry" + NL
+        + "                      and overwrites existing files." + NL
+        + "  -h, --help          Show this help." + NL
+        + "  -l, --location      Location of the blog installation." + NL
+        + "  -s, --site          Create site." + NL
+        + "  -v, --version       Show the version." + NL
+        + "  -d, --draft         Create site/post as draft." + NL
+        + NL
+        + "Example" + NL
+        + NL
+        + "  Publish the whole blog:" + NL
+        + "    juberblog publish -l path/to/your/blog -c path/to/your/config.properties" + NL
+        + NL
+        + NL;
 
     @Rule
     public final CapturedOutput output = new CapturedOutput();
@@ -280,7 +280,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_CREATE() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"create", "-x"}));
 
@@ -290,7 +290,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_INSTALL() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"install", "-x"}));
 
@@ -300,7 +300,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_PUBLISH() throws Exception {
         output.expectErr("FATAL: Unknown option: -x" + NL
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
 
         App.main(createApp(new String[]{"publish", "-x"}));
 
@@ -310,7 +310,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_CREATE() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "create",
@@ -324,7 +324,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_CREATE() throws Exception {
         output.expectErr(equalTo("FATAL: No configuration file given!\n"
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "create",
@@ -355,7 +355,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_INSTALL() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "install",
@@ -388,7 +388,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingLocation_PUBLISH() throws Exception {
         output.expectErr(equalTo("FATAL: No location directory given!\n"
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "publish",
@@ -402,7 +402,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_PUBLISH() throws Exception {
         output.expectErr(equalTo("FATAL: No configuration file given!\n"
-                + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
 
         final App sut = createApp(new String[]{
             "publish",
