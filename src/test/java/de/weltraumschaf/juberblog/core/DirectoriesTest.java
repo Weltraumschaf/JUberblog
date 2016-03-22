@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.core;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
@@ -21,10 +22,11 @@ public class DirectoriesTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     private final Directories sut = new Directories(
-            Paths.get("/blog/data"),
-            Paths.get("/blog/public"));
+        Paths.get("/blog/data"),
+        Paths.get("/blog/public"));
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsDataDir() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("dataDir");
@@ -33,6 +35,7 @@ public class DirectoriesTest {
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsOutputDir() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("outputDir");
@@ -43,20 +46,21 @@ public class DirectoriesTest {
     @Test
     public void equalsContract() {
         EqualsVerifier.forClass(Directories.class)
-                .verify();
+            .suppress(Warning.REFERENCE_EQUALITY)
+            .verify();
     }
 
     @Test
     public void toStringContainsAllProperties() {
         assertThat(sut.toString(), is(
-                "Directories{"
-                + "postsData=/blog/data/posts, "
-                + "sitesData=/blog/data/sites, "
-                + "postsDraftData=/blog/data/drafts/posts, "
-                + "sitesDraftData=/blog/data/drafts/sites, "
-                + "output=/blog/public, "
-                + "postsOutput=/blog/public/posts, "
-                + "siteOutput=/blog/public/sites}"));
+            "Directories{"
+            + "postsData=/blog/data/posts, "
+            + "sitesData=/blog/data/sites, "
+            + "postsDraftData=/blog/data/drafts/posts, "
+            + "sitesDraftData=/blog/data/drafts/sites, "
+            + "output=/blog/public, "
+            + "postsOutput=/blog/public/posts, "
+            + "siteOutput=/blog/public/sites}"));
     }
 
     @Test

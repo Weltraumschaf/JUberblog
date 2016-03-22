@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.core;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
@@ -21,138 +22,146 @@ public class TemplatesTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     private final Templates sut = new Templates(
-            Paths.get("layoutTemplate"),
-            Paths.get("postTemplate"),
-            Paths.get("siteTemplate"),
-            Paths.get("feedTemplate"),
-            Paths.get("indexTemplate"),
-            Paths.get("siteMapTemplate"),
-            Paths.get("create/post_or_site")
+        Paths.get("layoutTemplate"),
+        Paths.get("postTemplate"),
+        Paths.get("siteTemplate"),
+        Paths.get("feedTemplate"),
+        Paths.get("indexTemplate"),
+        Paths.get("siteMapTemplate"),
+        Paths.get("create/post_or_site")
     );
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsLayoutTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("layoutTemplate");
 
         new Templates(
-                null,
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class));
+            null,
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsPostTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("postTemplate");
 
         new Templates(
-                mock(Path.class),
-                null,
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class));
+            mock(Path.class),
+            null,
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsSiteTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("siteTemplate");
 
         new Templates(
-                mock(Path.class),
-                mock(Path.class),
-                null,
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class));
+            mock(Path.class),
+            mock(Path.class),
+            null,
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsFeedTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("feedTemplate");
 
         new Templates(
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                null,
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class));
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            null,
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsIndexTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("indexTemplate");
 
         new Templates(
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                null,
-                mock(Path.class),
-                mock(Path.class));
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            null,
+            mock(Path.class),
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsSiteMapTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("siteMapTemplate");
 
         new Templates(
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                null,
-                mock(Path.class));
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            null,
+            mock(Path.class));
     }
 
     @Test
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAscreateSiteOrPostTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("createSiteOrPostTemplate");
 
         new Templates(
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                mock(Path.class),
-                null);
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            mock(Path.class),
+            null);
     }
 
     @Test
     public void equalsContract() {
         EqualsVerifier.forClass(Templates.class)
-                .verify();
+            .suppress(Warning.REFERENCE_EQUALITY)
+            .verify();
     }
 
     @Test
     public void toStringContainsAllProperties() {
         assertThat(sut.toString(), is(
-                "Templates{"
-                + "layoutTemplate=layoutTemplate, "
-                + "postTemplate=postTemplate, "
-                + "siteTemplate=siteTemplate, "
-                + "feedTemplate=feedTemplate, "
-                + "indexTemplate=indexTemplate, "
-                + "siteMapTemplate=siteMapTemplate, "
-                + "createSiteOrPostTemplate=create/post_or_site"
-                + "}"));
+            "Templates{"
+            + "layoutTemplate=layoutTemplate, "
+            + "postTemplate=postTemplate, "
+            + "siteTemplate=siteTemplate, "
+            + "feedTemplate=feedTemplate, "
+            + "indexTemplate=indexTemplate, "
+            + "siteMapTemplate=siteMapTemplate, "
+            + "createSiteOrPostTemplate=create/post_or_site"
+            + "}"));
     }
 
     @Test
