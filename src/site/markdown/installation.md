@@ -3,12 +3,13 @@
 ## Prerequisites
 
 1. You need [Java 7 JDK][1] installed.
-2. You need [Maven 3][2] installed (if you want to build the binary self).
-3. You need [Git][3] installed (if you want to build the binary self).
+2. You need [Git][3] installed (if you want to build the binary self).
+3. You need [Maven 3][2] installed (if you want to build the binary self).
 
 ## Download or Build
 
-You can either choose to download a prebuilt binary or you can build it from scratch.
+You can  either choose to download  a prebuilt binary  or you can build  it from
+scratch.
 
 ### Download
 
