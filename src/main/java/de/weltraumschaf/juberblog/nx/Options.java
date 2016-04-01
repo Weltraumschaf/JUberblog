@@ -1,11 +1,16 @@
 package de.weltraumschaf.juberblog.nx;
 
 import com.beust.jcommander.JCommander;
+import de.weltraumschaf.juberblog.core.Constants;
 
 /**
+ * Facade to get options.
+ *
  * @since 1.0.0
  */
 public final class Options {
+
+    private static final String NL = Constants.DEFAULT_NEW_LINE.toString();
 
     private final MainOptions main = new MainOptions();
     private final InstallOptions install = new InstallOptions();
@@ -49,6 +54,24 @@ public final class Options {
 
     public PublishOptions getPublish() {
         return publish;
+    }
+
+    public String usage() {
+        return usage(Command.NONE);
+    }
+
+    public String usage(final Command cmd) {
+        switch (cmd) {
+            case INSTALL:
+                return InstallOptions.USAGE;
+            case CREATE:
+                return CreateOptions.USAGE;
+            case PUBLISH:
+                return PublishOptions.USAGE;
+            case NONE:
+            default:
+                return MainOptions.USAGE;
+        }
     }
 
     public static enum Command {

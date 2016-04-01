@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.nx;
 import com.beust.jcommander.Parameter;
 
 /**
+ * General options available for all commands.
  */
 abstract class CommonCommandOptions extends CommonOptions {
 

@@ -1,10 +1,8 @@
 package de.weltraumschaf.juberblog.nx;
 
-import com.beust.jcommander.MissingCommandException;
 import de.weltraumschaf.juberblog.nx.Options.Command;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -83,7 +81,6 @@ public final class OptionsTest {
         assertThat(sut.getInstall().isVerbose(), is(true));
     }
 
-
     @Test
     public void createShortOptions() {
         sut.parse("create", "-c", "config", "-t", "title", "-d", "-s", "-v");
@@ -116,21 +113,56 @@ public final class OptionsTest {
         assertThat(sut.getPublish().getConfig(), is("config"));
         assertThat(sut.getPublish().isPurge(), is(true));
         assertThat(sut.getPublish().isQuiet(), is(true));
-        assertThat(sut.getPublish().isSites(), is(true));
-        assertThat(sut.getPublish().isDrafts(), is(true));
+        assertThat(sut.getPublish().isSite(), is(true));
+        assertThat(sut.getPublish().isDraft(), is(true));
         assertThat(sut.getPublish().isVerbose(), is(true));
     }
 
     @Test
     public void publishLongOptions() {
-        sut.parse("publish", "--config", "config", "--purge", "--quiet", "--sites", "--drafts", "--verbose");
+        sut.parse("publish", "--config", "config", "--purge", "--quiet", "--site", "--draft", "--verbose");
 
         assertThat(sut.getParsedCommand(), is(Command.PUBLISH));
         assertThat(sut.getPublish().getConfig(), is("config"));
         assertThat(sut.getPublish().isPurge(), is(true));
         assertThat(sut.getPublish().isQuiet(), is(true));
-        assertThat(sut.getPublish().isSites(), is(true));
-        assertThat(sut.getPublish().isDrafts(), is(true));
+        assertThat(sut.getPublish().isSite(), is(true));
+        assertThat(sut.getPublish().isDraft(), is(true));
         assertThat(sut.getPublish().isVerbose(), is(true));
+    }
+
+    @Test
+    public void usage() {
+        assertThat(
+            sut.usage(),
+            is("juberblog [create|install|publish] [--version] [-h|--help]"));
+    }
+
+    @Test
+    public void usage_none() {
+        assertThat(
+            sut.usage(Command.NONE),
+            is("juberblog [create|install|publish] [--version] [-h|--help]"));
+    }
+
+    @Test
+    public void usage_install() {
+        assertThat(
+            sut.usage(Command.INSTALL),
+            is("juberblog install -l|--location <directory>"));
+    }
+
+    @Test
+    public void usage_create() {
+        assertThat(
+            sut.usage(Command.CREATE),
+            is("juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]"));
+    }
+
+    @Test
+    public void usage_publish() {
+        assertThat(
+            sut.usage(Command.PUBLISH),
+            is("juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]"));
     }
 }
