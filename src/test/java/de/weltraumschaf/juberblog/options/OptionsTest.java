@@ -1,6 +1,7 @@
-package de.weltraumschaf.juberblog.nx;
+package de.weltraumschaf.juberblog.options;
 
-import de.weltraumschaf.juberblog.nx.Options.Command;
+import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.options.Options.Command;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Ignore;

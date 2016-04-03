@@ -1,4 +1,4 @@
-package de.weltraumschaf.juberblog.nx;
+package de.weltraumschaf.juberblog.options;
 
 import com.beust.jcommander.Parameter;
 

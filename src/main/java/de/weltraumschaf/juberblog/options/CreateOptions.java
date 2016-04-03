@@ -1,8 +1,8 @@
-package de.weltraumschaf.juberblog.nx;
+package de.weltraumschaf.juberblog.options;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import de.weltraumschaf.juberblog.nx.Options.Command;
+import de.weltraumschaf.juberblog.options.Options.Command;
 
 /**
  * Options for the create command.

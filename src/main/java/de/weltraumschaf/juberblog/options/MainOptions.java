@@ -1,7 +1,7 @@
-package de.weltraumschaf.juberblog.nx;
+package de.weltraumschaf.juberblog.options;
 
 import com.beust.jcommander.Parameter;
-import de.weltraumschaf.juberblog.nx.Options.Command;
+import de.weltraumschaf.juberblog.options.Options.Command;
 
 /**
  * Options for the main command.
