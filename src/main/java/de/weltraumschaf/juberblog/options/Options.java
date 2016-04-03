@@ -11,6 +11,7 @@ import java.util.List;
  * Facade to get CLI options.
  *
  * @since 1.0.0
+ * @author Sven Strittmatter
  */
 public final class Options {
 

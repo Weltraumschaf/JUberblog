@@ -5,6 +5,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.options.InstallOptions;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,16 +32,20 @@ public final class InstallSubCommand  extends SubCommandBase {
         scaffold = new Scaffold(io());
     }
 
+    private InstallOptions installOptions() {
+        return options().getInstall();
+    }
+
     @Override
-    public void execute() throws ApplicationException {
+    public void doExecute() throws ApplicationException {
         validateArguments();
-        final String location = options().getLocation().trim();
+        final String location = installOptions().getLocation().trim();
         final File target = validateLocation(location);
         io().println(String.format("Install scaffold to '%s'...", location));
 
-        if (options().isForce()) {
+        if (installOptions().isForce()) {
             scaffold.setType(InstallationType.OVERWRITE);
-        } else if (options().isUpdate()) {
+        } else if (installOptions().isUpdate()) {
             scaffold.setType(InstallationType.BACKUP);
         } else if (target.list().length > 0) {
             throw new ApplicationException(
@@ -49,7 +54,7 @@ public final class InstallSubCommand  extends SubCommandBase {
         }
 
         try {
-            scaffold.setVerbose(options().isVerbose());
+            scaffold.setVerbose(installOptions().isVerbose());
             scaffold.copyFiles(target);
         } catch (IOException ex) {
             throw new ApplicationException(ExitCodeImpl.FATAL, "Can't install scaffold!", ex);
@@ -70,14 +75,15 @@ public final class InstallSubCommand  extends SubCommandBase {
      *
      * @throws ApplicationException if title is empty
      */
-    private void validateArguments() throws ApplicationException {
-        if (options().getLocation().isEmpty()) {
+    @Override
+    protected void validateArguments() throws ApplicationException {
+        if (installOptions().getLocation().isEmpty()) {
             throw new ApplicationException(
                 ExitCodeImpl.MISSING_ARGUMENT,
                 "Empty location given! Please specify a valid direcotry as installation location.");
         }
 
-        if (options().isForce() && options().isUpdate()) {
+        if (installOptions().isForce() && installOptions().isUpdate()) {
             throw new ApplicationException(
                 ExitCodeImpl.BAD_ARGUMENT,
                 "You must not use FORCE and UPGRADE flag together!");

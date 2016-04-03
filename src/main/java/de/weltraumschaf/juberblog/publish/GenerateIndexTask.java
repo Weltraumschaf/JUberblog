@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.publish;
 
 import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;

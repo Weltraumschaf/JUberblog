@@ -1,6 +1,5 @@
 package de.weltraumschaf.juberblog.options;
 
-import de.weltraumschaf.juberblog.options.Options;
 import de.weltraumschaf.juberblog.options.Options.Command;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -88,7 +87,7 @@ public final class OptionsTest {
         sut.parse("create", "-c", "config", "-t", "title", "-d", "-s", "-v");
 
         assertThat(sut.getParsedCommand(), is(Command.CREATE));
-        assertThat(sut.getCreate().getComfig(), is("config"));
+        assertThat(sut.getCreate().getConfig(), is("config"));
         assertThat(sut.getCreate().getTitle(), is("title"));
         assertThat(sut.getCreate().isDraft(), is(true));
         assertThat(sut.getCreate().isSite(), is(true));
@@ -100,7 +99,7 @@ public final class OptionsTest {
         sut.parse("create", "--config", "config", "--title", "title", "--draft", "--site", "--verbose");
 
         assertThat(sut.getParsedCommand(), is(Command.CREATE));
-        assertThat(sut.getCreate().getComfig(), is("config"));
+        assertThat(sut.getCreate().getConfig(), is("config"));
         assertThat(sut.getCreate().getTitle(), is("title"));
         assertThat(sut.getCreate().isDraft(), is(true));
         assertThat(sut.getCreate().isSite(), is(true));
@@ -202,8 +201,10 @@ public final class OptionsTest {
                 + "\n"
                 + "Options\n"
                 + "\n"
+                + "  -f, --force         Force the installation which overwrites exsiting files.\n"
                 + "  -h, --help          Show help.\n"
                 + "  -l, --location      Where to install the scaffold.\n"
+                + "  -u, --update        Updates files which makes backups of exisiting files.\n"
                 + "  -v, --verbose       Tell you more.\n"
                 + "\n"
                 + "Example\n"

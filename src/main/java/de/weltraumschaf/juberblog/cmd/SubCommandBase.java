@@ -1,12 +1,13 @@
 package de.weltraumschaf.juberblog.cmd;
 
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.options.Options;
 
 /**
  * Common functionality for sub commands.
@@ -33,35 +34,42 @@ public abstract class SubCommandBase implements SubCommand {
 
     @Override
     public final Options options() {
-        return registry().options();
+        return registry.options();
     }
 
     @Override
     public final IO io() {
-        return registry().io();
+        return registry.io();
     }
 
     @Override
     public final Templates templates() {
-        return registry().templates();
+        return registry.templates();
     }
 
     @Override
     public final Directories directories() {
-        return registry().directories();
+        return registry.directories();
     }
 
     @Override
     public final Configuration configuration() {
-        return registry().configuration();
+        return registry.configuration();
+    }
+
+    @Override
+    public void execute() throws ApplicationException {
+        validateArguments();
+        doExecute();
     }
 
     /**
-     * Getter for registry.
+     * Validates the required command line arguments.
      *
-     * @return never {@code null}
+     * @throws ApplicationException if title is empty
      */
-    private JUberblog registry() {
-        return registry;
-    }
+    abstract protected void validateArguments() throws ApplicationException;
+
+    abstract protected void doExecute() throws ApplicationException;
+
 }

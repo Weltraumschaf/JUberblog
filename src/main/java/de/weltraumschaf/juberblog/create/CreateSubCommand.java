@@ -37,7 +37,7 @@ public final class CreateSubCommand  extends SubCommandBase {
     }
 
     @Override
-    public void execute() throws ApplicationException {
+    protected void doExecute() throws ApplicationException {
         validateArguments();
         final String title = configuration().getTitle().trim();
 
@@ -51,7 +51,7 @@ public final class CreateSubCommand  extends SubCommandBase {
             tpl.assignVariable("title", title);
             final String content = fmd.render(tpl);
 
-            if (options().isSite()) {
+            if (options().getCreate().isSite()) {
                 createSite(content);
             } else {
                 createPost(content);
@@ -86,7 +86,7 @@ public final class CreateSubCommand  extends SubCommandBase {
         final String title = configuration().getTitle();
         final Path baseDir;
 
-        if (options().isDraft()) {
+        if (options().getCreate().isDraft()) {
             io().println(String.format("Create site draft '%s'...", title));
             baseDir = directories().getSitesDraftData();
         } else {
@@ -107,7 +107,7 @@ public final class CreateSubCommand  extends SubCommandBase {
         final String title = configuration().getTitle();
         final Path baseDir;
 
-        if (options().isDraft()) {
+        if (options().getCreate().isDraft()) {
             io().println(String.format("Create post draft '%s'...", title));
             baseDir = directories().getPostsDraftData();
         } else {
@@ -169,7 +169,8 @@ public final class CreateSubCommand  extends SubCommandBase {
      *
      * @throws ApplicationException if title is empty
      */
-    private void validateArguments() throws ApplicationException {
+    @Override
+    protected void validateArguments() throws ApplicationException {
         if (configuration().getTitle().isEmpty()) {
             throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title arguemnt given!");
         }

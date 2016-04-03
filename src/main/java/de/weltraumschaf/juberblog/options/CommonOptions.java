@@ -6,6 +6,7 @@ import com.beust.jcommander.Parameter;
  * General available options.
  *
  * @since 1.0.0
+ * @author Sven Strittmatter
  */
 abstract class CommonOptions {
 

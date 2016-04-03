@@ -1,10 +1,10 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.app.Options;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.options.Options;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;

@@ -2,7 +2,6 @@ package de.weltraumschaf.juberblog.app;
 
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BaseTestCase;
-import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.app.App.FactoryImpl;
@@ -11,6 +10,8 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.options.Options.Command;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import java.nio.file.Paths;
 import static org.hamcrest.Matchers.instanceOf;
@@ -49,24 +50,24 @@ public class FactoryTest extends BaseTestCase {
 
     @Test
     public void forName_CREATE() {
-        assertThat(sut.forName(SubCommand.Name.CREATE, registry),
+        assertThat(sut.forName(Command.CREATE, registry),
                 is(instanceOf(CreateSubCommand.class)));
     }
 
     @Test
     public void forName_INSTALL() {
-        assertThat(sut.forName(SubCommand.Name.INSTALL, registry),
+        assertThat(sut.forName(Command.INSTALL, registry),
                 is(instanceOf(InstallSubCommand.class)));
     }
 
     @Test
     public void forName_PUBLISH() {
-        assertThat(sut.forName(SubCommand.Name.PUBLISH, registry),
+        assertThat(sut.forName(Command.PUBLISH, registry),
                 is(instanceOf(PublishSubCommand.class)));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void forName_UNKNOWN() {
-        sut.forName(SubCommand.Name.UNKNOWN, registry);
+        sut.forName(Command.NONE, registry);
     }
 }

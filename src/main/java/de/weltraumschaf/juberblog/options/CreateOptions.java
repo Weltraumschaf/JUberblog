@@ -8,16 +8,17 @@ import de.weltraumschaf.juberblog.options.Options.Command;
  * Options for the create command.
  *
  * @since 1.0.0
+ * @author Sven Strittmatter
  */
 @Parameters(commandDescription = "Creates blog entities (sites/pages).")
-public final class CreateOptions extends CommonCommandOptions {
+public final class CreateOptions extends CommonCommandOptions implements OptionsWithConfig {
 
     static final String USAGE = Command.CREATE.toString()
         + " -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]";
     static final String EXAMPLE = "TODO Write examples.";
 
     @Parameter(names = {"-c", "--config"}, description = "Config file to use.", required = true)
-    private String comfig;
+    private String config;
     @Parameter(names = {"-t", "--title"}, description = "Title of the blog post.")
     private String title;
     @Parameter(names = {"-d", "--draft"}, description = "Will mark the file name as draft.")
@@ -25,8 +26,9 @@ public final class CreateOptions extends CommonCommandOptions {
     @Parameter(names = {"-s", "--site"}, description = "Will create a site instead of a post.")
     private boolean site;
 
-    public String getComfig() {
-        return comfig;
+    @Override
+    public String getConfig()  {
+        return config;
     }
 
     public String getTitle() {
@@ -40,5 +42,6 @@ public final class CreateOptions extends CommonCommandOptions {
     public boolean isSite() {
         return site;
     }
+
 
 }

@@ -4,6 +4,9 @@ import com.beust.jcommander.Parameter;
 
 /**
  * General options available for all commands.
+ *
+ * @since 1.0.0
+ * @author Sven Strittmatter
  */
 abstract class CommonCommandOptions extends CommonOptions {
 

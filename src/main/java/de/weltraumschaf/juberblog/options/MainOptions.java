@@ -7,6 +7,7 @@ import de.weltraumschaf.juberblog.options.Options.Command;
  * Options for the main command.
  *
  * @since 1.0.0
+ * @author Sven Strittmatter
  */
 public final class MainOptions extends CommonOptions {
 

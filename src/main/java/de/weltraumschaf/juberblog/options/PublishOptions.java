@@ -8,9 +8,10 @@ import de.weltraumschaf.juberblog.options.Options.Command;
  * Options for the publish command.
  *
  * @since 1.0.0
+ * @author Sven Strittmatter
  */
 @Parameters(commandDescription = "Publishes the blog.")
-public final class PublishOptions extends CommonCommandOptions {
+public final class PublishOptions extends CommonCommandOptions implements OptionsWithConfig {
 
     static final String USAGE = Command.PUBLISH.toString()
         + " -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]";
@@ -27,6 +28,7 @@ public final class PublishOptions extends CommonCommandOptions {
     @Parameter(names = {"-d", "--draft"}, description = "Publish drafts.")
     private boolean draft;
 
+    @Override
     public String getConfig() {
         return config;
     }

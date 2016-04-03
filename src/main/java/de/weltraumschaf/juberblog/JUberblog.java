@@ -3,11 +3,14 @@ package de.weltraumschaf.juberblog;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.app.Options;
+
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.options.InstallOptions;
+import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.options.OptionsWithConfig;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -110,18 +113,6 @@ public final class JUberblog {
     }
 
     /**
-     * Creates filled registry.
-     *
-     * @param cliOptions must not be {@code null}
-     * @param io must not be {@code null}
-     * @return never {@code null}
-     * @throws ApplicationException if not all objects can't be generated
-     */
-    public static JUberblog generate(final Options cliOptions, final IO io) throws ApplicationException {
-        return generate(cliOptions, io, generateConfiguration(cliOptions));
-    }
-
-    /**
      * Creates filled registry, but without loading configuration from file.
      *
      * @param cliOptions must not be {@code null}
@@ -142,9 +133,9 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if not all objects can't be generated
      */
-    private static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration)
+    public static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration)
             throws ApplicationException {
-        final Path locationDir = findLocationDir(cliOptions);
+        final Path locationDir = findLocationDir(cliOptions.getInstall());
         final Path dataDir = findDataDir(locationDir, configuration);
         final Path outputDir = findOutputDir(locationDir, configuration);
         final Path templateDir = findTemplateDir(locationDir, configuration);
@@ -198,7 +189,7 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if location is not a directory
      */
-    private static Path findLocationDir(final Options cliOptions) throws ApplicationException {
+    private static Path findLocationDir(final InstallOptions cliOptions) throws ApplicationException {
         final Path locationDir = Paths.get(cliOptions.getLocation());
 
         if (!Files.isDirectory(locationDir)) {
@@ -245,13 +236,13 @@ public final class JUberblog {
      * @return never {@code null}, always new instance
      * @throws ApplicationException if file can't be loaded
      */
-    private static Configuration generateConfiguration(final Options cliOptions) throws ApplicationException {
-        final Path configFile = Paths.get(Validate.notNull(cliOptions, "cliOptions").getConfigurationFile());
+    public static Configuration generateConfiguration(final OptionsWithConfig cliOptions) throws ApplicationException {
+        final Path configFile = Paths.get(Validate.notNull(cliOptions, "cliOptions").getConfig());
 
         if (!Files.isRegularFile(configFile)) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
-                    String.format("Can't read config file '%s'!", cliOptions.getConfigurationFile()));
+                    String.format("Can't read config file '%s'!", cliOptions.getConfig()));
         }
 
         final Configuration configuration;
@@ -261,7 +252,7 @@ public final class JUberblog {
         } catch (final IOException ex) {
             throw new ApplicationException(
                     ExitCodeImpl.FATAL,
-                    String.format("Error during read of config file '%s'!", cliOptions.getConfigurationFile()));
+                    String.format("Error during read of config file '%s'!", cliOptions.getConfig()));
         }
 
         return configuration;

@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.core;
 
 import com.beust.jcommander.internal.Lists;
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.validate.Validate;
 import java.util.Collection;
 
@@ -35,7 +36,7 @@ public final class TaskExecutor {
     /**
      * Executes all appended tasks.
      *
-     * @throws Exception if a task throws an exception, execution will be interrupted
+     * @throws ApplicationException if a task throws an exception, execution will be interrupted
      */
     public void execute() throws Exception {
         Object result = null;

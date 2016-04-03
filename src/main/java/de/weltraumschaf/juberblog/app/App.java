@@ -12,9 +12,10 @@ import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
-import de.weltraumschaf.juberblog.cmd.SubCommand.Name;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
 import de.weltraumschaf.juberblog.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.options.Options.Command;
 import de.weltraumschaf.juberblog.publish.PublishSubCommand;
 import java.io.UnsupportedEncodingException;
 
@@ -33,7 +34,7 @@ public final class App extends InvokableAdapter {
     /**
      * Command line arguments.
      */
-    private final Arguments arguments;
+    private final Options options = new Options();
     /**
      * Version information.
      */
@@ -62,7 +63,6 @@ public final class App extends InvokableAdapter {
         super(args);
         this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
         this.env = Validate.notNull(env, "env");
-        arguments = new Arguments(args);
     }
 
     /**
@@ -76,8 +76,8 @@ public final class App extends InvokableAdapter {
 
         try {
             InvokableAdapter.main(
-                    invokable,
-                    IOStreams.newDefault());
+                invokable,
+                IOStreams.newDefault());
         } catch (final UnsupportedEncodingException ex) {
             handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
         }
@@ -92,10 +92,10 @@ public final class App extends InvokableAdapter {
      * @param prefix must not be {@code null}
      */
     private static void handleFatals(
-            final App invokable,
-            final Throwable cause,
-            final ExitCode code,
-            final String prefix) {
+        final App invokable,
+        final Throwable cause,
+        final ExitCode code,
+        final String prefix) {
         // CHECKSTYLE:OFF
         // At this point we do not have IO streams.
         System.err.print(Validate.notNull(prefix, "prefix"));
@@ -112,16 +112,19 @@ public final class App extends InvokableAdapter {
     @Override
     public void execute() throws Exception {
         version.load();
+        final Command commandName;
 
-        if (arguments.isEmpty()) {
-            throwBadArgumentError();
-            return;
+        try {
+            options.parse(getArgs());
+            commandName = options.getParsedCommand();
+        } catch (final ParameterException ex) {
+            throw badArgumentError(ex, options.getParsedCommand());
         }
 
-        if (Name.isSubCommand(arguments.getFirstArgument())) {
-            executeSubCommand();
-        } else {
+        if (Command.NONE == commandName) {
             executeMainCommand();
+        } else {
+            executeSubCommand(commandName);
         }
     }
 
@@ -131,54 +134,44 @@ public final class App extends InvokableAdapter {
      * @throws ApplicationException on any application error such as bad arguments
      */
     private void executeMainCommand() throws ApplicationException {
-        try {
-            if (!executeBaseCommand(Options.gatherOptions(arguments.getAll()))) {
-                throwBadArgumentError();
-            }
-        } catch (final ParameterException ex) {
-            throwBadArgumentError(ex);
+        if (options.getMain().isVersion()) {
+            showVersion();
+            return;
         }
+
+        if (options.getMain().isHelp()) {
+            showHelp();
+            return;
+        }
+
+        throw badArgumentError();
     }
 
     /**
      * Executes a sub command named by fist CLI argument.
      *
+     * @param must not be {@code null}
      * @throws Exception if anything went wrong
      */
-    private void executeSubCommand() throws Exception {
-        final Options cliOptions;
-        try {
-            cliOptions = Options.gatherOptions(arguments.getTailArguments());
-        } catch (final ParameterException ex) {
-            throwBadArgumentError(ex.getMessage(), ex);
-            return;
-        }
-
-        if (executeBaseCommand(cliOptions)) {
-            return;
-        }
-
-        if (cliOptions.getLocation().isEmpty()) {
-            throwBadArgumentError("No location directory given!");
-            return;
-        }
-
-        final Name subCommandName = Name.betterValueOf(arguments.getFirstArgument());
+    private void executeSubCommand(final Command commandName) throws Exception {
+        Validate.notNull(commandName, "commandName");
         final JUberblog registry;
 
-        if (subCommandName == Name.INSTALL) {
-            registry = JUberblog.generateDefaultConfig(cliOptions, getIoStreams());
-        } else {
-            if (cliOptions.getConfigurationFile().isEmpty()) {
-                throwBadArgumentError("No configuration file given!");
-                return;
-            }
-
-            registry = JUberblog.generate(cliOptions, getIoStreams());
+        switch (commandName) {
+            case INSTALL:
+                registry = JUberblog.generateDefaultConfig(options, getIoStreams());
+                break;
+            case CREATE:
+                registry = JUberblog.generate(options, getIoStreams(), JUberblog.generateConfiguration(options.getCreate()));
+                break;
+            case PUBLISH:
+                registry = JUberblog.generate(options, getIoStreams(), JUberblog.generateConfiguration(options.getPublish()));
+                break;
+            default:
+                throw badArgumentError("Unsupported command!", commandName);
         }
 
-
-        subCommands.forName(subCommandName, registry).execute();
+        subCommands.forName(commandName, registry).execute();
     }
 
     /**
@@ -186,18 +179,18 @@ public final class App extends InvokableAdapter {
      *
      * @throws ApplicationException always
      */
-    private void throwBadArgumentError() throws ApplicationException {
-        throwBadArgumentError((ParameterException) null);
+    private ApplicationException badArgumentError() throws ApplicationException {
+        return badArgumentError("Bad arguments!", Command.NONE);
     }
 
     /**
      * Throw bad CLI argument error with custom message.
      *
-     * @param msg additional error message
+     * @param messageFormat additional error message
      * @throws ApplicationException always
      */
-    private void throwBadArgumentError(final String msg) throws ApplicationException {
-        throwBadArgumentError(msg, null);
+    private ApplicationException badArgumentError(final String messageFormat, final Command name, final Object... args) throws ApplicationException {
+        return badArgumentError(messageFormat, null, name, args);
     }
 
     /**
@@ -206,62 +199,43 @@ public final class App extends InvokableAdapter {
      * @param ex may be {@code null}
      * @throws ApplicationException always
      */
-    private void throwBadArgumentError(final ParameterException ex) throws ApplicationException {
-        throwBadArgumentError("Bad arguments!", ex);
+    private ApplicationException badArgumentError(final ParameterException ex, final Command name) throws ApplicationException {
+        return badArgumentError("Bad arguments (cause: %s)!", ex, name, ex.getMessage());
     }
 
     /**
      * Throw bad CLI argument error with custom message with exception for debug output the stack trace.
      *
-     * @param msg additional error message
+     * @param messageFormat additional error message
      * @param ex may be {@code null}
      * @throws ApplicationException always
      */
-    private void throwBadArgumentError(final String msg, final ParameterException ex) throws ApplicationException {
-        throw new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(msg), ex);
+    private ApplicationException badArgumentError(final String messageFormat, final ParameterException ex, final Command name, final Object... args) throws ApplicationException {
+        return new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(messageFormat, name, args), ex);
     }
 
     /**
      * Appends usage to given message.
      *
-     * @param msg must not be {@code null} or empty
+     * @param messageFormat must not be {@code null} or empty
+     * @param name must not be {@code null}
+     * @param args optional arguments for the message format string.
      * @return never {@code null} or empty
      */
-    private String errorMessage(final String msg) {
+    private String errorMessage(final String messageFormat, final Command name, final Object... args) {
         return new StringBuilder()
-                .append(Validate.notEmpty(msg, "msg"))
-                .append(Constants.DEFAULT_NEW_LINE.toString())
-                .append(Options.usage())
-                .toString();
-    }
-
-    /**
-     * Executes stuff common for all commands (e.g. show help or version).
-     *
-     * @param cliOptions must not {@code null}
-     * @return whether to exit the application
-     */
-    private boolean executeBaseCommand(final Options cliOptions) {
-        Validate.notNull(cliOptions, "opt");
-
-        if (cliOptions.isVersion()) {
-            showVersion();
-            return true;
-        }
-
-        if (cliOptions.isHelp()) {
-            showHelp();
-            return true;
-        }
-
-        return false;
+            .append(String.format(Validate.notEmpty(messageFormat, "messageFormat"), args))
+            .append(Constants.DEFAULT_NEW_LINE.toString())
+            .append("Usage: ")
+            .append(options.usage(name))
+            .toString();
     }
 
     /**
      * Show help message.
      */
     private void showHelp() {
-        getIoStreams().println(Options.helpMessage());
+        getIoStreams().println(options.help());
     }
 
     /**
@@ -305,7 +279,7 @@ public final class App extends InvokableAdapter {
          * @param registry must not be {@code null}
          * @return never {@code null}, always new instance
          */
-        SubCommand forName(final Name name, final JUberblog registry);
+        SubCommand forName(final Command name, final JUberblog registry);
     }
 
     /**
@@ -314,7 +288,7 @@ public final class App extends InvokableAdapter {
     static final class FactoryImpl implements Factory {
 
         @Override
-        public SubCommand forName(final Name name, final JUberblog registry) {
+        public SubCommand forName(final Command name, final JUberblog registry) {
             switch (Validate.notNull(name, "name")) {
                 case CREATE:
                     return new CreateSubCommand(registry);
