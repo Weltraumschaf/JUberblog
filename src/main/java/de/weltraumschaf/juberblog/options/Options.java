@@ -158,36 +158,37 @@ public final class Options {
      * @return never {@code null} or empty
      */
     public String help(final Command cmd) {
-        final String usage;
         final String description;
-        final String example;
         final List<ParameterDescription> parameters;
+
+        if (Command.NONE == cmd) {
+            description = MainOptions.DESCRIPTION;
+            parameters = parser.getParameters();
+        } else {
+            description = parser.getCommandDescription(cmd.toString());
+            parameters = parser.getCommands().get(cmd.toString()).getParameters();
+        }
+
+        final String usage;
+        final String example;
 
         switch (cmd) {
             case INSTALL:
                 usage = InstallOptions.USAGE;
-                description = parser.getCommandDescription(cmd.toString());
                 example = InstallOptions.EXAMPLE;
-                parameters = parser.getCommands().get(cmd.toString()).getParameters();
                 break;
             case CREATE:
                 usage = CreateOptions.USAGE;
-                description = parser.getCommandDescription(cmd.toString());
                 example = CreateOptions.EXAMPLE;
-                parameters = parser.getCommands().get(cmd.toString()).getParameters();
                 break;
             case PUBLISH:
                 usage = PublishOptions.USAGE;
-                description = parser.getCommandDescription(cmd.toString());
                 example = PublishOptions.EXAMPLE;
-                parameters = parser.getCommands().get(cmd.toString()).getParameters();
                 break;
             case NONE:
             default:
                 usage = MainOptions.USAGE;
-                description = MainOptions.DESCRIPTION;
                 example = MainOptions.EXAMPLE;
-                parameters = parser.getParameters();
                 break;
         }
 
