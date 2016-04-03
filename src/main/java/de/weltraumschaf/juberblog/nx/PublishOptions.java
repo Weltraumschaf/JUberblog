@@ -2,7 +2,6 @@ package de.weltraumschaf.juberblog.nx;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.nx.Options.Command;
 
 /**
@@ -10,13 +9,12 @@ import de.weltraumschaf.juberblog.nx.Options.Command;
  *
  * @since 1.0.0
  */
-@Parameters(commandDescription = "Publishes the blog")
+@Parameters(commandDescription = "Publishes the blog.")
 public final class PublishOptions extends CommonCommandOptions {
 
-    static final String USAGE = Constants.COMMAND_NAME.toString() + " " + Command.PUBLISH.toString()
+    static final String USAGE = Command.PUBLISH.toString()
         + " -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]";
-    static final String DESCRIPTION = "";
-    static final String EXAMPLE = "";
+    static final String EXAMPLE = "TODO Write examples.";
 
     @Parameter(names = {"-c", "--config"}, description = "Config file to use.", required = true)
     private String config;

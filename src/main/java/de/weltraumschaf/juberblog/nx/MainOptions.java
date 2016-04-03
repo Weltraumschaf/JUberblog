@@ -1,7 +1,6 @@
 package de.weltraumschaf.juberblog.nx;
 
 import com.beust.jcommander.Parameter;
-import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.nx.Options.Command;
 
 /**
@@ -11,13 +10,13 @@ import de.weltraumschaf.juberblog.nx.Options.Command;
  */
 public final class MainOptions extends CommonOptions {
 
-    static final String USAGE = Constants.COMMAND_NAME.toString() + " ["
-        + Command.CREATE.toString() + "|"
+    static final String USAGE =
+        Command.CREATE.toString() + "|"
         + Command.INSTALL.toString() + "|"
         + Command.PUBLISH.toString()
-        + "] [--version] [-h|--help]";
-    static final String DESCRIPTION = "";
-    static final String EXAMPLE = "";
+        + " [--version] [-h|--help]";
+    static final String DESCRIPTION = "Commandline tool to manage your blog.";
+    static final String EXAMPLE = "TODO Add some examples.";
 
     @Parameter(names = {"--version"}, description = "Show version.")
     private boolean version;

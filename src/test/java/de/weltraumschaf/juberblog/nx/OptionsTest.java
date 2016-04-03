@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.nx;
 import de.weltraumschaf.juberblog.nx.Options.Command;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -135,34 +136,125 @@ public final class OptionsTest {
     public void usage() {
         assertThat(
             sut.usage(),
-            is("juberblog [create|install|publish] [--version] [-h|--help]"));
+            is("create|install|publish [--version] [-h|--help]"));
     }
 
     @Test
     public void usage_none() {
         assertThat(
             sut.usage(Command.NONE),
-            is("juberblog [create|install|publish] [--version] [-h|--help]"));
+            is(sut.usage()));
     }
 
     @Test
     public void usage_install() {
         assertThat(
             sut.usage(Command.INSTALL),
-            is("juberblog install -l|--location <directory>"));
+            is("install -l|--location <directory>"));
     }
 
     @Test
     public void usage_create() {
         assertThat(
             sut.usage(Command.CREATE),
-            is("juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]"));
+            is("create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]"));
     }
 
     @Test
     public void usage_publish() {
         assertThat(
             sut.usage(Command.PUBLISH),
-            is("juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]"));
+            is("publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]"));
+    }
+
+    @Test
+    public void help() {
+        assertThat(
+            sut.help(),
+            is("Usage: juberblog create|install|publish [--version] [-h|--help]\n"
+                + "\n"
+                + "Commandline tool to manage your blog.\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -h, --help          Show help.\n"
+                + "      --version       Show version.\n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO Add some examples.\n"
+                + "\n"));
+    }
+
+    @Test
+    public void help_none() {
+        assertThat(sut.help(Command.NONE), is(sut.help()));
+    }
+
+    @Test
+    public void help_install() {
+        assertThat(
+            sut.help(Command.INSTALL),
+            is("Usage: juberblog install -l|--location <directory>\n"
+                + "\n"
+                + "Installs a fresh blog.\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -h, --help          Show help.\n"
+                + "  -l, --location      Where to install the scaffold.\n"
+                + "  -v, --verbose       Tell you more.\n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO Write examples.\n"
+                + "\n"));
+    }
+
+    @Test
+    public void help_create() {
+        assertThat(
+            sut.help(Command.CREATE),
+            is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]\n"
+                + "\n"
+                + "Creates blog entities (sites/pages).\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -c, --config        Config file to use.\n"
+                + "  -d, --draft         Will mark the file name as draft.\n"
+                + "  -h, --help          Show help.\n"
+                + "  -s, --site          Will create a site instead of a post.\n"
+                + "  -t, --title         Title of the blog post.\n"
+                + "  -v, --verbose       Tell you more.\n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO Write examples.\n"
+                + "\n"));
+    }
+
+    @Test
+    public void help_publish() {
+        assertThat(
+            sut.help(Command.PUBLISH),
+            is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]\n"
+                + "\n"
+                + "Publishes the blog.\n"
+                + "\n"
+                + "Options\n"
+                + "\n"
+                + "  -c, --config        Config file to use.\n"
+                + "  -d, --draft         Publish drafts.\n"
+                + "  -h, --help          Show help.\n"
+                + "  -p, --purge         Regenerate all blog posts.\n"
+                + "  -q, --quiet         Be quiet and don't post to social networks.\n"
+                + "  -s, --site          Generate static sites.\n"
+                + "  -v, --verbose       Tell you more.\n"
+                + "\n"
+                + "Example\n"
+                + "\n"
+                + "  TODO Write examples.\n"
+                + "\n"));
     }
 }
