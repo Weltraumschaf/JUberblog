@@ -72,12 +72,12 @@ public final class App extends InvokableAdapter {
      */
     public static void main(final String[] args) {
         final App invokable = new App(args);
+        invokable.debug = invokable.isEnvDebug();
 
         try {
             InvokableAdapter.main(
                     invokable,
-                    IOStreams.newDefault(),
-                    invokable.isEnvDebug());
+                    IOStreams.newDefault());
         } catch (final UnsupportedEncodingException ex) {
             handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
         }
