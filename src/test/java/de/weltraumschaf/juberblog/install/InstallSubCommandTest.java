@@ -2,7 +2,7 @@ package de.weltraumschaf.juberblog.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.testing.CapturedOutput;
+import de.weltraumschaf.commons.testing.rules.CapturedOutput;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.options.Options;
 import java.io.File;

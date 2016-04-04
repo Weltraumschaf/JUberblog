@@ -3,7 +3,7 @@ package de.weltraumschaf.juberblog.app;
 import de.weltraumschaf.juberblog.cmd.SubCommand;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.system.Environments;
-import de.weltraumschaf.commons.testing.CapturedOutput;
+import de.weltraumschaf.commons.testing.rules.CapturedOutput;
 import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.core.Constants;
