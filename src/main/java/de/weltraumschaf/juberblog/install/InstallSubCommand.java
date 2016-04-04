@@ -76,12 +76,6 @@ public final class InstallSubCommand  extends SubCommandBase {
      */
     @Override
     protected void validateArguments() throws ApplicationException {
-        if (installOptions().getLocation().isEmpty()) {
-            throw new ApplicationException(
-                ExitCodeImpl.MISSING_ARGUMENT,
-                "Empty location given! Please specify a valid direcotry as installation location.");
-        }
-
         if (installOptions().isForce() && installOptions().isUpdate()) {
             throw new ApplicationException(
                 ExitCodeImpl.BAD_ARGUMENT,
