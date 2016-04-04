@@ -38,7 +38,6 @@ public final class InstallSubCommand  extends SubCommandBase {
 
     @Override
     public void doExecute() throws ApplicationException {
-        validateArguments();
         final String location = installOptions().getLocation().trim();
         final File target = validateLocation(location);
         io().println(String.format("Install scaffold to '%s'...", location));
