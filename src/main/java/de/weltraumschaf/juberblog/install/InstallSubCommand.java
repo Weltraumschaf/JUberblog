@@ -104,15 +104,13 @@ public final class InstallSubCommand  extends SubCommandBase {
         if (!target.exists()) {
             throw new ApplicationException(
                     ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Install location '%s' does not exist!", location),
-                    null);
+                    String.format("Install location '%s' does not exist!", location));
         }
 
         if (!target.isDirectory()) {
             throw new ApplicationException(
                     ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Install location '%s' is not a directory!", location),
-                    null);
+                    String.format("Install location '%s' is not a directory!", location));
         }
 
         return target;
