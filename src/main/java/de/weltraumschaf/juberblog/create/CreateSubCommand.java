@@ -10,6 +10,7 @@ import de.weltraumschaf.freemarkerdown.TemplateError;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.options.CreateOptions;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +21,7 @@ import java.nio.file.Path;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class CreateSubCommand  extends SubCommandBase {
+public final class CreateSubCommand extends SubCommandBase {
 
     /**
      * Used to create the time in the file name.
@@ -36,22 +37,27 @@ public final class CreateSubCommand  extends SubCommandBase {
         super(registry);
     }
 
+    private CreateOptions createOptions() {
+        return options().getCreate();
+    }
+
     @Override
     protected void doExecute() throws ApplicationException {
         validateArguments();
         final String title = configuration().getTitle().trim();
+        final String encoding = configuration().getEncoding();
 
         try {
-            final FreeMarkerDown fmd = FreeMarkerDown.create(configuration().getEncoding());
+            final FreeMarkerDown fmd = FreeMarkerDown.create(encoding);
             final Fragment tpl = fmd.createFragemnt(
                 templates().getCreateSiteOrPostTemplate(),
-                configuration().getEncoding(),
+                encoding,
                 templates().getCreateSiteOrPostTemplate().toString(),
                 RenderOptions.WITHOUT_MARKDOWN);
             tpl.assignVariable("title", title);
             final String content = fmd.render(tpl);
 
-            if (options().getCreate().isSite()) {
+            if (createOptions().isSite()) {
                 createSite(content);
             } else {
                 createPost(content);
@@ -86,7 +92,7 @@ public final class CreateSubCommand  extends SubCommandBase {
         final String title = configuration().getTitle();
         final Path baseDir;
 
-        if (options().getCreate().isDraft()) {
+        if (createOptions().isDraft()) {
             io().println(String.format("Create site draft '%s'...", title));
             baseDir = directories().getSitesDraftData();
         } else {
@@ -107,7 +113,7 @@ public final class CreateSubCommand  extends SubCommandBase {
         final String title = configuration().getTitle();
         final Path baseDir;
 
-        if (options().getCreate().isDraft()) {
+        if (createOptions().isDraft()) {
             io().println(String.format("Create post draft '%s'...", title));
             baseDir = directories().getPostsDraftData();
         } else {
@@ -146,8 +152,8 @@ public final class CreateSubCommand  extends SubCommandBase {
     /**
      * Create file name from title.
      * <p>
-     * Format: {@literal TIME_TITLE.md}
-     * {@literal TIME} is provided by {@link #time}. {@literal TITLE} is the escaped title.
+     * Format: {@literal TIME_TITLE.md} {@literal TIME} is provided by {@link #time}. {@literal TITLE} is the escaped
+     * title.
      * </p>
      *
      * @param title must not be {@code null} or empty
@@ -157,9 +163,9 @@ public final class CreateSubCommand  extends SubCommandBase {
         final StringBuilder buffer = new StringBuilder();
 
         buffer.append(time.nowAsString())
-              .append('_')
-              .append(StringEscape.escapeFileName(Validate.notEmpty(title)))
-              .append(".md");
+            .append('_')
+            .append(StringEscape.escapeFileName(Validate.notEmpty(title)))
+            .append(".md");
 
         return buffer.toString();
     }

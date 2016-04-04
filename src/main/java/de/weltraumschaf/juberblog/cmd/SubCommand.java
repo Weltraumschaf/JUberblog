@@ -1,7 +1,6 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
