@@ -48,11 +48,11 @@ public class CopyDirectoryVisitorTest {
 
     private CopyDirectoryVisitor createSut(final InstallationType strategy, final boolean verbose) {
         return new CopyDirectoryVisitor(
-                target.getRoot().toPath(),
-                source.getRoot().getAbsolutePath() + "/",
-                io,
-                verbose,
-                strategy);
+            target.getRoot().toPath(),
+            source.getRoot().getAbsolutePath() + "/",
+            io,
+            verbose,
+            strategy);
     }
 
     private void createSource() throws IOException {
@@ -105,17 +105,17 @@ public class CopyDirectoryVisitorTest {
         createSource();
 
         Files.walkFileTree(
-                source.getRoot().toPath(),
-                createNotVerboseSut(InstallationType.FRESH));
+            source.getRoot().toPath(),
+            createNotVerboseSut(InstallationType.FRESH));
 
         final Collection<File> installedFiles = FileUtils.listFiles(target.getRoot(), null, true);
         assertThat(installedFiles, hasSize(3));
         assertThat(
-                installedFiles,
-                containsInAnyOrder(
-                        new File(target.getRoot(), "foo"),
-                        new File(target.getRoot(), "bar"),
-                        new File(new File(target.getRoot(), "baz"), "snafu")));
+            installedFiles,
+            containsInAnyOrder(
+                new File(target.getRoot(), "foo"),
+                new File(target.getRoot(), "bar"),
+                new File(new File(target.getRoot(), "baz"), "snafu")));
     }
 
     @Test
@@ -124,17 +124,17 @@ public class CopyDirectoryVisitorTest {
         createTarget();
 
         Files.walkFileTree(
-                source.getRoot().toPath(),
-                createNotVerboseSut(InstallationType.OVERWRITE));
+            source.getRoot().toPath(),
+            createNotVerboseSut(InstallationType.OVERWRITE));
 
         final Collection<File> installedFiles = FileUtils.listFiles(target.getRoot(), null, true);
         assertThat(installedFiles, hasSize(3));
         assertThat(
-                installedFiles,
-                containsInAnyOrder(
-                        new File(target.getRoot(), "foo"),
-                        new File(target.getRoot(), "bar"),
-                        new File(new File(target.getRoot(), "baz"), "snafu")));
+            installedFiles,
+            containsInAnyOrder(
+                new File(target.getRoot(), "foo"),
+                new File(target.getRoot(), "bar"),
+                new File(new File(target.getRoot(), "baz"), "snafu")));
     }
 
     @Test
@@ -143,19 +143,19 @@ public class CopyDirectoryVisitorTest {
         createTarget();
 
         Files.walkFileTree(
-                source.getRoot().toPath(),
-                createNotVerboseSut(InstallationType.BACKUP));
+            source.getRoot().toPath(),
+            createNotVerboseSut(InstallationType.BACKUP));
 
         final Collection<File> installedFiles = FileUtils.listFiles(target.getRoot(), null, true);
         assertThat(installedFiles, hasSize(5));
         assertThat(
-                installedFiles,
-                containsInAnyOrder(
-                        new File(target.getRoot(), "foo"),
-                        new File(target.getRoot(), "foo.bak"),
-                        new File(target.getRoot(), "bar"),
-                        new File(new File(target.getRoot(), "baz"), "snafu"),
-                        new File(new File(target.getRoot(), "baz"), "snafu.bak")));
+            installedFiles,
+            containsInAnyOrder(
+                new File(target.getRoot(), "foo"),
+                new File(target.getRoot(), "foo.bak"),
+                new File(target.getRoot(), "bar"),
+                new File(new File(target.getRoot(), "baz"), "snafu"),
+                new File(new File(target.getRoot(), "baz"), "snafu.bak")));
     }
 
 }

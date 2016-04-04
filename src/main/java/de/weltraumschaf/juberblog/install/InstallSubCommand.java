@@ -15,7 +15,7 @@ import java.io.IOException;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class InstallSubCommand  extends SubCommandBase {
+public final class InstallSubCommand extends SubCommandBase {
 
     /**
      * Used to copy the scaffold.
@@ -97,14 +97,14 @@ public final class InstallSubCommand  extends SubCommandBase {
 
         if (!target.exists()) {
             throw new ApplicationException(
-                    ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Install location '%s' does not exist!", location));
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format("Install location '%s' does not exist!", location));
         }
 
         if (!target.isDirectory()) {
             throw new ApplicationException(
-                    ExitCodeImpl.BAD_ARGUMENT,
-                    String.format("Install location '%s' is not a directory!", location));
+                ExitCodeImpl.BAD_ARGUMENT,
+                String.format("Install location '%s' is not a directory!", location));
         }
 
         return target;

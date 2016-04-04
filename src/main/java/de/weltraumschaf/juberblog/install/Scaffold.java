@@ -44,7 +44,7 @@ final class Scaffold {
      */
     private SourceJarProvider srcJar = new DefaultSourceJarProvider();
     /**
-     * Behaviour type of installation.
+     * behavior type of installation.
      */
     private InstallationType type = InstallationType.FRESH;
 
@@ -77,7 +77,7 @@ final class Scaffold {
     }
 
     /**
-     * Set installation behaviour type.
+     * Set installation behavior type.
      *
      * @param type must not be {@code null}
      */

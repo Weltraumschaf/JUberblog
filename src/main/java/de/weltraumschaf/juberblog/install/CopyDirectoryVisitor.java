@@ -49,11 +49,11 @@ final class CopyDirectoryVisitor extends SimpleFileVisitor<Path> {
      * @param strategy must not be {@code null}
      */
     CopyDirectoryVisitor(
-            final Path targetDir,
-            final String prefixToStrip,
-            final IO io,
-            final boolean verbose,
-            final InstallationType strategy) {
+        final Path targetDir,
+        final String prefixToStrip,
+        final IO io,
+        final boolean verbose,
+        final InstallationType strategy) {
         super();
         Validate.notNull(targetDir, "targetDir");
 
