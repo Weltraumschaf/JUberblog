@@ -34,7 +34,7 @@ public class JUberblogTest extends BaseTestCase {
         final Options options = new Options();
         final IO io = mock(IO.class);
 
-        final JUberblog product = JUberblog.generateDefaultConfig(options, io);
+        final JUberblog product = JUberblog.generateWithDefaultConfig(options, io);
 
         assertThat(product.options(), is(options));
         assertThat(product.io(), is(io));

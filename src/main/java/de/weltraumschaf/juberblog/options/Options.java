@@ -215,6 +215,10 @@ public final class Options {
         parser.addCommand(Command.PUBLISH.toString(), publish);
     }
 
+    public boolean isHelp() {
+        return main.isHelp() || install.isHelp() || create.isHelp() || publish.isHelp();
+    }
+
     /**
      * Available commands.
      */

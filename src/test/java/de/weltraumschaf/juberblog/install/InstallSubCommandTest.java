@@ -76,10 +76,6 @@ public class InstallSubCommandTest extends BaseTestCase {
 
     private final IO io = mock(IO.class);
 
-    public InstallSubCommandTest() throws UnsupportedEncodingException {
-        super();
-    }
-
     private String getRootDir() {
         return tmp.getRoot().getAbsolutePath();
     }
@@ -91,20 +87,8 @@ public class InstallSubCommandTest extends BaseTestCase {
     }
 
     @Test
-    @Ignore
-    public void execute_withoutAnyOption() throws ApplicationException, IOException, URISyntaxException {
-        final InstallSubCommand sut = createSut();
-
-        thrown.expect(ApplicationException.class);
-        thrown.expectMessage("Empty location given! Please specify a valid direcotry as installation location.");
-
-        sut.execute();
-    }
-
-    @Test
-    @Ignore
     public void execute_withLocationAndVerboseOption() throws ApplicationException, URISyntaxException, IOException {
-        final InstallSubCommand sut = createSut("-l", getRootDir(), "--verbose");
+        final InstallSubCommand sut = createSut("install", "-l", getRootDir(), "--verbose");
         sut.setSrcJar(TestingSourceJarProvider.newProvider());
 
         sut.execute();
@@ -257,9 +241,8 @@ public class InstallSubCommandTest extends BaseTestCase {
     }
 
     @Test
-    @Ignore
     public void execute_withLocation() throws ApplicationException, URISyntaxException, IOException {
-        final InstallSubCommand sut = createSut("-l", getRootDir());
+        final InstallSubCommand sut = createSut("install", "-l", getRootDir());
         sut.setSrcJar(TestingSourceJarProvider.newProvider());
 
         sut.execute();

@@ -39,9 +39,10 @@ public class AppTest extends IntegrationTestCase {
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
-    @Ignore
     public void showUsageIfNoArgument() throws Exception {
-        output.expectErr("Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments!" + NL
+            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+        output.expectOut(is(""));
 
         App.main(createApp(new String[0]));
 
@@ -49,9 +50,10 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showUsageIfBadSubCommand() {
-        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments (cause: Expected a command, got foobar)!" + NL
+            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+        output.expectOut(is(""));
 
         App.main(createApp(new String[]{"foobar"}));
 
@@ -59,9 +61,10 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showUsageIfBadArgument() {
-        output.expectErr("FATAL: Bad arguments!" + NL + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]");
+        output.expectErr("FATAL: Bad arguments (cause: Unknown option: --foobar)!" + NL
+            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+        output.expectOut(is(""));
 
         App.main(createApp(new String[]{"--foobar"}));
 
@@ -81,7 +84,20 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog create|install|publish [--version] [-h|--help]" + NL
+            + NL
+            + "Commandline tool to manage your blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -h, --help          Show help." + NL
+            + "      --version       Show version." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Add some examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"-h"}));
 
@@ -91,7 +107,20 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog create|install|publish [--version] [-h|--help]" + NL
+            + NL
+            + "Commandline tool to manage your blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -h, --help          Show help." + NL
+            + "      --version       Show version." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Add some examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"--help"}));
 
@@ -99,10 +128,24 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForCreateSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL
+            + NL
+            + "Creates blog entities (sites/pages).\n\nOptions" + NL
+            + NL
+            + "  -c, --config        Config file to use." + NL
+            + "  -d, --draft         Will mark the file name as draft." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -s, --site          Will create a site instead of a post." + NL
+            + "  -t, --title         Title of the blog post." + NL
+            + "  -v, --verbose       Tell you more." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"create", "-h"}));
 
@@ -110,10 +153,24 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForCreateSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL
+            + NL
+            + "Creates blog entities (sites/pages).\n\nOptions" + NL
+            + NL
+            + "  -c, --config        Config file to use." + NL
+            + "  -d, --draft         Will mark the file name as draft." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -s, --site          Will create a site instead of a post." + NL
+            + "  -t, --title         Title of the blog post." + NL
+            + "  -v, --verbose       Tell you more." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"create", "--help"}));
 
@@ -121,10 +178,25 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForInstallSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog install -l|--location <directory>" + NL
+            + NL
+            + "Installs a fresh blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -f, --force         Force the installation which overwrites exsiting files." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -l, --location      Where to install the scaffold." + NL
+            + "  -u, --update        Updates files which makes backups of exisiting files." + NL
+            + "  -v, --verbose       Tell you more.\n"
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"install", "-h"}));
 
@@ -132,10 +204,25 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForInstallSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog install -l|--location <directory>" + NL
+            + NL
+            + "Installs a fresh blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -f, --force         Force the installation which overwrites exsiting files." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -l, --location      Where to install the scaffold." + NL
+            + "  -u, --update        Updates files which makes backups of exisiting files." + NL
+            + "  -v, --verbose       Tell you more.\n"
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"install", "--help"}));
 
@@ -143,10 +230,27 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForPublishSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL
+            + NL
+            + "Publishes the blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -c, --config        Config file to use." + NL
+            + "  -d, --draft         Publish drafts." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -p, --purge         Regenerate all blog posts." + NL
+            + "  -q, --quiet         Be quiet and don't post to social networks." + NL
+            + "  -s, --site          Generate static sites." + NL
+            + "  -v, --verbose       Tell you more." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"publish", "-h"}));
 
@@ -154,10 +258,27 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void showHelpForPublishSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut("");
+        output.expectOut(is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL
+            + NL
+            + "Publishes the blog." + NL
+            + NL
+            + "Options" + NL
+            + NL
+            + "  -c, --config        Config file to use." + NL
+            + "  -d, --draft         Publish drafts." + NL
+            + "  -h, --help          Show help." + NL
+            + "  -p, --purge         Regenerate all blog posts." + NL
+            + "  -q, --quiet         Be quiet and don't post to social networks." + NL
+            + "  -s, --site          Generate static sites." + NL
+            + "  -v, --verbose       Tell you more." + NL
+            + NL
+            + "Example" + NL
+            + NL
+            + "  TODO Write examples." + NL
+            + NL
+            + NL));
 
         App.main(createApp(new String[]{"publish", "--help"}));
 
@@ -216,8 +337,8 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void badArgument_PUBLISH() throws Exception {
-        output.expectErr("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL);
+        output.expectErr(is("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
+            + "Usage: publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
 
         App.main(createApp(new String[]{"publish", "-x"}));
 
@@ -225,14 +346,11 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void missingConfig_CREATE() throws Exception {
-        output.expectErr(equalTo("FATAL: No configuration file given!\n"
-            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+        output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" + NL
+            + "Usage: create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL));
 
-        final App sut = createApp(new String[]{
-            "create",
-            "-l", tmp.getRoot().toPath().toString()});
+        final App sut = createApp(new String[]{"create"});
 
         App.main(sut);
 
@@ -240,12 +358,10 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void execute_CREATE() throws Exception {
         final App sut = createApp(new String[]{
             "create",
-            "-c", createPath("config.properties").toString(),
-            "-l", tmp.getRoot().toPath().toString()});
+            "-c", createPath("config.properties").toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(Command.CREATE), any(JUberblog.class))).thenReturn(cmd);
@@ -258,14 +374,12 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
-    public void missingLocation_INSTALL() throws Exception {
-        output.expectErr(equalTo("FATAL: No location directory given!\n"
-            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+    public void missingConfig_INSTALL() throws Exception {
+        output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -l, --location )!" + NL
+            + "Usage: install -l|--location <directory>" + NL));
 
         final App sut = createApp(new String[]{
-            "install",
-            "-c", createPath("config.properties").toString()});
+            "install"});
 
         App.main(sut);
 
@@ -273,13 +387,11 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
     public void execute_INSTALL() throws Exception {
-        output.expectErr(equalTo(""));
+        output.expectErr(is(""));
 
         final App sut = createApp(new String[]{
             "install",
-            "-c", createPath("config.properties").toString(),
             "-l", tmp.getRoot().toPath().toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
@@ -293,44 +405,25 @@ public class AppTest extends IntegrationTestCase {
     }
 
     @Test
-    @Ignore
-    public void missingLocation_PUBLISH() throws Exception {
-        output.expectErr(equalTo("FATAL: No location directory given!\n"
-            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
+    public void missingConfig_PUBLISH() throws Exception {
+        output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" +NL
+            + "Usage: publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
+
+        final App sut = createApp(new String[]{
+            "publish"});
+
+        App.main(sut);
+
+        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
+    }
+
+    @Test
+    public void execute_PUBLISH() throws Exception {
+        output.expectErr(is(""));
 
         final App sut = createApp(new String[]{
             "publish",
             "-c", createPath("config.properties").toString()});
-
-        App.main(sut);
-
-        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
-    }
-
-    @Test
-    @Ignore
-    public void missingConfig_PUBLISH() throws Exception {
-        output.expectErr(equalTo("FATAL: No configuration file given!\n"
-            + "Usage: juberblog create|install|publish -l <dir> [-c <file>] [-h] [-v]\n"));
-
-        final App sut = createApp(new String[]{
-            "publish",
-            "-l", tmp.getRoot().toPath().toString()});
-
-        App.main(sut);
-
-        verify(getExiter(), times(1)).exit(ExitCodeImpl.BAD_ARGUMENT);
-    }
-
-    @Test
-    @Ignore
-    public void execute_PUBLISH() throws Exception {
-        output.expectErr(equalTo(""));
-
-        final App sut = createApp(new String[]{
-            "publish",
-            "-c", createPath("config.properties").toString(),
-            "-l", tmp.getRoot().toPath().toString()});
         final Factory factory = mock(Factory.class);
         final SubCommand cmd = mock(SubCommand.class);
         when(factory.forName(eq(Command.PUBLISH), any(JUberblog.class))).thenReturn(cmd);

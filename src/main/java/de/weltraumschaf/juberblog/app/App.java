@@ -10,6 +10,7 @@ import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.create.CreateSubCommand;
@@ -134,13 +135,13 @@ public final class App extends InvokableAdapter {
      * @throws ApplicationException on any application error such as bad arguments
      */
     private void executeMainCommand() throws ApplicationException {
-        if (options.getMain().isVersion()) {
-            showVersion();
+        if (options.isHelp()) {
+            showHelp();
             return;
         }
 
-        if (options.getMain().isHelp()) {
-            showHelp();
+        if (options.getMain().isVersion()) {
+            showVersion();
             return;
         }
 
@@ -157,16 +158,25 @@ public final class App extends InvokableAdapter {
         Validate.notNull(commandName, "commandName");
         final JUberblog registry;
 
+        if (options.isHelp()) {
+            showHelp(commandName);
+            return;
+        }
+
         switch (commandName) {
             case INSTALL:
-                registry = JUberblog.generateDefaultConfig(options, getIoStreams());
+                registry = JUberblog.generateWithDefaultConfig(options, getIoStreams());
                 break;
-            case CREATE:
-                registry = JUberblog.generate(options, getIoStreams(), JUberblog.generateConfiguration(options.getCreate()));
+            case CREATE: {
+                final Configuration config = JUberblog.generateConfiguration(options.getCreate());
+                registry = JUberblog.generate(options, getIoStreams(), config);
                 break;
-            case PUBLISH:
-                registry = JUberblog.generate(options, getIoStreams(), JUberblog.generateConfiguration(options.getPublish()));
+            }
+            case PUBLISH: {
+                final Configuration config = JUberblog.generateConfiguration(options.getPublish());
+                registry = JUberblog.generate(options, getIoStreams(), config);
                 break;
+            }
             default:
                 throw badArgumentError("Unsupported command!", commandName);
         }
@@ -235,7 +245,11 @@ public final class App extends InvokableAdapter {
      * Show help message.
      */
     private void showHelp() {
-        getIoStreams().println(options.help());
+        showHelp(Command.NONE);
+    }
+
+    private void showHelp(final Command name) {
+        getIoStreams().println(options.help(name));
     }
 
     /**

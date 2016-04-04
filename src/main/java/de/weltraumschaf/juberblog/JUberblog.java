@@ -120,7 +120,7 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if not all objects can't be generated
      */
-    public static JUberblog generateDefaultConfig(final Options cliOptions, final IO io) throws ApplicationException {
+    public static JUberblog generateWithDefaultConfig(final Options cliOptions, final IO io) throws ApplicationException {
         return generate(cliOptions, io, Configuration.DEFAULT);
     }
 
@@ -134,19 +134,18 @@ public final class JUberblog {
      * @throws ApplicationException if not all objects can't be generated
      */
     public static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration)
-            throws ApplicationException {
-        final Path locationDir = findLocationDir(cliOptions.getInstall());
-        final Path dataDir = findDataDir(locationDir, configuration);
-        final Path outputDir = findOutputDir(locationDir, configuration);
-        final Path templateDir = findTemplateDir(locationDir, configuration);
+        throws ApplicationException {
+        final Path dataDir = findDataDir(configuration);
+        final Path outputDir = findOutputDir(configuration);
+        final Path templateDir = findTemplateDir(configuration);
 
         return JUberblog.Builder.create()
-                .directories(createDirs(dataDir, outputDir))
-                .templates(createTemplate(templateDir))
-                .configuration(configuration)
-                .options(cliOptions)
-                .io(io)
-                .product();
+            .directories(createDirs(dataDir, outputDir))
+            .templates(createTemplate(templateDir))
+            .configuration(configuration)
+            .options(cliOptions)
+            .io(io)
+            .product();
     }
 
     /**
@@ -156,8 +155,8 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findTemplateDir(final Path locationDir, final Configuration configuration) {
-        return locationDir.resolve(configuration.getTemplateDir());
+    private static Path findTemplateDir(final Configuration configuration) {
+        return Paths.get(configuration.getTemplateDir());
     }
 
     /**
@@ -167,8 +166,8 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findOutputDir(final Path locationDir, final Configuration configuration) {
-        return locationDir.resolve(configuration.getHtdocs());
+    private static Path findOutputDir(final Configuration configuration) {
+        return Paths.get(configuration.getHtdocs());
     }
 
     /**
@@ -178,8 +177,8 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findDataDir(final Path locationDir, final Configuration configuration) {
-        return locationDir.resolve(configuration.getDataDir());
+    private static Path findDataDir(final Configuration configuration) {
+        return Paths.get(configuration.getDataDir());
     }
 
     /**
@@ -194,8 +193,8 @@ public final class JUberblog {
 
         if (!Files.isDirectory(locationDir)) {
             throw new ApplicationException(
-                    ExitCodeImpl.FATAL,
-                    String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
+                ExitCodeImpl.FATAL,
+                String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
         }
 
         return locationDir;
@@ -204,25 +203,25 @@ public final class JUberblog {
     /**
      * Creates template directory object.
      *
-     * @param templateDir  must not be {@code null}
+     * @param templateDir must not be {@code null}
      * @return never {@code null}
      */
     private static Templates createTemplate(final Path templateDir) {
         return new Templates(
-                templateDir.resolve("layout.ftl"),
-                templateDir.resolve("post.ftl"),
-                templateDir.resolve("site.ftl"),
-                templateDir.resolve("feed.ftl"),
-                templateDir.resolve("index.ftl"),
-                templateDir.resolve("site_map.ftl"),
-                templateDir.resolve("create/post_or_site.md.ftl"));
+            templateDir.resolve("layout.ftl"),
+            templateDir.resolve("post.ftl"),
+            templateDir.resolve("site.ftl"),
+            templateDir.resolve("feed.ftl"),
+            templateDir.resolve("index.ftl"),
+            templateDir.resolve("site_map.ftl"),
+            templateDir.resolve("create/post_or_site.md.ftl"));
     }
 
     /**
      * Creates directories object.
      *
-     * @param dataDir  must not be {@code null}
-     * @param outputDir  must not be {@code null}
+     * @param dataDir must not be {@code null}
+     * @param outputDir must not be {@code null}
      * @return never {@code null}
      */
     private static Directories createDirs(final Path dataDir, final Path outputDir) {
@@ -241,8 +240,8 @@ public final class JUberblog {
 
         if (!Files.isRegularFile(configFile)) {
             throw new ApplicationException(
-                    ExitCodeImpl.FATAL,
-                    String.format("Can't read config file '%s'!", cliOptions.getConfig()));
+                ExitCodeImpl.FATAL,
+                String.format("Can't read config file '%s'!", cliOptions.getConfig()));
         }
 
         final Configuration configuration;
@@ -251,8 +250,8 @@ public final class JUberblog {
             configuration = new Configuration(configFile.toString());
         } catch (final IOException ex) {
             throw new ApplicationException(
-                    ExitCodeImpl.FATAL,
-                    String.format("Error during read of config file '%s'!", cliOptions.getConfig()));
+                ExitCodeImpl.FATAL,
+                String.format("Error during read of config file '%s'!", cliOptions.getConfig()));
         }
 
         return configuration;
