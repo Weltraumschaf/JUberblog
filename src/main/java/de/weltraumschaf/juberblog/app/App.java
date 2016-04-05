@@ -13,11 +13,11 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
-import de.weltraumschaf.juberblog.create.CreateSubCommand;
-import de.weltraumschaf.juberblog.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
+import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
 import de.weltraumschaf.juberblog.options.Options;
 import de.weltraumschaf.juberblog.options.Options.Command;
-import de.weltraumschaf.juberblog.publish.PublishSubCommand;
+import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import java.io.UnsupportedEncodingException;
 
 /**
