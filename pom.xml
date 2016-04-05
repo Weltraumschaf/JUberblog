@@ -198,6 +198,22 @@
                 Build plugins.
             -->
             <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.build.binDirectory}</directory>
+                            <includes>
+                                <include>*.jar</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
