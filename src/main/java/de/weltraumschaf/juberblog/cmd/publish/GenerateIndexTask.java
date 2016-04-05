@@ -13,6 +13,7 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
 import java.nio.file.Files;
@@ -52,44 +53,47 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
     public Pages execute(Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
-                config.indexTemplate,
-                config.encoding,
-                config.indexTemplate.toString(),
-                RenderOptions.WITHOUT_MARKDOWN);
+            config.indexTemplate,
+            config.encoding,
+            config.indexTemplate.toString(),
+            RenderOptions.WITHOUT_MARKDOWN);
         final Layout layout = fmd.createLayout(
-                config.layoutTemplate,
-                config.encoding,
-                config.layoutTemplate.toString(),
-                RenderOptions.WITHOUT_MARKDOWN);
+            config.layoutTemplate,
+            config.encoding,
+            config.layoutTemplate.toString(),
+            RenderOptions.WITHOUT_MARKDOWN);
         layout.assignTemplateModel("content", template);
         layout.assignVariable("name", config.name);
         layout.assignVariable("description", config.description);
-        template.assignVariable("posts", convert(previusResult));
+        template.assignVariable("posts", previusResult.convert(new ForIndexConverter()));
         Files.write(
-                config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
-                fmd.render(layout).getBytes(config.encoding)
+            config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
+            fmd.render(layout).getBytes(config.encoding)
         );
 
         return previusResult;
     }
 
-    @Override
-    protected Map<String, String> convert(final Page page) {
-        Validate.notNull(page, "page");
-        final Map<String, String> item = Maps.newHashMap();
-        item.put("title", page.getTitle());
-        item.put("link", page.getLink().toString());
-        item.put("description", page.getDescription());
-        item.put(
+    private static final class ForIndexConverter implements PageConverter {
+
+        @Override
+        public Map<String, String> convert(final Page page) {
+            Validate.notNull(page, "page");
+            final Map<String, String> item = Maps.newHashMap();
+            item.put("title", page.getTitle());
+            item.put("link", page.getLink().toString());
+            item.put("description", page.getDescription());
+            item.put(
                 "pubDate",
                 DateFormatter.format(
-                        page.getPublishingDate(),
-                        DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
-        item.put(
+                    page.getPublishingDate(),
+                    DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
+            item.put(
                 "dcDate",
                 DateFormatter.format(page.getPublishingDate(),
-                        DateFormatter.Format.W3C_DATE_FORMAT));
-        return Collections.unmodifiableMap(item);
+                    DateFormatter.Format.W3C_DATE_FORMAT));
+            return Collections.unmodifiableMap(item);
+        }
     }
 
     /**
@@ -130,9 +134,9 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param configuration must not be {@code null}
          */
         public Config(
-                final Templates templates,
-                final Directories directories,
-                final Configuration configuration) {
+            final Templates templates,
+            final Directories directories,
+            final Configuration configuration) {
             super();
             Validate.notNull(templates, "templates");
             Validate.notNull(directories, "directories");

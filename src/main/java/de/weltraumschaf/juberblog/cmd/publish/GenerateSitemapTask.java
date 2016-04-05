@@ -10,6 +10,7 @@ import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
+import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -52,37 +53,40 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
     public Void execute(final Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
-                config.template,
-                config.encoding,
-                config.template.toString(),
-                RenderOptions.WITHOUT_MARKDOWN);
+            config.template,
+            config.encoding,
+            config.template.toString(),
+            RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable("encoding", config.encoding);
-        template.assignVariable("urls", convert(previusResult));
+        template.assignVariable("urls", previusResult.convert(new ForSitemapConverter()));
 
         Files.write(
-                config.outputDir.resolve("site_map" + FileNameExtension.XML.getExtension()),
-                fmd.render(template).getBytes(config.encoding)
+            config.outputDir.resolve("site_map" + FileNameExtension.XML.getExtension()),
+            fmd.render(template).getBytes(config.encoding)
         );
 
         return null;
     }
 
-    @Override
-    protected Map<String, String> convert(final Page page) {
-        final Map<String, String> item = Maps.newHashMap();
-        item.put("loc", page.getLink().toString());
-        // XXX Introduce last mod date.
-        item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
+    private static final class ForSitemapConverter implements PageConverter {
 
-        if (page.getType() == PageType.POST) {
-            item.put("changefreq", "daily");
-            item.put("priority", "0.8");
-        } else {
-            item.put("changefreq", "weekly");
-            item.put("priority", "0.5");
+        @Override
+        public Map<String, String> convert(final Page page) {
+            final Map<String, String> item = Maps.newHashMap();
+            item.put("loc", page.getLink().toString());
+            // XXX Introduce last mod date.
+            item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
+
+            if (page.getType() == PageType.POST) {
+                item.put("changefreq", "daily");
+                item.put("priority", "0.8");
+            } else {
+                item.put("changefreq", "weekly");
+                item.put("priority", "0.5");
+            }
+
+            return Collections.unmodifiableMap(item);
         }
-
-        return Collections.unmodifiableMap(item);
     }
 
     /**
@@ -111,9 +115,9 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
          * @param configuration must not be {@code null}
          */
         public Config(
-                final Templates templates,
-                final Directories directories,
-                final Configuration configuration) {
+            final Templates templates,
+            final Directories directories,
+            final Configuration configuration) {
             super();
             this.template = Validate.notNull(templates, "templates").getSiteMapTemplate();
             this.outputDir = Validate.notNull(directories, "directories").getOutput();

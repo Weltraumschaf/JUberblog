@@ -31,41 +31,6 @@ public class BaseTaskTest {
         assertThat(sut.getDesiredTypeForPreviusResult().getSimpleName(), is("Void"));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void convert_pages_nullGiven() {
-        assertThat(sut.convert((Pages) null).size(), is(0));
-    }
-
-    @Test
-    public void convert_pages_emptyGiven() {
-        assertThat(sut.convert(new Pages()).size(), is(0));
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @SuppressWarnings("unchecked")
-    public void convert_pages_returnUnmodifiable() {
-        sut.convert(new Pages()).add(mock(Map.class));
-    }
-    @Test
-    public void convert_pages() {
-        final Pages pages = new Pages();
-        pages.add(new Page("title one", URI.create("/foo"), "", new DateTime(), PageType.POST));
-        pages.add(new Page("title two", URI.create("/bar"), "", new DateTime(), PageType.POST));
-
-        Collection<Map<String, String>> result = new BaseTaskWithConvertStub().convert(pages);
-
-        assertThat(result, hasSize(2));
-        assertThat(new ArrayList<>(result).get(0).size(), is(1));
-        assertThat(new ArrayList<>(result).get(0), hasEntry("title", "title one"));
-        assertThat(new ArrayList<>(result).get(1).size(), is(1));
-        assertThat(new ArrayList<>(result).get(1), hasEntry("title", "title two"));
-    }
-
-    @Test
-    public void convert_page_defaultImplementation() {
-        assertThat(sut.convert((Page) null).size(), is(0));
-    }
-
     private static class BaseTaskStub extends BaseTask<Void, Void> {
 
         public BaseTaskStub() {
@@ -88,11 +53,4 @@ public class BaseTaskTest {
 
     }
 
-    private static class BaseTaskWithConvertStub extends BaseTaskStub {
-        protected Map<String, String> convert(final Page page) {
-            final Map<String, String> result = Maps.newHashMap();
-            result.put("title", page.getTitle());
-            return result;
-        }
-    }
 }

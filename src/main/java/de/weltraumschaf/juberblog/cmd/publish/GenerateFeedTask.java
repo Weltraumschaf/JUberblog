@@ -13,6 +13,7 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
 import java.net.URI;
@@ -54,37 +55,40 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
     public Pages execute(final Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
-                config.template,
-                config.encoding,
-                config.template.toString(),
-                RenderOptions.WITHOUT_MARKDOWN);
+            config.template,
+            config.encoding,
+            config.template.toString(),
+            RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable("encoding", config.encoding);
         template.assignVariable("title", config.title);
         template.assignVariable("link", config.link.toString());
         template.assignVariable("description", config.description);
         template.assignVariable("language", config.language);
         template.assignVariable(
-                "lastBuildDate",
-                DateFormatter.format(config.lastBuildDate, Format.RSS_PUBLISH_DATE_FORMAT));
-        template.assignVariable("items", convert(previusResult));
+            "lastBuildDate",
+            DateFormatter.format(config.lastBuildDate, Format.RSS_PUBLISH_DATE_FORMAT));
+        template.assignVariable("items", previusResult.convert(new ForFeedConverter()));
 
         Files.write(
-                config.outputDir.resolve("feed" + FileNameExtension.XML.getExtension()),
-                fmd.render(template).getBytes(config.encoding)
+            config.outputDir.resolve("feed" + FileNameExtension.XML.getExtension()),
+            fmd.render(template).getBytes(config.encoding)
         );
 
         return previusResult;
     }
 
-    @Override
-    protected Map<String, String> convert(final Page page) {
-        final Map<String, String> item = Maps.newHashMap();
-        item.put("title", page.getTitle());
-        item.put("link", page.getLink().toString());
-        item.put("description", page.getDescription());
-        item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
-        item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));
-        return Collections.unmodifiableMap(item);
+    private static final class ForFeedConverter implements PageConverter {
+
+        @Override
+        public Map<String, String> convert(final Page page) {
+            final Map<String, String> item = Maps.newHashMap();
+            item.put("title", page.getTitle());
+            item.put("link", page.getLink().toString());
+            item.put("description", page.getDescription());
+            item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
+            item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));
+            return Collections.unmodifiableMap(item);
+        }
     }
 
     /**
@@ -134,10 +138,10 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
          * @param lastBuildDate must not be {@code null}
          */
         public Config(
-                final Templates templates,
-                final Directories directories,
-                final Configuration configuration,
-                final DateTime lastBuildDate) {
+            final Templates templates,
+            final Directories directories,
+            final Configuration configuration,
+            final DateTime lastBuildDate) {
             super();
             Validate.notNull(configuration, "configuration");
             this.template = Validate.notNull(templates, "templates").getFeedTemplate();
