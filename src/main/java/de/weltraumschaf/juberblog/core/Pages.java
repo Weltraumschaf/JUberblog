@@ -5,6 +5,8 @@ import de.weltraumschaf.commons.validate.Validate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,13 +15,24 @@ import java.util.Map;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class Pages extends ArrayList<Page> {
+public final class Pages {
 
-    /**
-     * Default constructor.
-     */
-    public Pages() {
-        super();
+    private final List<Page> data = new ArrayList<>();
+
+    public boolean add(final Pages pages) {
+        return data.addAll(pages.data);
+    }
+
+    public boolean add(final Page page) {
+        return data.add(page);
+    }
+
+    public void sort(Comparator<? super Page> c) {
+        data.sort(c);
+    }
+
+    public List<Page> data() {
+        return Collections.unmodifiableList(data);
     }
 
     /**
@@ -32,7 +45,7 @@ public final class Pages extends ArrayList<Page> {
         Validate.notNull(converter, "converter");
         final Collection<Map<String, String>> items = Lists.newArrayList();
 
-        for (final Page page : this) {
+        for (final Page page : data) {
             items.add(converter.convert(page));
         }
 

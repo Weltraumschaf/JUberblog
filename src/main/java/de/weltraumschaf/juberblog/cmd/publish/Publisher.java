@@ -66,10 +66,10 @@ public final class Publisher {
      * @throws IOException if any template can't be read
      */
     public Publisher(
-            final Templates templates,
-            final Directories directories,
-            final Configuration configuration,
-            final PageType type) throws IOException {
+        final Templates templates,
+        final Directories directories,
+        final Configuration configuration,
+        final PageType type) throws IOException {
         super();
         Validate.notNull(templates, "templates");
         Validate.notNull(directories, "directories");
@@ -82,17 +82,17 @@ public final class Publisher {
             this.inputDir = directories.getPostsData();
             this.outputDir = directories.getPostsOutput();
             this.renderer = new Renderer(
-                    templates.getLayoutTemplate(),
-                    templates.getPostTemplate(),
-                    encoding
+                templates.getLayoutTemplate(),
+                templates.getPostTemplate(),
+                encoding
             );
         } else if (type == PageType.SITE) {
             this.inputDir = directories.getSitesData();
             this.outputDir = directories.getSitesOutput();
             this.renderer = new Renderer(
-                    templates.getLayoutTemplate(),
-                    templates.getSiteTemplate(),
-                    encoding
+                templates.getLayoutTemplate(),
+                templates.getSiteTemplate(),
+                encoding
             );
         } else {
             throw new IllegalArgumentException(String.format("Bad type '%s'!", type));
@@ -121,8 +121,8 @@ public final class Publisher {
             // XXX: Check if present, extract etc.
             final Map<String, String> metaData = result.getMetaData();
             final String description = metaData.containsKey("Description")
-                    ? metaData.get("Description")
-                    : ""; // TODO Extract excerpt from Markdown.
+                ? metaData.get("Description")
+                : ""; // TODO Extract excerpt from Markdown.
 
             final URI pageUrl;
 
@@ -138,14 +138,14 @@ public final class Publisher {
             }
             // XXX: Emit errors if something of this is not available.
             publishedPages.add(new Page(
-                    headline.find(result.getMarkdown()),
-                    pageUrl,
-                    description,
-                    foundData.getCreationDate(),
-                    type));
+                headline.find(result.getMarkdown()),
+                pageUrl,
+                description,
+                foundData.getCreationDate(),
+                type));
         }
 
-        Collections.sort(publishedPages, new SortByDateAscending());
+        publishedPages.sort(new SortByDateAscending());
         return publishedPages;
     }
 

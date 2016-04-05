@@ -46,7 +46,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 config.type
         );
 
-        previusResult.addAll(publisher.publish());
+        previusResult.add(publisher.publish());
         return previusResult;
     }
 

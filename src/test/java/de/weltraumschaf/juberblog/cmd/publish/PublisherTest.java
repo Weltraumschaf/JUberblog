@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
@@ -36,7 +38,7 @@ public class PublisherTest extends BaseTestCase {
                 PageType.POST
         );
 
-        final Collection<Page> pages = sut.publish();
+        final List<Page> pages = sut.publish().data();
         assertThat(pages.size(), is(3));
         assertThat(pages, containsInAnyOrder(
                 new Page(
