@@ -141,20 +141,6 @@ public final class Page {
     }
 
     /**
-     * Convenience type to collect pages.
-     */
-    public static final class Pages extends ArrayList<Page> {
-
-        /**
-         * Default constructor.
-         */
-        public Pages() {
-            super();
-        }
-
-    }
-
-    /**
      * A comparator to sort pages ascending by date.
      */
     public static final class SortByDateAscending implements Comparator<Page> {

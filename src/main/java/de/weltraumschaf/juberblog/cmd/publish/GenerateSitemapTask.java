@@ -10,7 +10,7 @@ import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.Task;
@@ -45,7 +45,7 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
 
     @Override
     public Void execute() throws Exception {
-        return execute(new Page.Pages());
+        return execute(new Pages());
     }
 
     @Override

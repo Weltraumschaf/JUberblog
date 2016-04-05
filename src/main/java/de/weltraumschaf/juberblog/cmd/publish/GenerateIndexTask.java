@@ -1,7 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import com.beust.jcommander.internal.Maps;
-import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
@@ -9,7 +8,7 @@ import de.weltraumschaf.freemarkerdown.Layout;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Configuration;
@@ -46,7 +45,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
 
     @Override
     public Pages execute() throws Exception {
-        return execute(new Page.Pages());
+        return execute(new Pages());
     }
 
     @Override

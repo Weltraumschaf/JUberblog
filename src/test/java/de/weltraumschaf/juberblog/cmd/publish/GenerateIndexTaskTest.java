@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -70,7 +71,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
     @Test
     public void execute_twoPages() throws Exception {
         final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig());
-        final Page.Pages pages = new Page.Pages();
+        final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
 

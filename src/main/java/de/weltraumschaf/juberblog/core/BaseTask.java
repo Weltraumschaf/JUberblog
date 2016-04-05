@@ -2,7 +2,7 @@ package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Pages;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;

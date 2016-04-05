@@ -8,7 +8,7 @@ import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.DateFormatter.Format;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Configuration;

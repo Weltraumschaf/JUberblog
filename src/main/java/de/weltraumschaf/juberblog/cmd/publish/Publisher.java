@@ -7,7 +7,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.Templates;

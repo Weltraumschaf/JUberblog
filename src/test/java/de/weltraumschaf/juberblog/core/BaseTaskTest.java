@@ -1,7 +1,6 @@
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.guava.Maps;
-import de.weltraumschaf.juberblog.core.Page.Pages;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
