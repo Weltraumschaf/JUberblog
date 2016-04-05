@@ -44,7 +44,7 @@ public final class CreateSubCommand extends SubCommandBase {
     @Override
     protected void doExecute() throws ApplicationException {
         validateArguments();
-        final String title = configuration().getTitle().trim();
+        final String title = createOptions().getTitle().trim();
         final String encoding = configuration().getEncoding();
 
         try {
@@ -89,7 +89,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * @throws IOException if file can't be written
      */
     private void createSite(final String content) throws IOException {
-        final String title = configuration().getTitle();
+        final String title = createOptions().getTitle();
         final Path baseDir;
 
         if (createOptions().isDraft()) {
@@ -110,7 +110,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * @throws IOException if file can't be written
      */
     private void createPost(final String content) throws IOException {
-        final String title = configuration().getTitle();
+        final String title = createOptions().getTitle();
         final Path baseDir;
 
         if (createOptions().isDraft()) {
