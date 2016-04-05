@@ -22,6 +22,7 @@ public class BaseTaskTest {
     private final BaseTask sut = new BaseTaskStub();
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullType() {
         new BaseTaskStub(null);
     }
@@ -49,8 +50,8 @@ public class BaseTaskTest {
     @Test
     public void convert_pages() {
         final Pages pages = new Pages();
-        pages.add(new Page("title one", URI.create("/foo"), "", new DateTime(), Page.Type.POST));
-        pages.add(new Page("title two", URI.create("/bar"), "", new DateTime(), Page.Type.POST));
+        pages.add(new Page("title one", URI.create("/foo"), "", new DateTime(), PageType.POST));
+        pages.add(new Page("title two", URI.create("/bar"), "", new DateTime(), PageType.POST));
 
         Collection<Map<String, String>> result = new BaseTaskWithConvertStub().convert(pages);
 

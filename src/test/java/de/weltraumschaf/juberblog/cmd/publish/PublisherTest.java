@@ -1,8 +1,8 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.Publisher;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
+import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -33,7 +33,7 @@ public class PublisherTest extends BaseTestCase {
                 createTemplates(),
                 createDirs(tmp),
                 createConfig(),
-                Page.Type.POST
+                PageType.POST
         );
 
         final Collection<Page> pages = sut.publish();
@@ -43,17 +43,17 @@ public class PublisherTest extends BaseTestCase {
                         "This is the First Post",
                         URI.create("http://www.myblog.com/posts/This-is-the-First-Post.html"),
                         "This is the first post.",
-                        new DateTime("2014-05-30T21:29:20"), Page.Type.POST),
+                        new DateTime("2014-05-30T21:29:20"),PageType.POST),
                 new Page(
                         "This is the Second Post",
                         URI.create("http://www.myblog.com/posts/This-is-the-Second-Post.html"),
                         "This is the second post.",
-                        new DateTime("2014-06-30T23:25:44"), Page.Type.POST),
+                        new DateTime("2014-06-30T23:25:44"), PageType.POST),
                 new Page(
                         "This is the Third Post",
                         URI.create("http://www.myblog.com/posts/This-is-the-Third-Post.html"),
                         "This is the third post.",
-                        new DateTime("2014-07-28T17:44:13"), Page.Type.POST)
+                        new DateTime("2014-07-28T17:44:13"), PageType.POST)
         ));
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());

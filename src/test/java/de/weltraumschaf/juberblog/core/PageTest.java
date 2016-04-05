@@ -26,7 +26,7 @@ public class PageTest {
                 URI.create("http://juberblog.local"),
                 "desc",
                 new DateTime(0L),
-                Page.Type.POST);
+                PageType.POST);
 
         assertThat(
                 sut.toString(),

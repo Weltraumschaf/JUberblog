@@ -2,9 +2,9 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.juberblog.JUberblog;
-import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.TaskExecutor;
 import org.joda.time.DateTime;
 
@@ -32,7 +32,7 @@ public final class PublishSubCommand extends SubCommandBase {
                         templates(),
                         directories(),
                         configuration(),
-                        Page.Type.POST
+                        PageType.POST
                     )))
             .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                         templates(),
@@ -49,7 +49,7 @@ public final class PublishSubCommand extends SubCommandBase {
                         templates(),
                         directories(),
                         configuration(),
-                        Page.Type.SITE
+                        PageType.SITE
                     )))
             .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                         templates(),

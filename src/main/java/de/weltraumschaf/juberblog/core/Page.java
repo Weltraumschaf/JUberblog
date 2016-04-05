@@ -38,9 +38,9 @@ public final class Page {
      */
     private final DateTime publishingDate;
     /**
-     * Type of page.
+     * PageType of page.
      */
-    private final Type type;
+    private final PageType type;
 
     /**
      * Dedicated constructor.
@@ -56,7 +56,7 @@ public final class Page {
             final URI link,
             final String description,
             final DateTime publishingDate,
-            final Type type) {
+            final PageType type) {
         super();
         this.title = Validate.notEmpty(title, "title");
         this.link = Validate.notNull(link, "link");
@@ -106,7 +106,7 @@ public final class Page {
      *
      * @return never {@code null}
      */
-    public Type getType() {
+    public PageType getType() {
         return type;
     }
 
@@ -152,21 +152,6 @@ public final class Page {
             super();
         }
 
-    }
-
-    /**
-     * Type of pages.
-     */
-    public enum Type {
-
-        /**
-         * A blog post.
-         */
-        POST,
-        /**
-         * A regular site.
-         */
-        SITE;
     }
 
     /**

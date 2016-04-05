@@ -2,7 +2,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Page.Pages;
-import de.weltraumschaf.juberblog.core.Page.Type;
+import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.BaseTask;
 import de.weltraumschaf.juberblog.core.Configuration;
 import de.weltraumschaf.juberblog.core.Directories;
@@ -68,9 +68,9 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
          */
         private final Configuration configuration;
         /**
-         * Type of published data.
+         * PageType of published data.
          */
-        private final Type type;
+        private final PageType type;
 
         /**
          * Dedicated constructor.
@@ -84,7 +84,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
                 final Templates templates,
                 final Directories directories,
                 final Configuration configuration,
-                final Type type) {
+                final PageType type) {
             super();
             this.templates = Validate.notNull(templates, "templates");
             this.directories = Validate.notNull(directories, "directories");

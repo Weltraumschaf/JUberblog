@@ -1,11 +1,10 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.PublishTask;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.BaseTestCase;
-import de.weltraumschaf.juberblog.core.Page;
+import de.weltraumschaf.juberblog.core.PageType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -30,10 +29,11 @@ public class PublishTaskTest extends BaseTestCase {
                 createTemplates(),
                 createDirs(tmp),
                 createConfig(),
-                Page.Type.SITE);
+                PageType.SITE);
     }
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructWithNullThrowsException() {
         new PublishTask(null);
     }

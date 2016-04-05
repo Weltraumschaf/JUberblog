@@ -9,7 +9,7 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
 import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
-import de.weltraumschaf.juberblog.core.Page.Type;
+import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Uris;
 import java.io.IOException;
@@ -52,9 +52,9 @@ public final class Publisher {
      */
     private final Renderer renderer;
     /**
-     * Type of published pages.
+     * PageType of published pages.
      */
-    private final Type type;
+    private final PageType type;
 
     /**
      * Dedicated constructor.
@@ -69,7 +69,7 @@ public final class Publisher {
             final Templates templates,
             final Directories directories,
             final Configuration configuration,
-            final Type type) throws IOException {
+            final PageType type) throws IOException {
         super();
         Validate.notNull(templates, "templates");
         Validate.notNull(directories, "directories");
@@ -78,7 +78,7 @@ public final class Publisher {
         this.type = Validate.notNull(type, "type");
         this.baseUrlForPages = configuration.getBaseUri();
 
-        if (type == Type.POST) {
+        if (type == PageType.POST) {
             this.inputDir = directories.getPostsData();
             this.outputDir = directories.getPostsOutput();
             this.renderer = new Renderer(
@@ -86,7 +86,7 @@ public final class Publisher {
                     templates.getPostTemplate(),
                     encoding
             );
-        } else if (type == Type.SITE) {
+        } else if (type == PageType.SITE) {
             this.inputDir = directories.getSitesData();
             this.outputDir = directories.getSitesOutput();
             this.renderer = new Renderer(

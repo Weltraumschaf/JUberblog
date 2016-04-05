@@ -11,6 +11,7 @@ import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Page.Pages;
+import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -73,7 +74,7 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         // XXX Introduce last mod date.
         item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
 
-        if (page.getType() == Page.Type.POST) {
+        if (page.getType() == PageType.POST) {
             item.put("changefreq", "daily");
             item.put("priority", "0.8");
         } else {
