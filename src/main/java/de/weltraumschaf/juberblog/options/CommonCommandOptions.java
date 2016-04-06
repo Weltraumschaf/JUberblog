@@ -13,8 +13,15 @@ abstract class CommonCommandOptions extends CommonOptions {
     @Parameter(names = {"-v", "--verbose"}, description = "Tell you more.")
     private boolean verbose;
 
-
     public final boolean isVerbose() {
         return verbose;
+    }
+
+    static String usage() {
+        return new StringBuilder()
+            .append("[-v|--verbose]")
+            .append(' ')
+            .append(CommonOptions.usage())
+            .toString();
     }
 }

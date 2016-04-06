@@ -12,8 +12,6 @@ import com.beust.jcommander.Parameters;
 @Parameters(commandDescription = "Installs a fresh blog.")
 public final class InstallOptions extends CommonCommandOptions {
 
-    static final String USAGE = Options.Command.INSTALL.toString()
-        + " -l|--location <directory>";
     static final String EXAMPLE = "TODO Write examples.";
 
     @Parameter(names = {"-l", "--location"}, description = "Where to install the scaffold.", required = true)
@@ -35,4 +33,13 @@ public final class InstallOptions extends CommonCommandOptions {
         return update;
     }
 
+    public static String usage() {
+        return new StringBuilder()
+            .append(Options.Command.INSTALL)
+            .append(' ')
+            .append("-l|--location <directory> [-f|--force] [-u|--update]")
+            .append(' ')
+            .append(CommonCommandOptions.usage())
+            .toString();
+    }
 }

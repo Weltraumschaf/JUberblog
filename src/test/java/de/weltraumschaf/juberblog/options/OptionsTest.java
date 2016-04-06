@@ -3,7 +3,6 @@ package de.weltraumschaf.juberblog.options;
 import de.weltraumschaf.juberblog.options.Options.Command;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -150,21 +149,21 @@ public final class OptionsTest {
     public void usage_install() {
         assertThat(
             sut.usage(Command.INSTALL),
-            is("install -l|--location <directory>"));
+            is("install -l|--location <directory> [-f|--force] [-u|--update] [-v|--verbose] [-h|--help]"));
     }
 
     @Test
     public void usage_create() {
         assertThat(
             sut.usage(Command.CREATE),
-            is("create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]"));
+            is("create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site] [-v|--verbose] [-h|--help]"));
     }
 
     @Test
     public void usage_publish() {
         assertThat(
             sut.usage(Command.PUBLISH),
-            is("publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]"));
+            is("publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft] [-v|--verbose] [-h|--help]"));
     }
 
     @Test
@@ -195,7 +194,7 @@ public final class OptionsTest {
     public void help_install() {
         assertThat(
             sut.help(Command.INSTALL),
-            is("Usage: juberblog install -l|--location <directory>\n"
+            is("Usage: juberblog " + InstallOptions.usage() + "\n"
                 + "\n"
                 + "Installs a fresh blog.\n"
                 + "\n"
@@ -217,7 +216,7 @@ public final class OptionsTest {
     public void help_create() {
         assertThat(
             sut.help(Command.CREATE),
-            is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]\n"
+            is("Usage: juberblog " + CreateOptions.usage() + "\n"
                 + "\n"
                 + "Creates blog entities (sites/pages).\n"
                 + "\n"
@@ -240,7 +239,7 @@ public final class OptionsTest {
     public void help_publish() {
         assertThat(
             sut.help(Command.PUBLISH),
-            is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]\n"
+            is("Usage: juberblog " + PublishOptions.usage() + "\n"
                 + "\n"
                 + "Publishes the blog.\n"
                 + "\n"

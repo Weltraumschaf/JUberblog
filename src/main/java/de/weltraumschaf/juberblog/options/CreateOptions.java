@@ -13,8 +13,6 @@ import de.weltraumschaf.juberblog.options.Options.Command;
 @Parameters(commandDescription = "Creates blog entities (sites/pages).")
 public final class CreateOptions extends CommonCommandOptions implements OptionsWithConfig {
 
-    static final String USAGE = Command.CREATE.toString()
-        + " -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]";
     static final String EXAMPLE = "TODO Write examples.";
 
     @Parameter(names = {"-c", "--config"}, description = "Config file to use.", required = true)
@@ -43,5 +41,13 @@ public final class CreateOptions extends CommonCommandOptions implements Options
         return site;
     }
 
-
+    public static String usage() {
+        return new StringBuilder()
+            .append(Command.CREATE)
+            .append(' ')
+            .append("-c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]")
+            .append(' ')
+            .append(CommonCommandOptions.usage())
+            .toString();
+    }
 }

@@ -11,11 +11,6 @@ import de.weltraumschaf.juberblog.options.Options.Command;
  */
 public final class MainOptions extends CommonOptions {
 
-    static final String USAGE =
-        Command.CREATE.toString() + "|"
-        + Command.INSTALL.toString() + "|"
-        + Command.PUBLISH.toString()
-        + " [--version] [-h|--help]";
     static final String DESCRIPTION = "Commandline tool to manage your blog.";
     static final String EXAMPLE = "TODO Add some examples.";
 
@@ -24,5 +19,19 @@ public final class MainOptions extends CommonOptions {
 
     public boolean isVersion() {
         return version;
+    }
+
+    public static String usage() {
+        return new StringBuilder()
+            .append(Command.CREATE)
+            .append('|')
+            .append(Command.INSTALL)
+            .append('|')
+            .append(Command.PUBLISH)
+            .append(' ')
+            .append("[--version]")
+            .append(' ')
+            .append(CommonOptions.usage())
+            .toString();
     }
 }

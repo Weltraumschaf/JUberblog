@@ -129,14 +129,14 @@ public final class Options {
     public String usage(final Command cmd) {
         switch (cmd) {
             case INSTALL:
-                return InstallOptions.USAGE;
+                return InstallOptions.usage();
             case CREATE:
-                return CreateOptions.USAGE;
+                return CreateOptions.usage();
             case PUBLISH:
-                return PublishOptions.USAGE;
+                return PublishOptions.usage();
             case NONE:
             default:
-                return MainOptions.USAGE;
+                return MainOptions.usage();
         }
     }
 
@@ -170,25 +170,21 @@ public final class Options {
             parameters = parser.getCommands().get(cmd.toString()).getParameters();
         }
 
-        final String usage;
+        final String usage= usage(cmd);
         final String example;
 
         switch (cmd) {
             case INSTALL:
-                usage = InstallOptions.USAGE;
                 example = InstallOptions.EXAMPLE;
                 break;
             case CREATE:
-                usage = CreateOptions.USAGE;
                 example = CreateOptions.EXAMPLE;
                 break;
             case PUBLISH:
-                usage = PublishOptions.USAGE;
                 example = PublishOptions.EXAMPLE;
                 break;
             case NONE:
             default:
-                usage = MainOptions.USAGE;
                 example = MainOptions.EXAMPLE;
                 break;
         }

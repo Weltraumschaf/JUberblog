@@ -8,11 +8,13 @@ import de.weltraumschaf.juberblog.IntegrationTestCase;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.options.CreateOptions;
+import de.weltraumschaf.juberblog.options.InstallOptions;
+import de.weltraumschaf.juberblog.options.MainOptions;
 import de.weltraumschaf.juberblog.options.Options.Command;
-import static org.hamcrest.Matchers.equalTo;
+import de.weltraumschaf.juberblog.options.PublishOptions;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -41,7 +43,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfNoArgument() throws Exception {
         output.expectErr("FATAL: Bad arguments!" + NL
-            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog " + MainOptions.usage() + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[0]));
@@ -52,7 +54,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfBadSubCommand() {
         output.expectErr("FATAL: Bad arguments (cause: Expected a command, got foobar)!" + NL
-            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog " + MainOptions.usage() + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[]{"foobar"}));
@@ -63,7 +65,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfBadArgument() {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: --foobar)!" + NL
-            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog " + MainOptions.usage() + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[]{"--foobar"}));
@@ -84,7 +86,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog create|install|publish [--version] [-h|--help]" + NL
+        output.expectOut(is("Usage: juberblog " + MainOptions.usage() + NL
             + NL
             + "Commandline tool to manage your blog." + NL
             + NL
@@ -107,7 +109,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog create|install|publish [--version] [-h|--help]" + NL
+        output.expectOut(is("Usage: juberblog " + MainOptions.usage() + NL
             + NL
             + "Commandline tool to manage your blog." + NL
             + NL
@@ -130,7 +132,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForCreateSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL
+        output.expectOut(is("Usage: juberblog " + CreateOptions.usage() + NL
             + NL
             + "Creates blog entities (sites/pages).\n\nOptions" + NL
             + NL
@@ -155,7 +157,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForCreateSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL
+        output.expectOut(is("Usage: juberblog " + CreateOptions.usage() + NL
             + NL
             + "Creates blog entities (sites/pages).\n\nOptions" + NL
             + NL
@@ -180,7 +182,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForInstallSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog install -l|--location <directory>" + NL
+        output.expectOut(is("Usage: juberblog " + InstallOptions.usage() + NL
             + NL
             + "Installs a fresh blog." + NL
             + NL
@@ -206,7 +208,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForInstallSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog install -l|--location <directory>" + NL
+        output.expectOut(is("Usage: juberblog " + InstallOptions.usage() + NL
             + NL
             + "Installs a fresh blog." + NL
             + NL
@@ -232,7 +234,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForPublishSubCommandShortOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL
+        output.expectOut(is("Usage: juberblog " + PublishOptions.usage() + NL
             + NL
             + "Publishes the blog." + NL
             + NL
@@ -260,7 +262,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showHelpForPublishSubCommandLongOption() throws Exception {
         output.expectErr(is(""));
-        output.expectOut(is("Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL
+        output.expectOut(is("Usage: juberblog " + PublishOptions.usage() + NL
             + NL
             + "Publishes the blog." + NL
             + NL
@@ -318,7 +320,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_CREATE() throws Exception {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL);
+            + "Usage: juberblog " + CreateOptions.usage() + NL);
 
         App.main(createApp(new String[]{"create", "-x"}));
 
@@ -328,7 +330,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_INSTALL() throws Exception {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: juberblog install -l|--location <directory>" + NL);
+            + "Usage: juberblog " + InstallOptions.usage() + NL);
 
         App.main(createApp(new String[]{"install", "-x"}));
 
@@ -338,7 +340,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_PUBLISH() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
+            + "Usage: juberblog " + PublishOptions.usage() + NL));
 
         App.main(createApp(new String[]{"publish", "-x"}));
 
@@ -348,7 +350,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_CREATE() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" + NL
-            + "Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL));
+            + "Usage: juberblog " + CreateOptions.usage() + NL));
 
         final App sut = createApp(new String[]{"create"});
 
@@ -376,7 +378,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_INSTALL() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -l, --location )!" + NL
-            + "Usage: juberblog install -l|--location <directory>" + NL));
+            + "Usage: juberblog " + InstallOptions.usage() + NL));
 
         final App sut = createApp(new String[]{
             "install"});
@@ -406,8 +408,8 @@ public class AppTest extends IntegrationTestCase {
 
     @Test
     public void missingConfig_PUBLISH() throws Exception {
-        output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" +NL
-            + "Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
+        output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" + NL
+            + "Usage: juberblog " + PublishOptions.usage() + NL));
 
         final App sut = createApp(new String[]{
             "publish"});

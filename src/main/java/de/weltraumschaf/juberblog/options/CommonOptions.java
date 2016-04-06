@@ -17,4 +17,7 @@ abstract class CommonOptions {
         return help;
     }
 
+    static String usage() {
+        return "[-h|--help]";
+    }
 }
