@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -25,7 +24,7 @@ import java.util.Map;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class Publisher {
+final class Publisher {
 
     /**
      * USed to extract headline.

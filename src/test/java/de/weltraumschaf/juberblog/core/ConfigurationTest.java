@@ -38,16 +38,19 @@ public class ConfigurationTest extends BaseTestCase {
     }
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsProperties() throws IOException {
         new Configuration((Properties) null);
     }
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsFileName() throws IOException {
         new Configuration((String) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withEmptyAFileName() throws IOException {
         new Configuration("");
     }

@@ -1,6 +1,5 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.Renderer;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

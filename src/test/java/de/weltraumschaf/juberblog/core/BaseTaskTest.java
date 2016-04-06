@@ -1,15 +1,8 @@
 package de.weltraumschaf.juberblog.core;
 
-import de.weltraumschaf.commons.guava.Maps;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
-import org.joda.time.DateTime;
-import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link BaseTask}.

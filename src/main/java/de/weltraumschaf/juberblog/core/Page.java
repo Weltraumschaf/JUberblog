@@ -2,7 +2,6 @@ package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 import org.joda.time.DateTime;

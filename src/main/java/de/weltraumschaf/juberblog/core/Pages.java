@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Convenience type to collect pages.
@@ -50,6 +51,26 @@ public final class Pages {
         }
 
         return Collections.unmodifiableCollection(items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof Pages)) {
+            return false;
+        }
+
+        final Pages other = (Pages) obj;
+        return Objects.equals(data, other.data);
+    }
+
+    @Override
+    public String toString() {
+        return "Pages{" + "data=" + data + '}';
     }
 
 }

@@ -1,4 +1,3 @@
-
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.guava.Maps;
@@ -6,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -20,6 +20,11 @@ import static org.mockito.Mockito.mock;
 public class PagesTest {
 
     private final Pages sut = new Pages();
+
+    @Test
+    public void equalsContract() {
+        EqualsVerifier.forClass(Pages.class).verify();
+    }
 
     @Test(expected = NullPointerException.class)
     public void convert_pages_nullGiven() {

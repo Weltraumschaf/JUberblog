@@ -1,6 +1,5 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.juberblog.cmd.publish.PublishSubCommand;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;

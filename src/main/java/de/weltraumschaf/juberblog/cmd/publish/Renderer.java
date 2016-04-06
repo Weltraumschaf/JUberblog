@@ -39,6 +39,10 @@ import java.util.Map;
  */
 final class Renderer {
 
+    private static final String TPL_NAME_OUTER = "outerTemplate";
+    private static final String TPL_NAME_INNER = "innerTemplate";
+    private static final String TPL_NAME_CONTENT = "content";
+
     /**
      * Encoding used to transfer byte[] and string.
      */
@@ -82,9 +86,9 @@ final class Renderer {
         super();
         this.encoding = Validate.notEmpty(encoding, "encoding");
         this.fmd = FreeMarkerDown.create(encoding);
-        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, "outerTemplate", RenderOptions.WITHOUT_MARKDOWN);
-        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, "innerTemplate", RenderOptions.WITHOUT_MARKDOWN);
-        this.outerTemplate.assignTemplateModel("content", this.innerTemplate);
+        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
+        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
+        this.outerTemplate.assignTemplateModel(TPL_NAME_CONTENT, this.innerTemplate);
         fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);
     }
 
@@ -199,7 +203,7 @@ final class Renderer {
         public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
             final String name = template.getName();
 
-            if ("content".equals(name)) {
+            if (TPL_NAME_CONTENT.equals(name)) {
                 markdown = content;
             }
         }
