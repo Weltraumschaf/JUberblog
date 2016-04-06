@@ -28,8 +28,8 @@ public final class Pages {
         return data.add(page);
     }
 
-    public void sort(Comparator<? super Page> c) {
-        data.sort(c);
+    public void sort(Comparator<? super Page> comparator) {
+        Collections.sort(data, comparator);
     }
 
     public List<Page> data() {
