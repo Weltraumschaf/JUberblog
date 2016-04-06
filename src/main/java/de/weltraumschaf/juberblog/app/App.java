@@ -237,6 +237,8 @@ public final class App extends InvokableAdapter {
             .append(String.format(Validate.notEmpty(messageFormat, "messageFormat"), args))
             .append(Constants.DEFAULT_NEW_LINE.toString())
             .append("Usage: ")
+            .append(Constants.COMMAND_NAME.toString())
+            .append(' ')
             .append(options.usage(name))
             .toString();
     }

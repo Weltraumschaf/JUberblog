@@ -41,7 +41,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfNoArgument() throws Exception {
         output.expectErr("FATAL: Bad arguments!" + NL
-            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[0]));
@@ -52,7 +52,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfBadSubCommand() {
         output.expectErr("FATAL: Bad arguments (cause: Expected a command, got foobar)!" + NL
-            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[]{"foobar"}));
@@ -63,7 +63,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void showUsageIfBadArgument() {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: --foobar)!" + NL
-            + "Usage: create|install|publish [--version] [-h|--help]" + NL);
+            + "Usage: juberblog create|install|publish [--version] [-h|--help]" + NL);
         output.expectOut(is(""));
 
         App.main(createApp(new String[]{"--foobar"}));
@@ -318,7 +318,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_CREATE() throws Exception {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL);
+            + "Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL);
 
         App.main(createApp(new String[]{"create", "-x"}));
 
@@ -328,7 +328,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_INSTALL() throws Exception {
         output.expectErr("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: install -l|--location <directory>" + NL);
+            + "Usage: juberblog install -l|--location <directory>" + NL);
 
         App.main(createApp(new String[]{"install", "-x"}));
 
@@ -338,7 +338,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void badArgument_PUBLISH() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: Unknown option: -x)!" + NL
-            + "Usage: publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
+            + "Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
 
         App.main(createApp(new String[]{"publish", "-x"}));
 
@@ -348,7 +348,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_CREATE() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" + NL
-            + "Usage: create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL));
+            + "Usage: juberblog create -c|--config <file> [-t|--title <title>] [-d|--draft] [-s|--site]" + NL));
 
         final App sut = createApp(new String[]{"create"});
 
@@ -376,7 +376,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_INSTALL() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -l, --location )!" + NL
-            + "Usage: install -l|--location <directory>" + NL));
+            + "Usage: juberblog install -l|--location <directory>" + NL));
 
         final App sut = createApp(new String[]{
             "install"});
@@ -407,7 +407,7 @@ public class AppTest extends IntegrationTestCase {
     @Test
     public void missingConfig_PUBLISH() throws Exception {
         output.expectErr(is("FATAL: Bad arguments (cause: The following option is required: -c, --config )!" +NL
-            + "Usage: publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
+            + "Usage: juberblog publish -c|--config <file> [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]" + NL));
 
         final App sut = createApp(new String[]{
             "publish"});
