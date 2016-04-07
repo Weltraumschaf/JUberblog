@@ -4,7 +4,7 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
@@ -53,7 +53,7 @@ public abstract class SubCommandBase implements SubCommand {
     }
 
     @Override
-    public final Configuration configuration() {
+    public final BlogConfiguration configuration() {
         return registry.configuration();
     }
 

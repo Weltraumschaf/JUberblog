@@ -3,7 +3,7 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -30,18 +30,18 @@ public class PublishSubCommandTest extends BaseTestCase {
     @Test
     public void execute() throws Exception {
         final Properties config = new Properties();
-        config.setProperty(Configuration.TITLE, "Blog Title");
-        config.setProperty(Configuration.DESCRIPTION, "Blog Description");
-        config.setProperty(Configuration.LANGUAGE, "en");
-        config.setProperty(Configuration.SITE_URI, "http://uberblog.local/");
-        config.setProperty(Configuration.ENCODING, "utf-8");
-        config.setProperty(Configuration.DATA_DIR, "/");
-        config.setProperty(Configuration.PUBLIC_DIR, "/");
-        config.setProperty(Configuration.TEMPLATE_DIR, "/");
+        config.setProperty(BlogConfiguration.TITLE, "Blog Title");
+        config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
+        config.setProperty(BlogConfiguration.LANGUAGE, "en");
+        config.setProperty(BlogConfiguration.SITE_URI, "http://uberblog.local/");
+        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
+        config.setProperty(BlogConfiguration.DATA_DIR, "/");
+        config.setProperty(BlogConfiguration.PUBLIC_DIR, "/");
+        config.setProperty(BlogConfiguration.TEMPLATE_DIR, "/");
         final JUberblog registry = JUberblog.Builder.create()
             .directories(createDirs(tmp))
             .templates(createTemplates())
-            .configuration(new Configuration(config))
+            .configuration(new BlogConfiguration(config))
             .options(new Options())
             .io(mock(IO.class))
             .product();

@@ -4,7 +4,7 @@ import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.BaseTask;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -66,7 +66,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
         /**
          * The blog configuration.
          */
-        private final Configuration configuration;
+        private final BlogConfiguration configuration;
         /**
          * PageType of published data.
          */
@@ -83,7 +83,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
         public Config(
                 final Templates templates,
                 final Directories directories,
-                final Configuration configuration,
+                final BlogConfiguration configuration,
                 final PageType type) {
             super();
             this.templates = Validate.notNull(templates, "templates");

@@ -4,7 +4,7 @@ import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Pages;
@@ -67,7 +67,7 @@ final class Publisher {
     public Publisher(
         final Templates templates,
         final Directories directories,
-        final Configuration configuration,
+        final BlogConfiguration configuration,
         final PageType type) throws IOException {
         super();
         Validate.notNull(templates, "templates");

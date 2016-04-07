@@ -11,7 +11,7 @@ import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.BaseTask;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
@@ -140,7 +140,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         public Config(
             final Templates templates,
             final Directories directories,
-            final Configuration configuration,
+            final BlogConfiguration configuration,
             final DateTime lastBuildDate) {
             super();
             Validate.notNull(configuration, "configuration");

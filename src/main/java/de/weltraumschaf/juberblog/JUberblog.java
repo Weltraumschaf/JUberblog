@@ -4,7 +4,7 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.validate.Validate;
 
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -35,7 +35,7 @@ public final class JUberblog {
     /**
      * Holds the blog's configuration.
      */
-    private Configuration cfg;
+    private BlogConfiguration cfg;
     /**
      * Holds the command line options.
      */
@@ -90,7 +90,7 @@ public final class JUberblog {
      *
      * @return never {@code null}
      */
-    public Configuration configuration() {
+    public BlogConfiguration configuration() {
         return cfg;
     }
 
@@ -121,7 +121,7 @@ public final class JUberblog {
      * @throws ApplicationException if not all objects can't be generated
      */
     public static JUberblog generateWithDefaultConfig(final Options cliOptions, final IO io) throws ApplicationException {
-        return generate(cliOptions, io, Configuration.DEFAULT);
+        return generate(cliOptions, io, BlogConfiguration.DEFAULT);
     }
 
     /**
@@ -133,7 +133,7 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if not all objects can't be generated
      */
-    public static JUberblog generate(final Options cliOptions, final IO io, final Configuration configuration)
+    public static JUberblog generate(final Options cliOptions, final IO io, final BlogConfiguration configuration)
         throws ApplicationException {
         final Path dataDir = findDataDir(configuration);
         final Path outputDir = findOutputDir(configuration);
@@ -155,7 +155,7 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findTemplateDir(final Configuration configuration) {
+    private static Path findTemplateDir(final BlogConfiguration configuration) {
         return Paths.get(configuration.getTemplateDir());
     }
 
@@ -166,7 +166,7 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findOutputDir(final Configuration configuration) {
+    private static Path findOutputDir(final BlogConfiguration configuration) {
         return Paths.get(configuration.getHtdocs());
     }
 
@@ -177,7 +177,7 @@ public final class JUberblog {
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
-    private static Path findDataDir(final Configuration configuration) {
+    private static Path findDataDir(final BlogConfiguration configuration) {
         return Paths.get(configuration.getDataDir());
     }
 
@@ -235,7 +235,7 @@ public final class JUberblog {
      * @return never {@code null}, always new instance
      * @throws ApplicationException if file can't be loaded
      */
-    public static Configuration generateConfiguration(final OptionsWithConfig cliOptions) throws ApplicationException {
+    public static BlogConfiguration generateConfiguration(final OptionsWithConfig cliOptions) throws ApplicationException {
         final Path configFile = Paths.get(Validate.notNull(cliOptions, "cliOptions").getConfig());
 
         if (!Files.isRegularFile(configFile)) {
@@ -244,10 +244,10 @@ public final class JUberblog {
                 String.format("Can't read config file '%s'!", cliOptions.getConfig()));
         }
 
-        final Configuration configuration;
+        final BlogConfiguration configuration;
 
         try {
-            configuration = new Configuration(configFile.toString());
+            configuration = new BlogConfiguration(configFile.toString());
         } catch (final IOException ex) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
@@ -311,7 +311,7 @@ public final class JUberblog {
          * @param cfg must not be {@code null}
          * @return never {@code null}
          */
-        public Builder configuration(final Configuration cfg) {
+        public Builder configuration(final BlogConfiguration cfg) {
             holder.cfg = Validate.notNull(cfg, "cfg");
             return this;
         }

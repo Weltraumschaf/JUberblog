@@ -18,7 +18,7 @@ import java.util.Properties;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class Configuration {
+public final class BlogConfiguration {
 
     /**
      * Name of blog headline property.
@@ -55,7 +55,7 @@ public final class Configuration {
     /**
      * Default configuration.
      */
-    public static final Configuration DEFAULT;
+    public static final BlogConfiguration DEFAULT;
     static {
         final Properties emptyConfig = new Properties();
         emptyConfig.setProperty(TITLE, "blog title");
@@ -66,7 +66,7 @@ public final class Configuration {
         emptyConfig.setProperty(TEMPLATE_DIR, "templates");
         emptyConfig.setProperty(PUBLIC_DIR, "public");
         emptyConfig.setProperty(ENCODING, "utf-8");
-        DEFAULT = new Configuration(emptyConfig);
+        DEFAULT = new BlogConfiguration(emptyConfig);
     }
 
     /**
@@ -80,7 +80,7 @@ public final class Configuration {
      * @param filename must not be {@literal null} or empty
      * @throws IOException if file can't be load
      */
-    public Configuration(final String filename) throws IOException {
+    public BlogConfiguration(final String filename) throws IOException {
         this(load(filename));
     }
 
@@ -90,7 +90,7 @@ public final class Configuration {
      *
      * @param p must not be {@code null}
      */
-    public Configuration(final Properties p) {
+    public BlogConfiguration(final Properties p) {
         super();
         properties = validate(Validate.notNull(p));
     }
@@ -238,11 +238,11 @@ public final class Configuration {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Configuration)) {
+        if (!(obj instanceof BlogConfiguration)) {
             return false;
         }
 
-        final Configuration other = (Configuration) obj;
+        final BlogConfiguration other = (BlogConfiguration) obj;
         return Objects.equals(properties, other.properties);
     }
 

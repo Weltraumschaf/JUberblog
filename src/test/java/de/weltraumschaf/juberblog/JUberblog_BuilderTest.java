@@ -1,7 +1,7 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
@@ -34,7 +34,7 @@ public class JUberblog_BuilderTest extends BaseTestCase {
             Paths.get("."),
             Paths.get("."),
             Paths.get("."));
-    private final Configuration configuration = new Configuration(createProperties());
+    private final BlogConfiguration configuration = new BlogConfiguration(createProperties());
     private final Options options = new Options();
     private final IO io = mock(IO.class);
 

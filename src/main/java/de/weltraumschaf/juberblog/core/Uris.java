@@ -36,7 +36,7 @@ public final class Uris {
      * @param config must not be {@code null}
      * @throws URISyntaxException if {@link BlogConfiguration#getBaseUri()} is malformed
      */
-    public Uris(final Configuration config) throws URISyntaxException {
+    public Uris(final BlogConfiguration config) throws URISyntaxException {
         this(config.getBaseUri());
     }
 

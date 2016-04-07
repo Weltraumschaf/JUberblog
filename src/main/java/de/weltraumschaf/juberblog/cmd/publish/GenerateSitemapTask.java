@@ -6,7 +6,7 @@ import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.juberblog.core.BaseTask;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Page;
@@ -117,7 +117,7 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         public Config(
             final Templates templates,
             final Directories directories,
-            final Configuration configuration) {
+            final BlogConfiguration configuration) {
             super();
             this.template = Validate.notNull(templates, "templates").getSiteMapTemplate();
             this.outputDir = Validate.notNull(directories, "directories").getOutput();

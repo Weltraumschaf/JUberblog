@@ -10,7 +10,7 @@ import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.system.Environments;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
@@ -168,12 +168,12 @@ public final class App extends InvokableAdapter {
                 registry = JUberblog.generateWithDefaultConfig(options, getIoStreams());
                 break;
             case CREATE: {
-                final Configuration config = JUberblog.generateConfiguration(options.getCreate());
+                final BlogConfiguration config = JUberblog.generateConfiguration(options.getCreate());
                 registry = JUberblog.generate(options, getIoStreams(), config);
                 break;
             }
             case PUBLISH: {
-                final Configuration config = JUberblog.generateConfiguration(options.getPublish());
+                final BlogConfiguration config = JUberblog.generateConfiguration(options.getPublish());
                 registry = JUberblog.generate(options, getIoStreams(), config);
                 break;
             }

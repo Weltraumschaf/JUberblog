@@ -5,7 +5,7 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.app.App.Factory;
 import de.weltraumschaf.juberblog.app.App.FactoryImpl;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.cmd.create.CreateSubCommand;
@@ -41,7 +41,7 @@ public class FactoryTest extends BaseTestCase {
     private final JUberblog registry = JUberblog.Builder.create()
                 .directories(directories)
                 .templates(templates)
-                .configuration(new Configuration(createProperties()))
+                .configuration(new BlogConfiguration(createProperties()))
                 .options(new Options())
                 .io(mock(IO.class))
                 .product();

@@ -1,7 +1,7 @@
 package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
@@ -57,20 +57,20 @@ public abstract class BaseTestCase {
                 createPath(SCAFOLD_PACKAGE_PREFIX + "create/post_or_site.md.ftl"));
     }
 
-    protected final Configuration createConfig() {
-        return new Configuration(createProperties());
+    protected final BlogConfiguration createConfig() {
+        return new BlogConfiguration(createProperties());
     }
 
     protected final Properties createProperties() {
         final Properties config = new Properties();
-        config.setProperty(Configuration.DATA_DIR, "/data");
-        config.setProperty(Configuration.DESCRIPTION, "Blog Description");
-        config.setProperty(Configuration.ENCODING, "utf-8");
-        config.setProperty(Configuration.PUBLIC_DIR, "/htdocs");
-        config.setProperty(Configuration.LANGUAGE, "en");
-        config.setProperty(Configuration.SITE_URI, "http://www.myblog.com/");
-        config.setProperty(Configuration.TEMPLATE_DIR, "/templates");
-        config.setProperty(Configuration.TITLE, "Blog Title");
+        config.setProperty(BlogConfiguration.DATA_DIR, "/data");
+        config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
+        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
+        config.setProperty(BlogConfiguration.PUBLIC_DIR, "/htdocs");
+        config.setProperty(BlogConfiguration.LANGUAGE, "en");
+        config.setProperty(BlogConfiguration.SITE_URI, "http://www.myblog.com/");
+        config.setProperty(BlogConfiguration.TEMPLATE_DIR, "/templates");
+        config.setProperty(BlogConfiguration.TITLE, "Blog Title");
 
         return config;
     }

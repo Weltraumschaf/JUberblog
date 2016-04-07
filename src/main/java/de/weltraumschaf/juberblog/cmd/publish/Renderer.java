@@ -10,7 +10,7 @@ import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.PreProcessor;
 import de.weltraumschaf.freemarkerdown.PreProcessors;
 import de.weltraumschaf.freemarkerdown.TemplateModel;
-import de.weltraumschaf.juberblog.core.Configuration;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,7 +47,7 @@ final class Renderer {
     /**
      * Encoding used to transfer byte[] and string.
      */
-    private final Configuration configuration;
+    private final BlogConfiguration configuration;
     /**
      * Used to render the templates.
      *
@@ -83,7 +83,7 @@ final class Renderer {
      * @param encoding must not be {@code null} or empty
      * @throws IOException if templates can't be read
      */
-    public Renderer(final Path outerTemplate, final Path innerTemplate, final Configuration configuration) throws IOException {
+    public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration) throws IOException {
         super();
         this.configuration = Validate.notNull(configuration, "configuration");
         this.fmd = FreeMarkerDown.create(configuration.getEncoding());
