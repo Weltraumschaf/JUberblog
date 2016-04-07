@@ -10,6 +10,7 @@ import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.PreProcessor;
 import de.weltraumschaf.freemarkerdown.PreProcessors;
 import de.weltraumschaf.freemarkerdown.TemplateModel;
+import de.weltraumschaf.juberblog.core.Configuration;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +47,7 @@ final class Renderer {
     /**
      * Encoding used to transfer byte[] and string.
      */
-    private final String encoding;
+    private final Configuration configuration;
     /**
      * Used to render the templates.
      *
@@ -60,7 +61,7 @@ final class Renderer {
     /**
      * Used to pre process key value instructions.
      */
-    private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues);
+    private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues, "juberblog");
     /**
      * Used to extract raw Markdown.
      */
@@ -82,12 +83,12 @@ final class Renderer {
      * @param encoding must not be {@code null} or empty
      * @throws IOException if templates can't be read
      */
-    public Renderer(final Path outerTemplate, final Path innerTemplate, final String encoding) throws IOException {
+    public Renderer(final Path outerTemplate, final Path innerTemplate, final Configuration configuration) throws IOException {
         super();
-        this.encoding = Validate.notEmpty(encoding, "encoding");
-        this.fmd = FreeMarkerDown.create(encoding);
-        this.outerTemplate = fmd.createLayout(outerTemplate, encoding, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
-        this.innerTemplate = fmd.createLayout(innerTemplate, encoding, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
+        this.configuration = Validate.notNull(configuration, "configuration");
+        this.fmd = FreeMarkerDown.create(configuration.getEncoding());
+        this.outerTemplate = fmd.createLayout(outerTemplate, configuration.getEncoding(), TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
+        this.innerTemplate = fmd.createLayout(innerTemplate, configuration.getEncoding(), TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
         this.outerTemplate.assignTemplateModel(TPL_NAME_CONTENT, this.innerTemplate);
         fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);
     }
@@ -114,9 +115,10 @@ final class Renderer {
         }
 
         keyValues.clear();
-        innerTemplate.assignTemplateModel("content", fmd.createFragemnt(content, encoding, "content"));
-        outerTemplate.assignVariable("name", "NAME");
-        outerTemplate.assignVariable("description", "DESCRIPTION");
+        innerTemplate.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(content, configuration.getEncoding(), TPL_NAME_CONTENT));
+        // Extratc template variable names in enum.
+        outerTemplate.assignVariable("name", configuration.getTitle()); // TODO Rename variable to 'title'
+        outerTemplate.assignVariable("description", configuration.getDescription());
         fmd.register(processor);
 
         return new RendererResult(fmd.render(outerTemplate), interceptor.getMarkdown(), keyValues);
@@ -148,7 +150,7 @@ final class Renderer {
          *
          * @param renderedContent must not be {@code null}
          * @param markdown must not be {@code null}
-         * @param metaData must not be {@code null}
+         * @param metaData must not be {@code null}, defensive copied
          */
         private RendererResult(
                 final String renderedContent,

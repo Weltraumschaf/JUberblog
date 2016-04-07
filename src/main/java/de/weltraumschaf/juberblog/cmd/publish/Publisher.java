@@ -83,7 +83,7 @@ final class Publisher {
             this.renderer = new Renderer(
                 templates.getLayoutTemplate(),
                 templates.getPostTemplate(),
-                encoding
+                configuration
             );
         } else if (type == PageType.SITE) {
             this.inputDir = directories.getSitesData();
@@ -91,7 +91,7 @@ final class Publisher {
             this.renderer = new Renderer(
                 templates.getLayoutTemplate(),
                 templates.getSiteTemplate(),
-                encoding
+                configuration
             );
         } else {
             throw new IllegalArgumentException(String.format("Bad type '%s'!", type));

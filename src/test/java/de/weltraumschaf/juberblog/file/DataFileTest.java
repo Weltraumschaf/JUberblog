@@ -1,7 +1,6 @@
 package de.weltraumschaf.juberblog.file;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
-import de.weltraumschaf.juberblog.core.Directories;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -25,11 +24,13 @@ public class DataFileTest extends BaseTestCase {
     }
 
     @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullAsAbsoluteFileName() {
         new DataFile(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withEmptyAsAbsoluteFileName() {
         new DataFile("");
     }
@@ -86,7 +87,7 @@ public class DataFileTest extends BaseTestCase {
     public void readContent() throws IOException {
         assertThat(
                 sut.readContent(ENCODING),
-                is("<?fdm-keyvalue\n"
+                is("<?juberblog\n"
                         + "    Description: This is the first post.\n"
                         + "?>\n"
                         + "\n"
@@ -99,7 +100,7 @@ public class DataFileTest extends BaseTestCase {
                         + "tempor invidunt ut labore et dolore magna aliquyam.\n\n"));
         assertThat(
                 sut.readContent(ENCODING),
-                is("<?fdm-keyvalue\n"
+                is("<?juberblog\n"
                         + "    Description: This is the first post.\n"
                         + "?>\n"
                         + "\n"

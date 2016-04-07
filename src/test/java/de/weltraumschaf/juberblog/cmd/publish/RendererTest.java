@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
+import de.weltraumschaf.juberblog.core.Configuration;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -28,7 +29,7 @@ public class RendererTest extends BaseTestCase {
     final Renderer sut = new Renderer(
         createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
         createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
-        ENCODING);
+        Configuration.DEFAULT);
 
     public RendererTest() throws IOException, URISyntaxException {
         super();
@@ -50,8 +51,8 @@ public class RendererTest extends BaseTestCase {
             + "\n"
             + "    <body>\n"
             + "        <header>\n"
-            + "            <h1>NAME</h1>\n"
-            + "            <h2>DESCRIPTION</h2>\n"
+            + "            <h1>blog title</h1>\n"
+            + "            <h2>blog description</h2>\n"
             + "        </header>\n"
             + "\n"
             + "        <section>\n"
