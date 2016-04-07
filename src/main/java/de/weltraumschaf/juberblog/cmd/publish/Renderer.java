@@ -117,7 +117,7 @@ final class Renderer {
         keyValues.clear();
         innerTemplate.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(content, configuration.getEncoding(), TPL_NAME_CONTENT));
         // Extratc template variable names in enum.
-        outerTemplate.assignVariable("name", configuration.getTitle()); // TODO Rename variable to 'title'
+        outerTemplate.assignVariable("title", configuration.getTitle());
         outerTemplate.assignVariable("description", configuration.getDescription());
         fmd.register(processor);
 
