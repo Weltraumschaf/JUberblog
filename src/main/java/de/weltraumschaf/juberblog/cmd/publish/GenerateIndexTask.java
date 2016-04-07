@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -52,7 +53,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
     @Override
     public Pages execute(Pages previusResult) throws Exception {
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
-        final Fragment template = fmd.createFragemnt(
+        final Fragment content = fmd.createFragemnt(
             config.indexTemplate,
             config.encoding,
             config.indexTemplate.toString(),
@@ -62,10 +63,11 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             config.encoding,
             config.layoutTemplate.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
-        layout.assignTemplateModel(TemplateVariables.CONTENT, template);
+        layout.assignTemplateModel(TemplateVariables.CONTENT, content);
         layout.assignVariable(TemplateVariables.TITLE, config.name);
         layout.assignVariable(TemplateVariables.DESCRIPTION, config.description);
-        template.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
+        layout.assignVariable(TemplateVariables.BASE_URL, config.baseUrl);
+        content.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
         Files.write(
             config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
             fmd.render(layout).getBytes(config.encoding)
@@ -125,6 +127,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * The description of the blog.
          */
         private final String description;
+        private final URI baseUrl;
 
         /**
          * Dedicated constructor.
@@ -147,6 +150,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             this.indexTemplate = templates.getIndexTemplate();
             this.name = configuration.getTitle();
             this.description = configuration.getDescription();
+            this.baseUrl = configuration.getBaseUri();
         }
 
     }

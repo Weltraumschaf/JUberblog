@@ -7,6 +7,7 @@ import de.weltraumschaf.freemarkerdown.VariableName;
  * @author Sven Strittmatter
  */
 public enum TemplateVariables implements VariableName {
+    BASE_URL("baseUrl"),
     CONTENT("content"),
     DESCRIPTION("description"),
     ENCODING("encoding"),

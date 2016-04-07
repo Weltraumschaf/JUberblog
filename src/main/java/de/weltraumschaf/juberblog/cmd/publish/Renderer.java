@@ -69,11 +69,11 @@ final class Renderer {
     /**
      * Outer part of the two step layout.
      */
-    private final Layout outerTemplate;
+    private final Layout layout;
     /**
      * Inner part of the two step layout.
      */
-    private final Layout innerTemplate;
+    private final Layout content;
 
     /**
      * Dedicated constructor.
@@ -87,9 +87,9 @@ final class Renderer {
         super();
         this.configuration = Validate.notNull(configuration, "configuration");
         this.fmd = FreeMarkerDown.create(configuration.getEncoding());
-        this.outerTemplate = fmd.createLayout(outerTemplate, configuration.getEncoding(), TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
-        this.innerTemplate = fmd.createLayout(innerTemplate, configuration.getEncoding(), TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
-        this.outerTemplate.assignTemplateModel(TPL_NAME_CONTENT, this.innerTemplate);
+        this.layout = fmd.createLayout(outerTemplate, configuration.getEncoding(), TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
+        this.content = fmd.createLayout(innerTemplate, configuration.getEncoding(), TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
+        this.layout.assignTemplateModel(TPL_NAME_CONTENT, this.content);
         fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);
     }
 
@@ -99,29 +99,29 @@ final class Renderer {
      * Throws {@link IllegalArgumentException} if given path does not exist or is a directory.
      * </p>
      *
-     * @param content must not be {@code null}
+     * @param contentFile must not be {@code null}
      * @return never {@code null}
      * @throws IOException if content file can't be read
      */
-    RendererResult render(final Path content) throws IOException {
-        Validate.notNull(content, "content");
+    RendererResult render(final Path contentFile) throws IOException {
+        Validate.notNull(contentFile, "content");
 
-        if (!Files.exists(content)) {
-            throw new IllegalArgumentException(String.format("Given path '%s' does not exist!", content));
+        if (!Files.exists(contentFile)) {
+            throw new IllegalArgumentException(String.format("Given path '%s' does not exist!", contentFile));
         }
 
-        if (Files.isDirectory(content)) {
-            throw new IllegalArgumentException(String.format("Given path '%s' is a directory!", content));
+        if (Files.isDirectory(contentFile)) {
+            throw new IllegalArgumentException(String.format("Given path '%s' is a directory!", contentFile));
         }
 
         keyValues.clear();
-        innerTemplate.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(content, configuration.getEncoding(), TPL_NAME_CONTENT));
-        // Extratc template variable names in enum.
-        outerTemplate.assignVariable(TemplateVariables.TITLE, configuration.getTitle());
-        outerTemplate.assignVariable(TemplateVariables.DESCRIPTION, configuration.getDescription());
+        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, configuration.getEncoding(), TPL_NAME_CONTENT));
+        layout.assignVariable(TemplateVariables.TITLE, configuration.getTitle());
+        layout.assignVariable(TemplateVariables.DESCRIPTION, configuration.getDescription());
+        layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());
         fmd.register(processor);
 
-        return new RendererResult(fmd.render(outerTemplate), interceptor.getMarkdown(), keyValues);
+        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);
     }
 
     /**

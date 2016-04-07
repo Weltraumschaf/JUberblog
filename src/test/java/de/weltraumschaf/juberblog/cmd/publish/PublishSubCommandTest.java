@@ -103,8 +103,8 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "<html>\n"
             + "    <head>\n"
             + "        <meta name=\"robots\" content=\"all\"/>\n"
-            + "        <link href=\"css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
-            + "        <link href=\"img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
+            + "        <link href=\"http://uberblog.local//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
+            + "        <link href=\"http://uberblog.local//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"
             + "\n"
             + "    <body>\n"
@@ -136,7 +136,7 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "            Powered by JUberblog.\n"
             + "        </footer>\n"
             + "\n"
-            + "        <script type=\"text/javascript\" src=\"js/main.js\"></script>\n"
+            + "        <script type=\"text/javascript\" src=\"http://uberblog.local//js/main.js\"></script>\n"
             + "    </body>\n"
             + "</html>"));
         assertThat(siteMapFile.readContent(ENCODING), is(
