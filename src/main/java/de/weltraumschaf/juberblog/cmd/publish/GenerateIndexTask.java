@@ -62,10 +62,10 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             config.encoding,
             config.layoutTemplate.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
-        layout.assignTemplateModel("content", template);
-        layout.assignVariable("title", config.name);
-        layout.assignVariable("description", config.description);
-        template.assignVariable("posts", previusResult.convert(new ForIndexConverter()));
+        layout.assignTemplateModel(TemplateVariables.CONTENT, template);
+        layout.assignVariable(TemplateVariables.TITLE, config.name);
+        layout.assignVariable(TemplateVariables.DESCRIPTION, config.description);
+        template.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
         Files.write(
             config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
             fmd.render(layout).getBytes(config.encoding)

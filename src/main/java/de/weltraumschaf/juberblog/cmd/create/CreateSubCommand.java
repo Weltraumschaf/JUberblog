@@ -9,6 +9,7 @@ import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.TemplateError;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
+import de.weltraumschaf.juberblog.cmd.publish.TemplateVariables;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.options.CreateOptions;
 import java.io.IOException;
@@ -54,7 +55,7 @@ public final class CreateSubCommand extends SubCommandBase {
                 encoding,
                 templates().getCreateSiteOrPostTemplate().toString(),
                 RenderOptions.WITHOUT_MARKDOWN);
-            tpl.assignVariable("title", title);
+            tpl.assignVariable(TemplateVariables.TITLE, title);
             final String content = fmd.render(tpl);
 
             if (createOptions().isSite()) {

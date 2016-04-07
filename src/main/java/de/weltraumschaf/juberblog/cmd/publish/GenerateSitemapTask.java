@@ -57,8 +57,8 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
             config.encoding,
             config.template.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
-        template.assignVariable("encoding", config.encoding);
-        template.assignVariable("urls", previusResult.convert(new ForSitemapConverter()));
+        template.assignVariable(TemplateVariables.ENCODING, config.encoding);
+        template.assignVariable(TemplateVariables.URLS, previusResult.convert(new ForSitemapConverter()));
 
         Files.write(
             config.outputDir.resolve("site_map" + FileNameExtension.XML.getExtension()),

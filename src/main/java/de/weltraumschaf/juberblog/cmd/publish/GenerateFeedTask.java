@@ -59,15 +59,15 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             config.encoding,
             config.template.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
-        template.assignVariable("encoding", config.encoding);
-        template.assignVariable("title", config.title);
-        template.assignVariable("link", config.link.toString());
-        template.assignVariable("description", config.description);
-        template.assignVariable("language", config.language);
+        template.assignVariable(TemplateVariables.ENCODING, config.encoding);
+        template.assignVariable(TemplateVariables.TITLE, config.title);
+        template.assignVariable(TemplateVariables.LINK, config.link.toString());
+        template.assignVariable(TemplateVariables.DESCRIPTION, config.description);
+        template.assignVariable(TemplateVariables.LANGUAGE, config.language);
         template.assignVariable(
-            "lastBuildDate",
+            TemplateVariables.LAST_BUILD_DATE,
             DateFormatter.format(config.lastBuildDate, Format.RSS_PUBLISH_DATE_FORMAT));
-        template.assignVariable("items", previusResult.convert(new ForFeedConverter()));
+        template.assignVariable(TemplateVariables.ITEMS, previusResult.convert(new ForFeedConverter()));
 
         Files.write(
             config.outputDir.resolve("feed" + FileNameExtension.XML.getExtension()),
