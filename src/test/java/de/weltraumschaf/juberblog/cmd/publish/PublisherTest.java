@@ -3,10 +3,12 @@ package de.weltraumschaf.juberblog.cmd.publish;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -17,6 +19,7 @@ import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link Publisher}.
@@ -34,7 +37,8 @@ public class PublisherTest extends BaseTestCase {
             createTemplates(),
             createDirs(tmp),
             createConfig(),
-            PageType.POST
+            PageType.POST,
+            new Verbose(false, mock(PrintStream.class))
         );
 
         final List<Page> pages = sut.publish().data();

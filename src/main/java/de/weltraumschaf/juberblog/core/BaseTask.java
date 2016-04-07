@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.core;
 
 import de.weltraumschaf.commons.validate.Validate;
+import java.io.PrintStream;
 
 /**
  * Common functionality for all tasks.
@@ -16,15 +17,18 @@ public abstract class BaseTask<R, P> implements Task<R, P> {
      * Token type class of result from previous task.
      */
     private final Class<P> typeForPreviusResult;
+    private final Verbose verbose;
 
     /**
      * Dedicated constructor.
      *
      * @param typeForPreviusResult must not be {@code null}
+     * @param verbose must not be {@code null}
      */
-    public BaseTask(final Class<P> typeForPreviusResult) {
+    public BaseTask(final Class<P> typeForPreviusResult, final Verbose verbose) {
         super();
         this.typeForPreviusResult = Validate.notNull(typeForPreviusResult, "typeForPreviusResult");
+        this.verbose = Validate.notNull(verbose, "verbose");
     }
 
     @Override
@@ -32,16 +36,12 @@ public abstract class BaseTask<R, P> implements Task<R, P> {
         return typeForPreviusResult;
     }
 
-    /**
-     * Encapsulates unsafe cast into single location to minimize impact of suppressing the warning.
-     *
-     * @param <T> generic type
-     * @param aClass may be {@code null}
-     * @return may be {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    static final <T> Class<T> castClass(final Class<?> aClass) {
-        return (Class<T>) aClass;
+    protected final void println(final String message, final Object... args) {
+        verbose.print(message, args);
+    }
+
+    protected Verbose getVerbose() {
+        return verbose;
     }
 
 }

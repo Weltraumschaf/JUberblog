@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,9 +40,10 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
      * Dedicated constructor.
      *
      * @param config must not be {@code null}
+     * @param verbose must not be {@code null}
      */
-    public GenerateIndexTask(final Config config) {
-        super(Pages.class);
+    public GenerateIndexTask(final Config config, final Verbose verbose) {
+        super(Pages.class, verbose);
         this.config = Validate.notNull(config, "config");
     }
 
@@ -52,6 +54,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
 
     @Override
     public Pages execute(Pages previusResult) throws Exception {
+        println("Generate index...");
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment content = fmd.createFragemnt(
             config.indexTemplate,

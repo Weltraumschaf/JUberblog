@@ -4,10 +4,12 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.Pages;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -18,6 +20,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link GenerateIndexTask}.
@@ -39,12 +42,12 @@ public class GenerateIndexTaskTest extends BaseTestCase {
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructWithNullThrowsException() {
-        new GenerateIndexTask(null);
+        new GenerateIndexTask(null, new Verbose(false, mock(PrintStream.class)));
     }
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig());
+        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
 
         sut.execute();
 
@@ -86,7 +89,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig());
+        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
         final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));

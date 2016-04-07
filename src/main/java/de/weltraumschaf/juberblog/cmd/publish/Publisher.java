@@ -12,6 +12,7 @@ import de.weltraumschaf.juberblog.core.Page.SortByDateAscending;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Uris;
+import de.weltraumschaf.juberblog.core.Verbose;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -54,6 +55,7 @@ final class Publisher {
      * PageType of published pages.
      */
     private final PageType type;
+    private final Verbose verbose;
 
     /**
      * Dedicated constructor.
@@ -68,7 +70,8 @@ final class Publisher {
         final Templates templates,
         final Directories directories,
         final BlogConfiguration configuration,
-        final PageType type) throws IOException {
+        final PageType type,
+        final Verbose verbose) throws IOException {
         super();
         Validate.notNull(templates, "templates");
         Validate.notNull(directories, "directories");
@@ -96,6 +99,8 @@ final class Publisher {
         } else {
             throw new IllegalArgumentException(String.format("Bad type '%s'!", type));
         }
+
+        this.verbose = verbose;
     }
 
     /**
@@ -112,6 +117,7 @@ final class Publisher {
         final Pages publishedPages = new Pages();
 
         for (final DataFile foundData : FilesFinderByExtension.MARKDOWN.find(inputDir)) {
+            verbose.print("Publish file '%s'...", foundData.getPath());
             final Renderer.RendererResult result = renderer.render(foundData.getPath());
             final String outputBaseName = foundData.getBareName() + FileNameExtension.HTML.getExtension();
 

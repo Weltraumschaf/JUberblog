@@ -68,7 +68,7 @@ public abstract class SubCommandBase implements SubCommand {
      *
      * @throws ApplicationException if title is empty
      */
-    abstract protected void validateArguments() throws ApplicationException;
+    protected void validateArguments() throws ApplicationException {}
 
     abstract protected void doExecute() throws ApplicationException;
 

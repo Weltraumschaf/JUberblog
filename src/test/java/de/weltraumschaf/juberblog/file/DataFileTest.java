@@ -56,9 +56,6 @@ public class DataFileTest extends BaseTestCase {
         assertThat(
                 sut.getPath().toString(),
                 endsWith("de/weltraumschaf/juberblog/posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
-        assertThat(
-                sut.getPath().toString(),
-                endsWith("de/weltraumschaf/juberblog/posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
     }
 
     @Test
@@ -66,38 +63,27 @@ public class DataFileTest extends BaseTestCase {
         assertThat(
                 sut.getBaseName(),
                 is("2014-05-30T21.29.20_This-is-the-First-Post.md"));
-        assertThat(
-                sut.getBaseName(),
-                is("2014-05-30T21.29.20_This-is-the-First-Post.md"));
+        assertThat(new DataFile("/foo/bar/baz.md").getBaseName(), is("baz.md"));
     }
 
     @Test
     public void getBareName() {
         assertThat(sut.getBareName(), is("This-is-the-First-Post"));
-        assertThat(sut.getBareName(), is("This-is-the-First-Post"));
+        assertThat(new DataFile("/foo/bar/baz.md").getBareName(), is("baz"));
     }
 
     @Test
     public void getCreationDate() {
         assertThat(sut.getCreationDate(), is(new DateTime("2014-05-30T21:29:20")));
-        assertThat(sut.getCreationDate(), is(new DateTime("2014-05-30T21:29:20")));
+    }
+
+    @Test
+    public void getCreationDate_noDateAvailable() {
+        assertThat(new DataFile("/foo/bar/baz.md").getCreationDate(), is(notNullValue()));
     }
 
     @Test
     public void readContent() throws IOException {
-        assertThat(
-                sut.readContent(ENCODING),
-                is("<?juberblog\n"
-                        + "    Description: This is the first post.\n"
-                        + "?>\n"
-                        + "\n"
-                        + "### This is the First Post\n"
-                        + "\n"
-                        + "Lorem ipsum  dolor sit amet consetetur  sadipscing elitr sed diam  nonumy eirmod\n"
-                        + "tempor invidunt ut labore et dolore magna aliquyam.\n"
-                        + "\n"
-                        + "Lorem ipsum  dolor sit amet consetetur  sadipscing elitr sed diam  nonumy eirmod\n"
-                        + "tempor invidunt ut labore et dolore magna aliquyam.\n\n"));
         assertThat(
                 sut.readContent(ENCODING),
                 is("<?juberblog\n"

@@ -12,8 +12,7 @@ import org.joda.time.DateTime;
 /**
  * Abstracts a file from file system which contains blog data.
  * <p>
- * A data file is expected to have a file name in this format:
- * {@code YYYY-MM-DDTHH.MM.DD_This-is-the-First-Post.md}.
+ * A data file is expected to have a file name in this format: {@code YYYY-MM-DDTHH.MM.DD_This-is-the-First-Post.md}.
  * </p>
  *
  * @since 1.0.0
@@ -102,8 +101,18 @@ public final class DataFile {
     public String getBareName() {
         if (null == bareName) {
             final int firstDashPosition = getBaseName().indexOf(DATE_BARE_NAME_SEPARATOR);
+            final int start =
+                firstDashPosition < 0
+                ? 0
+                : firstDashPosition + 1;
+
             final int lastDotPosition = getBaseName().lastIndexOf(".");
-            bareName = getBaseName().substring(firstDashPosition + 1, lastDotPosition);
+            final int stop =
+                lastDotPosition < 0
+                ? getBaseName().length() - 1
+                : lastDotPosition;
+
+            bareName = getBaseName().substring(start, stop);
         }
 
         return bareName;
@@ -117,8 +126,13 @@ public final class DataFile {
     public DateTime getCreationDate() {
         if (null == creationDate) {
             final int firstDashPosition = getBaseName().indexOf(DATE_BARE_NAME_SEPARATOR);
-            final String dateTime = getBaseName().substring(0, firstDashPosition).replaceAll("\\.", ":");
-            creationDate = new DateTime(dateTime);
+
+            if (firstDashPosition < 0) {
+                creationDate = new DateTime();
+            } else {
+                final String dateTime = getBaseName().substring(0, firstDashPosition).replaceAll("\\.", ":");
+                creationDate = new DateTime(dateTime);
+            }
         }
 
         return creationDate;

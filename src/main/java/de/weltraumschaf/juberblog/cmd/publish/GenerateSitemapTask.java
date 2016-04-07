@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -38,9 +39,10 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
      * Dedicated constructor.
      *
      * @param config must not be {@code null}
+     * @param verbose must not be {@code null}
      */
-    public GenerateSitemapTask(final Config config) {
-        super(Pages.class);
+    public GenerateSitemapTask(final Config config, final Verbose verbose) {
+        super(Pages.class, verbose);
         this.config = Validate.notNull(config, "config");
     }
 
@@ -51,6 +53,7 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
 
     @Override
     public Void execute(final Pages previusResult) throws Exception {
+        println("Generate site map...");
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
             config.template,

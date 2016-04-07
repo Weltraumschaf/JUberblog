@@ -1,8 +1,10 @@
 package de.weltraumschaf.juberblog.core;
 
+import java.io.PrintStream;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for {@link BaseTask}.
@@ -31,7 +33,7 @@ public class BaseTaskTest {
         }
 
         public BaseTaskStub(final Class<Void> typeForPreviusResult) {
-            super(typeForPreviusResult);
+            super(typeForPreviusResult, new Verbose(false, mock(PrintStream.class)));
         }
 
         @Override

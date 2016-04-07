@@ -8,6 +8,7 @@ import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 
 /**
  * Task to publish pages.
@@ -26,9 +27,10 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
      * Dedicated constructor.
      *
      * @param config must not be {@code null}
+     * @param verbose must not be {@code null}
      */
-    public PublishTask(final Config config) {
-        super(Pages.class);
+    public PublishTask(final Config config, final Verbose verbose) {
+        super(Pages.class, verbose);
         this.config = Validate.notNull(config, "config");
     }
 
@@ -40,10 +42,11 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
     @Override
     public Pages execute(final Pages previusResult) throws Exception {
         final Publisher publisher = new Publisher(
-                config.templates,
-                config.directories,
-                config.configuration,
-                config.type
+            config.templates,
+            config.directories,
+            config.configuration,
+            config.type,
+            getVerbose()
         );
 
         previusResult.add(publisher.publish());
@@ -55,9 +58,9 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
      */
     public static final class Config {
 
-       /**
-        * Where to find template files.
-        */
+        /**
+         * Where to find template files.
+         */
         private final Templates templates;
         /**
          * Where to find important directories.
@@ -81,10 +84,10 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
          * @param type must not be {@code null}
          */
         public Config(
-                final Templates templates,
-                final Directories directories,
-                final BlogConfiguration configuration,
-                final PageType type) {
+            final Templates templates,
+            final Directories directories,
+            final BlogConfiguration configuration,
+            final PageType type) {
             super();
             this.templates = Validate.notNull(templates, "templates");
             this.directories = Validate.notNull(directories, "directories");

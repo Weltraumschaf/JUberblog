@@ -16,6 +16,7 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,9 +41,10 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
      * Dedicated constructor.
      *
      * @param config must not be {@code null}
+     * @param verbose must not be {@code null}
      */
-    public GenerateFeedTask(final Config config) {
-        super(Pages.class);
+    public GenerateFeedTask(final Config config, final Verbose verbose) {
+        super(Pages.class, verbose);
         this.config = Validate.notNull(config, "config");
     }
 
@@ -53,6 +55,7 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
 
     @Override
     public Pages execute(final Pages previusResult) throws Exception {
+        println("Generate feed...");
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
             config.template,

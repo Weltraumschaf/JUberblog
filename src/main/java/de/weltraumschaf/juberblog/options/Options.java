@@ -170,7 +170,7 @@ public final class Options {
             parameters = parser.getCommands().get(cmd.toString()).getParameters();
         }
 
-        final String usage= usage(cmd);
+        final String usage = usage(cmd);
         final String example;
 
         switch (cmd) {
@@ -215,10 +215,15 @@ public final class Options {
         return main.isHelp() || install.isHelp() || create.isHelp() || publish.isHelp();
     }
 
+    public boolean isVerbose() {
+        return install.isVerbose() || create.isVerbose() || publish.isVerbose();
+    }
+
     /**
      * Available commands.
      */
     public static enum Command {
+
         /**
          * Dummy for no command, but main program.
          */
