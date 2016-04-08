@@ -100,9 +100,12 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "</rss>"));
         assertThat(indexFile.readContent(ENCODING), is(
             "<!DOCTYPE html>\n"
-            + "<html>\n"
+            + "<html lang=\"en\">\n"
             + "    <head>\n"
             + "        <meta name=\"robots\" content=\"all\"/>\n"
+            + "        <meta name=\"description\" content=\"Blog Description\"/>\n"
+            + "        <meta name=\"keywords\" content=\"\"/>\n"
+            + "        <meta charset=\"utf-8\"/>\n"
             + "        <link href=\"http://uberblog.local//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
             + "        <link href=\"http://uberblog.local//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"

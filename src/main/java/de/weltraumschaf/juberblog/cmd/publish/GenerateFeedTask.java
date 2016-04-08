@@ -63,9 +63,9 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
             config.template.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable(TemplateVariables.ENCODING, config.encoding);
-        template.assignVariable(TemplateVariables.TITLE, config.title);
+        template.assignVariable(TemplateVariables.BLOG_TITLE, config.title);
         template.assignVariable(TemplateVariables.LINK, config.link.toString());
-        template.assignVariable(TemplateVariables.DESCRIPTION, config.description);
+        template.assignVariable(TemplateVariables.BLOG_DESCRIPTION, config.description);
         template.assignVariable(TemplateVariables.LANGUAGE, config.language);
         template.assignVariable(
             TemplateVariables.LAST_BUILD_DATE,

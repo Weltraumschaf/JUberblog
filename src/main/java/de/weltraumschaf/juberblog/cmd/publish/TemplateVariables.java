@@ -8,10 +8,13 @@ import de.weltraumschaf.freemarkerdown.VariableName;
  */
 public enum TemplateVariables implements VariableName {
     BASE_URL("baseUrl"),
+    BLOG_TITLE("blogTitle"),
+    BLOG_DESCRIPTION("blogDescription"),
     CONTENT("content"),
     DESCRIPTION("description"),
     ENCODING("encoding"),
     ITEMS("items"),
+    KEYWORDS("keywords"),
     LANGUAGE("language"),
     LAST_BUILD_DATE("lastBuildDate"),
     LINK("link"),

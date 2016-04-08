@@ -17,7 +17,6 @@ import de.weltraumschaf.juberblog.core.PageConverter;
 import de.weltraumschaf.juberblog.core.Task;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Verbose;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -67,9 +66,13 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             config.layoutTemplate.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         layout.assignTemplateModel(TemplateVariables.CONTENT, content);
-        layout.assignVariable(TemplateVariables.TITLE, config.name);
-        layout.assignVariable(TemplateVariables.DESCRIPTION, config.description);
-        layout.assignVariable(TemplateVariables.BASE_URL, config.baseUrl);
+        layout.assignVariable(TemplateVariables.KEYWORDS, "");
+        layout.assignVariable(TemplateVariables.LANGUAGE, config.blog.getLanguage());
+        layout.assignVariable(TemplateVariables.ENCODING, config.blog.getEncoding());
+        layout.assignVariable(TemplateVariables.BLOG_TITLE, config.blog.getTitle());
+        layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, config.blog.getDescription());
+        layout.assignVariable(TemplateVariables.DESCRIPTION, config.blog.getDescription());
+        layout.assignVariable(TemplateVariables.BASE_URL, config.blog.getBaseUri());
         content.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
         Files.write(
             config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),
@@ -122,15 +125,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
          * The inner template of the {@literal index.html).
          */
         private final Path indexTemplate;
-        /**
-         * The name of the blog.
-         */
-        private final String name;
-        /**
-         * The description of the blog.
-         */
-        private final String description;
-        private final URI baseUrl;
+        private final BlogConfiguration blog;
 
         /**
          * Dedicated constructor.
@@ -151,9 +146,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
             this.outputDir = directories.getOutput();
             this.layoutTemplate = templates.getLayoutTemplate();
             this.indexTemplate = templates.getIndexTemplate();
-            this.name = configuration.getTitle();
-            this.description = configuration.getDescription();
-            this.baseUrl = configuration.getBaseUri();
+            this.blog = configuration;
         }
 
     }

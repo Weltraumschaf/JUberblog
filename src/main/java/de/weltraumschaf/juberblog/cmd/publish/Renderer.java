@@ -116,9 +116,13 @@ final class Renderer {
 
         keyValues.clear();
         content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, configuration.getEncoding(), TPL_NAME_CONTENT));
-        layout.assignVariable(TemplateVariables.TITLE, configuration.getTitle());
-        layout.assignVariable(TemplateVariables.DESCRIPTION, configuration.getDescription());
+        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());
+        layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());
         layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());
+        layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());
+        layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());
+        layout.assignVariable(TemplateVariables.DESCRIPTION, ""); // FIXME Add from key values.
+        layout.assignVariable(TemplateVariables.KEYWORDS, ""); // FIXME Add from key values.
         fmd.register(processor);
 
         return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);

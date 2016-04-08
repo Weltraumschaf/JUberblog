@@ -153,7 +153,7 @@ public final class CreateSubCommand extends SubCommandBase {
     /**
      * Create file name from title.
      * <p>
-     * Format: {@literal TIME_TITLE.md} {@literal TIME} is provided by {@link #time}. {@literal TITLE} is the escaped
+     * Format: {@literal TIME_TITLE.md} {@literal TIME} is provided by {@link #time}. {@literal BLOG_TITLE} is the escaped
      * title.
      * </p>
      *

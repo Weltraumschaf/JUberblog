@@ -70,9 +70,12 @@ public class PublisherTest extends BaseTestCase {
         assertThat(
             expectedOne.readContent(ENCODING),
             is("<!DOCTYPE html>\n"
-                + "<html>\n"
+                + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
+                + "        <meta name=\"description\" content=\"\"/>\n"
+                + "        <meta name=\"keywords\" content=\"\"/>\n"
+                + "        <meta charset=\"utf-8\"/>\n"
                 + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
                 + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
                 + "    </head>\n"
@@ -103,9 +106,12 @@ public class PublisherTest extends BaseTestCase {
         assertThat(
             expectedTwo.readContent(ENCODING),
             is("<!DOCTYPE html>\n"
-                + "<html>\n"
+                + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
+                + "        <meta name=\"description\" content=\"\"/>\n"
+                + "        <meta name=\"keywords\" content=\"\"/>\n"
+                + "        <meta charset=\"utf-8\"/>\n"
                 + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
                 + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
                 + "    </head>\n"
@@ -136,9 +142,12 @@ public class PublisherTest extends BaseTestCase {
         assertThat(
             expectedThree.readContent(ENCODING),
             is("<!DOCTYPE html>\n"
-                + "<html>\n"
+                + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
+                + "        <meta name=\"description\" content=\"\"/>\n"
+                + "        <meta name=\"keywords\" content=\"\"/>\n"
+                + "        <meta charset=\"utf-8\"/>\n"
                 + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
                 + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
                 + "    </head>\n"

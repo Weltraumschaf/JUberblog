@@ -5,9 +5,9 @@
      version="2.0"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
     <channel>
-        <title>${title}</title>
+        <title>${blogTitle}</title>
         <link>${link}</link>
-        <description>${description}</description>
+        <description>${blogDescription}</description>
         <language>${language}</language>
         <lastBuildDate>${lastBuildDate}</lastBuildDate>
         <#list items as item>

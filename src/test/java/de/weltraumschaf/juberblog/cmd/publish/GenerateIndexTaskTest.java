@@ -58,9 +58,12 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), is(
             "<!DOCTYPE html>\n"
-            + "<html>\n"
+            + "<html lang=\"en\">\n"
             + "    <head>\n"
             + "        <meta name=\"robots\" content=\"all\"/>\n"
+            + "        <meta name=\"description\" content=\"Blog Description\"/>\n"
+            + "        <meta name=\"keywords\" content=\"\"/>\n"
+            + "        <meta charset=\"utf-8\"/>\n"
             + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
             + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"
@@ -103,9 +106,12 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), is(
             "<!DOCTYPE html>\n"
-            + "<html>\n"
+            + "<html lang=\"en\">\n"
             + "    <head>\n"
             + "        <meta name=\"robots\" content=\"all\"/>\n"
+            + "        <meta name=\"description\" content=\"Blog Description\"/>\n"
+            + "        <meta name=\"keywords\" content=\"\"/>\n"
+            + "        <meta charset=\"utf-8\"/>\n"
             + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
             + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"
