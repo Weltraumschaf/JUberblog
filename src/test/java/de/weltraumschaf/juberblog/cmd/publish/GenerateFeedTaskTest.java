@@ -20,6 +20,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * Tests for {@link GenerateFeedTask}.
@@ -56,7 +57,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), is(
+        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -88,7 +89,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), is(
+        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"

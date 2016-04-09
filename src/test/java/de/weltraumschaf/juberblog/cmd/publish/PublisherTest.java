@@ -20,6 +20,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * Tests for {@link Publisher}.
@@ -70,7 +71,7 @@ public class PublisherTest extends BaseTestCase {
         assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree));
         assertThat(
             expectedOne.readContent(ENCODING),
-            is("<!DOCTYPE html>\n"
+            isIdenticalTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
@@ -106,7 +107,7 @@ public class PublisherTest extends BaseTestCase {
                 + "</html>"));
         assertThat(
             expectedTwo.readContent(ENCODING),
-            is("<!DOCTYPE html>\n"
+            isIdenticalTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
@@ -142,7 +143,7 @@ public class PublisherTest extends BaseTestCase {
                 + "</html>"));
         assertThat(
             expectedThree.readContent(ENCODING),
-            is("<!DOCTYPE html>\n"
+            isIdenticalTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"

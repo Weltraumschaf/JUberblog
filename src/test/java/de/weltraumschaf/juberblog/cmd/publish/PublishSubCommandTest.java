@@ -16,6 +16,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * Tests for {@link PublishSubCommand}.
@@ -63,7 +64,7 @@ public class PublishSubCommandTest extends BaseTestCase {
                 new DataFile(tmp.getRoot().toString() + "/sites/Site-One.html"),
                 new DataFile(tmp.getRoot().toString() + "/sites/Site-Two.html"),
                 feedFile, indexFile, siteMapFile));
-        assertThat(feedFile.readContent(ENCODING), is(
+        assertThat(feedFile.readContent(ENCODING), isIdenticalTo(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
             + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
             + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -99,7 +100,7 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "        </item>\n"
             + "    </channel>\n"
             + "</rss>"));
-        assertThat(indexFile.readContent(ENCODING), is(
+        assertThat(indexFile.readContent(ENCODING), isIdenticalTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
@@ -146,7 +147,7 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "        <script type=\"text/javascript\" src=\"http://uberblog.local//js/main.js\"></script>\n"
             + "    </body>\n"
             + "</html>"));
-        assertThat(siteMapFile.readContent(ENCODING), is(
+        assertThat(siteMapFile.readContent(ENCODING), isIdenticalTo(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
             + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
             + "    <url>\n"

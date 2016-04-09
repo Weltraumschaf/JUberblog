@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * Tests for {@link GenerateIndexTask}.
@@ -58,7 +59,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), is(
+        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
@@ -106,7 +107,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), is(
+        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"

@@ -12,6 +12,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * Tests for {@link Renderer}.
@@ -41,7 +42,7 @@ public class RendererTest extends BaseTestCase {
         final Renderer.RendererResult result = sut.render(
             createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
-        assertThat(result.getRenderedContent(), is(
+        assertThat(result.getRenderedContent(), isIdenticalTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
