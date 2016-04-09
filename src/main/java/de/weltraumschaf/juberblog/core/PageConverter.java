@@ -16,5 +16,5 @@ public interface PageConverter {
      * @param page must not be {@code null}
      * @return never {@code null}, unmodifiable
      */
-    Map<String, String> convert(Page page);
+    Map<String, Object> convert(Page page);
 }

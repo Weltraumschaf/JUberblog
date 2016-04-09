@@ -83,8 +83,8 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
     private static final class ForFeedConverter implements PageConverter {
 
         @Override
-        public Map<String, String> convert(final Page page) {
-            final Map<String, String> item = Maps.newHashMap();
+        public Map<String, Object> convert(final Page page) {
+            final Map<String, Object> item = Maps.newHashMap();
             item.put("title", page.getTitle());
             item.put("link", page.getLink().toString());
             item.put("description", page.getDescription());

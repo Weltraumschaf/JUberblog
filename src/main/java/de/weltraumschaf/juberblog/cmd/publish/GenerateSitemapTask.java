@@ -74,8 +74,8 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
     private static final class ForSitemapConverter implements PageConverter {
 
         @Override
-        public Map<String, String> convert(final Page page) {
-            final Map<String, String> item = Maps.newHashMap();
+        public Map<String, Object> convert(final Page page) {
+            final Map<String, Object> item = Maps.newHashMap();
             item.put("loc", page.getLink().toString());
             // XXX Introduce last mod date.
             item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));

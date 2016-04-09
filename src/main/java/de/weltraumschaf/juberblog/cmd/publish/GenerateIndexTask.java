@@ -85,21 +85,13 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
     private static final class ForIndexConverter implements PageConverter {
 
         @Override
-        public Map<String, String> convert(final Page page) {
+        public Map<String, Object> convert(final Page page) {
             Validate.notNull(page, "page");
-            final Map<String, String> item = Maps.newHashMap();
+            final Map<String, Object> item = Maps.newHashMap();
             item.put("title", page.getTitle());
             item.put("link", page.getLink().toString());
             item.put("description", page.getDescription());
-            item.put(
-                "pubDate",
-                DateFormatter.format(
-                    page.getPublishingDate(),
-                    DateFormatter.Format.RSS_PUBLISH_DATE_FORMAT));
-            item.put(
-                "dcDate",
-                DateFormatter.format(page.getPublishingDate(),
-                    DateFormatter.Format.W3C_DATE_FORMAT));
+            item.put("pubDate", page.getPublishingDate().toDate());
             return Collections.unmodifiableMap(item);
         }
     }

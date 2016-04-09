@@ -42,9 +42,9 @@ public final class Pages {
      * @param converter must not be {@code null}
      * @return never {@code null}, unmodifiable
      */
-    public Collection<Map<String, String>> convert(final PageConverter converter) {
+    public Collection<Map<String, Object>> convert(final PageConverter converter) {
         Validate.notNull(converter, "converter");
-        final Collection<Map<String, String>> items = Lists.newArrayList();
+        final Collection<Map<String, Object>> items = Lists.newArrayList();
 
         for (final Page page : data) {
             items.add(converter.convert(page));
