@@ -1,15 +1,11 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.BaseTask;
-import de.weltraumschaf.juberblog.core.BlogConfiguration;
-import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Task;
-import de.weltraumschaf.juberblog.core.Templates;
-import de.weltraumschaf.juberblog.core.Verbose;
 
 /**
  * Task to publish pages.
@@ -19,20 +15,17 @@ import de.weltraumschaf.juberblog.core.Verbose;
  */
 public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pages, Pages> {
 
-    /**
-     * Task configuration.
-     */
-    private final Config config;
+    private final PageType type;
 
     /**
      * Dedicated constructor.
      *
-     * @param config must not be {@code null}
-     * @param verbose must not be {@code null}
+     * @param registry must not be {@code null}
+     * @param type must not be {@code null}
      */
-    public PublishTask(final Config config, final Verbose verbose) {
-        super(Pages.class, verbose);
-        this.config = Validate.notNull(config, "config");
+    public PublishTask(final Registry registry, final PageType type) {
+        super(Pages.class, registry);
+        this.type = Validate.notNull(type, "type");
     }
 
     @Override
@@ -43,63 +36,16 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
     @Override
     public Pages execute(final Pages previusResult) throws Exception {
         final Publisher publisher = new Publisher(
-            config.templates,
-            config.directories,
-            config.configuration,
-            config.type,
-            config.version,
-            getVerbose()
+            templates(),
+            directories(),
+            configuration(),
+            type,
+            version(),
+            verbose()
         );
 
         previusResult.add(publisher.publish());
         return previusResult;
     }
 
-    /**
-     * Task configuration.
-     */
-    public static final class Config {
-
-        /**
-         * Where to find template files.
-         */
-        private final Templates templates;
-        /**
-         * Where to find important directories.
-         */
-        private final Directories directories;
-        /**
-         * The blog configuration.
-         */
-        private final BlogConfiguration configuration;
-        /**
-         * PageType of published data.
-         */
-        private final PageType type;
-        private final Version version;
-
-        /**
-         * Dedicated constructor.
-         *
-         * @param templates must not be {@code null}
-         * @param directories must not be {@code null}
-         * @param configuration must not be {@code null}
-         * @param type must not be {@code null}
-         * @param version must not be {@code null}
-         */
-        public Config(
-            final Templates templates,
-            final Directories directories,
-            final BlogConfiguration configuration,
-            final PageType type,
-            final Version version) {
-            super();
-            this.templates = Validate.notNull(templates, "templates");
-            this.directories = Validate.notNull(directories, "directories");
-            this.configuration = Validate.notNull(configuration, "configuration");
-            this.type = Validate.notNull(type, "type");
-            this.version = Validate.notNull(version, "version");
-        }
-
-    }
 }

@@ -4,7 +4,6 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.string.StringEscape;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
-import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.freemarkerdown.RenderOptions;
 import de.weltraumschaf.freemarkerdown.TemplateError;
 import de.weltraumschaf.juberblog.JUberblog;
@@ -46,16 +45,14 @@ public final class CreateSubCommand extends SubCommandBase {
     protected void doExecute() throws ApplicationException {
         validateArguments();
         final String title = createOptions().getTitle().trim();
-        final String encoding = configuration().getEncoding();
 
         try {
-            final FreeMarkerDown fmd = FreeMarkerDown.create(encoding);
-            final Fragment tpl = fmd.createFragemnt(
+            final Fragment tpl = fmd().createFragemnt(
                 templates().getCreateSiteOrPostTemplate(),
                 templates().getCreateSiteOrPostTemplate().toString(),
                 RenderOptions.WITHOUT_MARKDOWN);
             tpl.assignVariable(TemplateVariables.TITLE, title);
-            final String content = fmd.render(tpl);
+            final String content = fmd().render(tpl);
 
             if (createOptions().isSite()) {
                 createSite(content);

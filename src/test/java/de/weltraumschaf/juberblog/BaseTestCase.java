@@ -1,20 +1,24 @@
 package de.weltraumschaf.juberblog;
 
-import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.Directories;
-import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.options.Options;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Some helper stuff.
@@ -22,6 +26,9 @@ import org.junit.rules.TemporaryFolder;
  * @author Sven Strittmatter
  */
 public abstract class BaseTestCase {
+
+    @Rule
+    public final TemporaryFolder tmp = new TemporaryFolder();
 
     protected static final String ENCODING = "utf-8";
     protected static final String BASE = "/de/weltraumschaf/juberblog/";
@@ -79,14 +86,40 @@ public abstract class BaseTestCase {
         return config;
     }
 
-    protected final JUberblog createRegistry(final TemporaryFolder tmp, final Options options, final IO io, final boolean createOutputDirs) throws URISyntaxException, IOException {
+    protected final JUberblog createRegistry(final boolean createOutputDirs) throws URISyntaxException, IOException {
+        return createRegistry(createOptions(), createOutputDirs);
+    }
+
+    protected final JUberblog createRegistry(final Options options, final boolean createOutputDirs) throws URISyntaxException, IOException {
         return JUberblog.Builder.create()
             .directories(createDirs(tmp, createOutputDirs))
             .templates(createTemplates())
             .configuration(createConfig())
             .options(options)
-            .io(io)
+            .io(createIo())
+            .verbose(createVervose())
+            .fmd(createFmd())
+            .version(createVersion())
             .product();
+    }
+
+    protected final Options createOptions() {
+        return new Options();
+    }
+
+    protected final FreeMarkerDown createFmd() {
+        return FreeMarkerDown.create("utf-8");
+    }
+
+    protected final IO createIo() {
+        final IO io = mock(IO.class);
+        when(io.getStderr()).thenReturn(mock(PrintStream.class));
+        when(io.getStdout()).thenReturn(mock(PrintStream.class));
+        return io;
+    }
+
+    protected final Verbose createVervose() {
+        return new Verbose(false, mock(PrintStream.class));
     }
 
     protected final Version createVersion() throws IOException {

@@ -4,23 +4,15 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.core.PageType;
-import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.mock;
-import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
@@ -30,26 +22,15 @@ import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
  */
 public class GenerateFeedTaskTest extends BaseTestCase {
 
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
-
-    private GenerateFeedTask.Config createTaskConfig() throws URISyntaxException, IOException {
-        return new GenerateFeedTask.Config(
-                createTemplates(),
-                createDirs(tmp, false),
-                createConfig(),
-                new DateTime("2014-12-01"));
-    }
-
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructWithNullThrowsException() {
-        new GenerateFeedTask(null, new Verbose(false, mock(PrintStream.class)));
+        new GenerateFeedTask(null);
     }
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
+        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry(true));
 
         sut.execute();
 
@@ -70,14 +51,14 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "        <link>http://www.myblog.com/</link>\n"
                 + "        <description>Blog Description</description>\n"
                 + "        <language>en</language>\n"
-                + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
+                + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
                 + "    </channel>\n"
                 + "</rss>").ignoreWhitespace());
     }
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
+        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry(true));
 
         final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
@@ -102,7 +83,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "        <link>http://www.myblog.com/</link>\n"
                 + "        <description>Blog Description</description>\n"
                 + "        <language>en</language>\n"
-                + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
+                + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>title1</title>\n"
                 + "            <link>http://www.myblog.com/link1</link>\n"

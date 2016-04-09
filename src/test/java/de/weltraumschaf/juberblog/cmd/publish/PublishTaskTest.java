@@ -4,17 +4,12 @@ import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.BaseTestCase;
+import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.core.PageType;
-import de.weltraumschaf.juberblog.core.Verbose;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -24,27 +19,21 @@ import static org.mockito.Mockito.mock;
  */
 public class PublishTaskTest extends BaseTestCase {
 
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
-
-    private PublishTask.Config createTaskConfig() throws URISyntaxException, IOException {
-        return new PublishTask.Config(
-            createTemplates(),
-            createDirs(tmp),
-            createConfig(),
-            PageType.SITE,
-            createVersion());
+    @Test(expected = NullPointerException.class)
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    public void constructWithNullAsRegistryThrowsException() {
+        new PublishTask(null, PageType.POST);
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
-    public void constructWithNullThrowsException() {
-        new PublishTask(null, new Verbose(false, mock(PrintStream.class)));
+    public void constructWithNullAsTypeThrowsException() {
+        new PublishTask(mock(Registry.class), null);
     }
 
     @Test
     public void execute() throws Exception {
-        final PublishTask sut = new PublishTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
+        final PublishTask sut = new PublishTask(createRegistry(true), PageType.SITE);
 
         sut.execute();
 

@@ -5,9 +5,12 @@ import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.options.Options;
 
 /**
@@ -16,7 +19,7 @@ import de.weltraumschaf.juberblog.options.Options;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public abstract class SubCommandBase implements SubCommand {
+public abstract class SubCommandBase implements SubCommand, Registry {
 
     /**
      * Provides some important objects.
@@ -64,9 +67,23 @@ public abstract class SubCommandBase implements SubCommand {
     }
 
     @Override
+    public final FreeMarkerDown fmd() {
+        return registry.fmd();
+    }
+
+    @Override
+    public Verbose verbose() {
+        return registry.verbose();
+    }
+
+    @Override
     public void execute() throws ApplicationException {
         validateArguments();
         doExecute();
+    }
+
+    protected final JUberblog registry() {
+        return registry;
     }
 
     /**

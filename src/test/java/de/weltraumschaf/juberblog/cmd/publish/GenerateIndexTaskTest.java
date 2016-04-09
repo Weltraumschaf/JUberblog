@@ -4,23 +4,16 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Page;
 import de.weltraumschaf.juberblog.core.PageType;
 import de.weltraumschaf.juberblog.core.Pages;
-import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertThat;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
@@ -31,27 +24,17 @@ import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
  */
 public class GenerateIndexTaskTest extends BaseTestCase {
 
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
 
-    private GenerateIndexTask.Config createTaskConfig() throws URISyntaxException, IOException {
-        return new GenerateIndexTask.Config(
-            createTemplates(),
-            createDirs(tmp, false),
-            createConfig(),
-            createVersion()
-        );
-    }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void constructWithNullThrowsException() {
-        new GenerateIndexTask(null, new Verbose(false, mock(PrintStream.class)));
+        new GenerateIndexTask(null);
     }
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
+        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry(true));
 
         sut.execute();
 
@@ -96,7 +79,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createTaskConfig(), new Verbose(false, mock(PrintStream.class)));
+        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry(true));
         final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));

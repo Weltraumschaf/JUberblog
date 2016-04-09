@@ -4,12 +4,14 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.options.InstallOptions;
 import de.weltraumschaf.juberblog.options.Options;
 import de.weltraumschaf.juberblog.options.OptionsWithConfig;
@@ -24,7 +26,7 @@ import java.nio.file.Paths;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class JUberblog {
+public final class JUberblog implements Registry {
 
     /**
      * Holds important directories.
@@ -47,6 +49,8 @@ public final class JUberblog {
      */
     private IO io;
     private Version version;
+    private FreeMarkerDown fmd;
+    private Verbose verbose;
 
     /**
      * Use {@link Builder} instead.
@@ -68,56 +72,49 @@ public final class JUberblog {
         copy.opt = opt;
         copy.tpls = tpls;
         copy.version = version;
+        copy.fmd = fmd;
+        copy.verbose = verbose;
         return copy;
     }
 
-    /**
-     * Get the directories.
-     *
-     * @return never {@code null}
-     */
+    @Override
     public Directories directories() {
         return dirs;
     }
 
-    /**
-     * Get the templates.
-     *
-     * @return never {@code null}
-     */
+    @Override
     public Templates templates() {
         return tpls;
     }
 
-    /**
-     * Get the configuration.
-     *
-     * @return never {@code null}
-     */
+    @Override
     public BlogConfiguration configuration() {
         return cfg;
     }
 
-    /**
-     * Get the options.
-     *
-     * @return never {@code null}
-     */
+    @Override
     public Options options() {
         return opt;
     }
 
-    /**
-     * Get the I/O.
-     *
-     * @return never {@code null}
-     */
+    @Override
     public IO io() {
         return io;
     }
 
+    @Override
     public Version version() {
         return version;
+    }
+
+    @Override
+    public FreeMarkerDown fmd() {
+        return fmd;
+    }
+
+    @Override
+    public Verbose verbose() {
+        return verbose;
     }
 
     /**
@@ -145,6 +142,8 @@ public final class JUberblog {
         final Path dataDir = findDataDir(configuration);
         final Path outputDir = findOutputDir(configuration);
         final Path templateDir = findTemplateDir(configuration);
+        final FreeMarkerDown fmd = FreeMarkerDown.create(configuration.getEncoding());
+        final Verbose verbose = new Verbose(cliOptions.isVerbose(), io.getStdout());
         final Version version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
 
         try {
@@ -159,6 +158,8 @@ public final class JUberblog {
             .configuration(configuration)
             .options(cliOptions)
             .io(io)
+            .fmd(fmd)
+            .verbose(verbose)
             .version(version)
             .product();
     }
@@ -350,6 +351,16 @@ public final class JUberblog {
          */
         public Builder io(final IO io) {
             holder.io = Validate.notNull(io, "io");
+            return this;
+        }
+
+        public Builder verbose(final Verbose verbose) {
+            holder.verbose = Validate.notNull(verbose, "verbose");
+            return this;
+        }
+
+        public Builder fmd(final FreeMarkerDown fmd) {
+            holder.fmd = Validate.notNull(fmd, "fmd");
             return this;
         }
 

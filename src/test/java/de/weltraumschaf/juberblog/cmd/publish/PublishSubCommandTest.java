@@ -1,22 +1,16 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
-import de.weltraumschaf.juberblog.options.Options;
 import java.util.Collection;
 import java.util.Properties;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import static org.mockito.Mockito.mock;
-import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
@@ -25,9 +19,6 @@ import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
  * @author Sven Strittmatter
  */
 public class PublishSubCommandTest extends BaseTestCase {
-
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
     public void execute() throws Exception {
@@ -44,9 +35,11 @@ public class PublishSubCommandTest extends BaseTestCase {
             .directories(createDirs(tmp))
             .templates(createTemplates())
             .configuration(new BlogConfiguration(config))
-            .options(new Options())
-            .io(mock(IO.class))
+            .options(createOptions())
+            .io(createIo())
             .version(createVersion())
+            .verbose(createVervose())
+            .fmd(createFmd())
             .product();
         final PublishSubCommand sut = new PublishSubCommand(registry);
 

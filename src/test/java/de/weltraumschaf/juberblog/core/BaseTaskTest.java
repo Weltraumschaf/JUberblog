@@ -1,6 +1,9 @@
 package de.weltraumschaf.juberblog.core;
 
-import java.io.PrintStream;
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.options.Options;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -13,11 +16,16 @@ import static org.mockito.Mockito.mock;
  */
 public class BaseTaskTest {
 
-    private final BaseTask sut = new BaseTaskStub();
+    private final BaseTask sut;
+
+    public BaseTaskTest() throws ApplicationException {
+        super();
+        this.sut = new BaseTaskStub();
+    }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
-    public void construct_withNullType() {
+    public void construct_withNullType() throws ApplicationException {
         new BaseTaskStub(null);
     }
 
@@ -28,12 +36,12 @@ public class BaseTaskTest {
 
     private static class BaseTaskStub extends BaseTask<Void, Void> {
 
-        public BaseTaskStub() {
+        public BaseTaskStub() throws ApplicationException {
             this(Void.class);
         }
 
-        public BaseTaskStub(final Class<Void> typeForPreviusResult) {
-            super(typeForPreviusResult, new Verbose(false, mock(PrintStream.class)));
+        public BaseTaskStub(final Class<Void> typeForPreviusResult) throws ApplicationException {
+            super(typeForPreviusResult, JUberblog.generateWithDefaultConfig(new Options(), mock(IO.class)));
         }
 
         @Override
