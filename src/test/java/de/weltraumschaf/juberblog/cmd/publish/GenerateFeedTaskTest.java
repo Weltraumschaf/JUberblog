@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link GenerateFeedTask}.
@@ -57,7 +58,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
+        assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -71,7 +72,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0100</lastBuildDate>\n"
                 + "    </channel>\n"
-                + "</rss>"));
+                + "</rss>").ignoreWhitespace());
     }
 
     @Test
@@ -89,7 +90,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
+        assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
                 + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -117,7 +118,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "            <dc:date>2014-11-30T00:00:00+01:00</dc:date>\n"
                 + "        </item>\n "
                 + "   </channel>\n"
-                + "</rss>"));
+                + "</rss>").ignoreWhitespace());
     }
 
 }

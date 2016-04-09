@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link Publisher}.
@@ -71,7 +72,7 @@ public class PublisherTest extends BaseTestCase {
         assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo, expectedThree));
         assertThat(
             expectedOne.readContent(ENCODING),
-            isIdenticalTo("<!DOCTYPE html>\n"
+            isSimilarTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
@@ -104,10 +105,10 @@ public class PublisherTest extends BaseTestCase {
                 + "\n"
                 + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
                 + "    </body>\n"
-                + "</html>"));
+                + "</html>").ignoreWhitespace());
         assertThat(
             expectedTwo.readContent(ENCODING),
-            isIdenticalTo("<!DOCTYPE html>\n"
+            isSimilarTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
@@ -140,10 +141,10 @@ public class PublisherTest extends BaseTestCase {
                 + "\n"
                 + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
                 + "    </body>\n"
-                + "</html>"));
+                + "</html>").ignoreWhitespace());
         assertThat(
             expectedThree.readContent(ENCODING),
-            isIdenticalTo("<!DOCTYPE html>\n"
+            isSimilarTo("<!DOCTYPE html>\n"
                 + "<html lang=\"en\">\n"
                 + "    <head>\n"
                 + "        <meta name=\"robots\" content=\"all\"/>\n"
@@ -176,7 +177,7 @@ public class PublisherTest extends BaseTestCase {
                 + "\n"
                 + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
                 + "    </body>\n"
-                + "</html>")
+                + "</html>").ignoreWhitespace()
         );
     }
 

@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link GenerateSitemapTask}.
@@ -78,7 +79,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
+        assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
                 + "    <url>\n"
@@ -94,7 +95,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
                 + "        <priority>0.8</priority>\n"
                 + "    </url>\n"
                 + "</urlset>"
-        ));
+        ).ignoreWhitespace());
     }
 
 }

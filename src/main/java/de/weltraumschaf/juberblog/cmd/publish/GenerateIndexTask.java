@@ -74,6 +74,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
         layout.assignVariable(TemplateVariables.BLOG_VERSION, config.version.getVersion());
         layout.assignVariable(TemplateVariables.DESCRIPTION, config.blog.getDescription());
         layout.assignVariable(TemplateVariables.BASE_URL, config.blog.getBaseUri());
+        previusResult.sort(new Page.SortByDateDescending());
         content.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
         Files.write(
             config.outputDir.resolve("index" + FileNameExtension.HTML.getExtension()),

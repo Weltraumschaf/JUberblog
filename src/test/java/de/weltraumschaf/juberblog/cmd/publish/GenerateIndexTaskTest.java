@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link GenerateIndexTask}.
@@ -107,7 +108,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         assertThat(foundFiles.size(), is(1));
         final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
-        assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
+        assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
@@ -128,15 +129,13 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "        <section>\n"
             + "        <h3>All Blog Posts</h3>\n"
             + "<ul>\n"
-            + "        <li>\n"
-            + "        <a href=\"http://www.myblog.com/link1\">title1</a>\n"
-            + "        <!-- Date format see here http://freemarker.org/docs/ref_builtins_date.html -->\n"
-            + "        <span>(29.11.2014, 00:00)</span>\n"
-            + "    </li>\n"
             + "    <li>\n"
             + "        <a href=\"http://www.myblog.com/link2\">title2</a>\n"
-            + "        <!-- Date format see here http://freemarker.org/docs/ref_builtins_date.html -->\n"
             + "        <span>(30.11.2014, 00:00)</span>\n"
+            + "    </li>\n"
+            + "    <li>\n"
+            + "        <a href=\"http://www.myblog.com/link1\">title1</a>\n"
+            + "        <span>(29.11.2014, 00:00)</span>\n"
             + "    </li>\n"
             + "</ul>\n"
             + "\n"
@@ -148,6 +147,6 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "\n"
             + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
             + "    </body>\n"
-            + "</html>"));
+            + "</html>").ignoreWhitespace().ignoreComments());
     }
 }

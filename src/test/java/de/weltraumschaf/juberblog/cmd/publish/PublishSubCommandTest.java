@@ -17,6 +17,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link PublishSubCommand}.
@@ -64,7 +65,7 @@ public class PublishSubCommandTest extends BaseTestCase {
                 new DataFile(tmp.getRoot().toString() + "/sites/Site-One.html"),
                 new DataFile(tmp.getRoot().toString() + "/sites/Site-Two.html"),
                 feedFile, indexFile, siteMapFile));
-        assertThat(feedFile.readContent(ENCODING), isIdenticalTo(
+        assertThat(feedFile.readContent(ENCODING), isSimilarTo(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
             + "<rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n"
             + "     xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\"\n"
@@ -99,8 +100,8 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "            <dc:date>2014-07-28T17:44:13+02:00</dc:date>\n"
             + "        </item>\n"
             + "    </channel>\n"
-            + "</rss>"));
-        assertThat(indexFile.readContent(ENCODING), isIdenticalTo(
+            + "</rss>").ignoreWhitespace());
+        assertThat(indexFile.readContent(ENCODING), isSimilarTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
@@ -121,20 +122,17 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "        <section>\n"
             + "        <h3>All Blog Posts</h3>\n"
             + "<ul>\n"
-            + "        <li>\n"
-            + "        <a href=\"http://uberblog.local/posts/This-is-the-First-Post.html\">This is the First Post</a>\n"
-            + "        <!-- Date format see here http://freemarker.org/docs/ref_builtins_date.html -->\n"
-            + "        <span>(30.05.2014, 21:29)</span>\n"
+            + "    <li>\n"
+            + "        <a href=\"http://uberblog.local/posts/This-is-the-Third-Post.html\">This is the Third Post</a>\n"
+            + "        <span>(28.07.2014, 17:44)</span>\n"
             + "    </li>\n"
             + "    <li>\n"
             + "        <a href=\"http://uberblog.local/posts/This-is-the-Second-Post.html\">This is the Second Post</a>\n"
-            + "        <!-- Date format see here http://freemarker.org/docs/ref_builtins_date.html -->\n"
             + "        <span>(30.06.2014, 23:25)</span>\n"
             + "    </li>\n"
             + "    <li>\n"
-            + "        <a href=\"http://uberblog.local/posts/This-is-the-Third-Post.html\">This is the Third Post</a>\n"
-            + "        <!-- Date format see here http://freemarker.org/docs/ref_builtins_date.html -->\n"
-            + "        <span>(28.07.2014, 17:44)</span>\n"
+            + "        <a href=\"http://uberblog.local/posts/This-is-the-First-Post.html\">This is the First Post</a>\n"
+            + "        <span>(30.05.2014, 21:29)</span>\n"
             + "    </li>\n"
             + "</ul>\n"
             + "\n"
@@ -146,8 +144,8 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "\n"
             + "        <script type=\"text/javascript\" src=\"http://uberblog.local//js/main.js\"></script>\n"
             + "    </body>\n"
-            + "</html>"));
-        assertThat(siteMapFile.readContent(ENCODING), isIdenticalTo(
+            + "</html>").ignoreWhitespace().ignoreComments());
+        assertThat(siteMapFile.readContent(ENCODING), isSimilarTo(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
             + "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
             + "    <url>\n"
@@ -180,7 +178,7 @@ public class PublishSubCommandTest extends BaseTestCase {
             + "        <changefreq>weekly</changefreq>\n"
             + "        <priority>0.5</priority>\n"
             + "    </url>\n"
-            + "</urlset>"));
+            + "</urlset>").ignoreWhitespace());
     }
 
 }

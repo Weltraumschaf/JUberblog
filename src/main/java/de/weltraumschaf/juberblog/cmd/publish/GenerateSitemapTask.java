@@ -61,6 +61,7 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
             config.template.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable(TemplateVariables.ENCODING, config.encoding);
+        previusResult.sort(new Page.SortByDateAscending());
         template.assignVariable(TemplateVariables.URLS, previusResult.convert(new ForSitemapConverter()));
 
         Files.write(

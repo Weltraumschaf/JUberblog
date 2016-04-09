@@ -155,4 +155,13 @@ public final class Page {
         }
 
     }
+
+    public static final class SortByDateDescending implements Comparator<Page> {
+
+        @Override
+        public int compare(final Page o1, final Page o2) {
+            return new SortByDateAscending().compare(o1, o2) * -1;
+        }
+
+    }
 }

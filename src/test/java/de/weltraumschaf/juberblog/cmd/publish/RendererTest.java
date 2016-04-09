@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
  * Tests for {@link Renderer}.
@@ -42,7 +43,7 @@ public class RendererTest extends BaseTestCase {
         final Renderer.RendererResult result = sut.render(
             createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 
-        assertThat(result.getRenderedContent(), isIdenticalTo(
+        assertThat(result.getRenderedContent(), isSimilarTo(
             "<!DOCTYPE html>\n"
             + "<html lang=\"en\">\n"
             + "    <head>\n"
@@ -76,7 +77,7 @@ public class RendererTest extends BaseTestCase {
             + "\n"
             + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
             + "    </body>\n"
-            + "</html>"));
+            + "</html>").ignoreWhitespace());
         assertThat(result.getMarkdown(), is(
             "\n"
             + "\n"
