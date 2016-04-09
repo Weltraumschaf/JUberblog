@@ -57,7 +57,6 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.encoding);
         final Fragment template = fmd.createFragemnt(
             config.template,
-            config.encoding,
             config.template.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         template.assignVariable(TemplateVariables.ENCODING, config.encoding);

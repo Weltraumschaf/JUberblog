@@ -57,12 +57,10 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
         final FreeMarkerDown fmd = FreeMarkerDown.create(config.blog.getEncoding());
         final Fragment content = fmd.createFragemnt(
             config.indexTemplate,
-            config.blog.getEncoding(),
             config.indexTemplate.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         final Layout layout = fmd.createLayout(
             config.layoutTemplate,
-            config.blog.getEncoding(),
             config.layoutTemplate.toString(),
             RenderOptions.WITHOUT_MARKDOWN);
         layout.assignTemplateModel(TemplateVariables.CONTENT, content);

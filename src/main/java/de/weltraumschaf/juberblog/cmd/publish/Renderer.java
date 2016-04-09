@@ -90,8 +90,8 @@ final class Renderer {
         this.configuration = Validate.notNull(configuration, "configuration");
         this.version = Validate.notNull(version, "version");
         this.fmd = FreeMarkerDown.create(configuration.getEncoding());
-        this.layout = fmd.createLayout(outerTemplate, configuration.getEncoding(), TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
-        this.content = fmd.createLayout(innerTemplate, configuration.getEncoding(), TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
+        this.layout = fmd.createLayout(outerTemplate, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
+        this.content = fmd.createLayout(innerTemplate, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
         this.layout.assignTemplateModel(TPL_NAME_CONTENT, this.content);
         fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);
     }
@@ -118,7 +118,7 @@ final class Renderer {
         }
 
         keyValues.clear();
-        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, configuration.getEncoding(), TPL_NAME_CONTENT));
+        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, TPL_NAME_CONTENT));
         layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());
         layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());
         layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());

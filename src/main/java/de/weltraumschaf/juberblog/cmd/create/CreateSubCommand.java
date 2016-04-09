@@ -52,7 +52,6 @@ public final class CreateSubCommand extends SubCommandBase {
             final FreeMarkerDown fmd = FreeMarkerDown.create(encoding);
             final Fragment tpl = fmd.createFragemnt(
                 templates().getCreateSiteOrPostTemplate(),
-                encoding,
                 templates().getCreateSiteOrPostTemplate().toString(),
                 RenderOptions.WITHOUT_MARKDOWN);
             tpl.assignVariable(TemplateVariables.TITLE, title);
