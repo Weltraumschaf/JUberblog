@@ -2,9 +2,11 @@ package de.weltraumschaf.juberblog;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Registry object to cary around important objects.
@@ -44,6 +48,7 @@ public final class JUberblog {
      * Provides I/O for the command line.
      */
     private IO io;
+    private Version version;
 
     /**
      * Use {@link Builder} instead.
@@ -64,6 +69,7 @@ public final class JUberblog {
         copy.io = io;
         copy.opt = opt;
         copy.tpls = tpls;
+        copy.version = version;
         return copy;
     }
 
@@ -112,6 +118,10 @@ public final class JUberblog {
         return io;
     }
 
+    public Version version() {
+        return version;
+    }
+
     /**
      * Creates filled registry, but without loading configuration from file.
      *
@@ -133,11 +143,17 @@ public final class JUberblog {
      * @return never {@code null}
      * @throws ApplicationException if not all objects can't be generated
      */
-    public static JUberblog generate(final Options cliOptions, final IO io, final BlogConfiguration configuration)
-        throws ApplicationException {
+    public static JUberblog generate(final Options cliOptions, final IO io, final BlogConfiguration configuration) throws ApplicationException {
         final Path dataDir = findDataDir(configuration);
         final Path outputDir = findOutputDir(configuration);
         final Path templateDir = findTemplateDir(configuration);
+        final Version version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
+
+        try {
+            version.load();
+        } catch (IOException ex) {
+            throw new ApplicationException(ExitCodeImpl.FATAL, "Can't load version properties!", ex);
+        }
 
         return JUberblog.Builder.create()
             .directories(createDirs(dataDir, outputDir))
@@ -145,6 +161,7 @@ public final class JUberblog {
             .configuration(configuration)
             .options(cliOptions)
             .io(io)
+            .version(version)
             .product();
     }
 
@@ -335,6 +352,11 @@ public final class JUberblog {
          */
         public Builder io(final IO io) {
             holder.io = Validate.notNull(io, "io");
+            return this;
+        }
+
+        public Builder version(final Version version) {
+            holder.version = Validate.notNull(version, "version");
             return this;
         }
 

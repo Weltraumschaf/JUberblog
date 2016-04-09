@@ -37,10 +37,6 @@ public final class App extends InvokableAdapter {
      */
     private final Options options = new Options();
     /**
-     * Version information.
-     */
-    private final Version version;
-    /**
      * Provides sub commands.
      */
     private Factory subCommands = new FactoryImpl();
@@ -62,7 +58,6 @@ public final class App extends InvokableAdapter {
      */
     App(final String[] args, final Environments.Env env) {
         super(args);
-        this.version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
         this.env = Validate.notNull(env, "env");
     }
 
@@ -112,7 +107,6 @@ public final class App extends InvokableAdapter {
 
     @Override
     public void execute() throws Exception {
-        version.load();
         final Command commandName;
 
         try {
@@ -141,7 +135,8 @@ public final class App extends InvokableAdapter {
         }
 
         if (options.getMain().isVersion()) {
-            showVersion();
+            final Version version = JUberblog.generateWithDefaultConfig(options, getIoStreams()).version();
+            showVersion(version);
             return;
         }
 
@@ -257,7 +252,7 @@ public final class App extends InvokableAdapter {
     /**
      * Show version message.
      */
-    private void showVersion() {
+    private void showVersion(final Version version) {
         getIoStreams().println(version.getVersion());
     }
 
@@ -267,8 +262,7 @@ public final class App extends InvokableAdapter {
      * @return {@code true} for enabled, else {@code false}
      */
     boolean isEnvDebug() {
-        final String debug = env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString());
-        return "true".equalsIgnoreCase(debug.trim());
+        return "true".equalsIgnoreCase(env.get(Constants.ENVIRONMENT_VARIABLE_DEBUG.toString()).trim());
     }
 
     /**
