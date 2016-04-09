@@ -29,7 +29,8 @@ public class RendererTest extends BaseTestCase {
     final Renderer sut = new Renderer(
         createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
         createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
-        BlogConfiguration.DEFAULT);
+        BlogConfiguration.DEFAULT,
+        createVersion());
 
     public RendererTest() throws IOException, URISyntaxException {
         super();

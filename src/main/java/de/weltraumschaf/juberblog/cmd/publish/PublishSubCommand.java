@@ -37,7 +37,8 @@ public final class PublishSubCommand extends SubCommandBase {
                         templates(),
                         directories(),
                         configuration(),
-                        PageType.POST
+                        PageType.POST,
+                        version()
                     ), verbose))
             .append(new GenerateFeedTask(new GenerateFeedTask.Config(
                         templates(),
@@ -48,13 +49,15 @@ public final class PublishSubCommand extends SubCommandBase {
             .append(new GenerateIndexTask(new GenerateIndexTask.Config(
                         templates(),
                         directories(),
-                        configuration()
+                        configuration(),
+                        version()
                     ), verbose))
             .append(new PublishTask(new PublishTask.Config(
                         templates(),
                         directories(),
                         configuration(),
-                        PageType.SITE
+                        PageType.SITE,
+                        version()
                     ), verbose))
             .append(new GenerateSitemapTask(new GenerateSitemapTask.Config(
                         templates(),

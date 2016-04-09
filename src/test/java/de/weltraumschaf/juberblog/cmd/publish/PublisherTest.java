@@ -38,6 +38,7 @@ public class PublisherTest extends BaseTestCase {
             createDirs(tmp),
             createConfig(),
             PageType.POST,
+            createVersion(),
             new Verbose(false, mock(PrintStream.class))
         );
 

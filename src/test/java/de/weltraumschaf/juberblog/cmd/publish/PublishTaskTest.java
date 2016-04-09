@@ -29,10 +29,11 @@ public class PublishTaskTest extends BaseTestCase {
 
     private PublishTask.Config createTaskConfig() throws URISyntaxException, IOException {
         return new PublishTask.Config(
-                createTemplates(),
-                createDirs(tmp),
-                createConfig(),
-                PageType.SITE);
+            createTemplates(),
+            createDirs(tmp),
+            createConfig(),
+            PageType.SITE,
+            createVersion());
     }
 
     @Test(expected = NullPointerException.class)

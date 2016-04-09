@@ -1,6 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
@@ -85,11 +85,15 @@ public final class GenerateFeedTask extends BaseTask<Pages, Pages> implements Ta
         @Override
         public Map<String, Object> convert(final Page page) {
             final Map<String, Object> item = Maps.newHashMap();
-            item.put("title", page.getTitle());
-            item.put("link", page.getLink().toString());
-            item.put("description", page.getDescription());
-            item.put("pubDate", DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
-            item.put("dcDate", DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));
+            item.put(TemplateVariables.TITLE.getVariableName(), page.getTitle());
+            item.put(TemplateVariables.LINK.getVariableName(), page.getLink().toString());
+            item.put(TemplateVariables.DESCRIPTION.getVariableName(), page.getDescription());
+            item.put(
+                TemplateVariables.PUB_DATE.getVariableName(),
+                DateFormatter.format(page.getPublishingDate(), Format.RSS_PUBLISH_DATE_FORMAT));
+            item.put(
+                TemplateVariables.DC_DATE.getVariableName(),
+                DateFormatter.format(page.getPublishingDate(), Format.W3C_DATE_FORMAT));
             return Collections.unmodifiableMap(item);
         }
     }

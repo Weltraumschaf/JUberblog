@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.cmd;
 
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
@@ -48,6 +49,8 @@ public interface SubCommand {
      * @return never {@code null}
      */
     BlogConfiguration configuration();
+
+    Version version();
 
     /**
      * Executes the sub command.

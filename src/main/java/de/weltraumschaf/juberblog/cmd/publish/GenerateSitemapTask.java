@@ -1,6 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
-import com.beust.jcommander.internal.Maps;
+import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.Fragment;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
@@ -76,16 +76,16 @@ public class GenerateSitemapTask extends BaseTask<Void, Pages> implements Task<V
         @Override
         public Map<String, Object> convert(final Page page) {
             final Map<String, Object> item = Maps.newHashMap();
-            item.put("loc", page.getLink().toString());
+            item.put(TemplateVariables.LOC.getVariableName(), page.getLink().toString());
             // XXX Introduce last mod date.
-            item.put("lastmod", DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
+            item.put(TemplateVariables.LASTMOD.getVariableName(), DateFormatter.format(page.getPublishingDate(), DateFormatter.Format.W3C_DATE_FORMAT));
 
             if (page.getType() == PageType.POST) {
-                item.put("changefreq", "daily");
-                item.put("priority", "0.8");
+                item.put(TemplateVariables.CHANGEFREQ.getVariableName(), "daily");
+                item.put(TemplateVariables.PRIORITY.getVariableName(), "0.8");
             } else {
-                item.put("changefreq", "weekly");
-                item.put("priority", "0.5");
+                item.put(TemplateVariables.CHANGEFREQ.getVariableName(), "weekly");
+                item.put(TemplateVariables.PRIORITY.getVariableName(), "0.5");
             }
 
             return Collections.unmodifiableMap(item);

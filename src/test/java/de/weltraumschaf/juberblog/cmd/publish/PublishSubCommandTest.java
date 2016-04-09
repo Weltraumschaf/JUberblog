@@ -44,6 +44,7 @@ public class PublishSubCommandTest extends BaseTestCase {
             .configuration(new BlogConfiguration(config))
             .options(new Options())
             .io(mock(IO.class))
+            .version(createVersion())
             .product();
         final PublishSubCommand sut = new PublishSubCommand(registry);
 

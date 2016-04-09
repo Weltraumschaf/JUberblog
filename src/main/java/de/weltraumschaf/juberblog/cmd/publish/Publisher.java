@@ -1,5 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
@@ -71,6 +72,7 @@ final class Publisher {
         final Directories directories,
         final BlogConfiguration configuration,
         final PageType type,
+        final Version version,
         final Verbose verbose) throws IOException {
         super();
         Validate.notNull(templates, "templates");
@@ -86,7 +88,8 @@ final class Publisher {
             this.renderer = new Renderer(
                 templates.getLayoutTemplate(),
                 templates.getPostTemplate(),
-                configuration
+                configuration,
+                version
             );
         } else if (type == PageType.SITE) {
             this.inputDir = directories.getSitesData();
@@ -94,7 +97,8 @@ final class Publisher {
             this.renderer = new Renderer(
                 templates.getLayoutTemplate(),
                 templates.getSiteTemplate(),
-                configuration
+                configuration,
+                version
             );
         } else {
             throw new IllegalArgumentException(String.format("Bad type '%s'!", type));

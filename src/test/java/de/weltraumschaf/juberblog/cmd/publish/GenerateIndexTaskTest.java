@@ -36,7 +36,9 @@ public class GenerateIndexTaskTest extends BaseTestCase {
         return new GenerateIndexTask.Config(
             createTemplates(),
             createDirs(tmp, false),
-            createConfig());
+            createConfig(),
+            createVersion()
+        );
     }
 
     @Test(expected = NullPointerException.class)

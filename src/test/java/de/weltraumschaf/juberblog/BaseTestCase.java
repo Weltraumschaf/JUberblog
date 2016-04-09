@@ -1,8 +1,12 @@
 package de.weltraumschaf.juberblog;
 
+import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import de.weltraumschaf.juberblog.core.Constants;
 import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
 import java.io.IOException;
@@ -42,19 +46,19 @@ public abstract class BaseTestCase {
         }
 
         return new Directories(
-                createPath("."),
-                tmp.getRoot().toPath());
+            createPath("."),
+            tmp.getRoot().toPath());
     }
 
     protected final Templates createTemplates() throws URISyntaxException {
         return new Templates(
-                createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"),
-                createPath(SCAFOLD_PACKAGE_PREFIX + "create/post_or_site.md.ftl"));
+            createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "site.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "feed.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "index.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "site_map.ftl"),
+            createPath(SCAFOLD_PACKAGE_PREFIX + "create/post_or_site.md.ftl"));
     }
 
     protected final BlogConfiguration createConfig() {
@@ -77,11 +81,17 @@ public abstract class BaseTestCase {
 
     protected final JUberblog createRegistry(final TemporaryFolder tmp, final Options options, final IO io, final boolean createOutputDirs) throws URISyntaxException, IOException {
         return JUberblog.Builder.create()
-                .directories(createDirs(tmp, createOutputDirs))
-                .templates(createTemplates())
-                .configuration(createConfig())
-                .options(options)
-                .io(io)
-                .product();
+            .directories(createDirs(tmp, createOutputDirs))
+            .templates(createTemplates())
+            .configuration(createConfig())
+            .options(options)
+            .io(io)
+            .product();
+    }
+
+    protected final Version createVersion() throws IOException {
+        final Version version = new Version(Constants.PACKAGE_BASE.toString() + "/version.properties");
+        version.load();
+        return version;
     }
 }

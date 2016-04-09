@@ -1,5 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.guava.Maps;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
@@ -74,6 +75,7 @@ final class Renderer {
      * Inner part of the two step layout.
      */
     private final Layout content;
+    private final Version version;
 
     /**
      * Dedicated constructor.
@@ -83,9 +85,10 @@ final class Renderer {
      * @param encoding must not be {@code null} or empty
      * @throws IOException if templates can't be read
      */
-    public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration) throws IOException {
+    public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration, final Version version) throws IOException {
         super();
         this.configuration = Validate.notNull(configuration, "configuration");
+        this.version = Validate.notNull(version, "version");
         this.fmd = FreeMarkerDown.create(configuration.getEncoding());
         this.layout = fmd.createLayout(outerTemplate, configuration.getEncoding(), TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);
         this.content = fmd.createLayout(innerTemplate, configuration.getEncoding(), TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);
@@ -116,9 +119,10 @@ final class Renderer {
 
         keyValues.clear();
         content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, configuration.getEncoding(), TPL_NAME_CONTENT));
-        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());
         layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());
+        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());
         layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());
+        layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());
         layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());
         layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());
         layout.assignVariable(TemplateVariables.DESCRIPTION, ""); // FIXME Add from key values.
