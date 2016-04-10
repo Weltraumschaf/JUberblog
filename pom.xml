@@ -13,7 +13,7 @@
     <parent>
         <groupId>de.weltraumschaf.organization</groupId>
         <artifactId>organization-parent</artifactId>
-        <version>2.0.8</version>
+        <version>2.1.0</version>
     </parent>
 
     <groupId>de.weltraumschaf</groupId>
@@ -85,8 +85,8 @@
         <maven.findbugs.excludefilterfile>${project.basedir}/src/main/config/findbugs-exclude.xml</maven.findbugs.excludefilterfile>
         <maven.findbugs.includefilterfile>${project.basedir}/src/main/config/findbugs-include.xml</maven.findbugs.includefilterfile>
 
-        <dependency.commons.version>2.2.0-SNAPSHOT</dependency.commons.version>
-        <dependency.freemarkerdown.version>1.0.0-SNAPSHOT</dependency.freemarkerdown.version>
+        <dependency.commons.version>2.2.0</dependency.commons.version>
+        <dependency.freemarkerdown.version>1.0.0</dependency.freemarkerdown.version>
         <dependency.joda-time.version>2.9.3</dependency.joda-time.version>
         <dependency.javax.ws.rs-api.version>2.0</dependency.javax.ws.rs-api.version>
         <dependency.jersey-common.version>2.4.1</dependency.jersey-common.version>
@@ -137,7 +137,7 @@
         <dependency>
             <groupId>de.weltraumschaf</groupId>
             <artifactId>freemarkerdown</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${dependency.freemarkerdown.version}</version>
         </dependency>
 
         <dependency>
