@@ -31,23 +31,23 @@ public final class DataFile {
     /**
      * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
      */
-    private Path path;
+    private transient Path path;
     /**
      * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
      */
-    private String bareName;
+    private transient String bareName;
     /**
      * Lazy computed file base name.
      */
-    private String baseName;
+    private transient String baseName;
     /**
      * Lazy computed from the file name.
      */
-    private DateTime creationDate;
+    private transient DateTime creationDate;
     /**
      * Lazy computed and not included in {@link #hashCode()} and {@link #equals(java.lang.Object)}.
      */
-    private String content;
+    private transient String content;
 
     /**
      * Dedicated constructor.
@@ -155,7 +155,7 @@ public final class DataFile {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.absoluteFileName);
+        return Objects.hashCode(absoluteFileName);
     }
 
     @Override
@@ -165,8 +165,7 @@ public final class DataFile {
         }
 
         final DataFile other = (DataFile) obj;
-
-        return Objects.equals(this.absoluteFileName, other.absoluteFileName);
+        return Objects.equals(absoluteFileName, other.absoluteFileName);
     }
 
     @Override
