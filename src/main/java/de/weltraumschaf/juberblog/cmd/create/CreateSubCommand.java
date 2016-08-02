@@ -11,6 +11,7 @@ import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.cmd.publish.TemplateVariables;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.options.CreateOptions;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,8 +19,8 @@ import java.nio.file.Path;
 /**
  * Creates a blog post or site.
  *
- * @since 1.0.0
  * @author Sven Strittmatter
+ * @since 1.0.0
  */
 public final class CreateSubCommand extends SubCommandBase {
 
@@ -125,7 +126,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * Write content to file.
      *
      * @param fileName must not be {@code null}
-     * @param content must not be {@code null} or empty
+     * @param content  must not be {@code null} or empty
      * @throws IOException if file can't be written
      */
     void writeFile(final Path fileName, final String content) throws IOException {
@@ -139,7 +140,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * Create target path.
      *
      * @param baseDir must not be {@code null}
-     * @param title must not be {@code null} or empty
+     * @param title   must not be {@code null} or empty
      * @return never {@code null}
      */
     Path createPath(final Path baseDir, final String title) {
@@ -157,6 +158,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * @return never {@code null} or empty
      */
     String createFileNameFromTitle(final String title) {
+        @SuppressWarnings("StringBufferReplaceableByString")
         final StringBuilder buffer = new StringBuilder();
 
         buffer.append(time.nowAsString())
@@ -175,7 +177,7 @@ public final class CreateSubCommand extends SubCommandBase {
     @Override
     protected void validateArguments() throws ApplicationException {
         if (configuration().getTitle().isEmpty()) {
-            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title arguemnt given!");
+            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, "No title argument given!");
         }
     }
 }

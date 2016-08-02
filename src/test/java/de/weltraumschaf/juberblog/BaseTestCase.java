@@ -31,8 +31,8 @@ public abstract class BaseTestCase {
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     protected static final String ENCODING = "utf-8";
-    protected static final String BASE = "/de/weltraumschaf/juberblog/";
     protected static final String SCAFOLD_PACKAGE_PREFIX = "scaffold/templates/";
+    private static final String BASE = "/de/weltraumschaf/juberblog/";
 
     protected final Path createPath(final String name) throws URISyntaxException {
         return createPath(BASE, name);
@@ -46,7 +46,7 @@ public abstract class BaseTestCase {
         return createDirs(tmp, true);
     }
 
-    protected final Directories createDirs(final TemporaryFolder tmp, final boolean createOutputDirs) throws IOException, URISyntaxException {
+    private Directories createDirs(final TemporaryFolder tmp, final boolean createOutputDirs) throws IOException, URISyntaxException {
         if (createOutputDirs) {
             tmp.newFolder("posts");
             tmp.newFolder("sites");
