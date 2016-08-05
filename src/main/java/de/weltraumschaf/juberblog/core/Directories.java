@@ -15,15 +15,15 @@ public final class Directories {
     /**
      * Name of sites sub directory.
      */
-    private static final String SITES_DIR_NAME = "sites";
+    public static final String SITES_DIR_NAME = "sites";
     /**
      * Name of posts sub directory.
      */
-    private static final String POSTS_DIR_NAME = "posts";
-/**
+    public static final String POSTS_DIR_NAME = "posts";
+    /**
      * Name of drafts sub directory.
      */
-    private static final String DRAFTS_DIR_NAME = "drafts";
+    public static final String DRAFTS_DIR_NAME = "drafts";
 
     /**
      * Where to find the post's Markdown files.

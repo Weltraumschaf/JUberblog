@@ -79,9 +79,9 @@ public class BlogConfigurationTest extends BaseTestCase {
         assertThat(propes.getProperty(BlogConfiguration.DATA_DIR), is("/data"));
         assertThat(propes.getProperty(BlogConfiguration.DESCRIPTION), is("Blog Description"));
         assertThat(propes.getProperty(BlogConfiguration.ENCODING), is("utf-8"));
-        assertThat(propes.getProperty(BlogConfiguration.PUBLIC_DIR), is("/htdocs"));
+        assertThat(propes.getProperty(BlogConfiguration.PUBLIC_DIR), is("/public"));
         assertThat(propes.getProperty(BlogConfiguration.LANGUAGE), is("en"));
-        assertThat(propes.getProperty(BlogConfiguration.SITE_URI), is("http://www.myblog.com/"));
+        assertThat(propes.getProperty(BlogConfiguration.SITE_URI), is("http://uberblog.local/"));
         assertThat(propes.getProperty(BlogConfiguration.TEMPLATE_DIR), is("/templates"));
         assertThat(propes.getProperty(BlogConfiguration.TITLE), is("Blog Title"));
     }

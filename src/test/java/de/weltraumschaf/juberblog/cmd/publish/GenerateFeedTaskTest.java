@@ -30,14 +30,14 @@ public class GenerateFeedTaskTest extends BaseTestCase {
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry(true));
+        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry());
 
         sut.execute();
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -48,7 +48,7 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
                 + "        <title>Blog Title</title>\n"
-                + "        <link>http://www.myblog.com/</link>\n"
+                + "        <link>http://uberblog.local/</link>\n"
                 + "        <description>Blog Description</description>\n"
                 + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
@@ -58,18 +58,18 @@ public class GenerateFeedTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry(true));
+        final GenerateFeedTask sut = new GenerateFeedTask(createRegistry());
 
         final Pages pages = new Pages();
-        pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
-        pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
+        pages.add(new Page("title1", URI.create("http://uberblog.local/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
+        pages.add(new Page("title2", URI.create("http://uberblog.local/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
 
         sut.execute(pages);
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/feed.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -80,20 +80,20 @@ public class GenerateFeedTaskTest extends BaseTestCase {
                 + "     xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">\n"
                 + "    <channel>\n"
                 + "        <title>Blog Title</title>\n"
-                + "        <link>http://www.myblog.com/</link>\n"
+                + "        <link>http://uberblog.local/</link>\n"
                 + "        <description>Blog Description</description>\n"
                 + "        <language>en</language>\n"
                 + "        <lastBuildDate>Mon, 08 Dec 2014 20:17:00 +0100</lastBuildDate>\n"
                 + "        <item>\n"
                 + "            <title>title1</title>\n"
-                + "            <link>http://www.myblog.com/link1</link>\n"
+                + "            <link>http://uberblog.local/link1</link>\n"
                 + "            <description>desc1</description>\n"
                 + "            <pubDate>Sat, 29 Nov 2014 00:00:00 +0100</pubDate>\n"
                 + "            <dc:date>2014-11-29T00:00:00+01:00</dc:date>\n"
                 + "        </item>\n"
                 + "        <item>\n"
                 + "            <title>title2</title>\n"
-                + "            <link>http://www.myblog.com/link2</link>\n"
+                + "            <link>http://uberblog.local/link2</link>\n"
                 + "            <description>desc2</description>\n"
                 + "            <pubDate>Sun, 30 Nov 2014 00:00:00 +0100</pubDate>\n"
                 + "            <dc:date>2014-11-30T00:00:00+01:00</dc:date>\n"

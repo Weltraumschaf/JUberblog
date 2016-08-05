@@ -6,6 +6,8 @@ import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
+
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Properties;
 import org.junit.Test;
@@ -22,41 +24,38 @@ public class PublishSubCommandTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
-        final Properties config = new Properties();
-        config.setProperty(BlogConfiguration.TITLE, "Blog Title");
-        config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
-        config.setProperty(BlogConfiguration.LANGUAGE, "en");
-        config.setProperty(BlogConfiguration.SITE_URI, "http://uberblog.local/");
-        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
-        config.setProperty(BlogConfiguration.DATA_DIR, "/");
-        config.setProperty(BlogConfiguration.PUBLIC_DIR, "/");
-        config.setProperty(BlogConfiguration.TEMPLATE_DIR, "/");
-        final JUberblog registry = JUberblog.Builder.create()
-            .directories(createDirs(tmp))
-            .templates(createTemplates())
-            .configuration(new BlogConfiguration(config))
-            .options(createOptions())
-            .io(createIo())
-            .version(createVersion())
-            .verbose(createVervose())
-            .fmd(createFmd())
-            .product();
+        final JUberblog registry = createRegistry();
+        Files.copy(
+            createPath("sites/2014-08-30T15.29.20_Site-One.md"),
+            registry.directories().getSitesData().resolve("2014-08-30T15.29.20_Site-One.md"));
+        Files.copy(
+            createPath("sites/2014-09-30T15.29.20_Site-Two.md"),
+            registry.directories().getSitesData().resolve("2014-09-30T15.29.20_Site-Two.md"));
+        Files.copy(
+            createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"),
+            registry.directories().getPostsData().resolve("2014-05-30T21.29.20_This-is-the-First-Post.md"));
+        Files.copy(
+            createPath("posts/2014-06-30T23.25.44_This-is-the-Second-Post.md"),
+            registry.directories().getPostsData().resolve("2014-06-30T23.25.44_This-is-the-Second-Post.md"));
+        Files.copy(
+            createPath("posts/2014-07-28T17.44.13_This-is-the-Third-Post.md"),
+            registry.directories().getPostsData().resolve("2014-07-28T17.44.13_This-is-the-Third-Post.md"));
         final PublishSubCommand sut = new PublishSubCommand(registry);
 
         sut.execute();
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML, FileNameExtension.XML)
-            .find(tmp.getRoot().toPath());
+            .find(tmp.getRoot().toPath().resolve("public"));
         assertThat(foundFiles.size(), is(8));
-        final DataFile feedFile = new DataFile(tmp.getRoot().toString() + "/feed.xml");
-        final DataFile indexFile = new DataFile(tmp.getRoot().toString() + "/index.html");
-        final DataFile siteMapFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
+        final DataFile feedFile = new DataFile(tmp.getRoot().toString() + "/public/feed.xml");
+        final DataFile indexFile = new DataFile(tmp.getRoot().toString() + "/public/index.html");
+        final DataFile siteMapFile = new DataFile(tmp.getRoot().toString() + "/public/site_map.xml");
         assertThat(foundFiles,
-            containsInAnyOrder(new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-First-Post.html"),
-                new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-Second-Post.html"),
-                new DataFile(tmp.getRoot().toString() + "/posts/This-is-the-Third-Post.html"),
-                new DataFile(tmp.getRoot().toString() + "/sites/Site-One.html"),
-                new DataFile(tmp.getRoot().toString() + "/sites/Site-Two.html"),
+            containsInAnyOrder(new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-First-Post.html"),
+                new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-Second-Post.html"),
+                new DataFile(tmp.getRoot().toString() + "/public/posts/This-is-the-Third-Post.html"),
+                new DataFile(tmp.getRoot().toString() + "/public/sites/Site-One.html"),
+                new DataFile(tmp.getRoot().toString() + "/public/sites/Site-Two.html"),
                 feedFile, indexFile, siteMapFile));
         assertThat(feedFile.readContent(ENCODING), isSimilarTo(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"

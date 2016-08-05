@@ -34,14 +34,14 @@ public class GenerateIndexTaskTest extends BaseTestCase {
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry(true));
+        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry());
 
         sut.execute();
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML)
             .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/index.html");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isIdenticalTo(
             "<!DOCTYPE html>\n"
@@ -51,8 +51,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "        <meta name=\"description\" content=\"Blog Description\"/>\n"
             + "        <meta name=\"keywords\" content=\"\"/>\n"
             + "        <meta charset=\"utf-8\"/>\n"
-            + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
-            + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
+            + "        <link href=\"http://uberblog.local//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
+            + "        <link href=\"http://uberblog.local//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"
             + "\n"
             + "    <body>\n"
@@ -72,24 +72,24 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "            Powered by JUberblog.\n"
             + "        </footer>\n"
             + "\n"
-            + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
+            + "        <script type=\"text/javascript\" src=\"http://uberblog.local//js/main.js\"></script>\n"
             + "    </body>\n"
             + "</html>"));
     }
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry(true));
+        final GenerateIndexTask sut = new GenerateIndexTask(createRegistry());
         final Pages pages = new Pages();
-        pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
-        pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
+        pages.add(new Page("title1", URI.create("http://uberblog.local/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
+        pages.add(new Page("title2", URI.create("http://uberblog.local/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
 
         sut.execute(pages);
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML)
             .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/index.html");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/index.html");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
             "<!DOCTYPE html>\n"
@@ -99,8 +99,8 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "        <meta name=\"description\" content=\"Blog Description\"/>\n"
             + "        <meta name=\"keywords\" content=\"\"/>\n"
             + "        <meta charset=\"utf-8\"/>\n"
-            + "        <link href=\"http://www.myblog.com//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
-            + "        <link href=\"http://www.myblog.com//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
+            + "        <link href=\"http://uberblog.local//css/main.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\"/>\n"
+            + "        <link href=\"http://uberblog.local//img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\"/>\n"
             + "    </head>\n"
             + "\n"
             + "    <body>\n"
@@ -113,11 +113,11 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "        <h3>All Blog Posts</h3>\n"
             + "<ul>\n"
             + "    <li>\n"
-            + "        <a href=\"http://www.myblog.com/link2\">title2</a>\n"
+            + "        <a href=\"http://uberblog.local/link2\">title2</a>\n"
             + "        <span>(30.11.2014, 00:00)</span>\n"
             + "    </li>\n"
             + "    <li>\n"
-            + "        <a href=\"http://www.myblog.com/link1\">title1</a>\n"
+            + "        <a href=\"http://uberblog.local/link1\">title1</a>\n"
             + "        <span>(29.11.2014, 00:00)</span>\n"
             + "    </li>\n"
             + "</ul>\n"
@@ -128,7 +128,7 @@ public class GenerateIndexTaskTest extends BaseTestCase {
             + "            Powered by JUberblog.\n"
             + "        </footer>\n"
             + "\n"
-            + "        <script type=\"text/javascript\" src=\"http://www.myblog.com//js/main.js\"></script>\n"
+            + "        <script type=\"text/javascript\" src=\"http://uberblog.local//js/main.js\"></script>\n"
             + "    </body>\n"
             + "</html>").ignoreWhitespace().ignoreComments());
     }

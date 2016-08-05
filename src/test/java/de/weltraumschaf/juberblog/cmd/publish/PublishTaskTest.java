@@ -1,11 +1,15 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
+import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.core.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.core.PageType;
+
+import java.nio.file.Files;
 import java.util.Collection;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
@@ -33,14 +37,17 @@ public class PublishTaskTest extends BaseTestCase {
 
     @Test
     public void execute() throws Exception {
-        final PublishTask sut = new PublishTask(createRegistry(true), PageType.SITE);
+        final JUberblog registry = createRegistry();
+        Files.copy(createPath("sites/2014-08-30T15.29.20_Site-One.md"), registry.directories().getSitesData().resolve("2014-08-30T15.29.20_Site-One.md"));
+        Files.copy(createPath("sites/2014-09-30T15.29.20_Site-Two.md"), registry.directories().getSitesData().resolve("2014-09-30T15.29.20_Site-Two.md"));
+        final PublishTask sut = new PublishTask(registry, PageType.SITE);
 
-        sut.execute();
+        final Pages pages = sut.execute();
 
-        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath());
+        final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath().resolve("public"));
         assertThat(foundFiles.size(), is(2));
-        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/sites/Site-One.html");
-        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/sites/Site-Two.html");
+        final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/public/sites/Site-One.html");
+        final DataFile expectedTwo = new DataFile(tmp.getRoot().toString() + "/public/sites/Site-Two.html");
         assertThat(foundFiles, containsInAnyOrder(expectedOne, expectedTwo));
     }
 

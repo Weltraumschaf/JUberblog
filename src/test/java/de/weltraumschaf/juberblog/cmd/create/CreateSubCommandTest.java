@@ -4,9 +4,11 @@ package de.weltraumschaf.juberblog.cmd.create;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.system.ExitCode;
 import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
+import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.options.Options;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -19,8 +21,10 @@ import org.junit.Ignore;
 import org.junit.rules.TemporaryFolder;
 import de.weltraumschaf.juberblog.BaseTestCase;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -28,12 +32,20 @@ import java.nio.file.Path;
  */
 public class CreateSubCommandTest extends BaseTestCase {
 
+    private final TimeProvider time = mock(TimeProvider.class);
     private CreateSubCommand sut;
+
+    @Before
+    public void prepareTimeProvider() {
+        when(time.nowAsString()).thenReturn("now");
+    }
 
     private CreateSubCommand createSut(final String... args) throws URISyntaxException, IOException {
         final Options opt = new Options();
         opt.parse(args);
-        return new CreateSubCommand(createRegistry(opt, false));
+        final CreateSubCommand sut = new CreateSubCommand(createRegistry(opt));
+        sut.setTime(time);
+        return sut;
     }
 
     @Test
@@ -59,10 +71,6 @@ public class CreateSubCommandTest extends BaseTestCase {
     @Test
     public void createFileNameFromTitle() throws IOException, URISyntaxException {
         final CreateSubCommand sut = createSut();
-        final TimeProvider time = mock(TimeProvider.class);
-        when(time.nowAsString()).thenReturn("now");
-
-        sut.setTime(time);
 
         assertThat(sut.createFileNameFromTitle("foo bar/baz:snafu"), is("now_foo_bar_baz_snafu.md"));
     }
@@ -85,9 +93,6 @@ public class CreateSubCommandTest extends BaseTestCase {
     @Test
     public void createPath() throws IOException, URISyntaxException {
         final CreateSubCommand sut = createSut();
-        final TimeProvider time = mock(TimeProvider.class);
-        when(time.nowAsString()).thenReturn("now");
-        sut.setTime(time);
         final Path baseDir = tmp.getRoot().toPath();
 
         assertThat(sut.createPath(baseDir, "foo"), is(baseDir.resolve("now_foo.md")));
@@ -109,13 +114,23 @@ public class CreateSubCommandTest extends BaseTestCase {
     }
 
     @Test
-    @Ignore
-    public void writeFile() {
+    public void writeFile() throws IOException, URISyntaxException {
+        final Path file = tmp.newFile().toPath();
+
+        createSut().writeFile(file, "foo");
+
+        assertThat(Files.readAllBytes(file), is("foo".getBytes()));
     }
 
     @Test
-    @Ignore
-    public void createPost_draft() {
+    public void createPost_draft() throws IOException, URISyntaxException {
+        final CreateSubCommand sut = createSut("create", "-t", "title", "-d", "-c", "config");
+
+        sut.createPost("foo");
+
+        final Path post = sut.directories().getPostsDraftData().resolve(sut.createFileNameFromTitle("title"));
+        assertThat(Files.exists(post), is(true));
+        assertThat(Files.readAllBytes(post), is("foo".getBytes()));
     }
 
     @Test

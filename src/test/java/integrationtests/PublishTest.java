@@ -238,7 +238,7 @@ public class PublishTest extends IntegrationTestCase {
                 "site.ftl",
                 "site_map.ftl")) {
             Files.copy(
-                    createPath(SCAFOLD_PACKAGE_PREFIX + name),
+                    createPath(SCAFFOLD_PACKAGE_PREFIX + name),
                     dirs.templatesDir.resolve(name));
         }
     }

@@ -86,7 +86,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * @param content must not be {@code null} or empty
      * @throws IOException if file can't be written
      */
-    private void createSite(final String content) throws IOException {
+    void createSite(final String content) throws IOException {
         final String title = createOptions().getTitle();
         final Path baseDir;
 
@@ -107,7 +107,7 @@ public final class CreateSubCommand extends SubCommandBase {
      * @param content must not be {@code null} or empty
      * @throws IOException if file can't be written
      */
-    private void createPost(final String content) throws IOException {
+    void createPost(final String content) throws IOException {
         final String title = createOptions().getTitle();
         final Path baseDir;
 

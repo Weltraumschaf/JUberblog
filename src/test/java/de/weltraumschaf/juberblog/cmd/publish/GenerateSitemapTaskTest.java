@@ -31,14 +31,14 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
 
     @Test
     public void execute_noPages() throws Exception {
-        final GenerateSitemapTask sut = new GenerateSitemapTask(createRegistry(true));
+        final GenerateSitemapTask sut = new GenerateSitemapTask(createRegistry());
 
         sut.execute();
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/site_map.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -49,7 +49,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
 
     @Test
     public void execute_twoPages() throws Exception {
-        final GenerateSitemapTask sut = new GenerateSitemapTask(createRegistry(true));
+        final GenerateSitemapTask sut = new GenerateSitemapTask(createRegistry());
         final Pages pages = new Pages();
         pages.add(new Page("title1", URI.create("http://www.myblog.com/link1"), "desc1", new DateTime("2014-11-29"), PageType.POST));
         pages.add(new Page("title2", URI.create("http://www.myblog.com/link2"), "desc2", new DateTime("2014-11-30"), PageType.POST));
@@ -59,7 +59,7 @@ public class GenerateSitemapTaskTest extends BaseTestCase {
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.XML)
                 .find(tmp.getRoot().toPath());
         assertThat(foundFiles.size(), is(1));
-        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/site_map.xml");
+        final DataFile expectedFile = new DataFile(tmp.getRoot().toString() + "/public/site_map.xml");
         assertThat(foundFiles, containsInAnyOrder(expectedFile));
         assertThat(expectedFile.readContent(ENCODING), isSimilarTo(
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"

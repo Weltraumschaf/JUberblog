@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
+
 import static org.xmlunit.matchers.CompareMatcher.isSimilarTo;
 
 /**
@@ -29,8 +29,8 @@ public class RendererTest extends BaseTestCase {
     public final TemporaryFolder tmp = new TemporaryFolder();
 
     final Renderer sut = new Renderer(
-        createPath(SCAFOLD_PACKAGE_PREFIX + "layout.ftl"),
-        createPath(SCAFOLD_PACKAGE_PREFIX + "post.ftl"),
+        createPath(SCAFFOLD_PACKAGE_PREFIX + "layout.ftl"),
+        createPath(SCAFFOLD_PACKAGE_PREFIX + "post.ftl"),
         BlogConfiguration.DEFAULT,
         createVersion());
 
