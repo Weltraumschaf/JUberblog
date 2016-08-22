@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FilesFinderByExtension.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.file</a> &gt; <span class="el_source">FilesFinderByExtension.java</span></div><h1>FilesFinderByExtension.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.file;
+
+import de.weltraumschaf.commons.validate.Validate;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Finds files recursively in a given directory by file name extensions.
+ *
+ * @since 1.0.0
+ * @author Sven Strittmatter
+ */
+public final class FilesFinderByExtension {
+
+    /**
+     * Instance to find Markdown files.
+     */
+<span class="fc" id="L25">    public static final FilesFinderByExtension MARKDOWN = new FilesFinderByExtension(FileNameExtension.MARKDOWN);</span>
+
+    /**
+     * Used to filter files.
+     */
+    private final FileFilter filter;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param type must not be {@code null}
+     */
+<span class="fc" id="L37">    public FilesFinderByExtension(final FileNameExtension ... type) {</span>
+<span class="fc" id="L38">        filter = new FileFilter(type);</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Find files in given directory.
+     *
+     * &lt;p&gt;
+     * Throws {@link IllegalArgumentException} if given path does not exist or is not a directory.
+     * &lt;/p&gt;
+     *
+     * @param directory must not be {@code null}
+     * @return never {@code null}, unmodifiable
+     * @throws IOException if any IO error occurs
+     */
+    public Collection&lt;DataFile&gt; find(final Path directory) throws IOException {
+<span class="fc" id="L53">        Validate.notNull(directory, &quot;directory&quot;);</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!Files.exists(directory)) {</span>
+<span class="fc" id="L56">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' does not exist!&quot;, directory));</span>
+        }
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!Files.isDirectory(directory)) {</span>
+<span class="fc" id="L60">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' is not a directory!&quot;, directory));</span>
+        }
+
+<span class="fc" id="L63">        final List&lt;DataFile&gt; foundFiles = new ArrayList&lt;&gt;();</span>
+
+<span class="pc" id="L65">        try (final DirectoryStream&lt;Path&gt; directoryStream = Files.newDirectoryStream(directory, filter)) {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            for (final Path path : directoryStream) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                if (Files.isDirectory(path)) {</span>
+<span class="fc" id="L68">                    foundFiles.addAll(find(path));</span>
+                } else {
+<span class="fc" id="L70">                    foundFiles.add(new DataFile(path.toString()));</span>
+                }
+<span class="fc" id="L72">            }</span>
+<span class="pc bpc" id="L73" title="6 of 8 branches missed.">        }</span>
+
+<span class="fc" id="L75">        return Collections.unmodifiableList(foundFiles);</span>
+    }
+
+    /**
+     * Filters out files not ending with one of the given extensions.
+     * &lt;p&gt;
+     * Must not be used outside of the outer class.
+     * &lt;/p&gt;
+     */
+    private static final class FileFilter implements DirectoryStream.Filter&lt;Path&gt; {
+
+        /**
+         * Accepted file name extensions.
+         */
+        private final List&lt;FileNameExtension&gt; extensions;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param type must not be {@code null}
+         */
+        private FileFilter(final FileNameExtension ... type) {
+<span class="fc" id="L97">            super();</span>
+<span class="fc" id="L98">            this.extensions = Arrays.asList(Validate.notNull(type, &quot;type&quot;));</span>
+<span class="fc" id="L99">        }</span>
+
+        @Override
+        public boolean accept(final Path file) throws IOException {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            if (Files.isDirectory(file)) {</span>
+<span class="fc" id="L104">                return true;</span>
+            }
+
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            for (final FileNameExtension extension : extensions) {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">                if (file.toString().endsWith(extension.getExtension())) {</span>
+<span class="fc" id="L109">                    return true;</span>
+                }
+<span class="fc" id="L111">            }</span>
+
+<span class="fc" id="L113">            return false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

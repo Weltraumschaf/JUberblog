@@ -1,87 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PublishSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">PublishSubCommand.java</span></div><h1>PublishSubCommand.java</h1><pre class="source lang-java linenums">/*
- *  LICENSE
- *
- * &quot;THE BEER-WARE LICENSE&quot; (Revision 43):
- * &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt; wrote this file.
- * As long as you retain this notice you can do whatever you want with
- * this stuff. If we meet some day, and you think this stuff is worth it,
- * you can buy me a non alcohol-free beer in return.
- *
- * Copyright (C) 2012 &quot;Sven Strittmatter&quot; &lt;weltraumschaf@googlemail.com&gt;
- */
-package de.weltraumschaf.juberblog.cmd.publish;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PublishSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">PublishSubCommand.java</span></div><h1>PublishSubCommand.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.application.ApplicationException;
-import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.time.StopWatch;
-import de.weltraumschaf.commons.validate.Validate;
-import de.weltraumschaf.juberblog.ExitCodeImpl;
-import de.weltraumschaf.juberblog.cmd.CommonCreateAndPublishSubCommand;
-import de.weltraumschaf.juberblog.opt.PublishOptions;
-import org.apache.log4j.Logger;
+import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.cmd.SubCommandBase;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.core.TaskExecutor;
 
 /**
- * Publish all sites/posts from data directory.
+ * Published the blog (pages, sites, index, site map, feed).
  *
- * TODO create index
- * TODO create sitemap.xml
- * TODO create feed xml
- *
- * @author Sven Strittmatter &lt;weltraumschaf@googlemail.com&gt;
+ * @since 1.0.0
+ * @author Sven Strittmatter
  */
-public final  class PublishSubCommand extends CommonCreateAndPublishSubCommand&lt;PublishOptions&gt; {
-
-    /**
-     * Log facility.
-     */
-<span class="fc" id="L37">    private static final Logger LOG = Logger.getLogger(PublishSubCommand.class);</span>
-    /**
-     * USed to measure publish time.
-     */
-<span class="fc" id="L41">    private final StopWatch watch = new StopWatch();</span>
-    /**
-     * Command line options.
-     */
-    private PublishOptions options;
+public final class PublishSubCommand extends SubCommandBase {
 
     /**
      * Dedicated constructor.
      *
-     * @param io must not be {@literal null}
+     * @param registry must not be {@code null}
      */
-    public PublishSubCommand(final IO io) {
-<span class="fc" id="L53">        super(io);</span>
-<span class="fc" id="L54">    }</span>
+    public PublishSubCommand(final JUberblog registry) {
+<span class="fc" id="L24">        super(registry);</span>
+<span class="fc" id="L25">    }</span>
 
     @Override
-    public void run() throws ApplicationException {
-<span class="nc" id="L58">        watch.reset();</span>
-<span class="nc" id="L59">        final Publisher pub = new Publisher(getDirectories(), getTemplateConfig(), getBlogConfiguration().getBaseUri());</span>
-<span class="nc" id="L60">        pub.setPurge(getOptions().isPurge());</span>
-<span class="nc" id="L61">        pub.setSites(getOptions().isSites());</span>
-<span class="nc" id="L62">        LOG.info(&quot;Start pulishing...&quot;);</span>
-<span class="nc" id="L63">        watch.start();</span>
+    protected void doExecute() throws ApplicationException {
+<span class="fc" id="L29">        verbose().print(&quot;Publish blog...&quot;);</span>
+<span class="fc" id="L30">        final TaskExecutor executor = new TaskExecutor()</span>
+            .append(new PublishTask(registry(), PageType.POST))
+            .append(new GenerateFeedTask(registry()))
+            .append(new GenerateIndexTask(registry()))
+            .append(new PublishTask(registry(), PageType.SITE))
+            .append(new GenerateSitemapTask(registry()));
 
         try {
-<span class="nc" id="L66">            pub.execute();</span>
-<span class="nc" id="L67">        } catch (PublishingSubCommandExcpetion ex) {</span>
-<span class="nc" id="L68">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Error while publishing files: &quot; + ex.getMessage(), ex);</span>
-<span class="nc" id="L69">        }</span>
-
-<span class="nc" id="L71">        watch.stop();</span>
-<span class="nc" id="L72">        LOG.info(String.format(&quot;Publishing finished! Elapsed time: %s&quot;, watch.toString()));</span>
-<span class="nc" id="L73">    }</span>
-
-    @Override
-    public void setOptions(final PublishOptions opt) {
-<span class="fc" id="L77">        Validate.notNull(opt, &quot;Options must not be null!&quot;);</span>
-<span class="fc" id="L78">        options = opt;</span>
-<span class="fc" id="L79">    }</span>
-
-    @Override
-    public PublishOptions getOptions() {
-<span class="fc" id="L83">        return options;</span>
-    }
+<span class="fc" id="L38">            executor.execute();</span>
+<span class="nc" id="L39">        } catch (Exception ex) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            final String message = ex.getMessage() == null ? &quot;n/a&quot; : ex.getMessage();</span>
+<span class="nc" id="L41">            throw new ApplicationException(ExitCodeImpl.FATAL, message, ex);</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
