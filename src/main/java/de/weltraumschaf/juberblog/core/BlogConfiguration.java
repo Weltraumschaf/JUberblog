@@ -58,9 +58,9 @@ public final class BlogConfiguration {
     public static final BlogConfiguration DEFAULT;
     static {
         final Properties emptyConfig = new Properties();
-        emptyConfig.setProperty(TITLE, "blog title");
-        emptyConfig.setProperty(DESCRIPTION, "blog description");
-        emptyConfig.setProperty(SITE_URI, "http://www.myblog.com/");
+        emptyConfig.setProperty(TITLE, "Blog Title");
+        emptyConfig.setProperty(DESCRIPTION, "Blog Description");
+        emptyConfig.setProperty(SITE_URI, "http://uberblog.local/");
         emptyConfig.setProperty(LANGUAGE, "en");
         emptyConfig.setProperty(DATA_DIR, "data");
         emptyConfig.setProperty(TEMPLATE_DIR, "templates");

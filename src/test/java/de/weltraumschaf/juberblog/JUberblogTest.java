@@ -8,6 +8,7 @@ import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -18,19 +19,14 @@ import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 
 /**
- * Tests for {@lnk JUberblog}.
+ * Tests for {@link JUberblog}.
  *
  * @author Sven Strittmatter
  */
 public class JUberblogTest extends BaseTestCase {
 
-    @Rule
-    public final TemporaryFolder tmp = new TemporaryFolder();
-
     @Test
-    @Ignore
-    public void generate() throws URISyntaxException, ApplicationException {
-        final Path location = tmp.getRoot().toPath();
+    public void generateWithDefaultConfig() throws URISyntaxException, ApplicationException {
         final Options options = new Options();
         final IO io = mock(IO.class);
 
@@ -39,21 +35,21 @@ public class JUberblogTest extends BaseTestCase {
         assertThat(product.options(), is(options));
         assertThat(product.io(), is(io));
         assertThat(product.directories(), is(new Directories(
-                location.resolve("data"),
-                location.resolve("public"))));
+            Paths.get("data"),
+            Paths.get("public"))));
         assertThat(product.templates(), is(new Templates(
-                location.resolve("templates/layout.ftl"),
-                location.resolve("templates/post.ftl"),
-                location.resolve("templates/site.ftl"),
-                location.resolve("templates/feed.ftl"),
-                location.resolve("templates/index.ftl"),
-                location.resolve("templates/site_map.ftl"),
-                location.resolve("templates/create/post_or_site.md.ftl"))));
+            Paths.get("templates/layout.ftl"),
+            Paths.get("templates/post.ftl"),
+            Paths.get("templates/site.ftl"),
+            Paths.get("templates/feed.ftl"),
+            Paths.get("templates/index.ftl"),
+            Paths.get("templates/site_map.ftl"),
+            Paths.get("templates/create/post_or_site.md.ftl"))));
         final Properties config = new Properties();
         config.setProperty(BlogConfiguration.TITLE, "Blog Title");
         config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
         config.setProperty(BlogConfiguration.SITE_URI, "http://uberblog.local/");
-        config.setProperty(BlogConfiguration.ENCODING, "UTF-8");
+        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
         config.setProperty(BlogConfiguration.PUBLIC_DIR, "public");
         config.setProperty(BlogConfiguration.LANGUAGE, "en");
         config.setProperty(BlogConfiguration.DATA_DIR, "data");
