@@ -48,7 +48,7 @@ give here an idea of a default setup:
 ### Data Files
 
 The pure blog data is stored in  plain text files with [Markdown syntax][1] with
-some usefull  extensions (see [Pegdown  Processor][2] for details)  and optional
+some useful  extensions (see [Pegdown  Processor][2] for details)  and optional
 preprocessor blocks for meta data. The format is as follows:
 
     <?juberblog
@@ -72,7 +72,7 @@ preprocessor blocks for meta data. The format is as follows:
 
 ### Meta Data
 
-Meta  data  in data  files  are  stored in  a  preprocesor  block (separated  by
+Meta  data  in data  files  are  stored in  a  preprocessor  block (separated  by
 `<?juberblog` and `?>`). Inside these  blocks the preprocessor recognizes simple
 key value pairs.
 
