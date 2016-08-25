@@ -75,11 +75,35 @@ used. You may use other tools like Subversion, Mercurial, Darcs etc.
     $ git add -A
     $ git commit -m "Initial commit."
 
-#### Overview Of The Directory Layout
+### Overview Of The Directory Layout
+
+The scaffolded directory layout consists of four directories:
+
+1. _configuration_:  Here you find  an example  configuration file. You  may put
+this to  any place  you want. The  JUberblog commands which  need this  need the
+path to it anyway.
+2. _data_: This is the directory where  you put your blog content. Blog articles
+goes  into the  _data/posts_ directory  and sites  into _data/sites_.  Drafts go
+into _data/drafts_.  There are  also two directories:  _posts_ and  _sites_. You
+get the idea.
+3.  _public_: This  directory will  be the  target of  the generated  and static
+files served  by the webserver. The  sub directories _css_, _img_,  and _js_ are
+only  a  suggestion. You  may  change  them, but  then  you  have to  adapt  the
+templates!  The  generated files  will  go  into this  directory  (_index.html_,
+_feed.xml_, and  _sitemap.xml_) and sub  directories according to  the structure
+in _data_.
+4.  _templates_:  Here  are   the  [Freemarker][freemarker]  templates  used  to
+generate the static HTML.
+
+### Configuration
+
+__IMPORTANT__:  The `configuration.properties`  must be  encoded in  iso-8859-1,
+unless umlauts and other special characters will be screwed.
 
 TODO
 
-[jdk]:      http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
-[mvn]:      https://maven.apache.org/download.cgi
-[git]:      http://git-scm.com/
-[markdown]: https://daringfireball.net/projects/markdown/
+[jdk]:          http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[mvn]:          https://maven.apache.org/download.cgi
+[git]:          http://git-scm.com/
+[markdown]:     https://daringfireball.net/projects/markdown/
+[freemarker]:   TODO
