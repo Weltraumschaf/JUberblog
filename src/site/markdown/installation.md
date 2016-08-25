@@ -1,10 +1,9 @@
 # Installation
 
-## Prerequisites
+There are two ways of get JUberblog:
 
-1. You need [Java 7 JDK][1] installed.
-2. You need [Git][3] installed (if you want to build the binary self).
-3. You need [Maven 3][2] installed (if you want to build the binary self).
+1. downlaod prebuilt binary
+2. build it from source
 
 ## Download or Build
 
@@ -13,9 +12,16 @@ scratch.
 
 ### Download
 
-The prebuilt binary downlaod is [here][4].
+TODO
+<!--The prebuilt binary downlaod is [here][dist].-->
 
-### Build
+### Build From Source
+
+If you want to build from source you need some build tools as prerequisites:
+
+1. you need [git][git] to checkout the source (alternative you may download the source tarball from GitHub)
+2. for compiling the sources you need [Java 7 JDK][jdk] or newer
+3. also you need [Maven 3][mvn] as build tool
 
 First clone the repository:
 
@@ -24,21 +30,52 @@ First clone the repository:
 Then build the project:
 
     $ cd JUberblog
-    $ git checkout stable
     $ mvn clean install
+    
+This will install the final binary (`juberblog.jar`) in the `bin/` directory.
 
-## Create the Scaffold
+## Setup Your Blog
+
+Your blog setup will consist of three components:
+
+1. the JUberblog command line tool (you built/downloaded that according the previous section)
+2. the "data storage" of your blog
+3. a webserver which serves your blog
+
+
+The  basic idea  is that  you have  a data  storage where  you put  the content  as
+[Markdown  files][markdown].  Then you  use  the  JUberblog  command line  tool  to
+generate static  HTML from  these files.  And finaly your  web server  serves these
+static files.
+
+### Create the Scaffold
+
+JUberblog requires  a particular  direcotry layout  as storage  place of  your blog
+content. You may configre this in various  ways. But for the first steps you should
+use the  defaults. To create  this structure  JUberblog provides the  `install` sub
+command.
+
 
 Create the initial scaffold directory for your blog data:
 
-    $ mkdir -p /where/you/want/to/save
-    $ juberblog install -l /where/you/want/to/save
-    $ cd /where/you/want/to/save
+    $ mkdir -p /where/you/want/to/store/your/blog
+    $ juberblog install -l /where/you/want/to/store/your/blog
+    $ cd /where/you/want/to/store/your/blog
+
+An optional step  is making this direcotry a version  controlled repository. If you
+set up  your blog only on  a single machine  (everything is done on  this machine),
+then  this  is not  necessary.  But  I recommend  it  because  this gives  you  the
+"feature" of versioning  of your content. In the examples  here [Git][git] is used.
+You may use other tools like Subversion, Mercurial, Darcs etc.
+
+(optional) Make the blog storage direcotry a repository:
+
     $ git init
     $ git add -A
     $ git commit -m "Initial commit."
 
-[1]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
-[2]: https://maven.apache.org/download.cgi
-[3]: http://git-scm.com/
-[4]: https://github.com/Weltraumschaf/JUberblog/raw/master/dist/juberblog.tar.bz2
+[jdk]:      http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[mvn]:      https://maven.apache.org/download.cgi
+[git]:      http://git-scm.com/
+[dist]:     https://github.com/Weltraumschaf/JUberblog/raw/master/dist/juberblog.tar.bz2
+[markdown]: TODO

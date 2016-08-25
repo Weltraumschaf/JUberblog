@@ -34,4 +34,4 @@ of API version hassle in the Ruby world.
 
 [uberblog]: https://github.com/Weltraumschaf/uberblog
 [markdown]: TODO
-[jvm]:      TODO
+[jvm]:      http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
