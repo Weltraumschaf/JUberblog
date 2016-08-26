@@ -1,65 +1,40 @@
 # Usage
 
-JUberbog is a pure command line tool. It provides sub commands:
+JUberbog is a pure command line tool.  It provides sub commands. This means that
+invoking solely `juberblog`  does almost nothing than show you  some help or the
+version. To get some help invoke:
 
     $ juberblog -h
-    $ Usage: juberblog [-v|--version] [-h|--help] [create|publish|install]
 
-## Install Sub Command: `juberblog install`
+The subcommands provided are: `install`, `create`,  `publish`. To get help for a
+particular subcommand invoke:
 
-The install sub command creates a scaffold directory for your blog installation.
-This scaffold directory has the structure as followed:
+    $ juberblog SUB_COMMAND -h
 
-    ├── README.md
-    ├── configuration
-    │   └── configuration.sample.properties
-    ├── data
-    │   ├── drafts
-    │   │   ├── posts
-    │   │   └── sites
-    │   ├── posts
-    │   └── sites
-    ├── public
-    │   ├── css
-    │   │   └── main.css
-    │   ├── drafts
-    │   │   ├── posts
-    │   │   └── sites
-    │   ├── img
-    │   ├── js
-    │   │   └── main.js
-    │   ├── posts
-    │   ├── robots.txt
-    │   └── sites
-    └── templates
-        ├── index.ftl
-        ├── post.ftl
-        ├── site.ftl
-        └── site_map.ftl
+Most of the options  are available as shot option with one  dash and long option
+with two dashes.
 
-Available options:
+## Install Sub Command
 
-    -l, --location <DIR>    Where to install the scaffold.
+The install  sub command creates  a scaffold directory  for your blog  data. The
+details    of   this    directory    is   described    in   the    [installation
+guide](install.html).  Basically  the this  commands  need  only a  location  as
+argument where to create the scaffold. The directory must exist.
 
-## Create Sub Command: `juberblog create`
+The  other options  are only  for update  startegies: You  can either  force the
+installation which  means all  existing files  will be  overwritten. Or  you can
+update which  means existing  files will  be backed up  by renaming.  The latter
+option  is only  useful  if you  have  no  version controll  in  your blog  data
+directory.
 
-Available options:
+## Create Sub Command
 
-    -c, --config <FILE>     Config file to use. [required]
-    -t, --title TITLE       Title of the blog post.
-    -d, --draft             Will mark the file name as draft.
-    -s, --site              Will create a site instead of a post.
-    -v, --verbose           Tell you more.
-    -h, --help              Show this message.
+This command creates  [Markdown][markdown] stubs into your  blog data directory.
+It  also generates  a  propper slugged  and timestamped  filename  in the  right
+directory (either post or site, or one of these in drafts).
 
-## Publish Sub Command: `juberblog publish`
+## Publish Sub Command
 
-Available options:
+TODO
 
-    -c, --config <FILE>     Config file to use. [required]
-    -p, --purge             Regenerate all blog posts.
-    -q, --quiet             Be quiet and don't post to social networks.
-    -s, --sites             Generate static sites.
-    -d, --draft             Publish drafts.
-    -v, --verbose           Tell you more.
-    -h, --help              Show this message.
+[markdown]: https://daringfireball.net/projects/markdown/
