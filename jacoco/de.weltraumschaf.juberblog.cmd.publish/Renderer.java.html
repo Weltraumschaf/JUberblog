@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Renderer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.publish</a> &gt; <span class="el_source">Renderer.java</span></div><h1>Renderer.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.cmd.publish;
+
+import de.weltraumschaf.commons.application.Version;
+import de.weltraumschaf.commons.guava.Maps;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.freemarkerdown.Interceptor;
+import de.weltraumschaf.freemarkerdown.Interceptor.ExecutionPoint;
+import de.weltraumschaf.freemarkerdown.Layout;
+import de.weltraumschaf.freemarkerdown.RenderOptions;
+import de.weltraumschaf.freemarkerdown.PreProcessor;
+import de.weltraumschaf.freemarkerdown.PreProcessors;
+import de.weltraumschaf.freemarkerdown.TemplateModel;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Map;
+
+/**
+ * Orchestrates the whole two step template and preprocessing stuff to render a post or site.
+ *
+ * &lt;p&gt;
+ * Structure of template fragments:
+ * &lt;/p&gt;
+ * &lt;pre&gt;
+ * +-------------------+
+ * |   outerTemplate   |
+ * | +---------------+ |
+ * | | innerTemplate | |
+ * | |  +---------+  | |
+ * | |  | content |  | |
+ * | |  +---------+  | |
+ * | +---------------+ |
+ * +-------------------+
+ * &lt;/pre&gt;
+ *
+ * @since 1.0.0
+ * @author Sven Strittmatter
+ */
+final class Renderer {
+
+    private static final String TPL_NAME_OUTER = &quot;outerTemplate&quot;;
+    private static final String TPL_NAME_INNER = &quot;innerTemplate&quot;;
+    private static final String TPL_NAME_CONTENT = &quot;content&quot;;
+
+    /**
+     * Encoding used to transfer byte[] and string.
+     */
+    private final BlogConfiguration configuration;
+    /**
+     * Used to render the templates.
+     *
+     * XXX: Inject one instance from main app.
+     */
+    private final FreeMarkerDown fmd;
+    /**
+     * Used to collect key values from pre processor.
+     */
+<span class="fc" id="L61">    private final Map&lt;String, String&gt; keyValues = Maps.newHashMap();</span>
+    /**
+     * Used to pre process key value instructions.
+     */
+<span class="fc" id="L65">    private final PreProcessor processor = PreProcessors.createKeyValueProcessor(keyValues, &quot;juberblog&quot;);</span>
+    /**
+     * Used to extract raw Markdown.
+     */
+<span class="fc" id="L69">    private final GetUnprocessedMarkdown interceptor = new GetUnprocessedMarkdown();</span>
+    /**
+     * Outer part of the two step layout.
+     */
+    private final Layout layout;
+    /**
+     * Inner part of the two step layout.
+     */
+    private final Layout content;
+    private final Version version;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param outerTemplate must not be {@code null}
+     * @param innerTemplate must not be {@code null}
+     * @param encoding must not be {@code null} or empty
+     * @throws IOException if templates can't be read
+     */
+    public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration, final Version version) throws IOException {
+<span class="fc" id="L89">        super();</span>
+<span class="fc" id="L90">        this.configuration = Validate.notNull(configuration, &quot;configuration&quot;);</span>
+<span class="fc" id="L91">        this.version = Validate.notNull(version, &quot;version&quot;);</span>
+<span class="fc" id="L92">        this.fmd = FreeMarkerDown.create(configuration.getEncoding());</span>
+<span class="fc" id="L93">        this.layout = fmd.createLayout(outerTemplate, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);</span>
+<span class="fc" id="L94">        this.content = fmd.createLayout(innerTemplate, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);</span>
+<span class="fc" id="L95">        this.layout.assignTemplateModel(TPL_NAME_CONTENT, this.content);</span>
+<span class="fc" id="L96">        fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Renders the given content fragment at given file location.
+     * &lt;p&gt;
+     * Throws {@link IllegalArgumentException} if given path does not exist or is a directory.
+     * &lt;/p&gt;
+     *
+     * @param contentFile must not be {@code null}
+     * @return never {@code null}
+     * @throws IOException if content file can't be read
+     */
+    RendererResult render(final Path contentFile) throws IOException {
+<span class="fc" id="L110">        Validate.notNull(contentFile, &quot;content&quot;);</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (!Files.exists(contentFile)) {</span>
+<span class="fc" id="L113">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' does not exist!&quot;, contentFile));</span>
+        }
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (Files.isDirectory(contentFile)) {</span>
+<span class="fc" id="L117">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' is a directory!&quot;, contentFile));</span>
+        }
+
+<span class="fc" id="L120">        keyValues.clear();</span>
+<span class="fc" id="L121">        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, TPL_NAME_CONTENT));</span>
+<span class="fc" id="L122">        layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());</span>
+<span class="fc" id="L123">        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());</span>
+<span class="fc" id="L124">        layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());</span>
+<span class="fc" id="L125">        layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());</span>
+<span class="fc" id="L126">        layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());</span>
+<span class="fc" id="L127">        layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());</span>
+<span class="fc" id="L128">        layout.assignVariable(TemplateVariables.DESCRIPTION, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L129">        layout.assignVariable(TemplateVariables.KEYWORDS, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L130">        fmd.register(processor);</span>
+
+<span class="fc" id="L132">        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);</span>
+    }
+
+    /**
+     * Provides the rendering result.
+     * &lt;p&gt;
+     * This object is necessary to return multiple values at one time.
+     * &lt;/p&gt;
+     */
+    static final class RendererResult {
+
+        /**
+         * The rendered content (usually HTML).
+         */
+        private final String renderedContent;
+        /**
+         * Raw Markdown from rendered file.
+         */
+        private final String markdown;
+        /**
+         * Meta data found by pre processors of FreeMarkerDown.
+         */
+        private final Map&lt;String, String&gt; metaData;
+
+        /**
+         * Dedicated constructor.
+         *
+         * @param renderedContent must not be {@code null}
+         * @param markdown must not be {@code null}
+         * @param metaData must not be {@code null}, defensive copied
+         */
+        private RendererResult(
+                final String renderedContent,
+                final String markdown,
+                final Map&lt;String, String&gt; metaData) {
+<span class="fc" id="L167">            super();</span>
+<span class="fc" id="L168">            this.renderedContent = Validate.notNull(renderedContent, &quot;renderedContent&quot;);</span>
+<span class="fc" id="L169">            this.markdown = Validate.notNull(markdown, &quot;markdown&quot;);</span>
+<span class="fc" id="L170">            this.metaData = Maps.newHashMap(Validate.notNull(metaData, &quot;metaData&quot;));</span>
+<span class="fc" id="L171">        }</span>
+
+        /**
+         * Get the rendered content.
+         *
+         * @return never {@code null}
+         */
+        String getRenderedContent() {
+<span class="fc" id="L179">            return renderedContent;</span>
+        }
+
+        /**
+         * Get the Markdown from rendered data file.
+         *
+         * @return never {@code null}
+         */
+        String getMarkdown() {
+<span class="fc" id="L188">            return markdown;</span>
+        }
+
+        /**
+         * Get found meta data.
+         *
+         * @return never {@code null}, unmodifiable
+         */
+        Map&lt;String, String&gt; getMetaData() {
+<span class="fc" id="L197">            return Collections.unmodifiableMap(metaData);</span>
+        }
+
+    }
+
+    /**
+     * Intercepts the rendering to collected the raw Markdown.
+     */
+<span class="fc" id="L205">    private static final class GetUnprocessedMarkdown implements Interceptor {</span>
+
+        /**
+         * Collected Markdown.
+         */
+<span class="fc" id="L210">        private String markdown = &quot;&quot;;</span>
+
+        @Override
+        public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
+<span class="fc" id="L214">            final String name = template.getName();</span>
+
+<span class="fc bfc" id="L216" title="All 2 branches covered.">            if (TPL_NAME_CONTENT.equals(name)) {</span>
+<span class="fc" id="L217">                markdown = content;</span>
+            }
+<span class="fc" id="L219">        }</span>
+
+        /**
+         * Returns the raw Markdown.
+         *
+         * @return never {@code null}
+         */
+        private String getMarkdown() {
+<span class="fc" id="L227">            return markdown;</span>
+        }
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
