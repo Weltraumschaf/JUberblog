@@ -6,6 +6,12 @@ things. So  the blog does  not care about storage  or versioning of  the content
 data. This  aspect is leaved to  other tools which  can do this better  (such as
 Git for example).
 
+## Where Go Go Next
+
+First you  need to [install  and configure](installation.html) your  blog. After
+that you can start.  For a brief overview how to use  the JUberblog command line
+tool see the [usage](usage.html).
+
 ## Story Behind
 
 Long time ago  (roundabout seven years) I blogged with  Wordpress and programmed
