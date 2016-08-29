@@ -56,10 +56,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://github.com/Weltraumschaf/JUberblog</connection>
+        <connection>scm:git:git@github.com:Weltraumschaf/JUberblog.git</connection>
+        <url>https://github.com/Weltraumschaf/JUberblog</url>
         <developerConnection>scm:git:git@github.com:Weltraumschaf/JUberblog.git</developerConnection>
-        <url>https://github.com/Weltraumschaf/JUberblog.git</url>
-        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
@@ -231,8 +230,18 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
                 <configuration>
                     <archive>
                         <manifest>
@@ -247,15 +256,6 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!--
@@ -265,6 +265,7 @@
                 <!-- http://wiki.netbeans.org/MavenCodeCoverage -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+
                 <configuration>
                     <excludes>
                         <exclude>**/ExitCodeImpl.class</exclude>
@@ -274,13 +275,12 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+
                 <configuration>
                     <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
                     <logViolationsToConsole>true</logViolationsToConsole>
@@ -300,55 +300,30 @@
                 Site generation
             -->
             <plugin>
-                <groupId>com.kryshchuk.maven.plugins</groupId>
-                <artifactId>umlet-maven-plugin</artifactId>
-                <version>1.1.6</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/site/resources/uml</directory>
-                            <includes>
-                                <include>**/*.uxf</include>
-                            </includes>
-                            <excludes />
-                        </fileset>
-                    </filesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>convert-uml</id>
-                        <goals>
-                            <goal>convert</goal>
-                        </goals>
-                        <configuration>
-                            <format>png</format>
-                            <outputDirectory>target/site/images</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
+
                 <executions>
                     <execution>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <target>
-                                <copydir src="${project.build.binDirectory}"
-                                         dest="${project.build.distDirectory}/juberblog" />
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.bz2"
-                                     basedir="${project.build.distDirectory}/juberblog"
-                                     compression="bzip2" />
-                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}.tar.gz"
-                                     basedir="${project.build.distDirectory}/juberblog"
-                                     compression="gzip" />
-                                <delete dir="${project.build.distDirectory}/juberblog" />
-                            </target>
-                        </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
+
+                        <phase>pre-site</phase>
+
+                        <configuration>
+                            <target>
+                                <copydir src="${project.build.binDirectory}"
+                                         dest="${project.build.directory}/juberblog" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.tar.bz2"
+                                     basedir="${project.build.directory}/juberblog"
+                                     compression="bzip2" />
+                                <tar destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.tar.gz"
+                                     basedir="${project.build.directory}/juberblog"
+                                     compression="gzip" />
+                                <zip destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.zip"
+                                     basedir="${project.build.directory}/juberblog" />
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
