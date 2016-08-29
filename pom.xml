@@ -322,9 +322,11 @@
 
                         <configuration>
                             <target>
-                                <!-- TODO Use copy instead: https://ant.apache.org/manual/Tasks/copy.html -->
-                                <copydir src="${project.build.binDirectory}"
-                                         dest="${project.build.directory}/juberblog" />
+                                <copy todir="${project.build.directory}/juberblog">
+                                    <fileset dir="${project.build.binDirectory}">
+                                        <include name="**/*" />
+                                    </fileset>
+                                </copy>
                                 <tar destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.tar.bz2"
                                      basedir="${project.build.directory}/juberblog"
                                      compression="bzip2" />
