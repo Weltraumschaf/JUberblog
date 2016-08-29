@@ -190,6 +190,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
+
                     <configuration>
                         <effort>Max</effort>
                         <threshold>Default</threshold>
@@ -204,6 +205,15 @@
                         <effort>Max</effort>
                         <debug>false</debug>
                         <relaxed>false</relaxed>
+                    </configuration>
+                </plugin>
+
+
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+
+                    <configuration>
+                        <skipDeploy>true</skipDeploy>
                     </configuration>
                 </plugin>
             </plugins>
@@ -312,6 +322,7 @@
 
                         <configuration>
                             <target>
+                                <!-- TODO Use copy instead: https://ant.apache.org/manual/Tasks/copy.html -->
                                 <copydir src="${project.build.binDirectory}"
                                          dest="${project.build.directory}/juberblog" />
                                 <tar destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.tar.bz2"
@@ -323,6 +334,28 @@
                                 <zip destfile="${project.build.distDirectory}/${project.build.finalName}-${project.version}.zip"
                                      basedir="${project.build.directory}/juberblog" />
                             </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.12</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+
+                        <phase>site-deploy</phase>
+
+                        <configuration>
+                            <server>github</server>
+                            <path>${site.path}</path>
+                            <message>Generate project site.</message>
                         </configuration>
                     </execution>
                 </executions>
