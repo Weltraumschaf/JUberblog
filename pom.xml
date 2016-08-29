@@ -340,6 +340,11 @@
             </plugin>
 
             <plugin>
+                <groupId>com.kryshchuk.maven.plugins</groupId>
+                <artifactId>umlet-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
                 <version>0.12</version>
