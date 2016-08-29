@@ -1,0 +1,72 @@
+#!/usr/bin/env sh
+
+##
+##  LICENSE
+##
+## "THE BEER-WARE LICENSE" (Revision 43):
+## "Sven Strittmatter" <weltraumschaf@googlemail.com> wrote this file.
+## As long as you retain this notice you can do whatever you want with
+## this stuff. If we meet some day, and you think this stuff is worth it,
+## you can buy me a non alcohol-free beer in return.
+##
+## Copyright (C) 2012 "Sven Strittmatter" <weltraumschaf@googlemail.com>
+##
+
+#
+# This is the Unix wrapper script to run JUberblog.
+#
+# You have some environment variables available:
+#   - JUBERBLOG_DEBUG  Set this 'true' and export it to enable debug 
+#                      output to STDOUT.
+#   - JUBERBLOG_HOME   Set the location of JUberblogs
+#
+# Author "Sven Strittmatter" <weltraumschaf@googlemail.com>
+#
+
+if [ "${JUBERBLOG_DEBUG}" = "" ] ; then 
+    export JUBERBLOG_DEBUG=false
+fi
+
+if [ "${JUBERBLOG_HOME}" = "" ] ; then 
+    export JUBERBLOG_HOME="${HOME}/.juberblog"
+fi
+
+# JVM settings.
+JVM_MIN_HEAP_SPACE="32m"
+JVM_MAX_HEAP_SPACE="128m"
+JVM_OPTIONS="-Xms${JVM_MIN_HEAP_SPACE} -Xmx${JVM_MAX_HEAP_SPACE}"
+
+PROGRAM="${0}"
+
+while [ -h "${PROGRAM}" ]; do
+  LS=`ls -ld "${PROGRAM}"`
+  LINK=`expr "${LS}" : '.*-> \(.*\)$'`
+
+  if expr "${LINK}" : '.*/.*' > /dev/null; then
+    PROGRAM="${LINK}"
+  else
+    PROGRAM=`dirname "${PROGRAM}"`/"${LINK}"
+  fi
+done
+
+PROGRAM_DIRECTORY=`dirname "${PROGRAM}"`
+
+# Set JUBERBLOG_HOME.
+if [ -z "${JUBERBLOG_HOME}" ] ; then
+    PROGRAM_DIRECTORY=`cd "${PROGRAM_DIRECTORY}" ; pwd`
+fi
+
+JAR="${PROGRAM_DIRECTORY}/juberblog.jar"
+
+if [ ! -f "${JAR}" ] ; then
+    PROJECT_DIR=`dirname "${PROGRAM_DIRECTORY}"`
+    echo "ERROR: JAR file ${JAR} not pressent!"
+    echo "Invoke 'mvn clean install' in the project base directory: ${PROJECT_DIR}."
+    exit 1
+fi
+
+if [ "${JUBERBLOG_DEBUG}" = "true" ] ; then
+    JVM_OPTIONS="${JVM_OPTIONS} -Djcommander.debug=true"
+fi
+
+java ${JVM_OPTIONS} -jar "${JAR}" "$@"
