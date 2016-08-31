@@ -41,7 +41,7 @@ Your blog setup will consist of three components:
 1. the JUberblog command line tool (you built/downloaded that according the 
    previous section)
 2. the "data storage" of your blog
-3. a webserver which serves your blog
+3. a web server which serves your blog
 
 
 The basic  idea is that  you have a  data storage where  you put the  content as
@@ -87,7 +87,7 @@ goes  into the  _data/posts_ directory  and sites  into _data/sites_.  Drafts go
 into _data/drafts_.  There are  also two directories:  _posts_ and  _sites_. You
 get the idea.
 3.  _public_: This  directory will  be the  target of  the generated  and static
-files served  by the webserver. The  sub directories _css_, _img_,  and _js_ are
+files served  by the web server. The  sub directories _css_, _img_,  and _js_ are
 only  a  suggestion. You  may  change  them, but  then  you  have to  adapt  the
 templates!  The  generated files  will  go  into this  directory  (_index.html_,
 _feed.xml_, and  _sitemap.xml_) and sub  directories according to  the structure
@@ -95,7 +95,7 @@ in _data_.
 4.  _templates_:  Here  are   the  [Freemarker][freemarker]  templates  used  to
 generate the static HTML.
 
-More information about  a particular direcotry may be found  in a `README.md` in
+More information about  a particular directory may be found  in a `README.md` in
 that directory.
 
 ### Configuration
@@ -145,7 +145,7 @@ files, the template files and the published files are.
 
 To generate HTML from the  [Markdown][markdown] files templates are used instead
 of plain converting  it with a processor  to HTML. This gives us  the ability to
-assign  variables from  JUberblog or  use other  constructs knwon  from template
+assign  variables from  JUberblog or  use other  constructs known  from template
 engines  (includes, loops,  conditional etc.).  Under the  hood the  widely used
 [Freemarker][freemarker] library is used.
 
@@ -160,19 +160,117 @@ templates:
 
 ### HTML Templates
 
-- _feed.ftl_: TODO
-- _index.ftl_: TODO
-- _layout.ftl_: TODO
-- _post.ftl_: TODO
-- _site.ftl_: TODO
-- _site_map.ftl_: TODO
+#### Preprocessor Directive
 
-### Markdwon Templates
+TODO
 
-- _post_or_site.md.ftl_: TODO
+#### feed.ftl
 
-## Preprocessor Directives
+This is  the template file  which is used to  generate the [RSS][rss]  feed XML.
+You should  only change  this template if  you know what  you do.  The available
+template variables are:
 
+| variable        | description                                               |
+|-----------------|-----------------------------------------------------------|
+| blogTitle       | This is the blog title from your configuration.           |
+| link            | This is the site URL from your configuration.             |
+| blogDescription | This is the blog description from your configuration.     |
+| lastBuildDate   | This is the file creation date as ISO time stamp.         |
+| items           | This is a collection of objects representing a blog post. |
+
+The objects in the list _items_ have the properties:
+
+| property    | description                                              |
+|-------------|----------------------------------------------------------|
+| title       | The title of the blog post.                              |
+| description | This comes from from the preprocessor directive          |
+| pubDate     | TODO |
+| dcDate      | TODO | 
+
+#### index.ftl
+
+This  is  the  inner  template  for  blog posts  which  will  be  inserted  into
+_lauout.ftl_  to  the place  where  the  variable  `${content}` is  placed.  All
+variables which are available in _layout.ftl_ are also available here.
+
+The available template variables are:
+
+The available template variables are:
+
+| variable | description                                               |
+|----------|-----------------------------------------------------------|
+| posts    | This is a collection of objects representing a blog post. |
+
+The objects in the list _posts_ have the properties:
+
+| property | description                   |
+|----------|-------------------------------|
+| link     | Direct link to the blog post. |
+| title    | Title of the blog post.       |
+| pubDate  | Publishing date.              |
+
+#### layout.ftl
+
+This is  the outer layout  template. JUberblog uses  a common pattern  named two
+step layout:  This means  you have an  outer template for  the things  all sites
+have  in common  and inside  this  template is  a  second one  inserted for  the
+different things. As schema you can imagine it as follows:
+
+    +--------------------+
+    |  laout.ftl         |
+    |  +--------------+  |
+    |  |  index.ftl/  |  |
+    |  |  post.ftl/   |  |
+    |  |  site.ftl    |  |
+    |  +--------------+  |
+    +--------------------+
+
+The available template variables are:
+
+| variable        | description                                           |
+|-----------------|-------------------------------------------------------|
+| description     | This comes from from the preprocessor directive       |
+| keywords        | This comes from from the preprocessor directive       |
+| encoding        | This is the encoding from your configuration          |
+| baseUrl         | This is the site URL from your configuration.         |
+| blogTitle       | This is the blog title from your configuration.       |
+| blogDescription | This is the blog description from your configuration. |
+| content         | This is the rendered content from the inner template. |
+
+#### post.ftl
+
+This  is  the  inner  template  for  blog posts  which  will  be  inserted  into
+_lauout.ftl_  to  the place  where  the  variable  `${content}` is  placed.  All
+variables which are available in _layout.ftl_ are also available here.
+
+The available template variables are:
+
+The available template variables are:
+
+| variable | description                    |
+|----------|--------------------------------|
+| content  | The rendered blog post conent. |
+
+#### site.ftl
+
+This  is  the  inner  template  for  blog posts  which  will  be  inserted  into
+_lauout.ftl_  to  the place  where  the  variable  `${content}` is  placed.  All
+variables which are available in _layout.ftl_ are also available here.
+
+The available template variables are:
+
+The available template variables are:
+
+| variable | description                    |
+|----------|--------------------------------|
+| content  | The rendered blog post conent. |
+
+#### site_map.ftl
+TODO
+
+### Markdown Templates
+
+#### post_or_site.md.ftl
 TODO
 
 [jdk]:          http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
@@ -180,3 +278,4 @@ TODO
 [git]:          http://git-scm.com/
 [markdown]:     https://daringfireball.net/projects/markdown/
 [freemarker]:   TODO
+[rss]:          TODO
