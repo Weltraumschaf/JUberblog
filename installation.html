@@ -220,7 +220,7 @@ $ git commit -m &quot;Initial commit.&quot;
   
 <li><i>public</i>: This directory will be the target of the generated and static files served by the web server. The sub directories <i>css</i>, <i>img</i>, and <i>js</i> are only a suggestion. You may change them, but then you have to adapt the templates! The generated files will go into this directory (<i>index.html</i>, <i>feed.xml</i>, and <i>sitemap.xml</i>) and sub directories according to the structure in <i>data</i>.</li>
   
-<li><i>templates</i>: Here are the <a href="TODO">Freemarker</a> templates used to generate the static HTML.</li>
+<li><i>templates</i>: Here are the <a class="externalLink" href="http://freemarker.org/">Freemarker</a> templates used to generate the static HTML.</li>
 </ol>
 <p>More information about a particular directory may be found in a <tt>README.md</tt> in that directory.</p></div>
 <div class="section">
@@ -232,25 +232,25 @@ $ git commit -m &quot;Initial commit.&quot;
 
 <ul>
   
-<li><i>title</i>: This is the title of your blog. This value is available in  the templates by the <a href="TODO">Freemarker</a> variable  expression <tt>${blogTitle}</tt>.</li>
+<li><i>title</i>: This is the title of your blog. This value is available in  the templates by the <a class="externalLink" href="http://freemarker.org/">Freemarker</a> variable  expression <tt>${blogTitle}</tt>.</li>
   
-<li><i>description</i>: This is the description of your blog. This value is  available in in the templates by the  <a href="TODO">Freemarker</a> variable expression  <tt>${blogDescription}</tt>.</li>
+<li><i>description</i>: This is the description of your blog. This value is  available in in the templates by the  <a class="externalLink" href="http://freemarker.org/">Freemarker</a> variable expression  <tt>${blogDescription}</tt>.</li>
   
-<li><i>siteUrl</i>: This is the base URL of your blog. This is used to  generate Links (eg. in the <i>feed.xml</i> or <i>sitemap.xml</i>).  It is also available in the in the templates by the  <a href="TODO">Freemarker</a> variable expression <tt>${baseUrl}</tt>.</li>
+<li><i>siteUrl</i>: This is the base URL of your blog. This is used to  generate Links (eg. in the <i>feed.xml</i> or <i>sitemap.xml</i>).  It is also available in the in the templates by the  <a class="externalLink" href="http://freemarker.org/">Freemarker</a> variable expression <tt>${baseUrl}</tt>.</li>
   
-<li><i>language</i>: This is the title of your blog. This value is available in  in the templates by the <a href="TODO">Freemarker</a> variable  expression <tt>${language}</tt>.</li>
+<li><i>language</i>: This is the title of your blog. This value is available in  in the templates by the <a class="externalLink" href="http://freemarker.org/">Freemarker</a> variable  expression <tt>${language}</tt>.</li>
   
-<li><i>encoding</i>: This is the overall encoding used to read/write files by  the command line tool and is also available in the in the  templates by the <a href="TODO">Freemarker</a> variable  expression <tt>${encoding}</tt>.</li>
+<li><i>encoding</i>: This is the overall encoding used to read/write files by  the command line tool and is also available in the in the  templates by the <a class="externalLink" href="http://freemarker.org/">Freemarker</a> variable  expression <tt>${encoding}</tt>.</li>
   
 <li><i>dataDirectory</i>: This is the directory where JUberblog finds the  <a class="externalLink" href="https://daringfireball.net/projects/markdown/">Markdown</a> content data. If the path is not  absolute then it is interpreted relative from where you  invoke the JUberblog command.</li>
   
-<li><i>temlateDirectory</i>: This is the directory where JUberblog finds the  <a href="TODO">Freemarker</a> templates to render the static  HTML. If the path is not absolute then it is interpreted  relative from where you invoke the JUberblog command.</li>
+<li><i>temlateDirectory</i>: This is the directory where JUberblog finds the  <a class="externalLink" href="http://freemarker.org/">Freemarker</a> templates to render the static  HTML. If the path is not absolute then it is interpreted  relative from where you invoke the JUberblog command.</li>
   
 <li><i>publicDirectory</i>: This is the directory where JUberblog puts the rendered  static HTML data. If the path is not absolute then it is  interpreted relative from where you invoke the JUberblog  command.</li>
 </ul></div></div></div>
 <div class="section">
 <h2><a name="Customize_The_Templates"></a>Customize The Templates</h2>
-<p>To generate HTML from the <a class="externalLink" href="https://daringfireball.net/projects/markdown/">Markdown</a> files templates are used instead of plain converting it with a processor to HTML. This gives us the ability to assign variables from JUberblog or use other constructs known from template engines (includes, loops, conditional etc.). Under the hood the widely used <a href="TODO">Freemarker</a> library is used.</p>
+<p>To generate HTML from the <a class="externalLink" href="https://daringfireball.net/projects/markdown/">Markdown</a> files templates are used instead of plain converting it with a processor to HTML. This gives us the ability to assign variables from JUberblog or use other constructs known from template engines (includes, loops, conditional etc.). Under the hood the widely used <a class="externalLink" href="http://freemarker.org/">Freemarker</a> library is used.</p>
 <p>All templates are in the scaffold directory <tt>templates</tt>, unless you configured an other location. There are several template files. There are two kinds of templates:</p>
 
 <ol style="list-style-type: decimal">
@@ -266,7 +266,7 @@ $ git commit -m &quot;Initial commit.&quot;
 <p>TODO</p></div>
 <div class="section">
 <h4><a name="feed.ftl"></a>feed.ftl</h4>
-<p>This is the template file which is used to generate the <a href="TODO">RSS</a> feed XML. You should only change this template if you know what you do. The available template variables are:</p>
+<p>This is the template file which is used to generate the <a class="externalLink" href="https://en.wikipedia.org/wiki/RSS">RSS</a> feed XML. You should only change this template if you know what you do. The available template variables are:</p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -348,14 +348,14 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>pubDate </td>
       
-<td>TODO </td>
+<td>Publishing date in the format <tt>Fri, 19 Mar 2010 09:42:24 +0100</tt> </td>
     </tr>
     
 <tr class="a">
       
 <td>dcDate </td>
       
-<td>TODO </td>
+<td>Publishing date in the format <tt>2010-03-19T09:42:24+01:00</tt> </td>
     </tr>
   </tbody>
 </table></div>
@@ -417,7 +417,7 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>pubDate </td>
       
-<td>Publishing date. </td>
+<td>Publishing date as Java date object (<a class="externalLink" href="http://freemarker.org/docs/ref_builtins_date.html">formatting</a>). </td>
     </tr>
   </tbody>
 </table></div>
@@ -522,7 +522,7 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>content </td>
       
-<td>The rendered blog post conent. </td>
+<td>The rendered blog post content. </td>
     </tr>
   </tbody>
 </table></div>
@@ -548,7 +548,7 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>content </td>
       
-<td>The rendered blog post conent. </td>
+<td>The rendered blog post content. </td>
     </tr>
   </tbody>
 </table></div>

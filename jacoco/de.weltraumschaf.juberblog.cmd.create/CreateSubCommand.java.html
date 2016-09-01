@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CreateSubCommand.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.cmd.create</a> &gt; <span class="el_source">CreateSubCommand.java</span></div><h1>CreateSubCommand.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.cmd.create;
+
+import de.weltraumschaf.commons.application.ApplicationException;
+import de.weltraumschaf.commons.string.StringEscape;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.Fragment;
+import de.weltraumschaf.freemarkerdown.RenderOptions;
+import de.weltraumschaf.freemarkerdown.TemplateError;
+import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.cmd.SubCommandBase;
+import de.weltraumschaf.juberblog.cmd.publish.TemplateVariables;
+import de.weltraumschaf.juberblog.core.ExitCodeImpl;
+import de.weltraumschaf.juberblog.options.CreateOptions;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+/**
+ * Creates a blog post or site.
+ *
+ * @author Sven Strittmatter
+ * @since 1.0.0
+ */
+public final class CreateSubCommand extends SubCommandBase {
+
+    /**
+     * Used to create the time in the file name.
+     */
+<span class="fc" id="L30">    private TimeProvider time = Time.newProvider();</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param registry must not be {@code null}
+     */
+    public CreateSubCommand(final JUberblog registry) {
+<span class="fc" id="L38">        super(registry);</span>
+<span class="fc" id="L39">    }</span>
+
+    private CreateOptions createOptions() {
+<span class="fc" id="L42">        return options().getCreate();</span>
+    }
+
+    @Override
+    protected void doExecute() throws ApplicationException {
+<span class="nc" id="L47">        validateArguments();</span>
+<span class="nc" id="L48">        final String title = createOptions().getTitle().trim();</span>
+
+        try {
+<span class="nc" id="L51">            final Fragment tpl = fmd().createFragemnt(</span>
+<span class="nc" id="L52">                templates().getCreateSiteOrPostTemplate(),</span>
+<span class="nc" id="L53">                templates().getCreateSiteOrPostTemplate().toString(),</span>
+                RenderOptions.WITHOUT_MARKDOWN);
+<span class="nc" id="L55">            tpl.assignVariable(TemplateVariables.TITLE, title);</span>
+<span class="nc" id="L56">            final String content = fmd().render(tpl);</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (createOptions().isSite()) {</span>
+<span class="nc" id="L59">                createSite(content);</span>
+            } else {
+<span class="nc" id="L61">                createPost(content);</span>
+            }
+<span class="nc" id="L63">        } catch (final IOException ex) {</span>
+<span class="nc" id="L64">            throw new ApplicationException(</span>
+<span class="nc" id="L65">                ExitCodeImpl.FATAL, &quot;Can't read template to create post/site! (&quot; + ex.getMessage() + ')', ex);</span>
+<span class="nc" id="L66">        } catch (final TemplateError ex) {</span>
+<span class="nc" id="L67">            throw new ApplicationException(</span>
+<span class="nc" id="L68">                ExitCodeImpl.FATAL, &quot;Can't render template to create post/site! (&quot; + ex.getMessage() + ')', ex);</span>
+<span class="nc" id="L69">        }</span>
+
+<span class="nc" id="L71">        io().println(&quot;Done :)&quot;);</span>
+<span class="nc" id="L72">    }</span>
+
+    /**
+     * Injection point for a time provider.
+     *
+     * @param time must not be {@code null}
+     */
+    void setTime(final TimeProvider time) {
+<span class="fc" id="L80">        this.time = Validate.notNull(time, &quot;time&quot;);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Create site (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    void createSite(final String content) throws IOException {
+<span class="nc" id="L90">        final String title = createOptions().getTitle();</span>
+        final Path baseDir;
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (createOptions().isDraft()) {</span>
+<span class="nc" id="L94">            io().println(String.format(&quot;Create site draft '%s'...&quot;, title));</span>
+<span class="nc" id="L95">            baseDir = directories().getSitesDraftData();</span>
+        } else {
+<span class="nc" id="L97">            io().println(String.format(&quot;Create site '%s'...&quot;, title));</span>
+<span class="nc" id="L98">            baseDir = directories().getSitesData();</span>
+        }
+
+<span class="nc" id="L101">        writeFile(createPath(baseDir, title), Validate.notEmpty(content, &quot;content&quot;));</span>
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Create post (draft).
+     *
+     * @param content must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    void createPost(final String content) throws IOException {
+<span class="fc" id="L111">        final String title = createOptions().getTitle();</span>
+        final Path baseDir;
+
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (createOptions().isDraft()) {</span>
+<span class="fc" id="L115">            io().println(String.format(&quot;Create post draft '%s'...&quot;, title));</span>
+<span class="fc" id="L116">            baseDir = directories().getPostsDraftData();</span>
+        } else {
+<span class="nc" id="L118">            io().println(String.format(&quot;Create post '%s'...&quot;, title));</span>
+<span class="nc" id="L119">            baseDir = directories().getPostsData();</span>
+        }
+
+<span class="fc" id="L122">        writeFile(createPath(baseDir, title), content);</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Write content to file.
+     *
+     * @param fileName must not be {@code null}
+     * @param content  must not be {@code null} or empty
+     * @throws IOException if file can't be written
+     */
+    void writeFile(final Path fileName, final String content) throws IOException {
+<span class="fc" id="L133">        io().println(String.format(&quot;Write file '%s'...&quot;, fileName));</span>
+<span class="fc" id="L134">        Files.write(</span>
+<span class="fc" id="L135">            Validate.notNull(fileName, &quot;fileName&quot;),</span>
+<span class="fc" id="L136">            Validate.notEmpty(content, &quot;content&quot;).getBytes(configuration().getEncoding()));</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Create target path.
+     *
+     * @param baseDir must not be {@code null}
+     * @param title   must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    Path createPath(final Path baseDir, final String title) {
+<span class="fc" id="L147">        return Validate.notNull(baseDir).resolve(createFileNameFromTitle(title));</span>
+    }
+
+    /**
+     * Create file name from title.
+     * &lt;p&gt;
+     * Format: {@literal TIME_TITLE.md} {@literal TIME} is provided by {@link #time}. {@literal BLOG_TITLE} is the escaped
+     * title.
+     * &lt;/p&gt;
+     *
+     * @param title must not be {@code null} or empty
+     * @return never {@code null} or empty
+     */
+    String createFileNameFromTitle(final String title) {
+        @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
+<span class="fc" id="L162">        final StringBuilder buffer = new StringBuilder();</span>
+
+<span class="fc" id="L164">        buffer.append(time.nowAsString())</span>
+<span class="fc" id="L165">            .append('_')</span>
+<span class="fc" id="L166">            .append(StringEscape.escapeFileName(Validate.notEmpty(title)))</span>
+<span class="fc" id="L167">            .append(&quot;.md&quot;);</span>
+
+<span class="fc" id="L169">        return buffer.toString();</span>
+    }
+
+    /**
+     * Validates the required command line arguments.
+     *
+     * @throws ApplicationException if title is empty
+     */
+    @Override
+    protected void validateArguments() throws ApplicationException {
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (configuration().getTitle().isEmpty()) {</span>
+<span class="nc" id="L180">            throw new ApplicationException(ExitCodeImpl.TOO_FEW_ARGUMENTS, &quot;No title argument given!&quot;);</span>
+        }
+<span class="fc" id="L182">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

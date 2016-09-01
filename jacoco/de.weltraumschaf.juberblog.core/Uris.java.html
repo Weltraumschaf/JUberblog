@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Uris.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.core</a> &gt; <span class="el_source">Uris.java</span></div><h1>Uris.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.core;
+
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.commons.uri.UriBuilder;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+/**
+ * Provides URIs based on a base URI.
+ *
+ * @since 1.0.0
+ * @author Sven Strittmatter
+ */
+public final class Uris {
+
+    /**
+     * Name of sites sub directory.
+     */
+<span class="fc" id="L19">    private static final String SITES_DIR = &quot;/&quot; + Constants.SITES_DIR.toString();</span>
+    /**
+     * Name of posts sub directory.
+     */
+<span class="fc" id="L23">    private static final String POSTS_DIR = &quot;/&quot; + Constants.POSTS_DIR.toString();</span>
+    /**
+     * Name of drafts sub directory.
+     */
+<span class="fc" id="L27">    private static final String DRAFTS_DIR = &quot;/&quot; + Constants.DRAFTS_DIR.toString();</span>
+    /**
+     * Base URI.
+     */
+    private final URI base;
+
+    /**
+     * Convenience constructor.
+     *
+     * @param config must not be {@code null}
+     * @throws URISyntaxException if {@link BlogConfiguration#getBaseUri()} is malformed
+     */
+    public Uris(final BlogConfiguration config) throws URISyntaxException {
+<span class="nc" id="L40">        this(config.getBaseUri());</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Convenience constructor.
+     *
+     * @param base must not be {@code null}
+     * @throws URISyntaxException is {@code base} is malformed
+     */
+    public Uris(final String base) throws URISyntaxException {
+<span class="fc" id="L50">        this(new URI(base));</span>
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param base must not be {@code null}
+     */
+    public Uris(final URI base) {
+<span class="fc" id="L59">        super();</span>
+<span class="fc" id="L60">        this.base = Validate.notNull(base, &quot;Base must not be null!&quot;);</span>
+<span class="fc" id="L61">    }</span>
+
+    /**
+     * Base URI for published posts.
+     *
+     * @return never {@code null}
+     */
+    public URI posts() {
+<span class="fc" id="L69">        return new UriBuilder()</span>
+<span class="fc" id="L70">                .uri(base)</span>
+<span class="fc" id="L71">                .path(POSTS_DIR)</span>
+<span class="fc" id="L72">                .build();</span>
+    }
+
+    /**
+     * Constructs URI for an post.
+     *
+     * @param filename must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    public URI post(final String filename) {
+<span class="fc" id="L82">        return new UriBuilder()</span>
+<span class="fc" id="L83">                .uri(posts())</span>
+<span class="fc" id="L84">                .path(Validate.notEmpty(filename, &quot;filename&quot;))</span>
+<span class="fc" id="L85">                .build();</span>
+    }
+
+    /**
+     * Base URI for published sites.
+     *
+     * @return never {@code null}
+     */
+    public URI sites() {
+<span class="fc" id="L94">        return new UriBuilder()</span>
+<span class="fc" id="L95">                .uri(base)</span>
+<span class="fc" id="L96">                .path(SITES_DIR)</span>
+<span class="fc" id="L97">                .build();</span>
+    }
+
+    /**
+     * Constructs URI for an post.
+     *
+     * @param filename must not be {@code null} or empty
+     * @return never {@code null}
+     */
+    public URI site(final String filename) {
+<span class="fc" id="L107">        return new UriBuilder()</span>
+<span class="fc" id="L108">                .uri(sites())</span>
+<span class="fc" id="L109">                .path(Validate.notEmpty(filename, &quot;filename&quot;))</span>
+<span class="fc" id="L110">                .build();</span>
+    }
+
+    /**
+     * Base URI for drafts.
+     *
+     * @return never {@code null}
+     */
+    public URI drafts() {
+<span class="fc" id="L119">        return new UriBuilder()</span>
+<span class="fc" id="L120">                .uri(base)</span>
+<span class="fc" id="L121">                .path(DRAFTS_DIR)</span>
+<span class="fc" id="L122">                .build();</span>
+    }
+
+    /**
+     * Base URI for draft sites.
+     *
+     * @return never {@code null}
+     */
+    public URI draftSites() {
+<span class="fc" id="L131">        return new UriBuilder()</span>
+<span class="fc" id="L132">                .uri(drafts())</span>
+<span class="fc" id="L133">                .path(SITES_DIR)</span>
+<span class="fc" id="L134">                .build();</span>
+    }
+
+    /**
+     * Base URI for draft posts.
+     *
+     * @return never {@code null}
+     */
+    public URI draftPosts() {
+<span class="fc" id="L143">        return new UriBuilder()</span>
+<span class="fc" id="L144">                .uri(drafts())</span>
+<span class="fc" id="L145">                .path(POSTS_DIR)</span>
+<span class="fc" id="L146">                .build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

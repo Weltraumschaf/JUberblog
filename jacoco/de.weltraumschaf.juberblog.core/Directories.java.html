@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Directories.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.core</a> &gt; <span class="el_source">Directories.java</span></div><h1>Directories.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.core;
+
+import de.weltraumschaf.commons.validate.Validate;
+import java.nio.file.Path;
+import java.util.Objects;
+
+/**
+ * Holds the directories to read and write the blog files.
+ *
+ * @since 1.0.0
+ * @author Sven Strittmatter
+ */
+public final class Directories {
+
+    /**
+     * Name of sites sub directory.
+     */
+    public static final String SITES_DIR_NAME = &quot;sites&quot;;
+    /**
+     * Name of posts sub directory.
+     */
+    public static final String POSTS_DIR_NAME = &quot;posts&quot;;
+    /**
+     * Name of drafts sub directory.
+     */
+    public static final String DRAFTS_DIR_NAME = &quot;drafts&quot;;
+
+    /**
+     * Where to find the post's Markdown files.
+     */
+    private final Path postsData;
+    /**
+     * Where to find the site's Markdown files.
+     */
+    private final Path sitesData;
+    /**
+     * Where to find the draft post's Markdown files.
+     */
+    private final Path postsDraftData;
+    /**
+     * Where to find the draft site's Markdown files.
+     */
+    private final Path sitesDraftData;
+    /**
+     * Where to store published files.
+     */
+    private final Path output;
+    /**
+     * Where to store published posts.
+     */
+    private final Path postsOutput;
+    /**
+     * Where to store published sites.
+     */
+    private final Path siteOutput;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param dataDir must not be {@code null}
+     * @param outputDir must not be {@code null}
+     */
+    public Directories(final Path dataDir, final Path outputDir) {
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        Validate.notNull(dataDir, &quot;dataDir&quot;);</span>
+<span class="fc" id="L66">        Validate.notNull(outputDir, &quot;outputDir&quot;);</span>
+<span class="fc" id="L67">        this.postsData = dataDir.resolve(POSTS_DIR_NAME);</span>
+<span class="fc" id="L68">        this.sitesData = dataDir.resolve(SITES_DIR_NAME);</span>
+<span class="fc" id="L69">        this.postsDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(POSTS_DIR_NAME);</span>
+<span class="fc" id="L70">        this.sitesDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(SITES_DIR_NAME);</span>
+<span class="fc" id="L71">        this.output = outputDir;</span>
+<span class="fc" id="L72">        this.postsOutput = outputDir.resolve(POSTS_DIR_NAME);</span>
+<span class="fc" id="L73">        this.siteOutput = outputDir.resolve(SITES_DIR_NAME);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Where to find the posts data files.
+     *
+     * @return never {@code null}
+     */
+    public Path getPostsData() {
+<span class="fc" id="L82">        return postsData;</span>
+    }
+
+    /**
+     * Where to find the sites data files.
+     *
+     * @return never {@code null}
+     */
+    public Path getSitesData() {
+<span class="fc" id="L91">        return sitesData;</span>
+    }
+
+    /**
+     * Where to find the sites drafts data files.
+     *
+     * @return never {@code null}
+     */
+    public Path getPostsDraftData() {
+<span class="fc" id="L100">        return postsDraftData;</span>
+    }
+
+    /**
+     * Where to find the posts drafts data files.
+     *
+     * @return never {@code null}
+     */
+    public Path getSitesDraftData() {
+<span class="fc" id="L109">        return sitesDraftData;</span>
+    }
+
+    /**
+     * Where to store published output.
+     *
+     * @return never {@code null}
+     */
+    public Path getOutput() {
+<span class="fc" id="L118">        return output;</span>
+    }
+
+    /**
+     * Where to store published posts.
+     *
+     * @return never {@code null}
+     */
+    public Path getPostsOutput() {
+<span class="fc" id="L127">        return postsOutput;</span>
+    }
+
+    /**
+     * Where to store published sites.
+     *
+     * @return never {@code null}
+     */
+    public Path getSitesOutput() {
+<span class="fc" id="L136">        return siteOutput;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L141">        return Objects.hash(</span>
+                postsData,
+                sitesData,
+                postsDraftData,
+                sitesDraftData,
+                output,
+                postsOutput,
+                siteOutput);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (!(obj instanceof Directories)) {</span>
+<span class="fc" id="L154">            return false;</span>
+        }
+
+<span class="fc" id="L157">        final Directories other = (Directories) obj;</span>
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        return Objects.equals(postsData, other.postsData)</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                &amp;&amp; Objects.equals(sitesData, other.sitesData)</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">                &amp;&amp; Objects.equals(postsDraftData, other.postsDraftData)</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                &amp;&amp; Objects.equals(sitesDraftData, other.sitesDraftData)</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                &amp;&amp; Objects.equals(output, other.output)</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">                &amp;&amp; Objects.equals(postsOutput, other.postsOutput)</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">                &amp;&amp; Objects.equals(siteOutput, other.siteOutput);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L170">        return &quot;Directories{&quot;</span>
+                + &quot;postsData=&quot; + postsData + &quot;, &quot;
+                + &quot;sitesData=&quot; + sitesData + &quot;, &quot;
+                + &quot;postsDraftData=&quot; + postsDraftData + &quot;, &quot;
+                + &quot;sitesDraftData=&quot; + sitesDraftData + &quot;, &quot;
+                + &quot;output=&quot; + output + &quot;, &quot;
+                + &quot;postsOutput=&quot; + postsOutput + &quot;, &quot;
+                + &quot;siteOutput=&quot; + siteOutput
+                + '}';
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
