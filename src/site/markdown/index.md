@@ -6,11 +6,12 @@ things. So  the blog does  not care about storage  or versioning of  the content
 data. This  aspect is leaved to  other tools which  can do this better  (such as
 Git for example).
 
-## Where Go Go Next
+## Where To Go Next
 
 First you  need to [install  and configure](installation.html) your  blog. After
 that you can start.  For a brief overview how to use  the JUberblog command line
-tool see the [usage](usage.html).
+tool  see the  [usage](usage.html). For  a deeper  look under  the hood  see the
+[architecture](architecture.html) site.
 
 ## Story Behind
 
@@ -20,12 +21,12 @@ of that Wordpress  is also a piece of  crap. Also I realized that I  do not need
 the most features  of Wordpress. What I want  is an easy way to  write my posts,
 version them and publish them as HTML.
 
-As a programmer I'm used to use a  version control system for my source code. So
-why  not   using  it   for  my  blog   posts  too?  Also   I'm  used   to  write
-[Markdown][markdown] files (mostly  the documentation of my  software is written
-in [Markdown][markdown]). So  why put my blog  texts into tables and  rows of an
-SQL database only for  putting them together on each page  request. So I decided
-to make my blog  as a repository of Markdown files from  which I generate static
+As a programmer I'm used to a version  control system for my source code. So why
+not using it for my blog posts  too? Also I'm used to write [Markdown][markdown]
+files   (mostly   the    documentation   of   my   software    is   written   in
+[Markdown][markdown]). So why put  my blog texts into tables and  rows of an SQL
+database only for  putting them together on  each page request. So  I decided to
+make my  blog as  a repository of  Markdown files from  which I  generate static
 HTML files periodically (with crontab e.g.).
 
 My  first  approach  was  [Uberblog][uberblog]:  A  command  line  Ruby  scripts
@@ -38,11 +39,6 @@ Ruby   I've   had   several   problems   to  set   up   all   dependencies   for
 [Uberblog][uberblog] on a new machine. I've  also had lot of problems setting up
 other Ruby  tools from scratch. Sadly  there is a  lot of API version  hassle in
 the Ruby world.
-
-For installation  instructions go  [here](install.html). For a  there is  also a
-complete [usage](usage.html)  overview for JUberblog  command line tool.  If you
-are   interested   in   the   details    how   it   is   implemented   see   the
-[architecture](architecture.html) page.
 
 [uberblog]: https://github.com/Weltraumschaf/uberblog
 [markdown]: https://daringfireball.net/projects/markdown/
