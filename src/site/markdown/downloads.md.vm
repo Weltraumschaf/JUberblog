@@ -9,6 +9,6 @@ Prebuilt binary packages:
 - [${project.build.finalName}-${project.version}.zip]
   (./dist/${project.build.finalName}-${project.version}.zip)
 
-Unpack the  downloaded archive any where  into your `$PATH`. It  contains a Java
+Unpack the  downloaded archive anywhere  into your  `$PATH`. It contains  a Java
 Jar file  `juberblog.jar` and a wrapper  script `juberblog`. You should  not run
 the Jar file directly. Instead use the wrapper script.
