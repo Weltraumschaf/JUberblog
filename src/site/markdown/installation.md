@@ -180,12 +180,12 @@ template variables are:
 
 The objects in the list _items_ have the properties:
 
-| property    | description                                              |
-|-------------|----------------------------------------------------------|
-| title       | The title of the blog post.                              |
-| description | This comes from from the preprocessor directive          |
-| pubDate     | TODO |
-| dcDate      | TODO | 
+| property    | description                                                     |
+|-------------|-----------------------------------------------------------------|
+| title       | The title of the blog post.                                     |
+| description | This comes from from the preprocessor directive                 |
+| pubDate     | Publishing date in the format `Fri, 19 Mar 2010 09:42:24 +0100` |
+| dcDate      | Publishing date in the format `2010-03-19T09:42:24+01:00`       | 
 
 #### index.ftl
 
@@ -203,11 +203,11 @@ The available template variables are:
 
 The objects in the list _posts_ have the properties:
 
-| property | description                   |
-|----------|-------------------------------|
-| link     | Direct link to the blog post. |
-| title    | Title of the blog post.       |
-| pubDate  | Publishing date.              |
+| property | description                                                      |
+|----------|------------------------------------------------------------------|
+| link     | Direct link to the blog post.                                    |
+| title    | Title of the blog post.                                          |
+| pubDate  | Publishing date as Java date object ([formatting][date-format]). |
 
 #### layout.ftl
 
@@ -247,9 +247,9 @@ The available template variables are:
 
 The available template variables are:
 
-| variable | description                    |
-|----------|--------------------------------|
-| content  | The rendered blog post conent. |
+| variable | description                     |
+|----------|---------------------------------|
+| content  | The rendered blog post content. |
 
 #### site.ftl
 
@@ -261,9 +261,9 @@ The available template variables are:
 
 The available template variables are:
 
-| variable | description                    |
-|----------|--------------------------------|
-| content  | The rendered blog post conent. |
+| variable | description                     |
+|----------|---------------------------------|
+| content  | The rendered blog post content. |
 
 #### site_map.ftl
 TODO
@@ -277,5 +277,6 @@ TODO
 [mvn]:          https://maven.apache.org/download.cgi
 [git]:          http://git-scm.com/
 [markdown]:     https://daringfireball.net/projects/markdown/
-[freemarker]:   TODO
-[rss]:          TODO
+[freemarker]:   http://freemarker.org/
+[rss]:          https://en.wikipedia.org/wiki/RSS
+[date-format]:  http://freemarker.org/docs/ref_builtins_date.html
