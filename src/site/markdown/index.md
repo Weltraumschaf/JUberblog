@@ -1,4 +1,4 @@
-# Welcome to the JUberblog Project
+# Command Line Blogging
 
 JUberblog is a command line based  blog engine which publishes static HTML files
 from given Markdown files.  The simple idea behind it is:  Only do the necessary
