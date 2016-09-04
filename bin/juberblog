@@ -18,17 +18,12 @@
 # You have some environment variables available:
 #   - JUBERBLOG_DEBUG  Set this 'true' and export it to enable debug 
 #                      output to STDOUT.
-#   - JUBERBLOG_HOME   Set the location of JUberblogs
 #
 # Author "Sven Strittmatter" <weltraumschaf@googlemail.com>
 #
 
 if [ "${JUBERBLOG_DEBUG}" = "" ] ; then 
     export JUBERBLOG_DEBUG=false
-fi
-
-if [ "${JUBERBLOG_HOME}" = "" ] ; then 
-    export JUBERBLOG_HOME="${HOME}/.juberblog"
 fi
 
 # JVM settings.
