@@ -1,8 +1,6 @@
 package de.weltraumschaf.juberblog.cmd.install;
 
 import de.weltraumschaf.commons.application.ApplicationException;
-import de.weltraumschaf.commons.application.IO;
-import de.weltraumschaf.commons.testing.rules.CapturedOutput;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.options.Options;
 import java.io.File;
@@ -17,9 +15,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * Tests for {@link InstallSubCommand}.

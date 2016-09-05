@@ -3,13 +3,10 @@ package de.weltraumschaf.juberblog.cmd.create;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.system.ExitCode;
-import de.weltraumschaf.juberblog.cmd.install.InstallSubCommand;
-import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.options.Options;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -18,10 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Ignore;
-import org.junit.rules.TemporaryFolder;
 import de.weltraumschaf.juberblog.BaseTestCase;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;

@@ -7,15 +7,11 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import static org.mockito.Mockito.mock;
 
 /**

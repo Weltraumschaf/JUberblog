@@ -2,14 +2,12 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.JUberblog;
-import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Properties;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
