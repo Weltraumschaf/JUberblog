@@ -15,12 +15,16 @@ public final class CreateOptions extends CommonCommandOptions implements Options
 
     static final String EXAMPLE = "TODO Write examples.";
 
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-c", "--config"}, description = "Config file to use.", required = true)
     private String config;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-t", "--title"}, description = "Title of the blog post.")
     private String title;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-d", "--draft"}, description = "Will mark the file name as draft.")
     private boolean draft;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-s", "--site"}, description = "Will create a site instead of a post.")
     private boolean site;
 

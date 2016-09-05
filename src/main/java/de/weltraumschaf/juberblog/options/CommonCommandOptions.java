@@ -10,6 +10,7 @@ import com.beust.jcommander.Parameter;
  */
 abstract class CommonCommandOptions extends CommonOptions {
 
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-v", "--verbose"}, description = "Tell you more.")
     private boolean verbose;
 

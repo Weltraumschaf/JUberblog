@@ -39,7 +39,7 @@ public class RendererTest extends BaseTestCase {
     }
 
     @Test
-    public void render() throws URISyntaxException, UnsupportedEncodingException, IOException {
+    public void render() throws URISyntaxException, IOException {
         final Renderer.RendererResult result = sut.render(
             createPath("posts/2014-05-30T21.29.20_This-is-the-First-Post.md"));
 

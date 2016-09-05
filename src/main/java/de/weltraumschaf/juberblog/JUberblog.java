@@ -195,25 +195,6 @@ public final class JUberblog implements Registry {
     }
 
     /**
-     * Finds location directory of blog.
-     *
-     * @param cliOptions must not be {@code null}
-     * @return never {@code null}
-     * @throws ApplicationException if location is not a directory
-     */
-    private static Path findLocationDir(final InstallOptions cliOptions) throws ApplicationException {
-        final Path locationDir = Paths.get(cliOptions.getLocation());
-
-        if (!Files.isDirectory(locationDir)) {
-            throw new ApplicationException(
-                ExitCodeImpl.FATAL,
-                String.format("Given location '%s' is not a valid directory!", cliOptions.getLocation()));
-        }
-
-        return locationDir;
-    }
-
-    /**
      * Creates template directory object.
      *
      * @param templateDir must not be {@code null}

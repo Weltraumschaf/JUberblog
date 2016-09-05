@@ -68,12 +68,8 @@ public class SubCommandBaseTest {
 
     private static class SubCommandBaseStub extends SubCommandBase {
 
-        public SubCommandBaseStub(JUberblog registry) {
+        SubCommandBaseStub(JUberblog registry) {
             super(registry);
-        }
-
-        @Override
-        protected void validateArguments() throws ApplicationException {
         }
 
         @Override

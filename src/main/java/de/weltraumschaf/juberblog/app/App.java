@@ -192,9 +192,8 @@ public final class App extends InvokableAdapter {
      * Throw bad CLI argument error with custom message.
      *
      * @param messageFormat additional error message
-     * @throws ApplicationException always
      */
-    private ApplicationException badArgumentError(final String messageFormat, final Command name, final Object... args) throws ApplicationException {
+    private ApplicationException badArgumentError(final String messageFormat, final Command name, final Object... args) {
         return badArgumentError(messageFormat, null, name, args);
     }
 
@@ -202,9 +201,8 @@ public final class App extends InvokableAdapter {
      * Throw a generic bad CLI argument error with exception for debug output the stack trace.
      *
      * @param ex may be {@code null}
-     * @throws ApplicationException always
      */
-    private ApplicationException badArgumentError(final ParameterException ex, final Command name) throws ApplicationException {
+    private ApplicationException badArgumentError(final ParameterException ex, final Command name) {
         return badArgumentError("Bad arguments (cause: %s)!", ex, name, ex.getMessage());
     }
 
@@ -213,9 +211,8 @@ public final class App extends InvokableAdapter {
      *
      * @param messageFormat additional error message
      * @param ex may be {@code null}
-     * @throws ApplicationException always
      */
-    private ApplicationException badArgumentError(final String messageFormat, final ParameterException ex, final Command name, final Object... args) throws ApplicationException {
+    private ApplicationException badArgumentError(final String messageFormat, final ParameterException ex, final Command name, final Object... args) {
         return new ApplicationException(ExitCodeImpl.BAD_ARGUMENT, errorMessage(messageFormat, name, args), ex);
     }
 

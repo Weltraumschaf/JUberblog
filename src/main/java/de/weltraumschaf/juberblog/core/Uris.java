@@ -34,9 +34,8 @@ public final class Uris {
      * Convenience constructor.
      *
      * @param config must not be {@code null}
-     * @throws URISyntaxException if {@link BlogConfiguration#getBaseUri()} is malformed
      */
-    public Uris(final BlogConfiguration config) throws URISyntaxException {
+    public Uris(final BlogConfiguration config) {
         this(config.getBaseUri());
     }
 
@@ -46,7 +45,7 @@ public final class Uris {
      * @param base must not be {@code null}
      * @throws URISyntaxException is {@code base} is malformed
      */
-    public Uris(final String base) throws URISyntaxException {
+    Uris(final String base) throws URISyntaxException {
         this(new URI(base));
     }
 

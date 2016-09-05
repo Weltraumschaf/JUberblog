@@ -14,14 +14,19 @@ public final class PublishOptions extends CommonCommandOptions implements Option
 
     static final String EXAMPLE = "TODO Write examples.";
 
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-c", "--config"}, description = "Config file to use.", required = true)
     private String config;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-p", "--purge"}, description = "Regenerate all blog posts.")
     private boolean purge;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-q", "--quiet"}, description = "Be quiet and don't post to social networks.")
     private boolean quiet;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-s", "--site"}, description = "Generate static sites.")
     private boolean site;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-d", "--draft"}, description = "Publish drafts.")
     private boolean draft;
 

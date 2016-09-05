@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class ScaffoldTest {
 
-    @Ignore
     @Test
+    @Ignore("TODO Write test")
     public void writeSomeTests() {}
 }

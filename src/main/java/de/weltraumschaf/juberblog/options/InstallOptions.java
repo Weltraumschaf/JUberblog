@@ -14,10 +14,13 @@ public final class InstallOptions extends CommonCommandOptions {
 
     static final String EXAMPLE = "TODO Write examples.";
 
+    @SuppressWarnings("CanBeFinal")
     @Parameter(names = {"-l", "--location"}, description = "Where to install the scaffold.", required = true)
     private String location = "";
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-f", "--force"}, description = "Force the installation which overwrites existing files.")
     private boolean force;
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-u", "--update"}, description = "Updates files which makes backup of existing files.")
     private boolean update;
 

@@ -10,6 +10,7 @@ import com.beust.jcommander.Parameter;
  */
 abstract class CommonOptions {
 
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"-h", "--help"}, description = "Show help.", help = true)
     private boolean help;
 
@@ -17,6 +18,7 @@ abstract class CommonOptions {
         return help;
     }
 
+    @SuppressWarnings("SameReturnValue")
     static String usage() {
         return "[-h|--help]";
     }

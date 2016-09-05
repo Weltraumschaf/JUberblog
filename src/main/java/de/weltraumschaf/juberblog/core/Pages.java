@@ -20,12 +20,12 @@ public final class Pages {
 
     private final List<Page> data = new ArrayList<>();
 
-    public boolean add(final Pages pages) {
-        return data.addAll(pages.data);
+    public void add(final Pages pages) {
+        data.addAll(pages.data);
     }
 
-    public boolean add(final Page page) {
-        return data.add(page);
+    public void add(final Page page) {
+        data.add(page);
     }
 
     public void sort(Comparator<? super Page> comparator) {

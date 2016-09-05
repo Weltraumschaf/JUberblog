@@ -44,11 +44,11 @@ public abstract class BaseTestCase {
         return Paths.get(getClass().getResource(base + name).toURI());
     }
 
-    protected final Directories createDirectories() throws IOException, URISyntaxException {
+    protected final Directories createDirectories() {
         return createDirectories(true);
     }
 
-    private Directories createDirectories(boolean createDirs) throws IOException, URISyntaxException {
+    private Directories createDirectories(boolean createDirs) {
         final File dataDir = new File(tmp.getRoot(), "data");
 
         if (createDirs) {
@@ -67,7 +67,7 @@ public abstract class BaseTestCase {
             outputDir.mkdir();
             new File(outputDir, Directories.POSTS_DIR_NAME).mkdir();
             new File(outputDir, Directories.SITES_DIR_NAME).mkdir();
-            File drafts = drafts = new File(outputDir, Directories.DRAFTS_DIR_NAME);
+            final File drafts = new File(outputDir, Directories.DRAFTS_DIR_NAME);
             drafts.mkdir();
             new File(drafts, Directories.POSTS_DIR_NAME).mkdir();
             new File(drafts, Directories.SITES_DIR_NAME).mkdir();

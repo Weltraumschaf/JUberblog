@@ -27,7 +27,6 @@ import java.nio.file.Path;
 public class CreateSubCommandTest extends BaseTestCase {
 
     private final TimeProvider time = mock(TimeProvider.class);
-    private CreateSubCommand sut;
 
     @Before
     public void prepareTimeProvider() {
@@ -128,17 +127,17 @@ public class CreateSubCommandTest extends BaseTestCase {
     }
 
     @Test
-    @Ignore
+    @Ignore("TODO Write test")
     public void createPost() {
     }
 
     @Test
-    @Ignore
+    @Ignore("TODO Write test")
     public void createSite_draft() {
     }
 
     @Test
-    @Ignore
+    @Ignore("TODO Write test")
     public void createSite() {
     }
 

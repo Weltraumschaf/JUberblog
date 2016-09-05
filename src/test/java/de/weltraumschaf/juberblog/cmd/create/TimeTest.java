@@ -2,6 +2,8 @@ package de.weltraumschaf.juberblog.cmd.create;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -33,9 +35,11 @@ public class TimeTest {
     }
 
     @Test
+    @Ignore("TODO Write test.")
     public void newProvider_neverNull() {}
 
     @Test
+    @Ignore("TODO Write test.")
     public void newProvider_alwaysNewInstance() {}
 
     @Test

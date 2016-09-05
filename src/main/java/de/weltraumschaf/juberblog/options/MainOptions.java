@@ -14,6 +14,7 @@ public final class MainOptions extends CommonOptions {
     static final String DESCRIPTION = "Commandline tool to manage your blog.";
     static final String EXAMPLE = "TODO Add some examples.";
 
+    @SuppressWarnings( {"CanBeFinal", "unused"})
     @Parameter(names = {"--version"}, description = "Show version.")
     private boolean version;
 
