@@ -20,24 +20,24 @@ public abstract class BaseTask<R, P> implements Task<R, P>, Registry {
     /**
      * Token type class of result from previous task.
      */
-    private final Class<P> typeForPreviusResult;
+    private final Class<P> typeForPreviousResult;
     private final Registry registry;
 
     /**
      * Dedicated constructor.
      *
-     * @param typeForPreviusResult must not be {@code null}
+     * @param typeForPreviousResult must not be {@code null}
      * @param registry must not be {@code null}
      */
-    public BaseTask(final Class<P> typeForPreviusResult, final Registry registry) {
+    public BaseTask(final Class<P> typeForPreviousResult, final Registry registry) {
         super();
-        this.typeForPreviusResult = Validate.notNull(typeForPreviusResult, "typeForPreviusResult");
+        this.typeForPreviousResult = Validate.notNull(typeForPreviousResult, "typeForPreviousResult");
         this.registry = Validate.notNull(registry, "registry");
     }
 
     @Override
-    public final Class<P> getDesiredTypeForPreviusResult() {
-        return typeForPreviusResult;
+    public final Class<P> getDesiredTypeForPreviousResult() {
+        return typeForPreviousResult;
     }
 
     protected final void println(final String message, final Object... args) {

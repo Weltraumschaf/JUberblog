@@ -210,7 +210,7 @@ public final class JUberblog implements Registry {
         if (!Files.isDirectory(locationDir)) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
-                String.format("Given location '%s' is not a valid direcotry!", cliOptions.getLocation()));
+                String.format("Given location '%s' is not a valid directory!", cliOptions.getLocation()));
         }
 
         return locationDir;

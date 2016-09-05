@@ -1,6 +1,6 @@
 * text=auto 
 
-# Archves
+# Archives
 *.tar.bz    binary -delta
 *.tar.bz2   binary -delta
 *.tar.gz    binary -delta

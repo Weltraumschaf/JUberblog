@@ -129,7 +129,7 @@ public class TemplatesTest {
 
     @Test
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
-    public void construct_withNullAscreateSiteOrPostTemplate() {
+    public void construct_withNullAsCreateSiteOrPostTemplate() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("createSiteOrPostTemplate");
 

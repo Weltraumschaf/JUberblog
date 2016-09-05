@@ -124,7 +124,7 @@ public abstract class BaseTestCase {
             .configuration(createConfig())
             .options(options)
             .io(createIo())
-            .verbose(createVervose())
+            .verbose(createVerbose())
             .fmd(createFmd())
             .version(createVersion())
             .product();
@@ -145,7 +145,7 @@ public abstract class BaseTestCase {
         return io;
     }
 
-    protected final Verbose createVervose() {
+    protected final Verbose createVerbose() {
         return new Verbose(false, mock(PrintStream.class));
     }
 

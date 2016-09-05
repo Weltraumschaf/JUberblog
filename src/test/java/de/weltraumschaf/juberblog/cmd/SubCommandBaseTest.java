@@ -26,7 +26,7 @@ public class SubCommandBaseTest {
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
-    public void constuctWithNullThrowsException() {
+    public void constructWithNullThrowsException() {
         new SubCommandBaseStub(null);
     }
 

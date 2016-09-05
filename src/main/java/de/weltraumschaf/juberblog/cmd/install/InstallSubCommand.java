@@ -84,7 +84,7 @@ public final class InstallSubCommand extends SubCommandBase {
     }
 
     /**
-     * Validate instalation directory.
+     * Validate installation directory.
      *
      * Validates that given string is not empty and is an existing directory.
      *

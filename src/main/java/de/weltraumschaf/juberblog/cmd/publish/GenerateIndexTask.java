@@ -39,7 +39,7 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
     }
 
     @Override
-    public Pages execute(Pages previusResult) throws Exception {
+    public Pages execute(Pages previousResult) throws Exception {
         println("Generate index...");
         final Fragment content = fmd().createFragemnt(
             templates().getIndexTemplate(),
@@ -56,14 +56,14 @@ public class GenerateIndexTask extends BaseTask<Pages, Pages> implements Task<Pa
         layout.assignVariable(TemplateVariables.BLOG_VERSION, version().getVersion());
         layout.assignVariable(TemplateVariables.DESCRIPTION, configuration().getDescription());
         layout.assignVariable(TemplateVariables.BASE_URL, configuration().getBaseUri());
-        previusResult.sort(new Page.SortByDateDescending());
-        content.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));
+        previousResult.sort(new Page.SortByDateDescending());
+        content.assignVariable(TemplateVariables.POSTS, previousResult.convert(new ForIndexConverter()));
         Files.write(
             directories().getOutput().resolve("index" + FileNameExtension.HTML.getExtension()),
             fmd().render(layout).getBytes(configuration().getEncoding())
         );
 
-        return previusResult;
+        return previousResult;
     }
 
     private static final class ForIndexConverter implements PageConverter {

@@ -30,8 +30,8 @@ public class BaseTaskTest {
     }
 
     @Test
-    public void getDesiredTypeForPreviusResult() {
-        assertThat(sut.getDesiredTypeForPreviusResult().getSimpleName(), is("Void"));
+    public void getDesiredTypeForPreviousResult() {
+        assertThat(sut.getDesiredTypeForPreviousResult().getSimpleName(), is("Void"));
     }
 
     private static class BaseTaskStub extends BaseTask<Void, Void> {
@@ -40,8 +40,8 @@ public class BaseTaskTest {
             this(Void.class);
         }
 
-        public BaseTaskStub(final Class<Void> typeForPreviusResult) throws ApplicationException {
-            super(typeForPreviusResult, JUberblog.generateWithDefaultConfig(new Options(), mock(IO.class)));
+        public BaseTaskStub(final Class<Void> typeForPreviousResult) throws ApplicationException {
+            super(typeForPreviousResult, JUberblog.generateWithDefaultConfig(new Options(), mock(IO.class)));
         }
 
         @Override
@@ -50,7 +50,7 @@ public class BaseTaskTest {
         }
 
         @Override
-        public Void execute(Void previusResult) throws Exception {
+        public Void execute(Void previousResult) throws Exception {
             return null;
         }
 

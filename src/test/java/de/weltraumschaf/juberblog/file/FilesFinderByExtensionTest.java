@@ -58,7 +58,7 @@ public class FilesFinderByExtensionTest extends BaseTestCase {
     }
 
     @Test
-    public void find_pathIsNotDirecotry() throws IOException {
+    public void find_pathIsNotDirectory() throws IOException {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("is not a directory");
 

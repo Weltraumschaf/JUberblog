@@ -34,7 +34,7 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
     }
 
     @Override
-    public Pages execute(final Pages previusResult) throws Exception {
+    public Pages execute(final Pages previousResult) throws Exception {
         final Publisher publisher = new Publisher(
             templates(),
             directories(),
@@ -44,8 +44,8 @@ public final class PublishTask extends BaseTask<Pages, Pages> implements Task<Pa
             verbose()
         );
 
-        previusResult.add(publisher.publish());
-        return previusResult;
+        previousResult.add(publisher.publish());
+        return previousResult;
     }
 
 }

@@ -16,9 +16,9 @@ public final class InstallOptions extends CommonCommandOptions {
 
     @Parameter(names = {"-l", "--location"}, description = "Where to install the scaffold.", required = true)
     private String location = "";
-    @Parameter(names = {"-f", "--force"}, description = "Force the installation which overwrites exsiting files.")
+    @Parameter(names = {"-f", "--force"}, description = "Force the installation which overwrites existing files.")
     private boolean force;
-    @Parameter(names = {"-u", "--update"}, description = "Updates files which makes backups of exisiting files.")
+    @Parameter(names = {"-u", "--update"}, description = "Updates files which makes backup of existing files.")
     private boolean update;
 
     public String getLocation() {

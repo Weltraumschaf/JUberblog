@@ -74,16 +74,16 @@ public class BlogConfigurationTest extends BaseTestCase {
 
     @Test
     public void validate() {
-        final Properties propes = BlogConfiguration.validate(createProperties());
+        final Properties config = BlogConfiguration.validate(createProperties());
 
-        assertThat(propes.getProperty(BlogConfiguration.DATA_DIR), is("/data"));
-        assertThat(propes.getProperty(BlogConfiguration.DESCRIPTION), is("Blog Description"));
-        assertThat(propes.getProperty(BlogConfiguration.ENCODING), is("utf-8"));
-        assertThat(propes.getProperty(BlogConfiguration.PUBLIC_DIR), is("/public"));
-        assertThat(propes.getProperty(BlogConfiguration.LANGUAGE), is("en"));
-        assertThat(propes.getProperty(BlogConfiguration.SITE_URI), is("http://uberblog.local/"));
-        assertThat(propes.getProperty(BlogConfiguration.TEMPLATE_DIR), is("/templates"));
-        assertThat(propes.getProperty(BlogConfiguration.TITLE), is("Blog Title"));
+        assertThat(config.getProperty(BlogConfiguration.DATA_DIR), is("/data"));
+        assertThat(config.getProperty(BlogConfiguration.DESCRIPTION), is("Blog Description"));
+        assertThat(config.getProperty(BlogConfiguration.ENCODING), is("utf-8"));
+        assertThat(config.getProperty(BlogConfiguration.PUBLIC_DIR), is("/public"));
+        assertThat(config.getProperty(BlogConfiguration.LANGUAGE), is("en"));
+        assertThat(config.getProperty(BlogConfiguration.SITE_URI), is("http://uberblog.local/"));
+        assertThat(config.getProperty(BlogConfiguration.TEMPLATE_DIR), is("/templates"));
+        assertThat(config.getProperty(BlogConfiguration.TITLE), is("Blog Title"));
     }
 
     @Test
@@ -147,9 +147,9 @@ public class BlogConfigurationTest extends BaseTestCase {
         config.remove(BlogConfiguration.TEMPLATE_DIR);
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The configuration property 'temlateDirectory' must not be empty or missing!");
+        thrown.expectMessage("The configuration property 'templateDirectory' must not be empty or missing!");
 
-        final Properties propes = BlogConfiguration.validate(config);
+        BlogConfiguration.validate(config);
     }
 
     @Test

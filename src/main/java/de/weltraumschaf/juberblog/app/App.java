@@ -75,19 +75,19 @@ public final class App extends InvokableAdapter {
                 invokable,
                 IOStreams.newDefault());
         } catch (final UnsupportedEncodingException ex) {
-            handleFatals(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
+            handleFatalErrors(invokable, ex, ExitCodeImpl.CANT_READ_IO_STREAMS, "Can't create IO streams!\n");
         }
     }
 
     /**
-     * Handles all not yet catched exceptions in main function.
+     * Handles all not yet caught exceptions in main function.
      *
      * @param invokable must not be {@code null}
      * @param cause must not be {@code null}
      * @param code must not be {@code null}
      * @param prefix must not be {@code null}
      */
-    private static void handleFatals(
+    private static void handleFatalErrors(
         final App invokable,
         final Throwable cause,
         final ExitCode code,

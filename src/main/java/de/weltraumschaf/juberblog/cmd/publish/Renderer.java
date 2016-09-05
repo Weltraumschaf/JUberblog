@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Orchestrates the whole two step template and preprocessing stuff to render a post or site.
+ * Orchestrates the whole two step template and pre processing stuff to render a post or site.
  *
  * <p>
  * Structure of template fragments:

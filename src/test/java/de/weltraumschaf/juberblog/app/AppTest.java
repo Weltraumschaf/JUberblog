@@ -188,10 +188,10 @@ public class AppTest extends IntegrationTestCase {
             + NL
             + "Options" + NL
             + NL
-            + "  -f, --force         Force the installation which overwrites exsiting files." + NL
+            + "  -f, --force         Force the installation which overwrites existing files." + NL
             + "  -h, --help          Show help." + NL
             + "  -l, --location      Where to install the scaffold." + NL
-            + "  -u, --update        Updates files which makes backups of exisiting files." + NL
+            + "  -u, --update        Updates files which makes backup of existing files." + NL
             + "  -v, --verbose       Tell you more.\n"
             + NL
             + "Example" + NL
@@ -214,10 +214,10 @@ public class AppTest extends IntegrationTestCase {
             + NL
             + "Options" + NL
             + NL
-            + "  -f, --force         Force the installation which overwrites exsiting files." + NL
+            + "  -f, --force         Force the installation which overwrites existing files." + NL
             + "  -h, --help          Show help." + NL
             + "  -l, --location      Where to install the scaffold." + NL
-            + "  -u, --update        Updates files which makes backups of exisiting files." + NL
+            + "  -u, --update        Updates files which makes backup of existing files." + NL
             + "  -v, --verbose       Tell you more.\n"
             + NL
             + "Example" + NL

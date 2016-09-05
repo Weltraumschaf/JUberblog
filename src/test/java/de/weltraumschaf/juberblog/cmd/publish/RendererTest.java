@@ -110,7 +110,7 @@ public class RendererTest extends BaseTestCase {
     }
 
     @Test
-    public void render_pathIsDirecotry() throws IOException {
+    public void render_pathIsDirectory() throws IOException {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("is a directory");
 

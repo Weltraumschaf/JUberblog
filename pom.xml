@@ -5,7 +5,7 @@
         - use "mvn versions:display-dependency-updates" to see what dependencies
           have updates available.
 
-        - use "mvn versions:display-plugin-updates" to see whan plugins have
+        - use "mvn versions:display-plugin-updates" to see when plugins have
           updates available.
     -->
     <modelVersion>4.0.0</modelVersion>

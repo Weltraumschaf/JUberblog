@@ -1,7 +1,7 @@
 package de.weltraumschaf.juberblog.cmd;
 
 /**
- * Implementations are a subcommand of the main application.
+ * Implementations are a sub command of the main application.
  *
  * @since 1.0.0
  * @author Sven Strittmatter

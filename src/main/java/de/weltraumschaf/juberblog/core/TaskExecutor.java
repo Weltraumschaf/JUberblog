@@ -73,7 +73,7 @@ public final class TaskExecutor {
         return Validate.notNull(result, "result")
                 .getClass()
                 .equals(
-                        Validate.notNull(task, "task").getDesiredTypeForPreviusResult());
+                        Validate.notNull(task, "task").getDesiredTypeForPreviousResult());
     }
 
     /**

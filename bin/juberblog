@@ -55,7 +55,7 @@ JAR="${PROGRAM_DIRECTORY}/juberblog.jar"
 
 if [ ! -f "${JAR}" ] ; then
     PROJECT_DIR=`dirname "${PROGRAM_DIRECTORY}"`
-    echo "ERROR: JAR file ${JAR} not pressent!"
+    echo "ERROR: JAR file ${JAR} not present!"
     echo "Invoke 'mvn clean install' in the project base directory: ${PROJECT_DIR}."
     exit 1
 fi

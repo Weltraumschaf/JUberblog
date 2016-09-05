@@ -56,7 +56,7 @@ public class JUberblog_BuilderTest extends BaseTestCase {
     }
 
     @Test
-    public void product_imutabilityBycopy() {
+    public void product_imutabilityByCopy() {
         final JUberblog.Builder sut = JUberblog.Builder.create();
         final JUberblog product = sut
                 .directories(directories)

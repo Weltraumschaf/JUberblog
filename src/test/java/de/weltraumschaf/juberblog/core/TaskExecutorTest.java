@@ -66,12 +66,12 @@ public class TaskExecutorTest {
         }
 
         @Override
-        public String execute(final Void previusResult) throws Exception {
+        public String execute(final Void previousResult) throws Exception {
             return execute();
         }
 
         @Override
-        public Class<Void> getDesiredTypeForPreviusResult() {
+        public Class<Void> getDesiredTypeForPreviousResult() {
             return Void.class;
         }
     }
@@ -84,12 +84,12 @@ public class TaskExecutorTest {
         }
 
         @Override
-        public String execute(final String previusResult) throws Exception {
+        public String execute(final String previousResult) throws Exception {
             return "SecondTask";
         }
 
         @Override
-        public Class<String> getDesiredTypeForPreviusResult() {
+        public Class<String> getDesiredTypeForPreviousResult() {
             return String.class;
         }
     }
@@ -102,12 +102,12 @@ public class TaskExecutorTest {
         }
 
         @Override
-        public Void execute(final String previusResult) throws Exception {
+        public Void execute(final String previousResult) throws Exception {
             return null;
         }
 
         @Override
-        public Class<String> getDesiredTypeForPreviusResult() {
+        public Class<String> getDesiredTypeForPreviousResult() {
             return String.class;
         }
     }

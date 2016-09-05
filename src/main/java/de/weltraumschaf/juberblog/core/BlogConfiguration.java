@@ -43,7 +43,7 @@ public final class BlogConfiguration {
     /**
      * Name of template directory property.
      */
-    public static final String TEMPLATE_DIR = "temlateDirectory";
+    public static final String TEMPLATE_DIR = "templateDirectory";
     /**
      * Name of published public directory property.
      */
