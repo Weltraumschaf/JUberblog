@@ -57,12 +57,14 @@ public class CopyDirectoryVisitorTest {
             strategy);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createSource() throws IOException {
         source.newFile("foo");
         source.newFile("bar");
         new File(source.newFolder("baz"), "snafu").createNewFile();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createTarget() throws IOException {
         target.newFile("foo");
         new File(target.newFolder("baz"), "snafu").createNewFile();

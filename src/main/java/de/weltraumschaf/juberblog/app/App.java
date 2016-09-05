@@ -87,6 +87,7 @@ public final class App extends InvokableAdapter {
      * @param code must not be {@code null}
      * @param prefix must not be {@code null}
      */
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     private static void handleFatalErrors(
         final App invokable,
         final Throwable cause,

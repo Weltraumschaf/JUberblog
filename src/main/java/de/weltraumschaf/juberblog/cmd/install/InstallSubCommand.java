@@ -46,7 +46,7 @@ public final class InstallSubCommand extends SubCommandBase {
             scaffold.setType(InstallationType.OVERWRITE);
         } else if (installOptions().isUpdate()) {
             scaffold.setType(InstallationType.BACKUP);
-        } else if (target.list().length > 0) {
+        } else if (null != target.list() && target.list().length > 0) {
             throw new ApplicationException(
                 ExitCodeImpl.FATAL,
                 "Target directory not empty! Use -f to force install or -u to update.");

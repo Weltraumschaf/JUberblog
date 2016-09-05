@@ -48,6 +48,7 @@ public abstract class BaseTestCase {
         return createDirectories(true);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private Directories createDirectories(boolean createDirs) {
         final File dataDir = new File(tmp.getRoot(), "data");
 

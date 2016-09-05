@@ -42,6 +42,7 @@ public class PublishTaskTest extends BaseTestCase {
         Files.copy(createPath("sites/2014-09-30T15.29.20_Site-Two.md"), registry.directories().getSitesData().resolve("2014-09-30T15.29.20_Site-Two.md"));
         final PublishTask sut = new PublishTask(registry, PageType.SITE);
 
+        // TODO Verify result.
         final Pages pages = sut.execute();
 
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath().resolve("public"));
