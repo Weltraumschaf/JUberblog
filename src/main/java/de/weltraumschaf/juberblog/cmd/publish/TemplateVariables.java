@@ -23,6 +23,7 @@ public enum TemplateVariables implements VariableName {
     LASTMOD("lastmod"),
     LINK("link"),
     LOC("loc"),
+    NAVIGATION("navi"),
     POSTS("posts"),
     PRIORITY("priority"),
     PUB_DATE("pubDate"),

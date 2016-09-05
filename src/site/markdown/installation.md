@@ -158,11 +158,7 @@ templates:
 2. Templates to create the Markdown templates for the raw data files: located in 
    subdirectory _create_.
 
-### HTML Templates
-
-#### Preprocessor Directive
-
-TODO
+### Templates
 
 #### feed.ftl
 
@@ -272,6 +268,36 @@ TODO
 
 #### post_or_site.md.ftl
 TODO
+
+## Create Content
+
+### Create Posts
+
+TODO
+
+### Create Sites
+
+TODO
+
+### Preprocessor Directives
+
+The content  files for posts and  sites support a preprocessor  directive to add
+some meta data:
+
+    <?juberblog
+        Navi:        some navigation
+        Description: some description.
+        Keywords:    some, keywords
+    ?>
+
+The syntax is  the same as for  XML preprocessor directives. So to  start it use
+`<?juberblog` and  to end the  directive use  `?>`. The directive  for JUberblog
+supports simple  key-value pairs. The  key must  not contain any  characters but
+letters and numbers. The  value may contain any word character.  The key and the
+value are separated by  a colon. Obviously you can't use the  colon in the value.
+A key value pair is separated by  newline. Also obviously you can't use newlines
+in  the  value.  The  key  values  will be  assigned  to  the  layout  template.
+`Description` and `Keywords` are used for the meta tags by default.
 
 [jdk]:          http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 [mvn]:          https://maven.apache.org/download.cgi

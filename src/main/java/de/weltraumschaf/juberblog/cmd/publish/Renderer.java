@@ -125,8 +125,10 @@ final class Renderer {
         layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());
         layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());
         layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());
+        // FIXME Assign all key values as is to the template.
         layout.assignVariable(TemplateVariables.DESCRIPTION, ""); // FIXME Add from key values.
         layout.assignVariable(TemplateVariables.KEYWORDS, ""); // FIXME Add from key values.
+        layout.assignVariable(TemplateVariables.NAVIGATION, ""); // FIXME Add from key values.
         fmd.register(processor);
 
         return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);
