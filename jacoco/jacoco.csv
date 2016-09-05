@@ -37,10 +37,10 @@ JUberblog,de.weltraumschaf.juberblog.cmd.publish,GenerateFeedTask,0,108,0,0,0,18
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,GenerateSitemapTask.ForSitemapConverter,0,54,0,2,0,10,0,3,0,2
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,GenerateIndexTask.ForIndexConverter,0,42,0,0,0,8,0,2,0,2
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,PublishSubCommand,16,50,2,0,3,12,1,2,0,2
-JUberblog,de.weltraumschaf.juberblog.cmd.publish,Renderer,0,197,0,4,0,29,0,4,0,2
+JUberblog,de.weltraumschaf.juberblog.cmd.publish,Renderer,0,202,0,4,0,30,0,4,0,2
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,Publisher.new Object() {...},2,17,0,0,0,1,0,1,0,1
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,GenerateSitemapTask,0,80,0,0,0,14,0,3,0,3
-JUberblog,de.weltraumschaf.juberblog.cmd.publish,TemplateVariables,9,246,0,0,0,26,2,3,2,3
+JUberblog,de.weltraumschaf.juberblog.cmd.publish,TemplateVariables,9,257,0,0,0,27,2,3,2,3
 JUberblog,de.weltraumschaf.juberblog.cmd.publish,Publisher,25,202,2,9,2,43,2,6,0,2
 JUberblog,de.weltraumschaf.juberblog.options,MainOptions,0,29,0,0,0,13,0,3,0,3
 JUberblog,de.weltraumschaf.juberblog.options,Options.new Object() {...},4,29,0,0,0,1,0,1,0,1

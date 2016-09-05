@@ -23,21 +23,22 @@ import de.weltraumschaf.freemarkerdown.VariableName;
 <span class="fc" id="L23">    LASTMOD(&quot;lastmod&quot;),</span>
 <span class="fc" id="L24">    LINK(&quot;link&quot;),</span>
 <span class="fc" id="L25">    LOC(&quot;loc&quot;),</span>
-<span class="fc" id="L26">    POSTS(&quot;posts&quot;),</span>
-<span class="fc" id="L27">    PRIORITY(&quot;priority&quot;),</span>
-<span class="fc" id="L28">    PUB_DATE(&quot;pubDate&quot;),</span>
-<span class="fc" id="L29">    TITLE(&quot;title&quot;),</span>
-<span class="fc" id="L30">    URLS(&quot;urls&quot;);</span>
+<span class="fc" id="L26">    NAVIGATION(&quot;navi&quot;),</span>
+<span class="fc" id="L27">    POSTS(&quot;posts&quot;),</span>
+<span class="fc" id="L28">    PRIORITY(&quot;priority&quot;),</span>
+<span class="fc" id="L29">    PUB_DATE(&quot;pubDate&quot;),</span>
+<span class="fc" id="L30">    TITLE(&quot;title&quot;),</span>
+<span class="fc" id="L31">    URLS(&quot;urls&quot;);</span>
 
     private final String variableName;
 
-<span class="fc" id="L34">    private TemplateVariables(String variableName) {</span>
-<span class="fc" id="L35">        this.variableName = variableName;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L35">    private TemplateVariables(String variableName) {</span>
+<span class="fc" id="L36">        this.variableName = variableName;</span>
+<span class="fc" id="L37">    }</span>
 
     @Override
     public String getVariableName() {
-<span class="fc" id="L40">        return variableName;</span>
+<span class="fc" id="L41">        return variableName;</span>
     }
 
 }

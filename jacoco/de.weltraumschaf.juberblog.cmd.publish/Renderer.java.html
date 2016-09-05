@@ -125,11 +125,13 @@ final class Renderer {
 <span class="fc" id="L125">        layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());</span>
 <span class="fc" id="L126">        layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());</span>
 <span class="fc" id="L127">        layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());</span>
-<span class="fc" id="L128">        layout.assignVariable(TemplateVariables.DESCRIPTION, &quot;&quot;); // FIXME Add from key values.</span>
-<span class="fc" id="L129">        layout.assignVariable(TemplateVariables.KEYWORDS, &quot;&quot;); // FIXME Add from key values.</span>
-<span class="fc" id="L130">        fmd.register(processor);</span>
+        // FIXME Assign all key values as is to the template.
+<span class="fc" id="L129">        layout.assignVariable(TemplateVariables.DESCRIPTION, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L130">        layout.assignVariable(TemplateVariables.KEYWORDS, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L131">        layout.assignVariable(TemplateVariables.NAVIGATION, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L132">        fmd.register(processor);</span>
 
-<span class="fc" id="L132">        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);</span>
+<span class="fc" id="L134">        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);</span>
     }
 
     /**
@@ -164,11 +166,11 @@ final class Renderer {
                 final String renderedContent,
                 final String markdown,
                 final Map&lt;String, String&gt; metaData) {
-<span class="fc" id="L167">            super();</span>
-<span class="fc" id="L168">            this.renderedContent = Validate.notNull(renderedContent, &quot;renderedContent&quot;);</span>
-<span class="fc" id="L169">            this.markdown = Validate.notNull(markdown, &quot;markdown&quot;);</span>
-<span class="fc" id="L170">            this.metaData = Maps.newHashMap(Validate.notNull(metaData, &quot;metaData&quot;));</span>
-<span class="fc" id="L171">        }</span>
+<span class="fc" id="L169">            super();</span>
+<span class="fc" id="L170">            this.renderedContent = Validate.notNull(renderedContent, &quot;renderedContent&quot;);</span>
+<span class="fc" id="L171">            this.markdown = Validate.notNull(markdown, &quot;markdown&quot;);</span>
+<span class="fc" id="L172">            this.metaData = Maps.newHashMap(Validate.notNull(metaData, &quot;metaData&quot;));</span>
+<span class="fc" id="L173">        }</span>
 
         /**
          * Get the rendered content.
@@ -176,7 +178,7 @@ final class Renderer {
          * @return never {@code null}
          */
         String getRenderedContent() {
-<span class="fc" id="L179">            return renderedContent;</span>
+<span class="fc" id="L181">            return renderedContent;</span>
         }
 
         /**
@@ -185,7 +187,7 @@ final class Renderer {
          * @return never {@code null}
          */
         String getMarkdown() {
-<span class="fc" id="L188">            return markdown;</span>
+<span class="fc" id="L190">            return markdown;</span>
         }
 
         /**
@@ -194,7 +196,7 @@ final class Renderer {
          * @return never {@code null}, unmodifiable
          */
         Map&lt;String, String&gt; getMetaData() {
-<span class="fc" id="L197">            return Collections.unmodifiableMap(metaData);</span>
+<span class="fc" id="L199">            return Collections.unmodifiableMap(metaData);</span>
         }
 
     }
@@ -202,21 +204,21 @@ final class Renderer {
     /**
      * Intercepts the rendering to collected the raw Markdown.
      */
-<span class="fc" id="L205">    private static final class GetUnprocessedMarkdown implements Interceptor {</span>
+<span class="fc" id="L207">    private static final class GetUnprocessedMarkdown implements Interceptor {</span>
 
         /**
          * Collected Markdown.
          */
-<span class="fc" id="L210">        private String markdown = &quot;&quot;;</span>
+<span class="fc" id="L212">        private String markdown = &quot;&quot;;</span>
 
         @Override
         public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
-<span class="fc" id="L214">            final String name = template.getName();</span>
+<span class="fc" id="L216">            final String name = template.getName();</span>
 
-<span class="fc bfc" id="L216" title="All 2 branches covered.">            if (TPL_NAME_CONTENT.equals(name)) {</span>
-<span class="fc" id="L217">                markdown = content;</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (TPL_NAME_CONTENT.equals(name)) {</span>
+<span class="fc" id="L219">                markdown = content;</span>
             }
-<span class="fc" id="L219">        }</span>
+<span class="fc" id="L221">        }</span>
 
         /**
          * Returns the raw Markdown.
@@ -224,7 +226,7 @@ final class Renderer {
          * @return never {@code null}
          */
         private String getMarkdown() {
-<span class="fc" id="L227">            return markdown;</span>
+<span class="fc" id="L229">            return markdown;</span>
         }
 
     }
