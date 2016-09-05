@@ -12,7 +12,6 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Verbose;
-import de.weltraumschaf.juberblog.options.InstallOptions;
 import de.weltraumschaf.juberblog.options.Options;
 import de.weltraumschaf.juberblog.options.OptionsWithConfig;
 import java.io.IOException;
