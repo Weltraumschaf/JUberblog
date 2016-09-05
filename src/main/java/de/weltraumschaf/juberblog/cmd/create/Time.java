@@ -6,7 +6,7 @@ package de.weltraumschaf.juberblog.cmd.create;
  * @since 1.0.0
  * @author Sven Strittmatter
  */
-public final class Time {
+final class Time {
 
     /**
      * Hidden for pure static factory.

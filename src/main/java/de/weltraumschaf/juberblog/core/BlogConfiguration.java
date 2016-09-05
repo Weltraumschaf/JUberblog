@@ -102,7 +102,7 @@ public final class BlogConfiguration {
      * @return never {@code null}
      * @throws IOException if configuration file can not be loaded
      */
-    static Properties load(final String filename) throws IOException {
+    private static Properties load(final String filename) throws IOException {
         Validate.notEmpty(filename, "filename");
         final Properties properties = new Properties();
 

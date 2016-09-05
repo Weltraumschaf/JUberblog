@@ -28,7 +28,7 @@ public class RendererTest extends BaseTestCase {
     @Rule
     public final TemporaryFolder tmp = new TemporaryFolder();
 
-    final Renderer sut = new Renderer(
+    private final Renderer sut = new Renderer(
         createPath(SCAFFOLD_PACKAGE_PREFIX + "layout.ftl"),
         createPath(SCAFFOLD_PACKAGE_PREFIX + "post.ftl"),
         BlogConfiguration.DEFAULT,

@@ -48,7 +48,7 @@ public abstract class BaseTestCase {
         return createDirectories(true);
     }
 
-    protected final Directories createDirectories(boolean createDirs) throws IOException, URISyntaxException {
+    private Directories createDirectories(boolean createDirs) throws IOException, URISyntaxException {
         final File dataDir = new File(tmp.getRoot(), "data");
 
         if (createDirs) {
@@ -109,7 +109,7 @@ public abstract class BaseTestCase {
         return createRegistry(true);
     }
 
-    protected final JUberblog createRegistry(final boolean createDirs) throws URISyntaxException, IOException {
+    private JUberblog createRegistry(final boolean createDirs) throws URISyntaxException, IOException {
         return createRegistry(createOptions(), createDirs);
     }
 
@@ -130,22 +130,22 @@ public abstract class BaseTestCase {
             .product();
     }
 
-    protected final Options createOptions() {
+    private Options createOptions() {
         return new Options();
     }
 
-    protected final FreeMarkerDown createFmd() {
+    private FreeMarkerDown createFmd() {
         return FreeMarkerDown.create("utf-8");
     }
 
-    protected final IO createIo() {
+    private IO createIo() {
         final IO io = mock(IO.class);
         when(io.getStderr()).thenReturn(mock(PrintStream.class));
         when(io.getStdout()).thenReturn(mock(PrintStream.class));
         return io;
     }
 
-    protected final Verbose createVerbose() {
+    private Verbose createVerbose() {
         return new Verbose(false, mock(PrintStream.class));
     }
 
