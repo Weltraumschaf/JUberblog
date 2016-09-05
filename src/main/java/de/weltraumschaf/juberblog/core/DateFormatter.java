@@ -42,15 +42,6 @@ public final class DateFormatter {
         /**
          * Publishing date format for RSS files.
          */
-        /**
-         * Publishing date format for RSS files.
-         */
-        /**
-         * Publishing date format for RSS files.
-         */
-        /**
-         * Publishing date format for RSS files.
-         */
         RSS_PUBLISH_DATE_FORMAT("EEE, dd MMM yyyy HH:mm:ss Z"),
         /**
          * DC publishing date format.
