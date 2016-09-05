@@ -261,7 +261,7 @@
                     <descriptorRefs>
                         <descriptorRefs>jar-with-dependencies</descriptorRefs>
                     </descriptorRefs>
-                    <finalName>${finalName}</finalName>
+                    <finalName>${project.build.finalName}</finalName>
                     <outputDirectory>${project.build.binDirectory}</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
