@@ -36,6 +36,7 @@ public final class InstallOptions extends CommonCommandOptions {
         return update;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     public static String usage() {
         return new StringBuilder()
             .append(Options.Command.INSTALL)

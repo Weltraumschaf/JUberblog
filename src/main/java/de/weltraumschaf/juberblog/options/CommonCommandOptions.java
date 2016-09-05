@@ -18,6 +18,7 @@ abstract class CommonCommandOptions extends CommonOptions {
         return verbose;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     static String usage() {
         return new StringBuilder()
             .append("[-v|--verbose]")

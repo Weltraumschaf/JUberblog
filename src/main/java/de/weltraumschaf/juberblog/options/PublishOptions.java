@@ -51,6 +51,7 @@ public final class PublishOptions extends CommonCommandOptions implements Option
         return draft;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     public static String usage() {
         return new StringBuilder()
             .append(Options.Command.PUBLISH)

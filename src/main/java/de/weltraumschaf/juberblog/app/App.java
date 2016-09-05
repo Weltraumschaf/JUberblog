@@ -224,6 +224,7 @@ public final class App extends InvokableAdapter {
      * @param args optional arguments for the message format string.
      * @return never {@code null} or empty
      */
+    @SuppressWarnings("StringBufferReplaceableByString")
     private String errorMessage(final String messageFormat, final Command name, final Object... args) {
         return new StringBuilder()
             .append(String.format(Validate.notEmpty(messageFormat, "messageFormat"), args))

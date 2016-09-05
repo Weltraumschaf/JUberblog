@@ -45,6 +45,7 @@ public final class CreateOptions extends CommonCommandOptions implements Options
         return site;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     public static String usage() {
         return new StringBuilder()
             .append(Command.CREATE)

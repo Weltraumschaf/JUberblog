@@ -22,6 +22,7 @@ public final class MainOptions extends CommonOptions {
         return version;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     public static String usage() {
         return new StringBuilder()
             .append(Command.CREATE)
