@@ -33,7 +33,7 @@ public enum FileNameExtension {
      *
      * @param fileNameExtension must not be {@code null} or empty
      */
-    private FileNameExtension(final String fileNameExtension) {
+    FileNameExtension(final String fileNameExtension) {
         this.extension = Validate.notEmpty(fileNameExtension, "fileNameExtension");
     }
 

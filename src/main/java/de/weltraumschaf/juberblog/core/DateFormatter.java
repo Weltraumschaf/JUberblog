@@ -59,7 +59,7 @@ public final class DateFormatter {
          *
          * @param pattern must not be {@code nul} or empty
          */
-        private Format(final String pattern) {
+        Format(final String pattern) {
             this.formatter = DateTimeFormat.forPattern(Validate.notEmpty(pattern, "pattern"));
         }
 

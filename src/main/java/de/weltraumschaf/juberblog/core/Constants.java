@@ -57,7 +57,7 @@ public enum Constants {
      *
      * @param value must not be {@code null}
      */
-    private Constants(final String value) {
+    Constants(final String value) {
         Validate.notNull(value, "Value must not be null!");
         this.value = value;
     }

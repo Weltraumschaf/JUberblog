@@ -32,7 +32,7 @@ public enum TemplateVariables implements VariableName {
 
     private final String variableName;
 
-    private TemplateVariables(String variableName) {
+    TemplateVariables(String variableName) {
         this.variableName = variableName;
     }
 

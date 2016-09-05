@@ -222,7 +222,7 @@ public final class Options {
     /**
      * Available commands.
      */
-    public static enum Command {
+    public enum Command {
 
         /**
          * Dummy for no command, but main program.
