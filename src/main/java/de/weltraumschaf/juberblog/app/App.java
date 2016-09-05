@@ -146,7 +146,7 @@ public final class App extends InvokableAdapter {
     /**
      * Executes a sub command named by fist CLI argument.
      *
-     * @param must not be {@code null}
+     * @param commandName must not be {@code null}
      * @throws Exception if anything went wrong
      */
     private void executeSubCommand(final Command commandName) throws Exception {

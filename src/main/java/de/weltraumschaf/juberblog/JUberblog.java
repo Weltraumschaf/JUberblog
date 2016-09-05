@@ -167,7 +167,6 @@ public final class JUberblog implements Registry {
     /**
      * Finds template directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
@@ -178,7 +177,6 @@ public final class JUberblog implements Registry {
     /**
      * Finds output directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
@@ -189,7 +187,6 @@ public final class JUberblog implements Registry {
     /**
      * Finds data directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */

@@ -82,7 +82,8 @@ final class Renderer {
      *
      * @param outerTemplate must not be {@code null}
      * @param innerTemplate must not be {@code null}
-     * @param encoding must not be {@code null} or empty
+     * @param configuration must not be {@code null}
+     * @param version must not be {@code null}
      * @throws IOException if templates can't be read
      */
     public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration, final Version version) throws IOException {
