@@ -20,7 +20,7 @@
             <bodyColumnClass>span9</bodyColumnClass>
             <topBarEnabled>false</topBarEnabled>
             <sideBarEnabled>true</sideBarEnabled>
-            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <sourceLineNumbersEnabled>false</sourceLineNumbersEnabled>
             <breadcrumbDivider>»</breadcrumbDivider>
 
             <gitHub>
