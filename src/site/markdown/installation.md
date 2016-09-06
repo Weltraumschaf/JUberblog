@@ -12,7 +12,7 @@ scratch.
 
 ### Download
 
-The prebuilt binary download is [here](download.html).
+The prebuilt binary download is [here](downloads.html).
 
 ### Build From Source
 
