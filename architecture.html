@@ -144,46 +144,88 @@
         <div id="bodyColumn"  class="span9" >
                                   
             <h1>Architecture</h1>
-<p><b>This is partial outdated and needs rewrite!</b></p>
+<p>Here you find a more detailed explanation of the basic concept behind JUberblog and some details about the implementation.</p>
 <div class="section">
-<h2><a name="Publishing_Concept"></a>Publishing Concept</h2>
+<h2><a name="The_Basic_Idea"></a>The Basic Idea</h2>
 <p>The publishing concept is very simple: The publish command crawls a configured directory for <a class="externalLink" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> files and converts them to static HTML in a web servers document root. So that&#x2019;s all. Nearly.</p>
-<p>What about versioning? No database at all? No, no database. In my opinion it make no sense to structure unrelational data like documents into a relational database scheme. Especially if I have to reassemble it from the tables back to a document on each page request. Then adding caching and such. why not saving documents as is: A document. In a file.</p>
-<p>I&#x2019;ve chosen the Markdown syntax for the files because it is more readable and easier to maintain than pure HTML. Also I&#x2019;ve added some basic template features (see below). And last but not least, if You really want versioning: Use Git or any other VCS for the directory where you save your Markdown files for the blog. You have full-blown version features with diff and so on.</p>
-<p>Ok, version is done by a VCS. What about automatic publishing of new posts? Easy going: Just use a system like cron or atd and at a periodic execution which runs the publisher.</p>
-<p><img src="images/concept_publish.png" alt="concept publish" /></p>
+<p>What about versioning? No database at all? No, no database. In my opinion it make no sense to structure unrelational data like documents into a relational database scheme. Especially if I have to reassemble it from the tables back to a document on each page request. Then adding caching and such. Why not saving documents as is: A document. In a file.</p>
+<p>I&#x2019;ve chosen the <a class="externalLink" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> syntax for the files because it is more readable and easier to maintain than pure HTML. Also I&#x2019;ve added some basic template features (see below). And last but not least, if You really want versioning: Use Git or any other VCS for the directory where you save your Markdown files for the blog. Then you will have full-blown version features with diff and so on.</p>
+<p>Ok, version is done by a VCS. What about automatic publishing of new posts? Easy going: Just use a system like <i>cron</i> or <i>atd</i> and at a periodic execution which runs the publisher.</p></div>
 <div class="section">
-<h3><a name="A_Default_Setup"></a>A Default Setup</h3>
-<p>All above sounds very easy and simple. But for some it might be to easy. So I give here an idea of a default setup:</p>
+<h2><a name="Publishing_Concepts"></a>Publishing Concepts</h2>
+<p>The basic publishing concept is shown in the image below:</p>
+<p><img src="images/concept_publish.png" alt="concept publish" /></p>
+<p>What does this show? </p>
+
+<ol style="list-style-type: decimal">
+  
+<li>You have a repository (git or such) in which you store your blog data:
+  
+<ul>
+    
+<li>blog posts, sites and drafts</li>
+    
+<li>CSS, JavaScript and Images</li>
+    
+<li>templates for generating the content</li>
+    
+<li><a class="externalLink" href="http://sass-lang.com/">SASS</a> files (optional)</li>
+    
+<li>whatever you need (optional)</li>
+  </ul></li>
+  
+<li>You have a web server
+  
+<ul>
+    
+<li>which has its own clone of the blog dat repo.</li>
+    
+<li>which points its document root to the <i>public</i> direcotry in this repo</li>
+  </ul></li>
+  
+<li>On that web server you have a <i>cron</i> or <i>atd</i> job running
+  
+<ul>
+    
+<li>which frequently pulls changes into the blog data repo</li>
+    
+<li>which periodically executes the <i>publish</i> sub command of JUberblog</li>
+  </ul></li>
+  
+<li>A local clone of the repository:
+  
+<ul>
+    
+<li>here you write your blog posts or sites</li>
+    
+<li>if ready you push to the remote and they will be published when the cron  jobs kick in</li>
+  </ul></li>
+</ol>
+<p>That&#x2019;s all.</p>
+<p>Of course you can imagine various scenarios:</p>
 
 <ul>
   
-<li>A central repository where you save your blog data (the whole scaffold  direcotry, except the configuration).</li>
+<li>All of this on a single machine.</li>
   
-<li>A server which
+<li>Host the repository somewehere else remote (GitHub, GitLab, gitolite etc.).</li>
   
-<ul>
-    
-<li>has a webserver which serves the <tt>public</tt> direcotry (or other configured)  from the scaffold.</li>
-    
-<li>has a cronjob which pulls the central repository (above) and runs the publihser against it.</li>
-  </ul></li>
-  
-<li>You write your posts on a local clone of the above repo and if you want to  puplish it: push to origin.</li>
-  
-<li>And if you want to scale up: Add more webservers with cornjobs behind a HTTP  load balancer</li>
-</ul></div></div>
+<li>Run the publishing on a different machine and rsync the generated content  (<i>public</i> direcotry) to one or more web server.</li>
+</ul></div>
 <div class="section">
 <h2><a name="Model"></a>Model</h2>
 <div class="section">
 <h3><a name="Data_Files"></a>Data Files</h3>
-<p>The pure blog data is stored in plain text files with <a class="externalLink" href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> with some useful extensions (see <a class="externalLink" href="https://github.com/sirthias/pegdown#introduction">Pegdown Processor</a> for details) and optional preprocessor blocks for meta data. The format is as follows:</p>
+<p>The pure blog data is stored in plain text files in <a class="externalLink" href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> with some useful extensions (see <a class="externalLink" href="https://github.com/sirthias/pegdown#introduction">Pegdown Processor</a> for details) and an optional preprocessor block for meta data. The format is as follows:</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">&lt;?juberblog
-    Navi: Projects
-    Description: My personal projects I'm working on
-    Keywords: Projects, Jenkins, Darcs
+    // Used for navigation.
+    navi: Projects
+    // Used for site description.
+    description: My personal projects I'm working on
+    // Used for site keywords.
+    keywords: Projects, Jenkins, Darcs
 ?&gt;
 ## The Headline
 
@@ -201,8 +243,9 @@ accusam et justo duo dolores et ea rebum.
 </pre></div></div></div>
 <div class="section">
 <h3><a name="Meta_Data"></a>Meta Data</h3>
-<p>Meta data in data files are stored in a preprocessor block (separated by <tt>&lt;?juberblog</tt> and <tt>?&gt;</tt>). Inside these blocks the preprocessor recognizes simple key value pairs.</p>
-<p>Syntax:</p>
+<p>Meta data in data files are stored in a pre processor block (separated by <tt>&lt;?juberblog</tt> and <tt>?&gt;</tt>). Inside these blocks the prep rocessor recognizes simple key value pairs.</p></div>
+<div class="section">
+<h3><a name="Pre_Processor_Grammar"></a>Pre Processor Grammar</h3>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">NL    = [ '\r' ] '\n' ;
@@ -211,20 +254,29 @@ NUM   = '0' .. '9' ;
 ALNUM = ALPHA | NUM ;
 
 metadata       = '&lt;?juberblog', NL, { key_value_pair NL }, '?&gt;' ;
+comment        = '//' [^NL]* NL ;
 key_value_pair = key, ':', value ;
 key            = ALNUM { ALNUM } ;
 value          = ANY_WORD, NL ;
-</pre></div></div></div>
+</pre></div></div>
+<p>You can add key values what you like. All key values from the pre processor will be assigned as variables to templates. But the these special ones are used internally for content generation:</p>
+
+<ul>
+  
+<li><tt>navi</tt>: This will be used to generate navigation links in the layout.</li>
+  
+<li><tt>description</tt>: This will be used as description in the meta of the layout and  the feed data.</li>
+  
+<li><tt>keywords</tt>: This will be used as keywords in the meta of the layout.</li>
+</ul></div>
 <div class="section">
 <h3><a name="Runtime_Model_Representation"></a>Runtime Model Representation</h3>
 <p>TODO</p>
 <p><img src="images/model.png" alt="model" /></p></div>
 <div class="section">
 <h3><a name="Templating"></a>Templating</h3>
-<p>TODO</p></div></div>
-<div class="section">
-<h2><a name="Template_And_Filter"></a>Template And Filter</h2>
-<p><img src="images/template_and_filters.png" alt="template and filters" /></p></div>
+<p>TODO</p>
+<p><img src="images/template_and_filters.png" alt="template and filters" /></p></div></div>
                   </div>
             </div>
           </div>
