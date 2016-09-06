@@ -266,9 +266,11 @@ $ git commit -m &quot;Initial commit.&quot;
 </ol>
 <div class="section">
 <h3><a name="Templates"></a>Templates</h3>
+<p>JUberblog brings some very basic templates to generate the static content. You can change them to adopt the static generated content to your own custom theme.</p>
 <div class="section">
 <h4><a name="feed.ftl"></a>feed.ftl</h4>
-<p>This is the template file which is used to generate the <a class="externalLink" href="https://en.wikipedia.org/wiki/RSS">RSS</a> feed XML. You should only change this template if you know what you do. The available template variables are:</p>
+<p>This is the template file which is used to generate the <a class="externalLink" href="https://en.wikipedia.org/wiki/RSS">RSS</a> feed XML. You should only change this template if you know what you do.</p>
+<p>The available template variables are:</p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -343,21 +345,21 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>description </td>
       
-<td>This comes from from the preprocessor directive </td>
+<td>This comes from from the preprocessor directive. </td>
     </tr>
     
 <tr class="b">
       
 <td>pubDate </td>
       
-<td>Publishing date in the format <tt>Fri, 19 Mar 2010 09:42:24 +0100</tt> </td>
+<td>Publishing date in the format <tt>Fri, 19 Mar 2010 09:42:24 +0100</tt>.</td>
     </tr>
     
 <tr class="a">
       
 <td>dcDate </td>
       
-<td>Publishing date in the format <tt>2010-03-19T09:42:24+01:00</tt> </td>
+<td>Publishing date in the format <tt>2010-03-19T09:42:24+01:00</tt>. </td>
     </tr>
   </tbody>
 </table></div>
@@ -455,21 +457,21 @@ $ git commit -m &quot;Initial commit.&quot;
       
 <td>description </td>
       
-<td>This comes from from the preprocessor directive </td>
+<td>This comes from from the preprocessor directive. </td>
     </tr>
     
 <tr class="a">
       
 <td>keywords </td>
       
-<td>This comes from from the preprocessor directive </td>
+<td>This comes from from the preprocessor directive. </td>
     </tr>
     
 <tr class="b">
       
 <td>encoding </td>
       
-<td>This is the encoding from your configuration </td>
+<td>This is the encoding from your configuration. </td>
     </tr>
     
 <tr class="a">
@@ -531,7 +533,6 @@ $ git commit -m &quot;Initial commit.&quot;
 <h4><a name="site.ftl"></a>site.ftl</h4>
 <p>This is the inner template for blog posts which will be inserted into <i>lauout.ftl</i> to the place where the variable <tt>${content}</tt> is placed. All variables which are available in <i>layout.ftl</i> are also available here.</p>
 <p>The available template variables are:</p>
-<p>The available template variables are:</p>
 
 <table border="0" class="table table-striped">
   <thead>
@@ -555,12 +556,106 @@ $ git commit -m &quot;Initial commit.&quot;
 </table></div>
 <div class="section">
 <h4><a name="site_map.ftl"></a>site_map.ftl</h4>
-<p>TODO</p></div></div>
+<p>This template is used to generate a <a class="externalLink" href="https://en.wikipedia.org/wiki/Sitemaps">site map XML</a> for better search engine indexing. You should only change this template if you know what you do.</p>
+<p>The available template variables are:</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>variable </th>
+      
+<th>description </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>encoding </td>
+      
+<td>This is the encoding from your configuration. </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>urls </td>
+      
+<td>This is a collection of objects representing al URLs of your blog. </td>
+    </tr>
+  </tbody>
+</table>
+<p>The objects in the list <i>urls</i> have the properties:</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>property </th>
+      
+<th>description </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>loc </td>
+      
+<td>The URL of the content. </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>lastmod </td>
+      
+<td>When the file was last published. </td>
+    </tr>
+    
+<tr class="b">
+      
+<td>changefreq </td>
+      
+<td>At the moment this is hardcoded to <i>daily</i> for posts and <i>weekly</i> for sites. </td>
+    </tr>
+    
+<tr class="a">
+      
+<td>priority </td>
+      
+<td>At the moment this is hardcoded to <i>0.8</i> for posts and <i>0.5</i> for sites. </td>
+    </tr>
+  </tbody>
+</table></div></div>
 <div class="section">
 <h3><a name="Markdown_Templates"></a>Markdown Templates</h3>
 <div class="section">
 <h4><a name="post_or_site.md.ftl"></a>post_or_site.md.ftl</h4>
-<p>TODO</p></div></div></div>
+<p>This template is used by the <tt>create</tt> sub command to produce an empty content file for you. It contains a pre processor block (see below) and the title given by the CLI options. There you place your content.</p>
+<p>The available template variables are:</p>
+
+<table border="0" class="table table-striped">
+  <thead>
+    
+<tr class="a">
+      
+<th>variable </th>
+      
+<th>description </th>
+    </tr>
+  </thead>
+  <tbody>
+    
+<tr class="b">
+      
+<td>title </td>
+      
+<td>The post/site title. </td>
+    </tr>
+  </tbody>
+</table></div></div></div>
 <div class="section">
 <h2><a name="Create_Content"></a>Create Content</h2>
 <div class="section">
@@ -575,9 +670,9 @@ $ git commit -m &quot;Initial commit.&quot;
 
 <div class="source">
 <div class="source"><pre class="prettyprint linenums">&lt;?juberblog
-    Navi:        some navigation
-    Description: some description.
-    Keywords:    some, keywords
+    navigation:  some navigation
+    description: some description.
+    keywords:    some, keywords
 ?&gt;
 </pre></div></div>
 <p>The syntax is the same as for XML preprocessor directives. So to start it use <tt>&lt;?juberblog</tt> and to end the directive use <tt>?&gt;</tt>. The directive for JUberblog supports simple key-value pairs. The key must not contain any characters but letters and numbers. The value may contain any word character. The key and the value are separated by a colon. Obviously you can&#x2019;t use the colon in the value. A key value pair is separated by newline. Also obviously you can&#x2019;t use newlines in the value. The key values will be assigned to the layout template. <tt>Description</tt> and <tt>Keywords</tt> are used for the meta tags by default.</p></div></div>
