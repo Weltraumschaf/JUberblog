@@ -18,8 +18,8 @@ with two dashes.
 
 The install  sub command creates  a scaffold directory  for your blog  data. The
 details    of   this    directory    is   described    in   the    [installation
-guide](install.html). Basically this  commands need only a  location as argument
-where to create the scaffold. The directory must exist.
+guide](installation.html).  Basically  this commands  need  only  a location  as
+argument where to create the scaffold. The directory must exist.
 
 The  other options  are only  for update  strategies: You  can either  force the
 installation which  means all  existing files  will be  overwritten. Or  you can
