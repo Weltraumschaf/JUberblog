@@ -160,11 +160,15 @@ templates:
 
 ### Templates
 
+JUberblog brings some  very basic templates to generate the  static content. You
+can change them to adopt the static generated content to your own custom theme.
+
 #### feed.ftl
 
 This is  the template file  which is used to  generate the [RSS][rss]  feed XML.
-You should  only change  this template if  you know what  you do.  The available
-template variables are:
+You should only change this template if you know what you do.
+
+The available template variables are:
 
 | variable        | description                                               |
 |-----------------|-----------------------------------------------------------|
@@ -179,9 +183,9 @@ The objects in the list _items_ have the properties:
 | property    | description                                                     |
 |-------------|-----------------------------------------------------------------|
 | title       | The title of the blog post.                                     |
-| description | This comes from from the preprocessor directive                 |
-| pubDate     | Publishing date in the format `Fri, 19 Mar 2010 09:42:24 +0100` |
-| dcDate      | Publishing date in the format `2010-03-19T09:42:24+01:00`       | 
+| description | This comes from from the preprocessor directive.                |
+| pubDate     | Publishing date in the format `Fri, 19 Mar 2010 09:42:24 +0100`.|
+| dcDate      | Publishing date in the format `2010-03-19T09:42:24+01:00`.      | 
 
 #### index.ftl
 
@@ -225,9 +229,9 @@ The available template variables are:
 
 | variable        | description                                           |
 |-----------------|-------------------------------------------------------|
-| description     | This comes from from the preprocessor directive       |
-| keywords        | This comes from from the preprocessor directive       |
-| encoding        | This is the encoding from your configuration          |
+| description     | This comes from from the preprocessor directive.      |
+| keywords        | This comes from from the preprocessor directive.      |
+| encoding        | This is the encoding from your configuration.         |
 | baseUrl         | This is the site URL from your configuration.         |
 | blogTitle       | This is the blog title from your configuration.       |
 | blogDescription | This is the blog description from your configuration. |
@@ -255,19 +259,44 @@ variables which are available in _layout.ftl_ are also available here.
 
 The available template variables are:
 
-The available template variables are:
-
 | variable | description                     |
 |----------|---------------------------------|
 | content  | The rendered blog post content. |
 
 #### site_map.ftl
-TODO
+
+This template  is used to generate  a [site map XML][sitemap]  for better search
+engine indexing. You should only change this template if you know what you do.
+
+The available template variables are:
+
+| variable | description                                                        |
+|----------|--------------------------------------------------------------------|
+| encoding | This is the encoding from your configuration.                      |
+| urls     | This is a collection of objects representing al URLs of your blog. |
+
+The objects in the list _urls_ have the properties:
+
+| property   | description                                                                  |
+|------------|------------------------------------------------------------------------------|
+| loc        | The URL of the content.                                                      |
+| lastmod    | When the file was last published.                                            |
+| changefreq | At the moment this is hardcoded to _daily_ for posts and _weekly_ for sites. |
+| priority   | At the moment this is hardcoded to _0.8_ for posts and _0.5_ for sites.      |
 
 ### Markdown Templates
 
 #### post_or_site.md.ftl
-TODO
+
+This template is  used by the `create`  sub command to produce  an empty content
+file for you. It contains a pre  processor block (see below) and the title given
+by the CLI options. There you place your content.
+
+The available template variables are:
+
+| variable | description                     |
+|----------|---------------------------------|
+| title    | The post/site title.            |
 
 ## Create Content
 
@@ -306,3 +335,4 @@ in  the  value.  The  key  values  will be  assigned  to  the  layout  template.
 [freemarker]:   http://freemarker.org/
 [rss]:          https://en.wikipedia.org/wiki/RSS
 [date-format]:  http://freemarker.org/docs/ref_builtins_date.html
+[sitemap]:      https://en.wikipedia.org/wiki/Sitemaps
