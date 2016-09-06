@@ -24,7 +24,7 @@ Ok, version  is done  by a VCS.  What about automatic  publishing of  new posts?
 Easy going:  Just use  a system  like cron or  atd and  at a  periodic execution
 which runs the publisher.
 
-<img alt="concept publish" src="images/concept_publish.png"/>
+![concept publish](images/concept_publish.png)
 
 ### A Default Setup
 
@@ -100,7 +100,8 @@ TODO
 
 ## Template And Filter
 
-<img alt="template and filters" src="images/template_and_filters.png"/>
+![template and filters](images/template_and_filters.png)
 
-[1]: http://daringfireball.net/projects/markdown/syntax
-[2]: https://github.com/sirthias/pegdown#introduction
+[1]:    http://daringfireball.net/projects/markdown/syntax
+[2]:    https://github.com/sirthias/pegdown#introduction
+[fmd]:  https://weltraumschaf.github.io/freemarkerdown/
