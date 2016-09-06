@@ -147,12 +147,12 @@
 <p>JUberbog is a pure command line tool. It provides subcommands. This means that invoking solely <tt>juberblog</tt> does almost nothing than show you some help or the version. To get some help invoke:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint linenums">$ juberblog -h
+<div class="source"><pre class="prettyprint">$ juberblog -h
 </pre></div></div>
 <p>The subcommands provided are: <tt>install</tt>, <tt>create</tt>, <tt>publish</tt>. To get help for a particular subcommand invoke:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint linenums">$ juberblog SUB_COMMAND -h
+<div class="source"><pre class="prettyprint">$ juberblog SUB_COMMAND -h
 </pre></div></div>
 <p>Most of the options are available as short option with one dash and long option with two dashes.</p>
 <div class="section">
@@ -162,18 +162,18 @@
 <p>For example to create a new blog data directory run:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint linenums">$ mkdir myblog
+<div class="source"><pre class="prettyprint">$ mkdir myblog
 $ juberblog install -l myblog
 </pre></div></div>
 <p>If there is a newer version of JUberblog which brings new scaffold files (templates, example config etc.) you can run:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint linenums">$ juberblog install -l myblog -f
+<div class="source"><pre class="prettyprint">$ juberblog install -l myblog -f
 </pre></div></div>
 <p>After that files may be changed or added. You can check this by your VCS, if you have the directory under version control. If you do not have the directory under version controll, which I do not recommend, you should use the <tt>-u</tt> option to update:</p>
 
 <div class="source">
-<div class="source"><pre class="prettyprint linenums">$ juberblog install -l myblog -u
+<div class="source"><pre class="prettyprint">$ juberblog install -l myblog -u
 </pre></div></div>
 <p>All files which would be overwritten are copied with a <tt>.bak</tt> suffix.</p></div>
 <div class="section">
