@@ -655,7 +655,15 @@ $ git commit -m &quot;Initial commit.&quot;
 <td>The post/site title. </td>
     </tr>
   </tbody>
-</table></div></div></div>
+</table></div></div>
+<div class="section">
+<h3><a name="Make_Custom_Style_With_SASS"></a>Make Custom Style With SASS</h3>
+<p>Of course you can style your blog with simple CSS. You only have to put the CSS files somewhere in your public folder served by the web server. Recommended and default is <i>public/css</i>. If you prefer another location you must change the link in the <i>layout.ftl</i>.</p>
+<p>But you can also use <a class="externalLink" href="http://sass-lang.com/">SASS</a>. For this use case there is a directory called <i>sass</i> in the freshly created scaffold data directory. It also brings a a [normalizer][normalizer] script which sets some sane defaults for all browser. To generate CSS you need <a class="externalLink" href="http://sass-lang.com/">SASS</a> installed and use this command from your scaffold dir:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">$ sassls sassc sass/main.scss public/css/main.css
+</pre></div></div></div></div>
 <div class="section">
 <h2><a name="Create_Content"></a>Create Content</h2>
 <div class="section">
