@@ -285,9 +285,9 @@ The content  files for posts and  sites support a preprocessor  directive to add
 some meta data:
 
     <?juberblog
-        Navi:        some navigation
-        Description: some description.
-        Keywords:    some, keywords
+        navigation:  some navigation
+        description: some description.
+        keywords:    some, keywords
     ?>
 
 The syntax is  the same as for  XML preprocessor directives. So to  start it use
