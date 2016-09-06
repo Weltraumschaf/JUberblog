@@ -1,6 +1,6 @@
 # Architecture
 
-An overview of the whole architecture.
+__This is partial outdated and needs rewrite!__
 
 ## Publishing Concept
 
