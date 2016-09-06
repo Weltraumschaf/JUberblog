@@ -1,60 +1,80 @@
 # Architecture
 
-__This is partial outdated and needs rewrite!__
+Here you find a more detailed  explanation of the basic concept behind JUberblog
+and some details about the implementation.
 
-## Publishing Concept
+## The Basic Idea
 
 The publishing concept  is very simple: The publish command  crawls a configured
-directory for  [Markdown][1] files  and converts  them to static  HTML in  a web
-servers document root. So that's all. Nearly.
+directory for [Markdown][markdown]  files and converts them to static  HTML in a
+web servers document root. So that's all. Nearly.
 
 What about  versioning? No database  at all? No, no  database. In my  opinion it
 make no  sense to structure unrelational  data like documents into  a relational
 database scheme. Especially if  I have to reassemble it from  the tables back to
-a document on  each page request. Then  adding caching and such.  why not saving
+a document on  each page request. Then  adding caching and such.  Why not saving
 documents as is: A document. In a file.
 
-I've chosen the  Markdown syntax for the  files because it is  more readable and
-easier to maintain than pure HTML.  Also I've added some basic template features
-(see below). And last  but not least, if You really want  versioning: Use Git or
-any other  VCS for  the directory  where you  save your  Markdown files  for the
-blog. You have full-blown version features with diff and so on.
+I've chosen  the [Markdown][markdown] syntax  for the  files because it  is more
+readable  and easier  to maintain  than pure  HTML. Also  I've added  some basic
+template  features (see  below). And  last  but not  least, if  You really  want
+versioning: Use  Git or  any other  VCS for  the directory  where you  save your
+Markdown files  for the  blog. Then  you will  have full-blown  version features
+with diff and so on.
 
 Ok, version  is done  by a VCS.  What about automatic  publishing of  new posts?
-Easy going:  Just use  a system  like cron or  atd and  at a  periodic execution
+Easy going: Just use  a system like _cron_ or _atd_ and  at a periodic execution
 which runs the publisher.
+
+## Publishing Concepts
+
+The basic publishing concept is shown in the image below:
 
 ![concept publish](images/concept_publish.png)
 
-### A Default Setup
+What does this show? 
 
-All above sounds  very easy and simple. But  for some it might be to  easy. So I
-give here an idea of a default setup:
+1. You have a repository (git or such) in which you store your blog data:
+    - blog posts, sites and drafts
+    - CSS, JavaScript and Images
+    - templates for generating the content
+    - [SASS][sass] files (optional)
+    - whatever you need (optional)
+2. You have a web server
+    - which has its own clone of the blog dat repo.
+    - which points its document root to the _public_ direcotry in this repo
+3. On that web server you have a _cron_ or _atd_ job running
+    - which frequently pulls changes into the blog data repo
+    - which periodically executes the _publish_ sub command of JUberblog
+4. A local clone of the repository:
+    - here you write your blog posts or sites
+    - if ready you push to the remote and they will  be published when the cron
+      jobs kick in
 
--  A central  repository  where you  save  your blog  data  (the whole  scaffold
-   direcotry, except the configuration).
-- A server which
-    - has a webserver  which serves the `public` direcotry (or other configured)
-      from the scaffold.
-     -  has a cronjob  which pulls the central  repository (above) and  runs the
-        publihser against it.  
-- You write  your posts on a  local clone of the  above repo and if  you want to
-  puplish it: push to origin.
-- And if you  want to scale up: Add more webservers with  cornjobs behind a HTTP
-  load balancer
+That's all.
+
+Of course you can imagine various scenarios:
+
+- All of this on a single machine.
+- Host the repository somewehere else remote (GitHub, GitLab, gitolite etc.).
+- Run  the publishing  on a  different machine and  rsync the  generated content
+  (_public_ direcotry) to one or more web server.
 
 ## Model
 
 ### Data Files
 
-The pure blog data is stored in  plain text files with [Markdown syntax][1] with
-some useful  extensions (see [Pegdown  Processor][2] for details)  and optional
-preprocessor blocks for meta data. The format is as follows:
+The pure blog data is stored  in plain text files in [Markdown syntax][markdown]
+with some useful  extensions (see [Pegdown Processor][pegdown]  for details) and
+an optional preprocessor block for meta data. The format is as follows:
 
     <?juberblog
-        Navi: Projects
-        Description: My personal projects I'm working on
-        Keywords: Projects, Jenkins, Darcs
+        // Used for navigation.
+        navi: Projects
+        // Used for site description.
+        description: My personal projects I'm working on
+        // Used for site keywords.
+        keywords: Projects, Jenkins, Darcs
     ?>
     ## The Headline
 
@@ -72,11 +92,11 @@ preprocessor blocks for meta data. The format is as follows:
 
 ### Meta Data
 
-Meta  data  in data  files  are  stored in  a  preprocessor  block (separated  by
-`<?juberblog` and `?>`). Inside these  blocks the preprocessor recognizes simple
-key value pairs.
+Meta  data in  data files  are stored  in a  pre processor  block (separated  by
+`<?juberblog`  and  `?>`). Inside  these  blocks  the prep  rocessor  recognizes
+simple key value pairs.
 
-Syntax:
+### Pre Processor Grammar
 
     NL    = [ '\r' ] '\n' ;
     ALPHA = 'a' .. 'Z' ;
@@ -84,9 +104,19 @@ Syntax:
     ALNUM = ALPHA | NUM ;
 
     metadata       = '<?juberblog', NL, { key_value_pair NL }, '?>' ;
+    comment        = '//' [^NL]* NL ;
     key_value_pair = key, ':', value ;
     key            = ALNUM { ALNUM } ;
     value          = ANY_WORD, NL ;
+
+You can  add key values  what you  like. All key  values from the  pre processor
+will be assigned as variables to templates.  But the these special ones are used
+internally for content generation:
+
+- `navi`: This will be used to generate navigation links in the layout.
+- `description`: This will be used as  description in the meta of the layout and
+  the feed data.
+- `keywords`: This will be used as keywords in the meta of the layout.
 
 ### Runtime Model Representation
 
@@ -98,10 +128,9 @@ TODO
 
 TODO
 
-## Template And Filter
-
 ![template and filters](images/template_and_filters.png)
 
-[1]:    http://daringfireball.net/projects/markdown/syntax
-[2]:    https://github.com/sirthias/pegdown#introduction
-[fmd]:  https://weltraumschaf.github.io/freemarkerdown/
+[markdown]: http://daringfireball.net/projects/markdown/syntax
+[pegdown]:  https://github.com/sirthias/pegdown#introduction
+[sass]:     http://sass-lang.com/
+[fmd]:      https://weltraumschaf.github.io/freemarkerdown/
