@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Orchestrates the whole two step template and preprocessing stuff to render a post or site.
+ * Orchestrates the whole two step template and pre processing stuff to render a post or site.
  *
  * &lt;p&gt;
  * Structure of template fragments:
@@ -82,19 +82,20 @@ final class Renderer {
      *
      * @param outerTemplate must not be {@code null}
      * @param innerTemplate must not be {@code null}
-     * @param encoding must not be {@code null} or empty
+     * @param configuration must not be {@code null}
+     * @param version must not be {@code null}
      * @throws IOException if templates can't be read
      */
     public Renderer(final Path outerTemplate, final Path innerTemplate, final BlogConfiguration configuration, final Version version) throws IOException {
-<span class="fc" id="L89">        super();</span>
-<span class="fc" id="L90">        this.configuration = Validate.notNull(configuration, &quot;configuration&quot;);</span>
-<span class="fc" id="L91">        this.version = Validate.notNull(version, &quot;version&quot;);</span>
-<span class="fc" id="L92">        this.fmd = FreeMarkerDown.create(configuration.getEncoding());</span>
-<span class="fc" id="L93">        this.layout = fmd.createLayout(outerTemplate, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);</span>
-<span class="fc" id="L94">        this.content = fmd.createLayout(innerTemplate, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);</span>
-<span class="fc" id="L95">        this.layout.assignTemplateModel(TPL_NAME_CONTENT, this.content);</span>
-<span class="fc" id="L96">        fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        this.configuration = Validate.notNull(configuration, &quot;configuration&quot;);</span>
+<span class="fc" id="L92">        this.version = Validate.notNull(version, &quot;version&quot;);</span>
+<span class="fc" id="L93">        this.fmd = FreeMarkerDown.create(configuration.getEncoding());</span>
+<span class="fc" id="L94">        this.layout = fmd.createLayout(outerTemplate, TPL_NAME_OUTER, RenderOptions.WITHOUT_MARKDOWN);</span>
+<span class="fc" id="L95">        this.content = fmd.createLayout(innerTemplate, TPL_NAME_INNER, RenderOptions.WITHOUT_MARKDOWN);</span>
+<span class="fc" id="L96">        this.layout.assignTemplateModel(TPL_NAME_CONTENT, this.content);</span>
+<span class="fc" id="L97">        fmd.register(interceptor, ExecutionPoint.BEFORE_RENDERING);</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Renders the given content fragment at given file location.
@@ -107,31 +108,31 @@ final class Renderer {
      * @throws IOException if content file can't be read
      */
     RendererResult render(final Path contentFile) throws IOException {
-<span class="fc" id="L110">        Validate.notNull(contentFile, &quot;content&quot;);</span>
+<span class="fc" id="L111">        Validate.notNull(contentFile, &quot;content&quot;);</span>
 
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (!Files.exists(contentFile)) {</span>
-<span class="fc" id="L113">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' does not exist!&quot;, contentFile));</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (!Files.exists(contentFile)) {</span>
+<span class="fc" id="L114">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' does not exist!&quot;, contentFile));</span>
         }
 
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (Files.isDirectory(contentFile)) {</span>
-<span class="fc" id="L117">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' is a directory!&quot;, contentFile));</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (Files.isDirectory(contentFile)) {</span>
+<span class="fc" id="L118">            throw new IllegalArgumentException(String.format(&quot;Given path '%s' is a directory!&quot;, contentFile));</span>
         }
 
-<span class="fc" id="L120">        keyValues.clear();</span>
-<span class="fc" id="L121">        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, TPL_NAME_CONTENT));</span>
-<span class="fc" id="L122">        layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());</span>
-<span class="fc" id="L123">        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());</span>
-<span class="fc" id="L124">        layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());</span>
-<span class="fc" id="L125">        layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());</span>
-<span class="fc" id="L126">        layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());</span>
-<span class="fc" id="L127">        layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());</span>
+<span class="fc" id="L121">        keyValues.clear();</span>
+<span class="fc" id="L122">        content.assignTemplateModel(TPL_NAME_CONTENT, fmd.createFragemnt(contentFile, TPL_NAME_CONTENT));</span>
+<span class="fc" id="L123">        layout.assignVariable(TemplateVariables.BLOG_DESCRIPTION, configuration.getDescription());</span>
+<span class="fc" id="L124">        layout.assignVariable(TemplateVariables.BLOG_TITLE, configuration.getTitle());</span>
+<span class="fc" id="L125">        layout.assignVariable(TemplateVariables.BASE_URL, configuration.getBaseUri());</span>
+<span class="fc" id="L126">        layout.assignVariable(TemplateVariables.BLOG_VERSION, version.getVersion());</span>
+<span class="fc" id="L127">        layout.assignVariable(TemplateVariables.LANGUAGE, configuration.getLanguage());</span>
+<span class="fc" id="L128">        layout.assignVariable(TemplateVariables.ENCODING, configuration.getEncoding());</span>
         // FIXME Assign all key values as is to the template.
-<span class="fc" id="L129">        layout.assignVariable(TemplateVariables.DESCRIPTION, &quot;&quot;); // FIXME Add from key values.</span>
-<span class="fc" id="L130">        layout.assignVariable(TemplateVariables.KEYWORDS, &quot;&quot;); // FIXME Add from key values.</span>
-<span class="fc" id="L131">        layout.assignVariable(TemplateVariables.NAVIGATION, &quot;&quot;); // FIXME Add from key values.</span>
-<span class="fc" id="L132">        fmd.register(processor);</span>
+<span class="fc" id="L130">        layout.assignVariable(TemplateVariables.DESCRIPTION, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L131">        layout.assignVariable(TemplateVariables.KEYWORDS, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L132">        layout.assignVariable(TemplateVariables.NAVIGATION, &quot;&quot;); // FIXME Add from key values.</span>
+<span class="fc" id="L133">        fmd.register(processor);</span>
 
-<span class="fc" id="L134">        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);</span>
+<span class="fc" id="L135">        return new RendererResult(fmd.render(layout), interceptor.getMarkdown(), keyValues);</span>
     }
 
     /**
@@ -166,11 +167,11 @@ final class Renderer {
                 final String renderedContent,
                 final String markdown,
                 final Map&lt;String, String&gt; metaData) {
-<span class="fc" id="L169">            super();</span>
-<span class="fc" id="L170">            this.renderedContent = Validate.notNull(renderedContent, &quot;renderedContent&quot;);</span>
-<span class="fc" id="L171">            this.markdown = Validate.notNull(markdown, &quot;markdown&quot;);</span>
-<span class="fc" id="L172">            this.metaData = Maps.newHashMap(Validate.notNull(metaData, &quot;metaData&quot;));</span>
-<span class="fc" id="L173">        }</span>
+<span class="fc" id="L170">            super();</span>
+<span class="fc" id="L171">            this.renderedContent = Validate.notNull(renderedContent, &quot;renderedContent&quot;);</span>
+<span class="fc" id="L172">            this.markdown = Validate.notNull(markdown, &quot;markdown&quot;);</span>
+<span class="fc" id="L173">            this.metaData = Maps.newHashMap(Validate.notNull(metaData, &quot;metaData&quot;));</span>
+<span class="fc" id="L174">        }</span>
 
         /**
          * Get the rendered content.
@@ -178,7 +179,7 @@ final class Renderer {
          * @return never {@code null}
          */
         String getRenderedContent() {
-<span class="fc" id="L181">            return renderedContent;</span>
+<span class="fc" id="L182">            return renderedContent;</span>
         }
 
         /**
@@ -187,7 +188,7 @@ final class Renderer {
          * @return never {@code null}
          */
         String getMarkdown() {
-<span class="fc" id="L190">            return markdown;</span>
+<span class="fc" id="L191">            return markdown;</span>
         }
 
         /**
@@ -196,7 +197,7 @@ final class Renderer {
          * @return never {@code null}, unmodifiable
          */
         Map&lt;String, String&gt; getMetaData() {
-<span class="fc" id="L199">            return Collections.unmodifiableMap(metaData);</span>
+<span class="fc" id="L200">            return Collections.unmodifiableMap(metaData);</span>
         }
 
     }
@@ -204,21 +205,21 @@ final class Renderer {
     /**
      * Intercepts the rendering to collected the raw Markdown.
      */
-<span class="fc" id="L207">    private static final class GetUnprocessedMarkdown implements Interceptor {</span>
+<span class="fc" id="L208">    private static final class GetUnprocessedMarkdown implements Interceptor {</span>
 
         /**
          * Collected Markdown.
          */
-<span class="fc" id="L212">        private String markdown = &quot;&quot;;</span>
+<span class="fc" id="L213">        private String markdown = &quot;&quot;;</span>
 
         @Override
         public void intercept(final ExecutionPoint point, final TemplateModel template, final String content) {
-<span class="fc" id="L216">            final String name = template.getName();</span>
+<span class="fc" id="L217">            final String name = template.getName();</span>
 
-<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (TPL_NAME_CONTENT.equals(name)) {</span>
-<span class="fc" id="L219">                markdown = content;</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">            if (TPL_NAME_CONTENT.equals(name)) {</span>
+<span class="fc" id="L220">                markdown = content;</span>
             }
-<span class="fc" id="L221">        }</span>
+<span class="fc" id="L222">        }</span>
 
         /**
          * Returns the raw Markdown.
@@ -226,7 +227,7 @@ final class Renderer {
          * @return never {@code null}
          */
         private String getMarkdown() {
-<span class="fc" id="L229">            return markdown;</span>
+<span class="fc" id="L230">            return markdown;</span>
         }
 
     }

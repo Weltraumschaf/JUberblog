@@ -14,25 +14,27 @@ import de.weltraumschaf.juberblog.options.Options.Command;
     static final String DESCRIPTION = &quot;Commandline tool to manage your blog.&quot;;
     static final String EXAMPLE = &quot;TODO Add some examples.&quot;;
 
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;--version&quot;}, description = &quot;Show version.&quot;)
     private boolean version;
 
     public boolean isVersion() {
-<span class="fc" id="L21">        return version;</span>
+<span class="fc" id="L22">        return version;</span>
     }
 
+    @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
     public static String usage() {
-<span class="fc" id="L25">        return new StringBuilder()</span>
-<span class="fc" id="L26">            .append(Command.CREATE)</span>
-<span class="fc" id="L27">            .append('|')</span>
-<span class="fc" id="L28">            .append(Command.INSTALL)</span>
+<span class="fc" id="L27">        return new StringBuilder()</span>
+<span class="fc" id="L28">            .append(Command.CREATE)</span>
 <span class="fc" id="L29">            .append('|')</span>
-<span class="fc" id="L30">            .append(Command.PUBLISH)</span>
-<span class="fc" id="L31">            .append(' ')</span>
-<span class="fc" id="L32">            .append(&quot;[--version]&quot;)</span>
+<span class="fc" id="L30">            .append(Command.INSTALL)</span>
+<span class="fc" id="L31">            .append('|')</span>
+<span class="fc" id="L32">            .append(Command.PUBLISH)</span>
 <span class="fc" id="L33">            .append(' ')</span>
-<span class="fc" id="L34">            .append(CommonOptions.usage())</span>
-<span class="fc" id="L35">            .toString();</span>
+<span class="fc" id="L34">            .append(&quot;[--version]&quot;)</span>
+<span class="fc" id="L35">            .append(' ')</span>
+<span class="fc" id="L36">            .append(CommonOptions.usage())</span>
+<span class="fc" id="L37">            .toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

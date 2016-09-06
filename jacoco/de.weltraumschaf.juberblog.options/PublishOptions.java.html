@@ -14,46 +14,52 @@ import com.beust.jcommander.Parameters;
 
     static final String EXAMPLE = &quot;TODO Write examples.&quot;;
 
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-c&quot;, &quot;--config&quot;}, description = &quot;Config file to use.&quot;, required = true)
     private String config;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-p&quot;, &quot;--purge&quot;}, description = &quot;Regenerate all blog posts.&quot;)
     private boolean purge;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-q&quot;, &quot;--quiet&quot;}, description = &quot;Be quiet and don't post to social networks.&quot;)
     private boolean quiet;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-s&quot;, &quot;--site&quot;}, description = &quot;Generate static sites.&quot;)
     private boolean site;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-d&quot;, &quot;--draft&quot;}, description = &quot;Publish drafts.&quot;)
     private boolean draft;
 
     @Override
     public String getConfig() {
-<span class="fc" id="L30">        return config;</span>
+<span class="fc" id="L35">        return config;</span>
     }
 
     public boolean isPurge() {
-<span class="fc" id="L34">        return purge;</span>
+<span class="fc" id="L39">        return purge;</span>
     }
 
     public boolean isQuiet() {
-<span class="fc" id="L38">        return quiet;</span>
+<span class="fc" id="L43">        return quiet;</span>
     }
 
     public boolean isSite() {
-<span class="fc" id="L42">        return site;</span>
+<span class="fc" id="L47">        return site;</span>
     }
 
     public boolean isDraft() {
-<span class="fc" id="L46">        return draft;</span>
+<span class="fc" id="L51">        return draft;</span>
     }
 
+    @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
     public static String usage() {
-<span class="fc" id="L50">        return new StringBuilder()</span>
-<span class="fc" id="L51">            .append(Options.Command.PUBLISH)</span>
-<span class="fc" id="L52">            .append(' ')</span>
-<span class="fc" id="L53">            .append(&quot;-c|--config &lt;file&gt; [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]&quot;)</span>
-<span class="fc" id="L54">            .append(' ')</span>
-<span class="fc" id="L55">            .append(CommonCommandOptions.usage())</span>
-<span class="fc" id="L56">            .toString();</span>
+<span class="fc" id="L56">        return new StringBuilder()</span>
+<span class="fc" id="L57">            .append(Options.Command.PUBLISH)</span>
+<span class="fc" id="L58">            .append(' ')</span>
+<span class="fc" id="L59">            .append(&quot;-c|--config &lt;file&gt; [-p|--purge] [-q|--quiet] [-s|--site] [-d|--draft]&quot;)</span>
+<span class="fc" id="L60">            .append(' ')</span>
+<span class="fc" id="L61">            .append(CommonCommandOptions.usage())</span>
+<span class="fc" id="L62">            .toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

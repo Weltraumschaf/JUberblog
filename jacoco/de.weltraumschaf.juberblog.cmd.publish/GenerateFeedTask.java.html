@@ -40,7 +40,7 @@ public final class GenerateFeedTask extends BaseTask&lt;Pages, Pages&gt; impleme
     }
 
     @Override
-    public Pages execute(final Pages previusResult) throws Exception {
+    public Pages execute(final Pages previousResult) throws Exception {
 <span class="fc" id="L44">        println(&quot;Generate feed...&quot;);</span>
 <span class="fc" id="L45">        final Fragment template = fmd().createFragemnt(</span>
 <span class="fc" id="L46">            templates().getFeedTemplate(),</span>
@@ -55,13 +55,13 @@ public final class GenerateFeedTask extends BaseTask&lt;Pages, Pages&gt; impleme
             TemplateVariables.LAST_BUILD_DATE,
 <span class="fc" id="L56">            DateFormatter.format(new DateTime(&quot;2014-12-08T20:17:00&quot;) // FIXME Change this.</span>
                 , Format.RSS_PUBLISH_DATE_FORMAT));
-<span class="fc" id="L58">        template.assignVariable(TemplateVariables.ITEMS, previusResult.convert(new ForFeedConverter()));</span>
+<span class="fc" id="L58">        template.assignVariable(TemplateVariables.ITEMS, previousResult.convert(new ForFeedConverter()));</span>
 
 <span class="fc" id="L60">        Files.write(directories().getOutput().resolve(&quot;feed&quot; + FileNameExtension.XML.getExtension()),</span>
 <span class="fc" id="L61">            fmd().render(template).getBytes(configuration().getEncoding())</span>
         );
 
-<span class="fc" id="L64">        return previusResult;</span>
+<span class="fc" id="L64">        return previousResult;</span>
     }
 
 <span class="fc" id="L67">    private static final class ForFeedConverter implements PageConverter {</span>

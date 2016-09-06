@@ -10,19 +10,21 @@ import com.beust.jcommander.Parameter;
  */
 <span class="fc" id="L11">abstract class CommonCommandOptions extends CommonOptions {</span>
 
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-v&quot;, &quot;--verbose&quot;}, description = &quot;Tell you more.&quot;)
     private boolean verbose;
 
     public final boolean isVerbose() {
-<span class="fc" id="L17">        return verbose;</span>
+<span class="fc" id="L18">        return verbose;</span>
     }
 
+    @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
     static String usage() {
-<span class="fc" id="L21">        return new StringBuilder()</span>
-<span class="fc" id="L22">            .append(&quot;[-v|--verbose]&quot;)</span>
-<span class="fc" id="L23">            .append(' ')</span>
-<span class="fc" id="L24">            .append(CommonOptions.usage())</span>
-<span class="fc" id="L25">            .toString();</span>
+<span class="fc" id="L23">        return new StringBuilder()</span>
+<span class="fc" id="L24">            .append(&quot;[-v|--verbose]&quot;)</span>
+<span class="fc" id="L25">            .append(' ')</span>
+<span class="fc" id="L26">            .append(CommonOptions.usage())</span>
+<span class="fc" id="L27">            .toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

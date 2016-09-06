@@ -10,15 +10,17 @@ import com.beust.jcommander.Parameter;
  */
 <span class="fc" id="L11">abstract class CommonOptions {</span>
 
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-h&quot;, &quot;--help&quot;}, description = &quot;Show help.&quot;, help = true)
     private boolean help;
 
     public final boolean isHelp() {
-<span class="fc" id="L17">        return help;</span>
+<span class="fc" id="L18">        return help;</span>
     }
 
+    @SuppressWarnings(&quot;SameReturnValue&quot;)
     static String usage() {
-<span class="fc" id="L21">        return &quot;[-h|--help]&quot;;</span>
+<span class="fc" id="L23">        return &quot;[-h|--help]&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

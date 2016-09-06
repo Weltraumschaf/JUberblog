@@ -12,7 +12,6 @@ import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.core.Verbose;
-import de.weltraumschaf.juberblog.options.InstallOptions;
 import de.weltraumschaf.juberblog.options.Options;
 import de.weltraumschaf.juberblog.options.OptionsWithConfig;
 import java.io.IOException;
@@ -56,8 +55,8 @@ public final class JUberblog implements Registry {
      * Use {@link Builder} instead.
      */
     private JUberblog() {
-<span class="fc" id="L59">        super();</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L58">        super();</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Copies the whole object.
@@ -65,56 +64,56 @@ public final class JUberblog implements Registry {
      * @return never {@code nul}, always new instance
      */
     private JUberblog copy() {
-<span class="fc" id="L68">        final JUberblog copy = new JUberblog();</span>
-<span class="fc" id="L69">        copy.cfg = cfg;</span>
-<span class="fc" id="L70">        copy.dirs = dirs;</span>
-<span class="fc" id="L71">        copy.io = io;</span>
-<span class="fc" id="L72">        copy.opt = opt;</span>
-<span class="fc" id="L73">        copy.tpls = tpls;</span>
-<span class="fc" id="L74">        copy.version = version;</span>
-<span class="fc" id="L75">        copy.fmd = fmd;</span>
-<span class="fc" id="L76">        copy.verbose = verbose;</span>
-<span class="fc" id="L77">        return copy;</span>
+<span class="fc" id="L67">        final JUberblog copy = new JUberblog();</span>
+<span class="fc" id="L68">        copy.cfg = cfg;</span>
+<span class="fc" id="L69">        copy.dirs = dirs;</span>
+<span class="fc" id="L70">        copy.io = io;</span>
+<span class="fc" id="L71">        copy.opt = opt;</span>
+<span class="fc" id="L72">        copy.tpls = tpls;</span>
+<span class="fc" id="L73">        copy.version = version;</span>
+<span class="fc" id="L74">        copy.fmd = fmd;</span>
+<span class="fc" id="L75">        copy.verbose = verbose;</span>
+<span class="fc" id="L76">        return copy;</span>
     }
 
     @Override
     public Directories directories() {
-<span class="fc" id="L82">        return dirs;</span>
+<span class="fc" id="L81">        return dirs;</span>
     }
 
     @Override
     public Templates templates() {
-<span class="fc" id="L87">        return tpls;</span>
+<span class="fc" id="L86">        return tpls;</span>
     }
 
     @Override
     public BlogConfiguration configuration() {
-<span class="fc" id="L92">        return cfg;</span>
+<span class="fc" id="L91">        return cfg;</span>
     }
 
     @Override
     public Options options() {
-<span class="fc" id="L97">        return opt;</span>
+<span class="fc" id="L96">        return opt;</span>
     }
 
     @Override
     public IO io() {
-<span class="fc" id="L102">        return io;</span>
+<span class="fc" id="L101">        return io;</span>
     }
 
     @Override
     public Version version() {
-<span class="fc" id="L107">        return version;</span>
+<span class="fc" id="L106">        return version;</span>
     }
 
     @Override
     public FreeMarkerDown fmd() {
-<span class="fc" id="L112">        return fmd;</span>
+<span class="fc" id="L111">        return fmd;</span>
     }
 
     @Override
     public Verbose verbose() {
-<span class="fc" id="L117">        return verbose;</span>
+<span class="fc" id="L116">        return verbose;</span>
     }
 
     /**
@@ -126,7 +125,7 @@ public final class JUberblog implements Registry {
      * @throws ApplicationException if not all objects can't be generated
      */
     public static JUberblog generateWithDefaultConfig(final Options cliOptions, final IO io) throws ApplicationException {
-<span class="fc" id="L129">        return generate(cliOptions, io, BlogConfiguration.DEFAULT);</span>
+<span class="fc" id="L128">        return generate(cliOptions, io, BlogConfiguration.DEFAULT);</span>
     }
 
     /**
@@ -139,81 +138,59 @@ public final class JUberblog implements Registry {
      * @throws ApplicationException if not all objects can't be generated
      */
     public static JUberblog generate(final Options cliOptions, final IO io, final BlogConfiguration configuration) throws ApplicationException {
-<span class="fc" id="L142">        final Path dataDir = findDataDir(configuration);</span>
-<span class="fc" id="L143">        final Path outputDir = findOutputDir(configuration);</span>
-<span class="fc" id="L144">        final Path templateDir = findTemplateDir(configuration);</span>
-<span class="fc" id="L145">        final FreeMarkerDown fmd = FreeMarkerDown.create(configuration.getEncoding());</span>
-<span class="fc" id="L146">        final Verbose verbose = new Verbose(cliOptions.isVerbose(), io.getStdout());</span>
-<span class="fc" id="L147">        final Version version = new Version(Constants.PACKAGE_BASE.toString() + &quot;/version.properties&quot;);</span>
+<span class="fc" id="L141">        final Path dataDir = findDataDir(configuration);</span>
+<span class="fc" id="L142">        final Path outputDir = findOutputDir(configuration);</span>
+<span class="fc" id="L143">        final Path templateDir = findTemplateDir(configuration);</span>
+<span class="fc" id="L144">        final FreeMarkerDown fmd = FreeMarkerDown.create(configuration.getEncoding());</span>
+<span class="fc" id="L145">        final Verbose verbose = new Verbose(cliOptions.isVerbose(), io.getStdout());</span>
+<span class="fc" id="L146">        final Version version = new Version(Constants.PACKAGE_BASE.toString() + &quot;/version.properties&quot;);</span>
 
         try {
-<span class="fc" id="L150">            version.load();</span>
-<span class="nc" id="L151">        } catch (IOException ex) {</span>
-<span class="nc" id="L152">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't load version properties!&quot;, ex);</span>
-<span class="fc" id="L153">        }</span>
+<span class="fc" id="L149">            version.load();</span>
+<span class="nc" id="L150">        } catch (IOException ex) {</span>
+<span class="nc" id="L151">            throw new ApplicationException(ExitCodeImpl.FATAL, &quot;Can't load version properties!&quot;, ex);</span>
+<span class="fc" id="L152">        }</span>
 
-<span class="fc" id="L155">        return JUberblog.Builder.create()</span>
-<span class="fc" id="L156">            .directories(createDirs(dataDir, outputDir))</span>
-<span class="fc" id="L157">            .templates(createTemplate(templateDir))</span>
-<span class="fc" id="L158">            .configuration(configuration)</span>
-<span class="fc" id="L159">            .options(cliOptions)</span>
-<span class="fc" id="L160">            .io(io)</span>
-<span class="fc" id="L161">            .fmd(fmd)</span>
-<span class="fc" id="L162">            .verbose(verbose)</span>
-<span class="fc" id="L163">            .version(version)</span>
-<span class="fc" id="L164">            .product();</span>
+<span class="fc" id="L154">        return JUberblog.Builder.create()</span>
+<span class="fc" id="L155">            .directories(createDirs(dataDir, outputDir))</span>
+<span class="fc" id="L156">            .templates(createTemplate(templateDir))</span>
+<span class="fc" id="L157">            .configuration(configuration)</span>
+<span class="fc" id="L158">            .options(cliOptions)</span>
+<span class="fc" id="L159">            .io(io)</span>
+<span class="fc" id="L160">            .fmd(fmd)</span>
+<span class="fc" id="L161">            .verbose(verbose)</span>
+<span class="fc" id="L162">            .version(version)</span>
+<span class="fc" id="L163">            .product();</span>
     }
 
     /**
      * Finds template directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
     private static Path findTemplateDir(final BlogConfiguration configuration) {
-<span class="fc" id="L175">        return Paths.get(configuration.getTemplateDir());</span>
+<span class="fc" id="L173">        return Paths.get(configuration.getTemplateDir());</span>
     }
 
     /**
      * Finds output directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
     private static Path findOutputDir(final BlogConfiguration configuration) {
-<span class="fc" id="L186">        return Paths.get(configuration.getHtdocs());</span>
+<span class="fc" id="L183">        return Paths.get(configuration.getHtdocs());</span>
     }
 
     /**
      * Finds data directory based on location of blog.
      *
-     * @param locationDir must not be {@code null}
      * @param configuration must not be {@code null}
      * @return never {@code null}
      */
     private static Path findDataDir(final BlogConfiguration configuration) {
-<span class="fc" id="L197">        return Paths.get(configuration.getDataDir());</span>
-    }
-
-    /**
-     * Finds location directory of blog.
-     *
-     * @param cliOptions must not be {@code null}
-     * @return never {@code null}
-     * @throws ApplicationException if location is not a directory
-     */
-    private static Path findLocationDir(final InstallOptions cliOptions) throws ApplicationException {
-<span class="nc" id="L208">        final Path locationDir = Paths.get(cliOptions.getLocation());</span>
-
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (!Files.isDirectory(locationDir)) {</span>
-<span class="nc" id="L211">            throw new ApplicationException(</span>
-                ExitCodeImpl.FATAL,
-<span class="nc" id="L213">                String.format(&quot;Given location '%s' is not a valid direcotry!&quot;, cliOptions.getLocation()));</span>
-        }
-
-<span class="nc" id="L216">        return locationDir;</span>
+<span class="fc" id="L193">        return Paths.get(configuration.getDataDir());</span>
     }
 
     /**
@@ -223,14 +200,14 @@ public final class JUberblog implements Registry {
      * @return never {@code null}
      */
     private static Templates createTemplate(final Path templateDir) {
-<span class="fc" id="L226">        return new Templates(</span>
-<span class="fc" id="L227">            templateDir.resolve(&quot;layout.ftl&quot;),</span>
-<span class="fc" id="L228">            templateDir.resolve(&quot;post.ftl&quot;),</span>
-<span class="fc" id="L229">            templateDir.resolve(&quot;site.ftl&quot;),</span>
-<span class="fc" id="L230">            templateDir.resolve(&quot;feed.ftl&quot;),</span>
-<span class="fc" id="L231">            templateDir.resolve(&quot;index.ftl&quot;),</span>
-<span class="fc" id="L232">            templateDir.resolve(&quot;site_map.ftl&quot;),</span>
-<span class="fc" id="L233">            templateDir.resolve(&quot;create/post_or_site.md.ftl&quot;));</span>
+<span class="fc" id="L203">        return new Templates(</span>
+<span class="fc" id="L204">            templateDir.resolve(&quot;layout.ftl&quot;),</span>
+<span class="fc" id="L205">            templateDir.resolve(&quot;post.ftl&quot;),</span>
+<span class="fc" id="L206">            templateDir.resolve(&quot;site.ftl&quot;),</span>
+<span class="fc" id="L207">            templateDir.resolve(&quot;feed.ftl&quot;),</span>
+<span class="fc" id="L208">            templateDir.resolve(&quot;index.ftl&quot;),</span>
+<span class="fc" id="L209">            templateDir.resolve(&quot;site_map.ftl&quot;),</span>
+<span class="fc" id="L210">            templateDir.resolve(&quot;create/post_or_site.md.ftl&quot;));</span>
     }
 
     /**
@@ -241,7 +218,7 @@ public final class JUberblog implements Registry {
      * @return never {@code null}
      */
     private static Directories createDirs(final Path dataDir, final Path outputDir) {
-<span class="fc" id="L244">        return new Directories(dataDir, outputDir);</span>
+<span class="fc" id="L221">        return new Directories(dataDir, outputDir);</span>
     }
 
     /**
@@ -252,25 +229,25 @@ public final class JUberblog implements Registry {
      * @throws ApplicationException if file can't be loaded
      */
     public static BlogConfiguration generateConfiguration(final OptionsWithConfig cliOptions) throws ApplicationException {
-<span class="fc" id="L255">        final Path configFile = Paths.get(Validate.notNull(cliOptions, &quot;cliOptions&quot;).getConfig());</span>
+<span class="fc" id="L232">        final Path configFile = Paths.get(Validate.notNull(cliOptions, &quot;cliOptions&quot;).getConfig());</span>
 
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (!Files.isRegularFile(configFile)) {</span>
-<span class="nc" id="L258">            throw new ApplicationException(</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (!Files.isRegularFile(configFile)) {</span>
+<span class="nc" id="L235">            throw new ApplicationException(</span>
                 ExitCodeImpl.FATAL,
-<span class="nc" id="L260">                String.format(&quot;Can't read config file '%s'!&quot;, cliOptions.getConfig()));</span>
+<span class="nc" id="L237">                String.format(&quot;Can't read config file '%s'!&quot;, cliOptions.getConfig()));</span>
         }
 
         final BlogConfiguration configuration;
 
         try {
-<span class="fc" id="L266">            configuration = new BlogConfiguration(configFile.toString());</span>
-<span class="nc" id="L267">        } catch (final IOException ex) {</span>
-<span class="nc" id="L268">            throw new ApplicationException(</span>
+<span class="fc" id="L243">            configuration = new BlogConfiguration(configFile.toString());</span>
+<span class="nc" id="L244">        } catch (final IOException ex) {</span>
+<span class="nc" id="L245">            throw new ApplicationException(</span>
                 ExitCodeImpl.FATAL,
-<span class="nc" id="L270">                String.format(&quot;Error during read of config file '%s'!&quot;, cliOptions.getConfig()));</span>
-<span class="fc" id="L271">        }</span>
+<span class="nc" id="L247">                String.format(&quot;Error during read of config file '%s'!&quot;, cliOptions.getConfig()));</span>
+<span class="fc" id="L248">        }</span>
 
-<span class="fc" id="L273">        return configuration;</span>
+<span class="fc" id="L250">        return configuration;</span>
     }
 
     /**
@@ -281,14 +258,14 @@ public final class JUberblog implements Registry {
         /**
          * Holds the build values.
          */
-<span class="fc" id="L284">        private final JUberblog holder = new JUberblog();</span>
+<span class="fc" id="L261">        private final JUberblog holder = new JUberblog();</span>
 
         /**
          * Use {@link #create()} instead.
          */
         private Builder() {
-<span class="fc" id="L290">            super();</span>
-<span class="fc" id="L291">        }</span>
+<span class="fc" id="L267">            super();</span>
+<span class="fc" id="L268">        }</span>
 
         /**
          * Creates builder.
@@ -296,7 +273,7 @@ public final class JUberblog implements Registry {
          * @return never {@code null}, always new instance
          */
         public static Builder create() {
-<span class="fc" id="L299">            return new Builder();</span>
+<span class="fc" id="L276">            return new Builder();</span>
         }
 
         /**
@@ -306,8 +283,8 @@ public final class JUberblog implements Registry {
          * @return never {@code null}
          */
         public Builder directories(final Directories dirs) {
-<span class="fc" id="L309">            holder.dirs = Validate.notNull(dirs, &quot;dirs&quot;);</span>
-<span class="fc" id="L310">            return this;</span>
+<span class="fc" id="L286">            holder.dirs = Validate.notNull(dirs, &quot;dirs&quot;);</span>
+<span class="fc" id="L287">            return this;</span>
         }
 
         /**
@@ -317,8 +294,8 @@ public final class JUberblog implements Registry {
          * @return never {@code null}
          */
         public Builder templates(final Templates tpls) {
-<span class="fc" id="L320">            holder.tpls = Validate.notNull(tpls, &quot;tpls&quot;);</span>
-<span class="fc" id="L321">            return this;</span>
+<span class="fc" id="L297">            holder.tpls = Validate.notNull(tpls, &quot;tpls&quot;);</span>
+<span class="fc" id="L298">            return this;</span>
         }
 
         /**
@@ -328,8 +305,8 @@ public final class JUberblog implements Registry {
          * @return never {@code null}
          */
         public Builder configuration(final BlogConfiguration cfg) {
-<span class="fc" id="L331">            holder.cfg = Validate.notNull(cfg, &quot;cfg&quot;);</span>
-<span class="fc" id="L332">            return this;</span>
+<span class="fc" id="L308">            holder.cfg = Validate.notNull(cfg, &quot;cfg&quot;);</span>
+<span class="fc" id="L309">            return this;</span>
         }
 
         /**
@@ -339,8 +316,8 @@ public final class JUberblog implements Registry {
          * @return never {@code null}
          */
         public Builder options(final Options opt) {
-<span class="fc" id="L342">            holder.opt = Validate.notNull(opt, &quot;opt&quot;);</span>
-<span class="fc" id="L343">            return this;</span>
+<span class="fc" id="L319">            holder.opt = Validate.notNull(opt, &quot;opt&quot;);</span>
+<span class="fc" id="L320">            return this;</span>
         }
 
         /**
@@ -350,23 +327,23 @@ public final class JUberblog implements Registry {
          * @return never {@code null}
          */
         public Builder io(final IO io) {
-<span class="fc" id="L353">            holder.io = Validate.notNull(io, &quot;io&quot;);</span>
-<span class="fc" id="L354">            return this;</span>
+<span class="fc" id="L330">            holder.io = Validate.notNull(io, &quot;io&quot;);</span>
+<span class="fc" id="L331">            return this;</span>
         }
 
         public Builder verbose(final Verbose verbose) {
-<span class="fc" id="L358">            holder.verbose = Validate.notNull(verbose, &quot;verbose&quot;);</span>
-<span class="fc" id="L359">            return this;</span>
+<span class="fc" id="L335">            holder.verbose = Validate.notNull(verbose, &quot;verbose&quot;);</span>
+<span class="fc" id="L336">            return this;</span>
         }
 
         public Builder fmd(final FreeMarkerDown fmd) {
-<span class="fc" id="L363">            holder.fmd = Validate.notNull(fmd, &quot;fmd&quot;);</span>
-<span class="fc" id="L364">            return this;</span>
+<span class="fc" id="L340">            holder.fmd = Validate.notNull(fmd, &quot;fmd&quot;);</span>
+<span class="fc" id="L341">            return this;</span>
         }
 
         public Builder version(final Version version) {
-<span class="fc" id="L368">            holder.version = Validate.notNull(version, &quot;version&quot;);</span>
-<span class="fc" id="L369">            return this;</span>
+<span class="fc" id="L345">            holder.version = Validate.notNull(version, &quot;version&quot;);</span>
+<span class="fc" id="L346">            return this;</span>
         }
 
         /**
@@ -375,7 +352,7 @@ public final class JUberblog implements Registry {
          * @return never {@code null}, always new instance
          */
         public JUberblog product() {
-<span class="fc" id="L378">            return validate(holder.copy());</span>
+<span class="fc" id="L355">            return validate(holder.copy());</span>
         }
 
         /**
@@ -385,13 +362,13 @@ public final class JUberblog implements Registry {
          * @return the validated object itself
          */
         private JUberblog validate(final JUberblog product) {
-<span class="fc" id="L388">            Validate.notNull(product, &quot;product&quot;);</span>
-<span class="fc" id="L389">            notNull(product.cfg, &quot;Configuration must not be null! Call Builder#configuration(cfg) first.&quot;);</span>
-<span class="fc" id="L390">            notNull(product.dirs, &quot;Directories must not be null! Call Builder#directories(dirs) first.&quot;);</span>
-<span class="fc" id="L391">            notNull(product.io, &quot;I/O must not be null! Call Builder#io(io) first.&quot;);</span>
-<span class="fc" id="L392">            notNull(product.opt, &quot;Options must not be null! Call Builder#options(opt) first.&quot;);</span>
-<span class="fc" id="L393">            notNull(product.tpls, &quot;Templates must not be null! Call Builder#templates(tpls) first.&quot;);</span>
-<span class="fc" id="L394">            return product;</span>
+<span class="fc" id="L365">            Validate.notNull(product, &quot;product&quot;);</span>
+<span class="fc" id="L366">            notNull(product.cfg, &quot;Configuration must not be null! Call Builder#configuration(cfg) first.&quot;);</span>
+<span class="fc" id="L367">            notNull(product.dirs, &quot;Directories must not be null! Call Builder#directories(dirs) first.&quot;);</span>
+<span class="fc" id="L368">            notNull(product.io, &quot;I/O must not be null! Call Builder#io(io) first.&quot;);</span>
+<span class="fc" id="L369">            notNull(product.opt, &quot;Options must not be null! Call Builder#options(opt) first.&quot;);</span>
+<span class="fc" id="L370">            notNull(product.tpls, &quot;Templates must not be null! Call Builder#templates(tpls) first.&quot;);</span>
+<span class="fc" id="L371">            return product;</span>
         }
 
         /**
@@ -401,10 +378,10 @@ public final class JUberblog implements Registry {
          * @param msg the exception message
          */
         private void notNull(final Object o, final String msg) {
-<span class="fc bfc" id="L404" title="All 2 branches covered.">            if (null == o) {</span>
-<span class="fc" id="L405">                throw new NullPointerException(msg);</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">            if (null == o) {</span>
+<span class="fc" id="L382">                throw new NullPointerException(msg);</span>
             }
-<span class="fc" id="L407">        }</span>
+<span class="fc" id="L384">        }</span>
     }
 
 }

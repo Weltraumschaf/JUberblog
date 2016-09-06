@@ -20,24 +20,24 @@ public abstract class BaseTask&lt;R, P&gt; implements Task&lt;R, P&gt;, Registry
     /**
      * Token type class of result from previous task.
      */
-    private final Class&lt;P&gt; typeForPreviusResult;
+    private final Class&lt;P&gt; typeForPreviousResult;
     private final Registry registry;
 
     /**
      * Dedicated constructor.
      *
-     * @param typeForPreviusResult must not be {@code null}
+     * @param typeForPreviousResult must not be {@code null}
      * @param registry must not be {@code null}
      */
-    public BaseTask(final Class&lt;P&gt; typeForPreviusResult, final Registry registry) {
+    public BaseTask(final Class&lt;P&gt; typeForPreviousResult, final Registry registry) {
 <span class="fc" id="L33">        super();</span>
-<span class="fc" id="L34">        this.typeForPreviusResult = Validate.notNull(typeForPreviusResult, &quot;typeForPreviusResult&quot;);</span>
+<span class="fc" id="L34">        this.typeForPreviousResult = Validate.notNull(typeForPreviousResult, &quot;typeForPreviousResult&quot;);</span>
 <span class="fc" id="L35">        this.registry = Validate.notNull(registry, &quot;registry&quot;);</span>
 <span class="fc" id="L36">    }</span>
 
     @Override
-    public final Class&lt;P&gt; getDesiredTypeForPreviusResult() {
-<span class="fc" id="L40">        return typeForPreviusResult;</span>
+    public final Class&lt;P&gt; getDesiredTypeForPreviousResult() {
+<span class="fc" id="L40">        return typeForPreviousResult;</span>
     }
 
     protected final void println(final String message, final Object... args) {

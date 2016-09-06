@@ -43,7 +43,7 @@ public final class BlogConfiguration {
     /**
      * Name of template directory property.
      */
-    public static final String TEMPLATE_DIR = &quot;temlateDirectory&quot;;
+    public static final String TEMPLATE_DIR = &quot;templateDirectory&quot;;
     /**
      * Name of published public directory property.
      */
@@ -102,7 +102,7 @@ public final class BlogConfiguration {
      * @return never {@code null}
      * @throws IOException if configuration file can not be loaded
      */
-    static Properties load(final String filename) throws IOException {
+    private static Properties load(final String filename) throws IOException {
 <span class="fc" id="L106">        Validate.notEmpty(filename, &quot;filename&quot;);</span>
 <span class="fc" id="L107">        final Properties properties = new Properties();</span>
 

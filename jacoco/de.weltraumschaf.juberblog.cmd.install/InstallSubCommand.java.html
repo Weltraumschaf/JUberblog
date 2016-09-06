@@ -46,7 +46,7 @@ public final class InstallSubCommand extends SubCommandBase {
 <span class="nc" id="L46">            scaffold.setType(InstallationType.OVERWRITE);</span>
 <span class="pc bpc" id="L47" title="1 of 2 branches missed.">        } else if (installOptions().isUpdate()) {</span>
 <span class="nc" id="L48">            scaffold.setType(InstallationType.BACKUP);</span>
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        } else if (target.list().length &gt; 0) {</span>
+<span class="pc bpc" id="L49" title="2 of 4 branches missed.">        } else if (null != target.list() &amp;&amp; target.list().length &gt; 0) {</span>
 <span class="nc" id="L50">            throw new ApplicationException(</span>
                 ExitCodeImpl.FATAL,
                 &quot;Target directory not empty! Use -f to force install or -u to update.&quot;);
@@ -84,7 +84,7 @@ public final class InstallSubCommand extends SubCommandBase {
 <span class="fc" id="L84">    }</span>
 
     /**
-     * Validate instalation directory.
+     * Validate installation directory.
      *
      * Validates that given string is not empty and is an existing directory.
      *

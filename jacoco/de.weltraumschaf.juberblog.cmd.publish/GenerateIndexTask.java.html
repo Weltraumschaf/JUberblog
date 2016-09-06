@@ -39,7 +39,7 @@ public class GenerateIndexTask extends BaseTask&lt;Pages, Pages&gt; implements T
     }
 
     @Override
-    public Pages execute(Pages previusResult) throws Exception {
+    public Pages execute(Pages previousResult) throws Exception {
 <span class="fc" id="L43">        println(&quot;Generate index...&quot;);</span>
 <span class="fc" id="L44">        final Fragment content = fmd().createFragemnt(</span>
 <span class="fc" id="L45">            templates().getIndexTemplate(),</span>
@@ -56,14 +56,14 @@ public class GenerateIndexTask extends BaseTask&lt;Pages, Pages&gt; implements T
 <span class="fc" id="L56">        layout.assignVariable(TemplateVariables.BLOG_VERSION, version().getVersion());</span>
 <span class="fc" id="L57">        layout.assignVariable(TemplateVariables.DESCRIPTION, configuration().getDescription());</span>
 <span class="fc" id="L58">        layout.assignVariable(TemplateVariables.BASE_URL, configuration().getBaseUri());</span>
-<span class="fc" id="L59">        previusResult.sort(new Page.SortByDateDescending());</span>
-<span class="fc" id="L60">        content.assignVariable(TemplateVariables.POSTS, previusResult.convert(new ForIndexConverter()));</span>
+<span class="fc" id="L59">        previousResult.sort(new Page.SortByDateDescending());</span>
+<span class="fc" id="L60">        content.assignVariable(TemplateVariables.POSTS, previousResult.convert(new ForIndexConverter()));</span>
 <span class="fc" id="L61">        Files.write(</span>
 <span class="fc" id="L62">            directories().getOutput().resolve(&quot;index&quot; + FileNameExtension.HTML.getExtension()),</span>
 <span class="fc" id="L63">            fmd().render(layout).getBytes(configuration().getEncoding())</span>
         );
 
-<span class="fc" id="L66">        return previusResult;</span>
+<span class="fc" id="L66">        return previousResult;</span>
     }
 
 <span class="fc" id="L69">    private static final class ForIndexConverter implements PageConverter {</span>

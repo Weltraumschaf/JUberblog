@@ -14,33 +14,37 @@ import com.beust.jcommander.Parameters;
 
     static final String EXAMPLE = &quot;TODO Write examples.&quot;;
 
-<span class="fc" id="L17">    @Parameter(names = {&quot;-l&quot;, &quot;--location&quot;}, description = &quot;Where to install the scaffold.&quot;, required = true)</span>
+<span class="fc" id="L17">    @SuppressWarnings(&quot;CanBeFinal&quot;)</span>
+    @Parameter(names = {&quot;-l&quot;, &quot;--location&quot;}, description = &quot;Where to install the scaffold.&quot;, required = true)
     private String location = &quot;&quot;;
-    @Parameter(names = {&quot;-f&quot;, &quot;--force&quot;}, description = &quot;Force the installation which overwrites exsiting files.&quot;)
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
+    @Parameter(names = {&quot;-f&quot;, &quot;--force&quot;}, description = &quot;Force the installation which overwrites existing files.&quot;)
     private boolean force;
-    @Parameter(names = {&quot;-u&quot;, &quot;--update&quot;}, description = &quot;Updates files which makes backups of exisiting files.&quot;)
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
+    @Parameter(names = {&quot;-u&quot;, &quot;--update&quot;}, description = &quot;Updates files which makes backup of existing files.&quot;)
     private boolean update;
 
     public String getLocation() {
-<span class="fc" id="L25">        return location;</span>
+<span class="fc" id="L28">        return location;</span>
     }
 
     public boolean isForce() {
-<span class="fc" id="L29">        return force;</span>
+<span class="fc" id="L32">        return force;</span>
     }
 
     public boolean isUpdate() {
-<span class="fc" id="L33">        return update;</span>
+<span class="fc" id="L36">        return update;</span>
     }
 
+    @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
     public static String usage() {
-<span class="fc" id="L37">        return new StringBuilder()</span>
-<span class="fc" id="L38">            .append(Options.Command.INSTALL)</span>
-<span class="fc" id="L39">            .append(' ')</span>
-<span class="fc" id="L40">            .append(&quot;-l|--location &lt;directory&gt; [-f|--force] [-u|--update]&quot;)</span>
-<span class="fc" id="L41">            .append(' ')</span>
-<span class="fc" id="L42">            .append(CommonCommandOptions.usage())</span>
-<span class="fc" id="L43">            .toString();</span>
+<span class="fc" id="L41">        return new StringBuilder()</span>
+<span class="fc" id="L42">            .append(Options.Command.INSTALL)</span>
+<span class="fc" id="L43">            .append(' ')</span>
+<span class="fc" id="L44">            .append(&quot;-l|--location &lt;directory&gt; [-f|--force] [-u|--update]&quot;)</span>
+<span class="fc" id="L45">            .append(' ')</span>
+<span class="fc" id="L46">            .append(CommonCommandOptions.usage())</span>
+<span class="fc" id="L47">            .toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

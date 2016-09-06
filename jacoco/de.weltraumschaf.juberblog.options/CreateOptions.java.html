@@ -15,40 +15,45 @@ import de.weltraumschaf.juberblog.options.Options.Command;
 
     static final String EXAMPLE = &quot;TODO Write examples.&quot;;
 
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-c&quot;, &quot;--config&quot;}, description = &quot;Config file to use.&quot;, required = true)
     private String config;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-t&quot;, &quot;--title&quot;}, description = &quot;Title of the blog post.&quot;)
     private String title;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-d&quot;, &quot;--draft&quot;}, description = &quot;Will mark the file name as draft.&quot;)
     private boolean draft;
+    @SuppressWarnings( {&quot;CanBeFinal&quot;, &quot;unused&quot;})
     @Parameter(names = {&quot;-s&quot;, &quot;--site&quot;}, description = &quot;Will create a site instead of a post.&quot;)
     private boolean site;
 
     @Override
     public String getConfig()  {
-<span class="fc" id="L29">        return config;</span>
+<span class="fc" id="L33">        return config;</span>
     }
 
     public String getTitle() {
-<span class="fc" id="L33">        return title;</span>
+<span class="fc" id="L37">        return title;</span>
     }
 
     public boolean isDraft() {
-<span class="fc" id="L37">        return draft;</span>
+<span class="fc" id="L41">        return draft;</span>
     }
 
     public boolean isSite() {
-<span class="fc" id="L41">        return site;</span>
+<span class="fc" id="L45">        return site;</span>
     }
 
+    @SuppressWarnings(&quot;StringBufferReplaceableByString&quot;)
     public static String usage() {
-<span class="fc" id="L45">        return new StringBuilder()</span>
-<span class="fc" id="L46">            .append(Command.CREATE)</span>
-<span class="fc" id="L47">            .append(' ')</span>
-<span class="fc" id="L48">            .append(&quot;-c|--config &lt;file&gt; [-t|--title &lt;title&gt;] [-d|--draft] [-s|--site]&quot;)</span>
-<span class="fc" id="L49">            .append(' ')</span>
-<span class="fc" id="L50">            .append(CommonCommandOptions.usage())</span>
-<span class="fc" id="L51">            .toString();</span>
+<span class="fc" id="L50">        return new StringBuilder()</span>
+<span class="fc" id="L51">            .append(Command.CREATE)</span>
+<span class="fc" id="L52">            .append(' ')</span>
+<span class="fc" id="L53">            .append(&quot;-c|--config &lt;file&gt; [-t|--title &lt;title&gt;] [-d|--draft] [-s|--site]&quot;)</span>
+<span class="fc" id="L54">            .append(' ')</span>
+<span class="fc" id="L55">            .append(CommonCommandOptions.usage())</span>
+<span class="fc" id="L56">            .toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

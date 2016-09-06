@@ -39,15 +39,15 @@ public class GenerateSitemapTask extends BaseTask&lt;Void, Pages&gt; implements 
     }
 
     @Override
-    public Void execute(final Pages previusResult) throws Exception {
+    public Void execute(final Pages previousResult) throws Exception {
 <span class="fc" id="L43">        println(&quot;Generate site map...&quot;);</span>
 <span class="fc" id="L44">        final Fragment template = fmd().createFragemnt(</span>
 <span class="fc" id="L45">            templates().getSiteMapTemplate(),</span>
 <span class="fc" id="L46">            templates().getSiteMapTemplate().toString(),</span>
             RenderOptions.WITHOUT_MARKDOWN);
 <span class="fc" id="L48">        template.assignVariable(TemplateVariables.ENCODING, configuration().getEncoding());</span>
-<span class="fc" id="L49">        previusResult.sort(new Page.SortByDateAscending());</span>
-<span class="fc" id="L50">        template.assignVariable(TemplateVariables.URLS, previusResult.convert(new ForSitemapConverter()));</span>
+<span class="fc" id="L49">        previousResult.sort(new Page.SortByDateAscending());</span>
+<span class="fc" id="L50">        template.assignVariable(TemplateVariables.URLS, previousResult.convert(new ForSitemapConverter()));</span>
 
 <span class="fc" id="L52">        Files.write(</span>
 <span class="fc" id="L53">            directories().getOutput().resolve(&quot;site_map&quot; + FileNameExtension.XML.getExtension()),</span>

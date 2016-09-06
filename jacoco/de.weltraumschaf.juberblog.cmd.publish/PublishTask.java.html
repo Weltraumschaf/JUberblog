@@ -34,7 +34,7 @@ public final class PublishTask extends BaseTask&lt;Pages, Pages&gt; implements T
     }
 
     @Override
-    public Pages execute(final Pages previusResult) throws Exception {
+    public Pages execute(final Pages previousResult) throws Exception {
 <span class="fc" id="L38">        final Publisher publisher = new Publisher(</span>
 <span class="fc" id="L39">            templates(),</span>
 <span class="fc" id="L40">            directories(),</span>
@@ -44,8 +44,8 @@ public final class PublishTask extends BaseTask&lt;Pages, Pages&gt; implements T
 <span class="fc" id="L44">            verbose()</span>
         );
 
-<span class="fc" id="L47">        previusResult.add(publisher.publish());</span>
-<span class="fc" id="L48">        return previusResult;</span>
+<span class="fc" id="L47">        previousResult.add(publisher.publish());</span>
+<span class="fc" id="L48">        return previousResult;</span>
     }
 
 }
