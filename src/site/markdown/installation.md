@@ -298,6 +298,21 @@ The available template variables are:
 |----------|---------------------------------|
 | title    | The post/site title.            |
 
+### Make Custom Style With SASS
+
+Of course you can style your blog with  simple CSS. You only have to put the CSS
+files somewhere in your public folder  served by the web server. Recommended and
+default is  _public/css_. If  you prefer  another location  you must  change the
+link in the _layout.ftl_.
+
+But  you can  also use  [SASS][sass]. For  this use  case there  is a  directory
+called _sass_ in  the freshly created scaffold data directory.  It also brings a
+a  [normalizer][normalizer]  script  which  sets  some  sane  defaults  for  all
+browser. To  generate CSS you need  [SASS][sass] installed and use  this command
+from your scaffold dir:
+
+    $ sassls sassc sass/main.scss public/css/main.css
+
 ## Create Content
 
 ### Create Posts
@@ -336,3 +351,4 @@ in  the  value.  The  key  values  will be  assigned  to  the  layout  template.
 [rss]:          https://en.wikipedia.org/wiki/RSS
 [date-format]:  http://freemarker.org/docs/ref_builtins_date.html
 [sitemap]:      https://en.wikipedia.org/wiki/Sitemaps
+[sass]:         http://sass-lang.com/
