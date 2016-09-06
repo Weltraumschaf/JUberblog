@@ -110,36 +110,36 @@ files, the template files and the published files are.
 
 #### All Available Configuration Options
 
-- _title_:            This is the title of your blog. This value is available in 
-                      the templates by the [Freemarker][freemarker] variable 
-                      expression `${blogTitle}`.
-- _description_:      This is the description of your blog. This value is 
-                      available in in the templates by the 
-                      [Freemarker][freemarker] variable expression 
-                      `${blogDescription}`. 
-- _siteUrl_:          This is the base URL of your blog. This is used to 
-                      generate Links (eg. in the _feed.xml_ or _sitemap.xml_). 
-                      It is also available in the in the templates by the
-                      [Freemarker][freemarker] variable expression `${baseUrl}`. 
-- _language_:         This is the title of your blog. This value is available in 
-                      in the templates by the [Freemarker][freemarker] variable 
-                      expression `${language}`. 
-- _encoding_:         This is the overall encoding used to read/write files by 
-                      the command line tool and is also available in the in the 
-                      templates by the [Freemarker][freemarker] variable 
-                      expression `${encoding}`.
-- _dataDirectory_:    This is the directory where JUberblog finds the 
-                      [Markdown][markdown] content data. If the path is not 
-                      absolute then it is interpreted relative from where you 
-                      invoke the JUberblog command. 
-- _temlateDirectory_: This is the directory where JUberblog finds the
-                      [Freemarker][freemarker] templates to render the static 
-                      HTML. If the path is not absolute then it is interpreted 
-                      relative from where you invoke the JUberblog command. 
-- _publicDirectory_:  This is the directory where JUberblog puts the rendered 
-                      static HTML data. If the path is not absolute then it is
-                      interpreted relative from where you invoke the JUberblog 
-                      command.
+- _title_:             This is the title of your blog. This value is available in 
+                       the templates by the [Freemarker][freemarker] variable 
+                       expression `${blogTitle}`.
+- _description_:       This is the description of your blog. This value is 
+                       available in in the templates by the 
+                       [Freemarker][freemarker] variable expression 
+                       `${blogDescription}`. 
+- _siteUrl_:           This is the base URL of your blog. This is used to 
+                       generate Links (eg. in the _feed.xml_ or _sitemap.xml_). 
+                       It is also available in the in the templates by the
+                       [Freemarker][freemarker] variable expression `${baseUrl}`. 
+- _language_:          This is the title of your blog. This value is available in 
+                       in the templates by the [Freemarker][freemarker] variable 
+                       expression `${language}`. 
+- _encoding_:          This is the overall encoding used to read/write files by 
+                       the command line tool and is also available in the in the 
+                       templates by the [Freemarker][freemarker] variable 
+                       expression `${encoding}`.
+- _dataDirectory_:     This is the directory where JUberblog finds the 
+                       [Markdown][markdown] content data. If the path is not 
+                       absolute then it is interpreted relative from where you 
+                       invoke the JUberblog command. 
+- _templateDirectory_: This is the directory where JUberblog finds the
+                       [Freemarker][freemarker] templates to render the static 
+                       HTML. If the path is not absolute then it is interpreted 
+                       relative from where you invoke the JUberblog command. 
+- _publicDirectory_:   This is the directory where JUberblog puts the rendered 
+                       static HTML data. If the path is not absolute then it is
+                       interpreted relative from where you invoke the JUberblog 
+                       command.
 
 ## Customize The Templates
 
