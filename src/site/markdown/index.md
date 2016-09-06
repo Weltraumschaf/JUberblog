@@ -40,6 +40,11 @@ Ruby   I've   had   several   problems   to  set   up   all   dependencies   for
 other Ruby  tools from scratch. Sadly  there is a  lot of API version  hassle in
 the Ruby world.
 
+## JUberblog In The Wild
+
+- [Christian Rösch](https://croesch.de/)
+- [my own](https://blog.weltraumschaf.de/)
+
 [uberblog]: https://github.com/Weltraumschaf/uberblog
 [markdown]: https://daringfireball.net/projects/markdown/
 [jvm]:      http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
