@@ -1,9 +1,10 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.task;
 
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.task.BaseTask;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;

@@ -5,7 +5,7 @@ import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.cmd.SubCommandBase;
 import de.weltraumschaf.juberblog.core.ExitCodeImpl;
 import de.weltraumschaf.juberblog.core.PageType;
-import de.weltraumschaf.juberblog.core.TaskExecutor;
+import de.weltraumschaf.juberblog.task.TaskExecutor;
 
 /**
  * Published the blog (pages, sites, index, site map, feed).

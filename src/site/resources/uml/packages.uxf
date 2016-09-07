@@ -7,7 +7,7 @@
       <x>20</x>
       <y>20</y>
       <w>260</w>
-      <h>300</h>
+      <h>330</h>
     </coordinates>
     <panel_attributes>type=Package
 de.weltraumschaf.juberblog
@@ -18,7 +18,8 @@ de.weltraumschaf.juberblog
 		publish
 	core
 	file
-	options</panel_attributes>
+	options
+	task</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

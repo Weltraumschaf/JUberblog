@@ -1,11 +1,16 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.task;
 
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
 import de.weltraumschaf.juberblog.Registry;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.task.Task;
 
 /**
  * Common functionality for all tasks.

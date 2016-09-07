@@ -1,5 +1,7 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.task;
 
+import de.weltraumschaf.juberblog.task.Task;
+import de.weltraumschaf.juberblog.task.TaskExecutor;
 import org.junit.Test;
 import org.mockito.InOrder;
 import static org.mockito.Mockito.inOrder;

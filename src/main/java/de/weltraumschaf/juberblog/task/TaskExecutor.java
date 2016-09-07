@@ -1,8 +1,9 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.task;
 
 import com.beust.jcommander.internal.Lists;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.validate.Validate;
+
 import java.util.Collection;
 
 /**
