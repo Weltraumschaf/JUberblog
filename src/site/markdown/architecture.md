@@ -59,6 +59,12 @@ Of course you can imagine various scenarios:
 - Host the repository somewhere else remote (GitHub, GitLab, gitolite etc.).
 - Run  the publishing  on a  different machine and  rsync the  generated content
   (_public_ directory) to one or more web server.
+  
+## Component And Package Overview
+
+TODO
+
+![model](images/packages.png)
 
 ## Model
 
@@ -122,7 +128,7 @@ internally for content generation:
 
 TODO
 
-<img alt="model" src="images/model.png"/>
+![model](images/model.png)
 
 ### Templating
 
