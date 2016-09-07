@@ -337,11 +337,15 @@ some meta data:
 The syntax is  the same as for  XML preprocessor directives. So to  start it use
 `<?juberblog` and  to end the  directive use  `?>`. The directive  for JUberblog
 supports simple  key-value pairs. The  key must  not contain any  characters but
-letters and numbers. The  value may contain any word character.  The key and the
-value are separated by  a colon. Obviously you can't use the  colon in the value.
-A key value pair is separated by  newline. Also obviously you can't use newlines
-in  the  value.  The  key  values  will be  assigned  to  the  layout  template.
-`Description` and `Keywords` are used for the meta tags by default.
+letters  and  numbers. The  value  may  contain any  character  but  a colon  or
+newline. The  key and the value  are separated by a  colon. A key value  pair is
+separated by  newline. Also obviously you  can't use newlines in  the value. The
+key  values  will  be  assigned   to  the  layout  template.  `Description`  and
+`Keywords` are used for the meta tags by default.
+
+The three  keys shown  in the  example above  are also  used internally  for the
+content generation,  but JUberblog will choose  sane defaults if you  don't have
+them in your file.
 
 [jdk]:          http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 [mvn]:          https://maven.apache.org/download.cgi
