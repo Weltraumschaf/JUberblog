@@ -10,7 +10,7 @@ directory for [Markdown][markdown]  files and converts them to static  HTML in a
 web servers document root. So that's all. Nearly.
 
 What about  versioning? No database  at all? No, no  database. In my  opinion it
-make no  sense to structure unrelational  data like documents into  a relational
+make no sense to structure non-relational  data like documents into a relational
 database scheme. Especially if  I have to reassemble it from  the tables back to
 a document on  each page request. Then  adding caching and such.  Why not saving
 documents as is: A document. In a file.
@@ -42,7 +42,7 @@ What does this show?
     - whatever you need (optional)
 2. You have a web server
     - which has its own clone of the blog dat repo.
-    - which points its document root to the _public_ direcotry in this repo
+    - which points its document root to the _public_ directory in this repo
 3. On that web server you have a _cron_ or _atd_ job running
     - which frequently pulls changes into the blog data repo
     - which periodically executes the _publish_ sub command of JUberblog
@@ -56,9 +56,9 @@ That's all.
 Of course you can imagine various scenarios:
 
 - All of this on a single machine.
-- Host the repository somewehere else remote (GitHub, GitLab, gitolite etc.).
+- Host the repository somewhere else remote (GitHub, GitLab, gitolite etc.).
 - Run  the publishing  on a  different machine and  rsync the  generated content
-  (_public_ direcotry) to one or more web server.
+  (_public_ directory) to one or more web server.
 
 ## Model
 
@@ -93,7 +93,7 @@ an optional preprocessor block for meta data. The format is as follows:
 ### Meta Data
 
 Meta  data in  data files  are stored  in a  pre processor  block (separated  by
-`<?juberblog`  and  `?>`). Inside  these  blocks  the prep  rocessor  recognizes
+`<?juberblog`  and  `?>`). Inside  these  blocks  the pre  processor  recognizes
 simple key value pairs.
 
 ### Pre Processor Grammar
@@ -126,11 +126,30 @@ TODO
 
 ### Templating
 
-TODO
+The primary part  is obviously [Markdown][markdown] generation which  is done by
+the  [Pegdown][pegdown]  library.   But  soon  it  was   obviously  that  simple
+templating mechanics are necessary. For this I chosen [Freemarker][freemarker].
 
-![template and filters](images/template_and_filters.png)
+The  basic  idea  is  we  have   simple  text  files  which  are  rendered  from
+[Markdown][markdown] to HTML. This HTML is  inserted in some HTML template which
+layouts the  content. And at  least this HTML snippet  will be inserted  into an
+outer layout template which is shared  across all generated HTML. Here comes the
+template engine into play.
 
-[markdown]: http://daringfireball.net/projects/markdown/syntax
-[pegdown]:  https://github.com/sirthias/pegdown#introduction
-[sass]:     http://sass-lang.com/
-[fmd]:      https://weltraumschaf.github.io/freemarkerdown/
+While  integrating [Pegdown][pegdown]  and  [Freemarker][freemarker] it  emerged
+that that I need additional features:
+
+- pre processors: To make the meta data model possible
+- interceptors: to hook in the various steps of HTML generation
+
+These are very generic  concerns which are not strictly bound  to JUberblog so I
+decided to  extract this into  a separate library: [FreeMarkerDown][fmd].  See the
+FreeMarkerDown  [architecture site][fmd-arch]  for detailed  information how  it
+works.
+
+[markdown]:     http://daringfireball.net/projects/markdown/syntax
+[pegdown]:      https://github.com/sirthias/pegdown#introduction
+[sass]:         http://sass-lang.com/
+[fmd]:          https://weltraumschaf.github.io/freemarkerdown/
+[fmd-arch]:     https://weltraumschaf.github.io/freemarkerdown/architecture.html
+[freemarker]:   http://freemarker.org/
