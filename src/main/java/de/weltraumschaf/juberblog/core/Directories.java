@@ -14,14 +14,20 @@ public final class Directories {
 
     /**
      * Name of sites sub directory.
+     *
+     * TODO Use Comstants#SITES_DIR instead.
      */
     public static final String SITES_DIR_NAME = "sites";
     /**
      * Name of posts sub directory.
+     *
+     * TODO Use Constants#POSTS_DIR instead.
      */
     public static final String POSTS_DIR_NAME = "posts";
     /**
      * Name of drafts sub directory.
+     *
+     * TODO Use Constants#DRAFTS_DIR imstead.
      */
     public static final String DRAFTS_DIR_NAME = "drafts";
 

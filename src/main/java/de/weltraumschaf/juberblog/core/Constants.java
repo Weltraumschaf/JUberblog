@@ -11,7 +11,7 @@ import de.weltraumschaf.commons.validate.Validate;
 public enum Constants {
 
     /**
-     * NAme of the command line script.
+     * Name of the command line script.
      */
     COMMAND_NAME("juberblog"),
     /**
