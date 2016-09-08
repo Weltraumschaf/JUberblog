@@ -1,9 +1,10 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.content;
 
 import de.weltraumschaf.commons.validate.Validate;
 import java.net.URI;
 import java.util.Comparator;
 import java.util.Objects;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 
@@ -12,8 +13,6 @@ import org.joda.time.DateTimeComparator;
  * <p>
  * This class is immutable by design.
  * </p>
- *
- * XXX: Move into publish package.
  *
  * @since 1.0.0
  * @author Sven Strittmatter
@@ -156,6 +155,9 @@ public final class Page {
 
     }
 
+    /**
+     * A comparator to sort pages descending by date.
+     */
     public static final class SortByDateDescending implements Comparator<Page> {
 
         @Override

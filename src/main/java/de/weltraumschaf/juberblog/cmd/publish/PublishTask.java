@@ -2,8 +2,8 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.commons.validate.Validate;
 import de.weltraumschaf.juberblog.Registry;
-import de.weltraumschaf.juberblog.core.Pages;
-import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.content.Pages;
+import de.weltraumschaf.juberblog.content.PageType;
 import de.weltraumschaf.juberblog.task.BaseTask;
 import de.weltraumschaf.juberblog.task.Task;
 

@@ -1,4 +1,4 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.content;
 
 /**
  * PageType of pages.

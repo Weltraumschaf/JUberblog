@@ -1,13 +1,13 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.JUberblog;
-import de.weltraumschaf.juberblog.core.Pages;
+import de.weltraumschaf.juberblog.content.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.Registry;
-import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.content.PageType;
 
 import java.nio.file.Files;
 import java.util.Collection;

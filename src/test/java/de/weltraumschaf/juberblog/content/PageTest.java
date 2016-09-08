@@ -1,6 +1,9 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.content;
 
 import java.net.URI;
+
+import de.weltraumschaf.juberblog.content.Page;
+import de.weltraumschaf.juberblog.content.PageType;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.hamcrest.Matchers.is;
 import org.joda.time.DateTime;

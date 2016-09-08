@@ -4,11 +4,14 @@ import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.JUberblog;
 import de.weltraumschaf.juberblog.options.Options;
-import de.weltraumschaf.juberblog.task.BaseTask;
 import org.junit.Test;
+
+import java.io.PrintStream;
+
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link BaseTask}.
@@ -17,17 +20,20 @@ import static org.mockito.Mockito.mock;
  */
 public class BaseTaskTest {
 
+    private final IO io = mock(IO.class);
     private final BaseTask sut;
 
     public BaseTaskTest() throws ApplicationException {
         super();
-        this.sut = new BaseTaskStub();
+        when(io.getStdout()).thenReturn(mock(PrintStream.class));
+        when(io.getStderr()).thenReturn(mock(PrintStream.class));
+        this.sut = new BaseTaskStub(io);
     }
 
     @Test(expected = NullPointerException.class)
     @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public void construct_withNullType() throws ApplicationException {
-        new BaseTaskStub(null);
+        new BaseTaskStub(null, io);
     }
 
     @Test
@@ -37,12 +43,12 @@ public class BaseTaskTest {
 
     private static class BaseTaskStub extends BaseTask<Void, Void> {
 
-        public BaseTaskStub() throws ApplicationException {
-            this(Void.class);
+        public BaseTaskStub(IO io) throws ApplicationException {
+            this(Void.class, io);
         }
 
-        public BaseTaskStub(final Class<Void> typeForPreviousResult) throws ApplicationException {
-            super(typeForPreviousResult, JUberblog.generateWithDefaultConfig(new Options(), mock(IO.class)));
+        public BaseTaskStub(final Class<Void> typeForPreviousResult, IO io) throws ApplicationException {
+            super(typeForPreviousResult, JUberblog.generateWithDefaultConfig(new Options(), io));
         }
 
         @Override

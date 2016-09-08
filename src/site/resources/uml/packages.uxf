@@ -7,7 +7,7 @@
       <x>20</x>
       <y>20</y>
       <w>260</w>
-      <h>330</h>
+      <h>360</h>
     </coordinates>
     <panel_attributes>type=Package
 de.weltraumschaf.juberblog
@@ -16,6 +16,7 @@ de.weltraumschaf.juberblog
 		create
 		install
 		publish
+	content
 	core
 	file
 	options
@@ -37,7 +38,7 @@ de.weltraumschaf.juberblog
     <id>UMLNote</id>
     <coordinates>
       <x>360</x>
-      <y>90</y>
+      <y>80</y>
       <w>310</w>
       <h>40</h>
     </coordinates>
@@ -62,16 +63,16 @@ by feature.</panel_attributes>
       <x>130</x>
       <y>90</y>
       <w>250</w>
-      <h>40</h>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;10.0;230.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
       <x>360</x>
-      <y>150</y>
+      <y>180</y>
       <w>310</w>
       <h>40</h>
     </coordinates>
@@ -82,7 +83,7 @@ by feature.</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>130</x>
-      <y>160</y>
+      <y>190</y>
       <w>250</w>
       <h>90</h>
     </coordinates>
@@ -93,7 +94,7 @@ by feature.</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>360</x>
-      <y>210</y>
+      <y>230</y>
       <w>310</w>
       <h>40</h>
     </coordinates>
@@ -104,7 +105,7 @@ by feature.</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>360</x>
-      <y>270</y>
+      <y>280</y>
       <w>310</w>
       <h>40</h>
     </coordinates>
@@ -115,22 +116,66 @@ by feature.</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>120</x>
-      <y>220</y>
+      <y>240</y>
       <w>260</w>
-      <h>60</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;40.0;240.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;240.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>150</x>
-      <y>280</y>
+      <y>290</y>
       <w>230</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>10.0;40.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>360</x>
+      <y>130</y>
+      <w>310</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Main model classes.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>140</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>10.0;90.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>360</x>
+      <y>330</y>
+      <w>310</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Abstraction for tasks done in commands.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>340</y>
+      <w>250</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;20.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;20.0;230.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -2,8 +2,8 @@ package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.core.Directories;
-import de.weltraumschaf.juberblog.core.Page;
-import de.weltraumschaf.juberblog.core.PageType;
+import de.weltraumschaf.juberblog.content.Page;
+import de.weltraumschaf.juberblog.content.PageType;
 import de.weltraumschaf.juberblog.core.Verbose;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FilesFinderByExtension;

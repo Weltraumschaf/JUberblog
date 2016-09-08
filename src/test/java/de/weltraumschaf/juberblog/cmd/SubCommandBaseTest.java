@@ -9,6 +9,9 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.mockito.InOrder;
+
+import java.io.PrintStream;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -17,11 +20,15 @@ public class SubCommandBaseTest {
 
     private final Options opts = new Options();
     private final IO io = mock(IO.class);
-    private final JUberblog registry = JUberblog.generateWithDefaultConfig(opts, io);
-    private final SubCommandBase sut = new SubCommandBaseStub(registry);
+    private final JUberblog registry;
+    private final SubCommandBase sut;
 
     public SubCommandBaseTest() throws ApplicationException {
         super();
+        when(io.getStdout()).thenReturn(mock(PrintStream.class));
+        when(io.getStderr()).thenReturn(mock(PrintStream.class));
+        registry = JUberblog.generateWithDefaultConfig(opts, io);
+        sut = new SubCommandBaseStub(registry);
     }
 
     @Test(expected = NullPointerException.class)

@@ -1,7 +1,9 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.content;
 
 import de.weltraumschaf.commons.guava.Lists;
 import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.juberblog.core.PageConverter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

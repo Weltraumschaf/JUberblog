@@ -6,6 +6,8 @@ import de.weltraumschaf.juberblog.core.BlogConfiguration;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
+
+import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -13,6 +15,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link JUberblog}.
@@ -25,6 +28,8 @@ public class JUberblogTest extends BaseTestCase {
     public void generateWithDefaultConfig() throws URISyntaxException, ApplicationException {
         final Options options = new Options();
         final IO io = mock(IO.class);
+        when(io.getStdout()).thenReturn(mock(PrintStream.class));
+        when(io.getStderr()).thenReturn(mock(PrintStream.class));
 
         final JUberblog product = JUberblog.generateWithDefaultConfig(options, io);
 

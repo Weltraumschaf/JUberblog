@@ -1,5 +1,7 @@
 package de.weltraumschaf.juberblog.core;
 
+import de.weltraumschaf.juberblog.content.Page;
+
 import java.util.Map;
 
 /**
