@@ -19,7 +19,7 @@ import java.util.Properties;
  * @author Sven Strittmatter
  */
 public final class BlogConfiguration {
-
+// TODO Make the properties private.
     /**
      * Name of blog headline property.
      */
@@ -108,7 +108,7 @@ public final class BlogConfiguration {
 
         try (final InputStream in = new FileInputStream(new File(filename))) {
             properties.load(in);
-            return properties;
+            return properties; // TODO Move outside of scope.
         }
     }
 
