@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BaseTask.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JUberblog</a> &gt; <a href="index.source.html" class="el_package">de.weltraumschaf.juberblog.task</a> &gt; <span class="el_source">BaseTask.java</span></div><h1>BaseTask.java</h1><pre class="source lang-java linenums">package de.weltraumschaf.juberblog.task;
+
+import de.weltraumschaf.commons.application.IO;
+import de.weltraumschaf.commons.application.Version;
+import de.weltraumschaf.commons.validate.Validate;
+import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
+import de.weltraumschaf.juberblog.Registry;
+import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import de.weltraumschaf.juberblog.core.Directories;
+import de.weltraumschaf.juberblog.core.Templates;
+import de.weltraumschaf.juberblog.core.Verbose;
+import de.weltraumschaf.juberblog.options.Options;
+import de.weltraumschaf.juberblog.task.Task;
+
+/**
+ * Common functionality for all tasks.
+ *
+ * @param &lt;R&gt; type of return value
+ * @param &lt;P&gt; type of previous result
+ * @since 1.0.0
+ * @author Sven Strittmatter
+ */
+public abstract class BaseTask&lt;R, P&gt; implements Task&lt;R, P&gt;, Registry {
+
+    /**
+     * Token type class of result from previous task.
+     */
+    private final Class&lt;P&gt; typeForPreviousResult;
+    private final Registry registry;
+
+    /**
+     * Dedicated constructor.
+     *
+     * @param typeForPreviousResult must not be {@code null}
+     * @param registry must not be {@code null}
+     */
+    public BaseTask(final Class&lt;P&gt; typeForPreviousResult, final Registry registry) {
+<span class="fc" id="L38">        super();</span>
+<span class="fc" id="L39">        this.typeForPreviousResult = Validate.notNull(typeForPreviousResult, &quot;typeForPreviousResult&quot;);</span>
+<span class="fc" id="L40">        this.registry = Validate.notNull(registry, &quot;registry&quot;);</span>
+<span class="fc" id="L41">    }</span>
+
+    @Override
+    public final Class&lt;P&gt; getDesiredTypeForPreviousResult() {
+<span class="fc" id="L45">        return typeForPreviousResult;</span>
+    }
+
+    protected final void println(final String message, final Object... args) {
+<span class="fc" id="L49">        registry.verbose().print(message, args);</span>
+<span class="fc" id="L50">    }</span>
+
+    @Override
+    public final Options options() {
+<span class="nc" id="L54">        return registry.options();</span>
+    }
+
+    @Override
+    public final IO io() {
+<span class="nc" id="L59">        return registry.io();</span>
+    }
+
+    @Override
+    public final Templates templates() {
+<span class="fc" id="L64">        return registry.templates();</span>
+    }
+
+    @Override
+    public final Directories directories() {
+<span class="fc" id="L69">        return registry.directories();</span>
+    }
+
+    @Override
+    public final BlogConfiguration configuration() {
+<span class="fc" id="L74">        return registry.configuration();</span>
+    }
+
+    @Override
+    public final Version version() {
+<span class="fc" id="L79">        return registry.version();</span>
+    }
+
+    @Override
+    public final FreeMarkerDown fmd() {
+<span class="fc" id="L84">        return registry.fmd();</span>
+    }
+
+    @Override
+    public final Verbose verbose() {
+<span class="fc" id="L89">        return registry.verbose();</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
