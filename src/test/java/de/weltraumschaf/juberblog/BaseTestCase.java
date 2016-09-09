@@ -3,11 +3,7 @@ package de.weltraumschaf.juberblog;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.commons.application.Version;
 import de.weltraumschaf.freemarkerdown.FreeMarkerDown;
-import de.weltraumschaf.juberblog.core.BlogConfiguration;
-import de.weltraumschaf.juberblog.core.Constants;
-import de.weltraumschaf.juberblog.core.Directories;
-import de.weltraumschaf.juberblog.core.Templates;
-import de.weltraumschaf.juberblog.core.Verbose;
+import de.weltraumschaf.juberblog.core.*;
 import de.weltraumschaf.juberblog.options.Options;
 
 import java.io.File;
@@ -94,14 +90,14 @@ public abstract class BaseTestCase {
 
     protected final Properties createProperties() {
         final Properties config = new Properties();
-        config.setProperty(BlogConfiguration.DATA_DIR, "/data");
-        config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
-        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
-        config.setProperty(BlogConfiguration.PUBLIC_DIR, "/public");
-        config.setProperty(BlogConfiguration.LANGUAGE, "en");
-        config.setProperty(BlogConfiguration.SITE_URI, "http://uberblog.local/");
-        config.setProperty(BlogConfiguration.TEMPLATE_DIR, "/templates");
-        config.setProperty(BlogConfiguration.TITLE, "Blog Title");
+        config.setProperty(BlogConfigurationKeys.DATA_DIR.getKey(), "/data");
+        config.setProperty(BlogConfigurationKeys.DESCRIPTION.getKey(), "Blog Description");
+        config.setProperty(BlogConfigurationKeys.ENCODING.getKey(), "utf-8");
+        config.setProperty(BlogConfigurationKeys.PUBLIC_DIR.getKey(), "/public");
+        config.setProperty(BlogConfigurationKeys.LANGUAGE.getKey(), "en");
+        config.setProperty(BlogConfigurationKeys.SITE_URI.getKey(), "http://uberblog.local/");
+        config.setProperty(BlogConfigurationKeys.TEMPLATE_DIR.getKey(), "/templates");
+        config.setProperty(BlogConfigurationKeys.TITLE.getKey(), "Blog Title");
 
         return config;
     }

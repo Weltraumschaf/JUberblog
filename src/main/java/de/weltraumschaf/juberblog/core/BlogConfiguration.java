@@ -6,66 +6,33 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
 /**
  * Blog configuration.
- *
+ * <p>
  * Abstracts the configuration properties file.
+ * </p>
  *
  * @since 1.0.0
  * @author Sven Strittmatter
  */
 public final class BlogConfiguration {
-// TODO Make the properties private.
-    /**
-     * Name of blog headline property.
-     */
-    public static final String TITLE = "title";
-    /**
-     * Name of blog description property.
-     */
-    public static final String DESCRIPTION = "description";
-    /**
-     * Name of site base URI property.
-     */
-    public static final String SITE_URI = "siteUrl";
-    /**
-     * Name of site language property.
-     */
-    public static final String LANGUAGE = "language";
-    /**
-     * Name of data directory property.
-     */
-    public static final String DATA_DIR = "dataDirectory";
-    /**
-     * Name of template directory property.
-     */
-    public static final String TEMPLATE_DIR = "templateDirectory";
-    /**
-     * Name of published public directory property.
-     */
-    public static final String PUBLIC_DIR = "publicDirectory";
-    /**
-     * Name of encoding property.
-     */
-    public static final String ENCODING = "encoding";
     /**
      * Default configuration.
      */
     public static final BlogConfiguration DEFAULT;
     static {
         final Properties emptyConfig = new Properties();
-        emptyConfig.setProperty(TITLE, "Blog Title");
-        emptyConfig.setProperty(DESCRIPTION, "Blog Description");
-        emptyConfig.setProperty(SITE_URI, "http://uberblog.local/");
-        emptyConfig.setProperty(LANGUAGE, "en");
-        emptyConfig.setProperty(DATA_DIR, "data");
-        emptyConfig.setProperty(TEMPLATE_DIR, "templates");
-        emptyConfig.setProperty(PUBLIC_DIR, "public");
-        emptyConfig.setProperty(ENCODING, "utf-8");
+        emptyConfig.setProperty(BlogConfigurationKeys.TITLE.getKey(), "Blog Title");
+        emptyConfig.setProperty(BlogConfigurationKeys.DESCRIPTION.getKey(), "Blog Description");
+        emptyConfig.setProperty(BlogConfigurationKeys.SITE_URI.getKey(), "http://uberblog.local/");
+        emptyConfig.setProperty(BlogConfigurationKeys.LANGUAGE.getKey(), "en");
+        emptyConfig.setProperty(BlogConfigurationKeys.DATA_DIR.getKey(), "data");
+        emptyConfig.setProperty(BlogConfigurationKeys.TEMPLATE_DIR.getKey(), "templates");
+        emptyConfig.setProperty(BlogConfigurationKeys.PUBLIC_DIR.getKey(), "public");
+        emptyConfig.setProperty(BlogConfigurationKeys.ENCODING.getKey(), "utf-8");
         DEFAULT = new BlogConfiguration(emptyConfig);
     }
 
@@ -122,21 +89,13 @@ public final class BlogConfiguration {
      * @return same as input
      */
     static Properties validate(final Properties input) {
-        for (final String propertyName : Arrays.asList(DATA_DIR,
-                DESCRIPTION,
-                ENCODING,
-                PUBLIC_DIR,
-                LANGUAGE,
-                SITE_URI,
-                TEMPLATE_DIR,
-                TITLE
-        )) {
+        for (final BlogConfigurationKeys propertyName : BlogConfigurationKeys.values()) {
             try {
-                Validate.notEmpty(input.getProperty(propertyName));
+                Validate.notEmpty(input.getProperty(propertyName.getKey()));
             } catch (final IllegalArgumentException | NullPointerException ex) {
                 throw new IllegalArgumentException(String.format(
                         "The configuration property '%s' must not be empty or missing!",
-                        propertyName));
+                        propertyName.getKey()));
             }
         }
 
@@ -149,9 +108,9 @@ public final class BlogConfiguration {
      * @param name must not be {code null} or empty
      * @return never {@literal null}
      */
-    private String getProperty(final String name) {
-        Validate.notEmpty(name, "Name must not be null or empty!");
-        return properties.getProperty(name, "");
+    private String getProperty(final BlogConfigurationKeys name) {
+        Validate.notEmpty(name.getKey(), "Name must not be null or empty!");
+        return properties.getProperty(name.getKey(), "");
     }
 
     /**
@@ -160,7 +119,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTitle() {
-        return getProperty(TITLE);
+        return getProperty(BlogConfigurationKeys.TITLE);
     }
 
     /**
@@ -169,7 +128,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDescription() {
-        return getProperty(DESCRIPTION);
+        return getProperty(BlogConfigurationKeys.DESCRIPTION);
     }
 
     /**
@@ -178,7 +137,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public URI getBaseUri() {
-        return URI.create(getProperty(SITE_URI));
+        return URI.create(getProperty(BlogConfigurationKeys.SITE_URI));
     }
 
     /**
@@ -187,7 +146,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getLanguage() {
-        return getProperty(LANGUAGE);
+        return getProperty(BlogConfigurationKeys.LANGUAGE);
     }
 
     /**
@@ -196,7 +155,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDataDir() {
-        return getProperty(DATA_DIR);
+        return getProperty(BlogConfigurationKeys.DATA_DIR);
     }
 
     /**
@@ -205,7 +164,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTemplateDir() {
-        return getProperty(TEMPLATE_DIR);
+        return getProperty(BlogConfigurationKeys.TEMPLATE_DIR);
     }
 
     /**
@@ -214,7 +173,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHtdocs() {
-        return getProperty(PUBLIC_DIR);
+        return getProperty(BlogConfigurationKeys.PUBLIC_DIR);
     }
 
     /**
@@ -223,7 +182,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getEncoding() {
-        return getProperty(ENCODING);
+        return getProperty(BlogConfigurationKeys.ENCODING);
     }
 
     @Override

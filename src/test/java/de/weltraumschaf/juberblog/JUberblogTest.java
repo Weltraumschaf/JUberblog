@@ -3,6 +3,7 @@ package de.weltraumschaf.juberblog;
 import de.weltraumschaf.commons.application.ApplicationException;
 import de.weltraumschaf.commons.application.IO;
 import de.weltraumschaf.juberblog.core.BlogConfiguration;
+import de.weltraumschaf.juberblog.core.BlogConfigurationKeys;
 import de.weltraumschaf.juberblog.core.Directories;
 import de.weltraumschaf.juberblog.core.Templates;
 import de.weltraumschaf.juberblog.options.Options;
@@ -47,14 +48,14 @@ public class JUberblogTest extends BaseTestCase {
             Paths.get("templates/site_map.ftl"),
             Paths.get("templates/create/post_or_site.md.ftl"))));
         final Properties config = new Properties();
-        config.setProperty(BlogConfiguration.TITLE, "Blog Title");
-        config.setProperty(BlogConfiguration.DESCRIPTION, "Blog Description");
-        config.setProperty(BlogConfiguration.SITE_URI, "http://uberblog.local/");
-        config.setProperty(BlogConfiguration.ENCODING, "utf-8");
-        config.setProperty(BlogConfiguration.PUBLIC_DIR, "public");
-        config.setProperty(BlogConfiguration.LANGUAGE, "en");
-        config.setProperty(BlogConfiguration.DATA_DIR, "data");
-        config.setProperty(BlogConfiguration.TEMPLATE_DIR, "templates");
+        config.setProperty(BlogConfigurationKeys.TITLE.getKey(), "Blog Title");
+        config.setProperty(BlogConfigurationKeys.DESCRIPTION.getKey(), "Blog Description");
+        config.setProperty(BlogConfigurationKeys.SITE_URI.getKey(), "http://uberblog.local/");
+        config.setProperty(BlogConfigurationKeys.ENCODING.getKey(), "utf-8");
+        config.setProperty(BlogConfigurationKeys.PUBLIC_DIR.getKey(), "public");
+        config.setProperty(BlogConfigurationKeys.LANGUAGE.getKey(), "en");
+        config.setProperty(BlogConfigurationKeys.DATA_DIR.getKey(), "data");
+        config.setProperty(BlogConfigurationKeys.TEMPLATE_DIR.getKey(), "templates");
         assertThat(product.configuration(), is(new BlogConfiguration(config)));
     }
 

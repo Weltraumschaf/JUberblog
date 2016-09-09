@@ -76,20 +76,20 @@ public class BlogConfigurationTest extends BaseTestCase {
     public void validate() {
         final Properties config = BlogConfiguration.validate(createProperties());
 
-        assertThat(config.getProperty(BlogConfiguration.DATA_DIR), is("/data"));
-        assertThat(config.getProperty(BlogConfiguration.DESCRIPTION), is("Blog Description"));
-        assertThat(config.getProperty(BlogConfiguration.ENCODING), is("utf-8"));
-        assertThat(config.getProperty(BlogConfiguration.PUBLIC_DIR), is("/public"));
-        assertThat(config.getProperty(BlogConfiguration.LANGUAGE), is("en"));
-        assertThat(config.getProperty(BlogConfiguration.SITE_URI), is("http://uberblog.local/"));
-        assertThat(config.getProperty(BlogConfiguration.TEMPLATE_DIR), is("/templates"));
-        assertThat(config.getProperty(BlogConfiguration.TITLE), is("Blog Title"));
+        assertThat(config.getProperty(BlogConfigurationKeys.DATA_DIR.getKey()), is("/data"));
+        assertThat(config.getProperty(BlogConfigurationKeys.DESCRIPTION.getKey()), is("Blog Description"));
+        assertThat(config.getProperty(BlogConfigurationKeys.ENCODING.getKey()), is("utf-8"));
+        assertThat(config.getProperty(BlogConfigurationKeys.PUBLIC_DIR.getKey()), is("/public"));
+        assertThat(config.getProperty(BlogConfigurationKeys.LANGUAGE.getKey()), is("en"));
+        assertThat(config.getProperty(BlogConfigurationKeys.SITE_URI.getKey()), is("http://uberblog.local/"));
+        assertThat(config.getProperty(BlogConfigurationKeys.TEMPLATE_DIR.getKey()), is("/templates"));
+        assertThat(config.getProperty(BlogConfigurationKeys.TITLE.getKey()), is("Blog Title"));
     }
 
     @Test
     public void validate_emptyTitle() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.TITLE);
+        config.remove(BlogConfigurationKeys.TITLE.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'title' must not be empty or missing!");
@@ -100,7 +100,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyDescription() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.DESCRIPTION);
+        config.remove(BlogConfigurationKeys.DESCRIPTION.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'description' must not be empty or missing!");
@@ -111,7 +111,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptySiteUrl() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.SITE_URI);
+        config.remove(BlogConfigurationKeys.SITE_URI.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'siteUrl' must not be empty or missing!");
@@ -122,7 +122,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyLanguage() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.LANGUAGE);
+        config.remove(BlogConfigurationKeys.LANGUAGE.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'language' must not be empty or missing!");
@@ -133,7 +133,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyDataDir() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.DATA_DIR);
+        config.remove(BlogConfigurationKeys.DATA_DIR.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'dataDirectory' must not be empty or missing!");
@@ -144,7 +144,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyTplDir() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.TEMPLATE_DIR);
+        config.remove(BlogConfigurationKeys.TEMPLATE_DIR.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'templateDirectory' must not be empty or missing!");
@@ -155,7 +155,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyHtdocs() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.PUBLIC_DIR);
+        config.remove(BlogConfigurationKeys.PUBLIC_DIR.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'publicDirectory' must not be empty or missing!");
@@ -166,7 +166,7 @@ public class BlogConfigurationTest extends BaseTestCase {
     @Test
     public void validate_emptyEncoding() {
         final Properties config = createProperties();
-        config.remove(BlogConfiguration.ENCODING);
+        config.remove(BlogConfigurationKeys.ENCODING.getKey());
 
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("The configuration property 'encoding' must not be empty or missing!");
