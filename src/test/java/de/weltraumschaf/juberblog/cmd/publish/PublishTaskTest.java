@@ -1,6 +1,7 @@
 package de.weltraumschaf.juberblog.cmd.publish;
 
 import de.weltraumschaf.juberblog.JUberblog;
+import de.weltraumschaf.juberblog.content.Page;
 import de.weltraumschaf.juberblog.content.Pages;
 import de.weltraumschaf.juberblog.file.DataFile;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
@@ -9,8 +10,11 @@ import de.weltraumschaf.juberblog.BaseTestCase;
 import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.content.PageType;
 
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.Collection;
+
+import org.joda.time.DateTime;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -42,9 +46,12 @@ public class PublishTaskTest extends BaseTestCase {
         Files.copy(createPath("sites/2014-09-30T15.29.20_Site-Two.md"), registry.directories().getSitesData().resolve("2014-09-30T15.29.20_Site-Two.md"));
         final PublishTask sut = new PublishTask(registry, PageType.SITE);
 
-        // TODO Verify result.
         final Pages pages = sut.execute();
 
+        assertThat(pages.data(), hasSize(2));
+        assertThat(pages.data(), containsInAnyOrder(
+            new Page("This is Site One", new URI("http://uberblog.local/sites/Site-One.html"), "", new DateTime("2014-08-30T15:29:20"), PageType.SITE),
+            new Page("This is Site Two", new URI("http://uberblog.local/sites/Site-Two.html"), "", new DateTime("2014-09-30T15:29:20"), PageType.SITE)));
         final Collection<DataFile> foundFiles = new FilesFinderByExtension(FileNameExtension.HTML).find(tmp.getRoot().toPath().resolve("public"));
         assertThat(foundFiles.size(), is(2));
         final DataFile expectedOne = new DataFile(tmp.getRoot().toString() + "/public/sites/Site-One.html");

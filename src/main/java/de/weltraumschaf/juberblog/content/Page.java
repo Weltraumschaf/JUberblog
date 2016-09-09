@@ -152,7 +152,6 @@ public final class Page {
         public int compare(final Page o1, final Page o2) {
             return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());
         }
-
     }
 
     /**
