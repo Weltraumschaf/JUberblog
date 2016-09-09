@@ -13,25 +13,6 @@ import java.util.Objects;
 public final class Directories {
 
     /**
-     * Name of sites sub directory.
-     *
-     * TODO Use Comstants#SITES_DIR instead.
-     */
-    public static final String SITES_DIR_NAME = "sites";
-    /**
-     * Name of posts sub directory.
-     *
-     * TODO Use Constants#POSTS_DIR instead.
-     */
-    public static final String POSTS_DIR_NAME = "posts";
-    /**
-     * Name of drafts sub directory.
-     *
-     * TODO Use Constants#DRAFTS_DIR imstead.
-     */
-    public static final String DRAFTS_DIR_NAME = "drafts";
-
-    /**
      * Where to find the post's Markdown files.
      */
     private final Path postsData;
@@ -70,13 +51,13 @@ public final class Directories {
         super();
         Validate.notNull(dataDir, "dataDir");
         Validate.notNull(outputDir, "outputDir");
-        this.postsData = dataDir.resolve(POSTS_DIR_NAME);
-        this.sitesData = dataDir.resolve(SITES_DIR_NAME);
-        this.postsDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(POSTS_DIR_NAME);
-        this.sitesDraftData = dataDir.resolve(DRAFTS_DIR_NAME).resolve(SITES_DIR_NAME);
+        this.postsData = dataDir.resolve(Constants.POSTS_DIR.toString());
+        this.sitesData = dataDir.resolve(Constants.SITES_DIR.toString());
+        this.postsDraftData = dataDir.resolve(Constants.DRAFTS_DIR.toString()).resolve(Constants.POSTS_DIR.toString());
+        this.sitesDraftData = dataDir.resolve(Constants.DRAFTS_DIR.toString()).resolve(Constants.SITES_DIR.toString());
         this.output = outputDir;
-        this.postsOutput = outputDir.resolve(POSTS_DIR_NAME);
-        this.siteOutput = outputDir.resolve(SITES_DIR_NAME);
+        this.postsOutput = outputDir.resolve(Constants.POSTS_DIR.toString());
+        this.siteOutput = outputDir.resolve(Constants.SITES_DIR.toString());
     }
 
     /**

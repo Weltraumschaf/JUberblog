@@ -54,24 +54,24 @@ public abstract class BaseTestCase {
 
         if (createDirs) {
             dataDir.mkdir();
-            new File(dataDir, Directories.POSTS_DIR_NAME).mkdir();
-            new File(dataDir, Directories.SITES_DIR_NAME).mkdir();
-            File drafts = new File(dataDir, Directories.DRAFTS_DIR_NAME);
+            new File(dataDir, Constants.POSTS_DIR.toString()).mkdir();
+            new File(dataDir, Constants.SITES_DIR.toString()).mkdir();
+            File drafts = new File(dataDir, Constants.DRAFTS_DIR.toString());
             drafts.mkdir();
-            new File(drafts, Directories.POSTS_DIR_NAME).mkdir();
-            new File(drafts, Directories.SITES_DIR_NAME).mkdir();
+            new File(drafts, Constants.POSTS_DIR.toString()).mkdir();
+            new File(drafts, Constants.SITES_DIR.toString()).mkdir();
         }
 
         final File outputDir = new File(tmp.getRoot(), "public");
 
         if (createDirs) {
             outputDir.mkdir();
-            new File(outputDir, Directories.POSTS_DIR_NAME).mkdir();
-            new File(outputDir, Directories.SITES_DIR_NAME).mkdir();
-            final File drafts = new File(outputDir, Directories.DRAFTS_DIR_NAME);
+            new File(outputDir, Constants.POSTS_DIR.toString()).mkdir();
+            new File(outputDir, Constants.SITES_DIR.toString()).mkdir();
+            final File drafts = new File(outputDir, Constants.DRAFTS_DIR.toString());
             drafts.mkdir();
-            new File(drafts, Directories.POSTS_DIR_NAME).mkdir();
-            new File(drafts, Directories.SITES_DIR_NAME).mkdir();
+            new File(drafts, Constants.POSTS_DIR.toString()).mkdir();
+            new File(drafts, Constants.SITES_DIR.toString()).mkdir();
         }
 
         return new Directories(dataDir.toPath(), outputDir.toPath());
