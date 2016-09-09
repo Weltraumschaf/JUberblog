@@ -75,8 +75,9 @@ public final class BlogConfiguration {
 
         try (final InputStream in = new FileInputStream(new File(filename))) {
             properties.load(in);
-            return properties; // TODO Move outside of scope.
         }
+
+        return properties;
     }
 
     /**
