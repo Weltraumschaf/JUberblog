@@ -1,4 +1,4 @@
-package de.weltraumschaf.juberblog.core;
+package de.weltraumschaf.juberblog.content;
 
 import de.weltraumschaf.juberblog.content.Page;
 
@@ -6,8 +6,6 @@ import java.util.Map;
 
 /**
  * Converts a single page to a map of strings assignable to templates.
- *
- * XXX Move to comtent package.
  *
  * @since 1.0.0
  * @author Sven Strittmatter

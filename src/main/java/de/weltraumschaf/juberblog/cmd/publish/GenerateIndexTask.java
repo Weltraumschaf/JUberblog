@@ -10,7 +10,7 @@ import de.weltraumschaf.juberblog.content.Page;
 import de.weltraumschaf.juberblog.content.Pages;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
 import de.weltraumschaf.juberblog.task.BaseTask;
-import de.weltraumschaf.juberblog.core.PageConverter;
+import de.weltraumschaf.juberblog.content.PageConverter;
 import de.weltraumschaf.juberblog.task.Task;
 import java.nio.file.Files;
 import java.util.Collections;

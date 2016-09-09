@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import de.weltraumschaf.juberblog.content.Page;
-import de.weltraumschaf.juberblog.content.PageType;
-import de.weltraumschaf.juberblog.content.Pages;
-import de.weltraumschaf.juberblog.core.PageConverter;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;

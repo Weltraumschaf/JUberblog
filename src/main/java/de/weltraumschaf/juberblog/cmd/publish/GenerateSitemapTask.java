@@ -7,7 +7,7 @@ import de.weltraumschaf.juberblog.Registry;
 import de.weltraumschaf.juberblog.task.BaseTask;
 import de.weltraumschaf.juberblog.core.DateFormatter;
 import de.weltraumschaf.juberblog.content.Page;
-import de.weltraumschaf.juberblog.core.PageConverter;
+import de.weltraumschaf.juberblog.content.PageConverter;
 import de.weltraumschaf.juberblog.content.Pages;
 import de.weltraumschaf.juberblog.content.PageType;
 import de.weltraumschaf.juberblog.file.FileNameExtension;
