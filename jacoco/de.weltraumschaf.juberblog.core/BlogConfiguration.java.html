@@ -6,68 +6,37 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
 /**
  * Blog configuration.
- *
+ * &lt;p&gt;
  * Abstracts the configuration properties file.
+ * &lt;/p&gt;
  *
  * @since 1.0.0
  * @author Sven Strittmatter
  */
 public final class BlogConfiguration {
-
-    /**
-     * Name of blog headline property.
-     */
-    public static final String TITLE = &quot;title&quot;;
-    /**
-     * Name of blog description property.
-     */
-    public static final String DESCRIPTION = &quot;description&quot;;
-    /**
-     * Name of site base URI property.
-     */
-    public static final String SITE_URI = &quot;siteUrl&quot;;
-    /**
-     * Name of site language property.
-     */
-    public static final String LANGUAGE = &quot;language&quot;;
-    /**
-     * Name of data directory property.
-     */
-    public static final String DATA_DIR = &quot;dataDirectory&quot;;
-    /**
-     * Name of template directory property.
-     */
-    public static final String TEMPLATE_DIR = &quot;templateDirectory&quot;;
-    /**
-     * Name of published public directory property.
-     */
-    public static final String PUBLIC_DIR = &quot;publicDirectory&quot;;
-    /**
-     * Name of encoding property.
-     */
-    public static final String ENCODING = &quot;encoding&quot;;
     /**
      * Default configuration.
      */
     public static final BlogConfiguration DEFAULT;
     static {
-<span class="fc" id="L60">        final Properties emptyConfig = new Properties();</span>
-<span class="fc" id="L61">        emptyConfig.setProperty(TITLE, &quot;Blog Title&quot;);</span>
-<span class="fc" id="L62">        emptyConfig.setProperty(DESCRIPTION, &quot;Blog Description&quot;);</span>
-<span class="fc" id="L63">        emptyConfig.setProperty(SITE_URI, &quot;http://uberblog.local/&quot;);</span>
-<span class="fc" id="L64">        emptyConfig.setProperty(LANGUAGE, &quot;en&quot;);</span>
-<span class="fc" id="L65">        emptyConfig.setProperty(DATA_DIR, &quot;data&quot;);</span>
-<span class="fc" id="L66">        emptyConfig.setProperty(TEMPLATE_DIR, &quot;templates&quot;);</span>
-<span class="fc" id="L67">        emptyConfig.setProperty(PUBLIC_DIR, &quot;public&quot;);</span>
-<span class="fc" id="L68">        emptyConfig.setProperty(ENCODING, &quot;utf-8&quot;);</span>
-<span class="fc" id="L69">        DEFAULT = new BlogConfiguration(emptyConfig);</span>
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L29">        final Properties emptyConfig = new Properties();</span>
+<span class="fc" id="L30">        emptyConfig.setProperty(BlogConfigurationKeys.TITLE.getKey(), &quot;Blog Title&quot;);</span>
+<span class="fc" id="L31">        emptyConfig.setProperty(BlogConfigurationKeys.DESCRIPTION.getKey(), &quot;Blog Description&quot;);</span>
+<span class="fc" id="L32">        emptyConfig.setProperty(BlogConfigurationKeys.SITE_URI.getKey(), &quot;http://uberblog.local/&quot;);</span>
+<span class="fc" id="L33">        emptyConfig.setProperty(BlogConfigurationKeys.LANGUAGE.getKey(), &quot;en&quot;);</span>
+<span class="fc" id="L34">        emptyConfig.setProperty(BlogConfigurationKeys.DATA_DIR.getKey(), &quot;data&quot;);</span>
+<span class="fc" id="L35">        emptyConfig.setProperty(BlogConfigurationKeys.TEMPLATE_DIR.getKey(), &quot;templates&quot;);</span>
+<span class="fc" id="L36">        emptyConfig.setProperty(BlogConfigurationKeys.PUBLIC_DIR.getKey(), &quot;public&quot;);</span>
+<span class="fc" id="L37">        emptyConfig.setProperty(BlogConfigurationKeys.ENCODING.getKey(), &quot;utf-8&quot;);</span>
+<span class="fc" id="L38">        DEFAULT = new BlogConfiguration(emptyConfig);</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Used to load and parse file.
@@ -81,8 +50,8 @@ public final class BlogConfiguration {
      * @throws IOException if file can't be load
      */
     public BlogConfiguration(final String filename) throws IOException {
-<span class="fc" id="L84">        this(load(filename));</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L53">        this(load(filename));</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      *
@@ -91,9 +60,9 @@ public final class BlogConfiguration {
      * @param p must not be {@code null}
      */
     public BlogConfiguration(final Properties p) {
-<span class="fc" id="L94">        super();</span>
-<span class="fc" id="L95">        properties = validate(Validate.notNull(p));</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L63">        super();</span>
+<span class="fc" id="L64">        properties = validate(Validate.notNull(p));</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Load the properties from file.
@@ -103,13 +72,14 @@ public final class BlogConfiguration {
      * @throws IOException if configuration file can not be loaded
      */
     private static Properties load(final String filename) throws IOException {
-<span class="fc" id="L106">        Validate.notEmpty(filename, &quot;filename&quot;);</span>
-<span class="fc" id="L107">        final Properties properties = new Properties();</span>
+<span class="fc" id="L75">        Validate.notEmpty(filename, &quot;filename&quot;);</span>
+<span class="fc" id="L76">        final Properties properties = new Properties();</span>
 
-<span class="pc" id="L109">        try (final InputStream in = new FileInputStream(new File(filename))) {</span>
-<span class="fc" id="L110">            properties.load(in);</span>
-<span class="fc" id="L111">            return properties;</span>
-<span class="pc bpc" id="L112" title="6 of 8 branches missed.">        }</span>
+<span class="pc" id="L78">        try (final InputStream in = Files.newInputStream(Paths.get(filename))) {</span>
+<span class="fc" id="L79">            properties.load(in);</span>
+<span class="pc bpc" id="L80" title="6 of 8 branches missed.">        }</span>
+
+<span class="fc" id="L82">        return properties;</span>
     }
 
     /**
@@ -122,25 +92,17 @@ public final class BlogConfiguration {
      * @return same as input
      */
     static Properties validate(final Properties input) {
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (final String propertyName : Arrays.asList(DATA_DIR,</span>
-                DESCRIPTION,
-                ENCODING,
-                PUBLIC_DIR,
-                LANGUAGE,
-                SITE_URI,
-                TEMPLATE_DIR,
-                TITLE
-        )) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (final BlogConfigurationKeys propertyName : BlogConfigurationKeys.values()) {</span>
             try {
-<span class="fc" id="L135">                Validate.notEmpty(input.getProperty(propertyName));</span>
-<span class="fc" id="L136">            } catch (final IllegalArgumentException | NullPointerException ex) {</span>
-<span class="fc" id="L137">                throw new IllegalArgumentException(String.format(</span>
+<span class="fc" id="L97">                Validate.notEmpty(input.getProperty(propertyName.getKey()));</span>
+<span class="fc" id="L98">            } catch (final IllegalArgumentException | NullPointerException ex) {</span>
+<span class="fc" id="L99">                throw new IllegalArgumentException(String.format(</span>
                         &quot;The configuration property '%s' must not be empty or missing!&quot;,
-                        propertyName));
-<span class="fc" id="L140">            }</span>
-<span class="fc" id="L141">        }</span>
+<span class="fc" id="L101">                        propertyName.getKey()));</span>
+<span class="fc" id="L102">            }</span>
+        }
 
-<span class="fc" id="L143">        return input;</span>
+<span class="fc" id="L105">        return input;</span>
     }
 
     /**
@@ -149,9 +111,9 @@ public final class BlogConfiguration {
      * @param name must not be {code null} or empty
      * @return never {@literal null}
      */
-    private String getProperty(final String name) {
-<span class="fc" id="L153">        Validate.notEmpty(name, &quot;Name must not be null or empty!&quot;);</span>
-<span class="fc" id="L154">        return properties.getProperty(name, &quot;&quot;);</span>
+    private String getProperty(final BlogConfigurationKeys name) {
+<span class="fc" id="L115">        Validate.notEmpty(name.getKey(), &quot;Name must not be null or empty!&quot;);</span>
+<span class="fc" id="L116">        return properties.getProperty(name.getKey(), &quot;&quot;);</span>
     }
 
     /**
@@ -160,7 +122,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTitle() {
-<span class="fc" id="L163">        return getProperty(TITLE);</span>
+<span class="fc" id="L125">        return getProperty(BlogConfigurationKeys.TITLE);</span>
     }
 
     /**
@@ -169,7 +131,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDescription() {
-<span class="fc" id="L172">        return getProperty(DESCRIPTION);</span>
+<span class="fc" id="L134">        return getProperty(BlogConfigurationKeys.DESCRIPTION);</span>
     }
 
     /**
@@ -178,7 +140,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public URI getBaseUri() {
-<span class="fc" id="L181">        return URI.create(getProperty(SITE_URI));</span>
+<span class="fc" id="L143">        return URI.create(getProperty(BlogConfigurationKeys.SITE_URI));</span>
     }
 
     /**
@@ -187,7 +149,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getLanguage() {
-<span class="fc" id="L190">        return getProperty(LANGUAGE);</span>
+<span class="fc" id="L152">        return getProperty(BlogConfigurationKeys.LANGUAGE);</span>
     }
 
     /**
@@ -196,7 +158,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getDataDir() {
-<span class="fc" id="L199">        return getProperty(DATA_DIR);</span>
+<span class="fc" id="L161">        return getProperty(BlogConfigurationKeys.DATA_DIR);</span>
     }
 
     /**
@@ -205,7 +167,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getTemplateDir() {
-<span class="fc" id="L208">        return getProperty(TEMPLATE_DIR);</span>
+<span class="fc" id="L170">        return getProperty(BlogConfigurationKeys.TEMPLATE_DIR);</span>
     }
 
     /**
@@ -214,7 +176,7 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getHtdocs() {
-<span class="fc" id="L217">        return getProperty(PUBLIC_DIR);</span>
+<span class="fc" id="L179">        return getProperty(BlogConfigurationKeys.PUBLIC_DIR);</span>
     }
 
     /**
@@ -223,27 +185,27 @@ public final class BlogConfiguration {
      * @return never {@literal null}
      */
     public String getEncoding() {
-<span class="fc" id="L226">        return getProperty(ENCODING);</span>
+<span class="fc" id="L188">        return getProperty(BlogConfigurationKeys.ENCODING);</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L231">        return &quot;Configuration{&quot; + &quot;properties=&quot; + properties + '}';</span>
+<span class="nc" id="L193">        return &quot;Configuration{&quot; + &quot;properties=&quot; + properties + '}';</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L236">        return Objects.hash(properties);</span>
+<span class="fc" id="L198">        return Objects.hash(properties);</span>
     }
 
     @Override
     public boolean equals(final Object obj) {
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (!(obj instanceof BlogConfiguration)) {</span>
-<span class="fc" id="L242">            return false;</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (!(obj instanceof BlogConfiguration)) {</span>
+<span class="fc" id="L204">            return false;</span>
         }
 
-<span class="fc" id="L245">        final BlogConfiguration other = (BlogConfiguration) obj;</span>
-<span class="fc" id="L246">        return Objects.equals(properties, other.properties);</span>
+<span class="fc" id="L207">        final BlogConfiguration other = (BlogConfiguration) obj;</span>
+<span class="fc" id="L208">        return Objects.equals(properties, other.properties);</span>
     }
 
 }

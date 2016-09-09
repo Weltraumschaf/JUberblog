@@ -14,8 +14,6 @@ import org.joda.time.DateTimeComparator;
  * This class is immutable by design.
  * &lt;/p&gt;
  *
- * XXX: Move into publish package.
- *
  * @since 1.0.0
  * @author Sven Strittmatter
  */
@@ -57,13 +55,13 @@ public final class Page {
             final String description,
             final DateTime publishingDate,
             final PageType type) {
-<span class="fc" id="L60">        super();</span>
-<span class="fc" id="L61">        this.title = Validate.notEmpty(title, &quot;title&quot;);</span>
-<span class="fc" id="L62">        this.link = Validate.notNull(link, &quot;link&quot;);</span>
-<span class="fc" id="L63">        this.description = Validate.notNull(description, &quot;description&quot;);</span>
-<span class="fc" id="L64">        this.publishingDate = Validate.notNull(publishingDate, &quot;publishingDate&quot;);</span>
-<span class="fc" id="L65">        this.type = Validate.notNull(type, &quot;type&quot;);</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L58">        super();</span>
+<span class="fc" id="L59">        this.title = Validate.notEmpty(title, &quot;title&quot;);</span>
+<span class="fc" id="L60">        this.link = Validate.notNull(link, &quot;link&quot;);</span>
+<span class="fc" id="L61">        this.description = Validate.notNull(description, &quot;description&quot;);</span>
+<span class="fc" id="L62">        this.publishingDate = Validate.notNull(publishingDate, &quot;publishingDate&quot;);</span>
+<span class="fc" id="L63">        this.type = Validate.notNull(type, &quot;type&quot;);</span>
+<span class="fc" id="L64">    }</span>
 
     /**
      * Get the page tile.
@@ -71,7 +69,7 @@ public final class Page {
      * @return never {@code null} or empty
      */
     public String getTitle() {
-<span class="fc" id="L74">        return title;</span>
+<span class="fc" id="L72">        return title;</span>
     }
 
     /**
@@ -80,7 +78,7 @@ public final class Page {
      * @return never {@code null}
      */
     public URI getLink() {
-<span class="fc" id="L83">        return link;</span>
+<span class="fc" id="L81">        return link;</span>
     }
 
     /**
@@ -89,7 +87,7 @@ public final class Page {
      * @return never {@code null}
      */
     public String getDescription() {
-<span class="fc" id="L92">        return description;</span>
+<span class="fc" id="L90">        return description;</span>
     }
 
     /**
@@ -98,7 +96,7 @@ public final class Page {
      * @return never {@code null}
      */
     public DateTime getPublishingDate() {
-<span class="fc" id="L101">        return publishingDate;</span>
+<span class="fc" id="L99">        return publishingDate;</span>
     }
 
     /**
@@ -107,31 +105,31 @@ public final class Page {
      * @return never {@code null}
      */
     public PageType getType() {
-<span class="fc" id="L110">        return type;</span>
+<span class="fc" id="L108">        return type;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L115">        return Objects.hash(title, link, description, publishingDate, type);</span>
+<span class="fc" id="L113">        return Objects.hash(title, link, description, publishingDate, type);</span>
     }
 
     @Override
     public boolean equals(final Object obj) {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (!(obj instanceof Page)) {</span>
-<span class="fc" id="L121">            return false;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (!(obj instanceof Page)) {</span>
+<span class="fc" id="L119">            return false;</span>
         }
 
-<span class="fc" id="L124">        final Page other = (Page) obj;</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        return Objects.equals(title, other.title)</span>
-<span class="fc bfc" id="L126" title="All 2 branches covered.">                &amp;&amp; Objects.equals(link, other.link)</span>
-<span class="fc bfc" id="L127" title="All 2 branches covered.">                &amp;&amp; Objects.equals(description, other.description)</span>
-<span class="fc bfc" id="L128" title="All 2 branches covered.">                &amp;&amp; Objects.equals(publishingDate, other.publishingDate)</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">                &amp;&amp; Objects.equals(type, other.type);</span>
+<span class="fc" id="L122">        final Page other = (Page) obj;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        return Objects.equals(title, other.title)</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                &amp;&amp; Objects.equals(link, other.link)</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                &amp;&amp; Objects.equals(description, other.description)</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                &amp;&amp; Objects.equals(publishingDate, other.publishingDate)</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                &amp;&amp; Objects.equals(type, other.type);</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L134">        return &quot;Page{&quot;</span>
+<span class="fc" id="L132">        return &quot;Page{&quot;</span>
                 + &quot;title=&quot; + title + &quot;, &quot;
                 + &quot;link=&quot; + link + &quot;, &quot;
                 + &quot;description=&quot; + description + &quot;, &quot;
@@ -143,25 +141,28 @@ public final class Page {
     /**
      * A comparator to sort pages ascending by date.
      */
-<span class="fc" id="L146">    public static final class SortByDateAscending implements Comparator&lt;Page&gt; {</span>
+<span class="fc" id="L144">    public static final class SortByDateAscending implements Comparator&lt;Page&gt; {</span>
 
         /**
          * Delegate for Joda time objects.
          */
-<span class="fc" id="L151">        private final Comparator&lt;Object&gt; jodaCompare = DateTimeComparator.getInstance();</span>
+<span class="fc" id="L149">        private final Comparator&lt;Object&gt; jodaCompare = DateTimeComparator.getInstance();</span>
 
         @Override
         public int compare(final Page o1, final Page o2) {
-<span class="fc" id="L155">            return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());</span>
+<span class="fc" id="L153">            return jodaCompare.compare(o1.getPublishingDate(), o2.getPublishingDate());</span>
         }
 
     }
 
-<span class="fc" id="L160">    public static final class SortByDateDescending implements Comparator&lt;Page&gt; {</span>
+    /**
+     * A comparator to sort pages descending by date.
+     */
+<span class="fc" id="L161">    public static final class SortByDateDescending implements Comparator&lt;Page&gt; {</span>
 
         @Override
         public int compare(final Page o1, final Page o2) {
-<span class="fc" id="L164">            return new SortByDateAscending().compare(o1, o2) * -1;</span>
+<span class="fc" id="L165">            return new SortByDateAscending().compare(o1, o2) * -1;</span>
         }
 
     }
