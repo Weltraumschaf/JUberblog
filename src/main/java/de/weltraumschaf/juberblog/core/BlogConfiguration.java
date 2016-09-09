@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -73,7 +75,7 @@ public final class BlogConfiguration {
         Validate.notEmpty(filename, "filename");
         final Properties properties = new Properties();
 
-        try (final InputStream in = new FileInputStream(new File(filename))) {
+        try (final InputStream in = Files.newInputStream(Paths.get(filename))) {
             properties.load(in);
         }
 
