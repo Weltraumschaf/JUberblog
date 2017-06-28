@@ -1,0 +1,12 @@
+[[section-system-scope-and-context]]
+== System Scope and Context
+
+image:images/context_boundaries.png["Context Boundaries"]
+
+The system has two different kinds of interfaces:
+
+. User interfaces: Which are used by human users to interact with the system.
+The system provides two kinds of user interfaces:
+* A simple search interface for any unprivileged user.
+* An administrative interface for authorized users.
+. The file system: The system interacts with it to find media files.

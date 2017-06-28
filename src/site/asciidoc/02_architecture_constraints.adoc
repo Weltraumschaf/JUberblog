@@ -1,0 +1,12 @@
+[[section-architecture-constraints]]
+== Architecture Constraints
+
+[options="header",cols="1,2"]
+|===
+| Constraint | Description
+| Operating System | The application must run on MacOS and Free BSD.
+| Programming Language | The application must be written with Java.
+| Frameworks | The application must be done with https://projects.spring.io/spring-boot/[Spring Boot]. The admin UI must be done with https://vaadin.com/home[Vaadin].
+| Final artifact | The application must be a single self contained executable JAR.
+|==
+

@@ -1,0 +1,19 @@
+[[section-runtime-view]]
+== Runtime View
+
+=== Scan of a bucket
+
+The steps done by a job which sacans a bucket:
+
+. FindFilesStep
+.. list all files in the bucket
+.. calculate hash of each file
+. FilterSeenFilesStep
+.. filter out already added files with same hash (means unchanged)
+. MetaDataExtractionStep
+.. extract file extension
+.. determine media type
+.. extract keywords from relative path
+.. store media file and its keywords
+
+image:images/scan_runtime_view.png["Batch Scan Runtime View"]

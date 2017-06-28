@@ -1,0 +1,4 @@
+== Non Functional
+
+* The administrative website must be secured with a login
+* The whole application must be in one selfcontained executable JAR.

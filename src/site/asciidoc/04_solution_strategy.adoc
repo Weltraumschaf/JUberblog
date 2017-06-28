@@ -1,0 +1,14 @@
+[[section-solution-strategy]]
+== Solution Strategy
+
+The core technology to build this application is Java and JavaScript.
+
+== Backend
+
+The backend is backed by the Spring Boot framework. The administrative
+interface is done with Vaadin. All persistent data is stored in a SQL
+database.
+
+== Frontend
+
+The frontend is backed by jQuery and Bootstrap.

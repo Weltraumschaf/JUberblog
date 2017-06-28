@@ -1,0 +1,17 @@
+[[section-introduction-and-goals]]
+== Introduction and Goals
+
+=== Requirements Overview
+
+The Maconha system provides a way to crawl file system directories for media data (e.g. music,
+movies etc.), index them, and provide a simple interface to search them.
+
+=== Quality Goals
+
+[options="header",cols="1,2,2"]
+|===
+| Priority | Goal | Scenario
+| 1. | Simple use of search interface. | The search interface must be as simple as Google.
+| 2. | The system must be self contained. | There must be nothing else than Java or database necessary to run the program.
+| 3. | TODO | ...
+|===

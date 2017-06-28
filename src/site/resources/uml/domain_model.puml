@@ -1,0 +1,59 @@
+@startuml
+skinparam componentStyle uml2
+
+class Bucket {
+    id
+    directory
+    name
+}
+
+class MediaFile {
+    relativeFileName
+    fileHash
+    lastScanned
+    hasMetaData()
+}
+
+note left of MediaFile {
+    The relative file name is relative
+    to the bucket's directory.
+}
+
+enum MediaType {
+    VIDEO
+    AUDIO
+    OTHER
+}
+
+enum FileExtension {
+    extension
+}
+
+interface MetaData {
+}
+
+class NoMetaData {
+}
+
+class Mp3MetaData {
+}
+
+class Keyword {
+    literal
+}
+
+note bottom of Keyword {
+    The literal keyword is normalized:
+    - all letters lowercase
+}
+
+Bucket *-- MediaFile
+MediaFile -- MediaType : type
+MediaFile -- FileExtension : format
+MediaFile "1" -- "0..1" MetaData
+MediaFile "1" -- "*" Keyword
+MediaType "1" -- "*" FileExtension
+NoMetaData --|> MetaData
+Mp3MetaData --|> MetaData
+
+@enduml

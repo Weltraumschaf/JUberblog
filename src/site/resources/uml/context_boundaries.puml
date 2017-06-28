@@ -1,0 +1,16 @@
+@startuml
+skinparam componentStyle uml2
+
+[Maconha]
+[Filesystem] #White
+:Administrator: #White
+:User: #White
+database SQL #White
+
+
+Administrator ..> Maconha
+User ..> Maconha
+Maconha ..> Filesystem
+Maconha ..> SQL
+
+@enduml

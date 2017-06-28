@@ -46,6 +46,7 @@
         <breadcrumbs>
             <item name="Weltraumschaf" href="http://www.weltraumschaf.de"/>
         </breadcrumbs>
+        
         <menu name="${project.name}">
             <item name="Home" href="index.html"/>
             <item name="Installation" href="installation.html"/>
@@ -53,6 +54,32 @@
             <item name="Usage" href="usage.html"/>
             <item name="Architecture" href="architecture.html"/>
         </menu>
+        
+        <menu name="Requirements">
+            <item href="functional_requirements.html" name="Functional"/>
+            <item href="non_functional_requirements.html"
+                  name="Non Functional"/>
+        </menu>
+        
+        <menu name="Architecture">
+            <item href="01_introduction_and_goals.html"
+                  name="Introduction and Goals"/>
+            <item href="02_architecture_constraints.html"
+                  name="Architecture Constraints"/>
+            <item href="03_system_scope_and_context.html"
+                  name="System Scope and Context"/>
+            <item href="04_solution_strategy.html" name="Solution Strategy"/>
+            <item href="05_building_block_view.html"
+                  name="Building Block View"/>
+            <item href="06_runtime_view.html" name="Runtime View"/>
+            <item href="07_deployment_view.html" name="Deployment View"/>
+            <item href="08_concepts.html" name="Concepts"/>
+            <item href="09_design_decisions.html" name="Design Decisions"/>
+            <item href="10_quality_scenarios.html" name="Quality Scenarios"/>
+            <item href="11_technical_risks.html" name="Technical Risks"/>
+            <item href="12_glossary.html" name="Glossary"/>
+        </menu>
+
         <menu name="Reports" ref="reports"/>
     </body>
 </project>

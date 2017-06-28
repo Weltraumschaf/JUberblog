@@ -1,0 +1,10 @@
+[[section-deployment-view]]
+
+== Deployment View
+
+image:images/deployment.png["Deployment"]
+
+The deployment is quite simple: The whole application is delivered by a single
+self contained Java jar file which will be deployed to a single node which has
+the directories (buckets) withe media data. The only addition needed is a SQL
+database.

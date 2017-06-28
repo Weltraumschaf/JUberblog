@@ -1,0 +1,10 @@
+@startuml
+skinparam componentStyle uml2
+
+node NAS {
+    [Maconha] <<jar>>
+    database maconha <<sql>>
+    Maconha -- maconha
+}
+
+@enduml

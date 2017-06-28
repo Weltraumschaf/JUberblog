@@ -1,0 +1,8 @@
+[[section-building-block-view]]
+== Building Block View
+
+image:images/components_level_1.png["Components Level 1"]
+
+=== Domain Model
+
+image:images/domain_model.png["Domain Model"]

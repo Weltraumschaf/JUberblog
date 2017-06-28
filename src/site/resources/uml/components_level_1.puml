@@ -1,0 +1,28 @@
+@startuml
+skinparam componentStyle uml2
+
+[Filesystem] #White
+:Administrator: #White
+:User: #White
+database SQL
+
+frame Maconha {
+    [Admin Interface] as webadmin <<Vaadin>>
+    [Search Interface] as searchui <<HTML5>>
+    [Search Service] as search <<REST>>
+    [Domain Model] as model <<JPA>>
+    [Crawler/Indexer] as crawler <<Batch>>
+
+    searchui ..> search
+    crawler ..> model
+    search ..> model
+    webadmin ..> model
+    webadmin ..> crawler
+}
+
+Administrator ..> webadmin
+User ..> searchui
+crawler ..> Filesystem
+model ..> SQL
+
+@enduml

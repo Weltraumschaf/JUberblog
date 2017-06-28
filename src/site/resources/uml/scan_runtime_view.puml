@@ -1,0 +1,37 @@
+@startuml
+skinparam componentStyle uml2
+
+actor Admin
+
+admin -> ScanService : start
+activate ScanService
+
+ScanService -> ScanJob
+activate ScanJob
+
+ScanJob -> FindFilesStep
+activate FindFilesStep
+deactivate FindFilesStep
+ScanJob <-- FindFilesStep
+
+ScanJob -> FilterSeenFilesStep
+activate FilterSeenFilesStep
+deactivate FilterSeenFilesStep
+ScanJob <-- FilterSeenFilesStep
+
+ScanJob -> MetaDataExtractionStep
+activate MetaDataExtractionStep
+
+MetaDataExtractionStep -> MediaFileRepo: save
+activate MediaFileRepo
+deactivate MediaFileRepo
+MetaDataExtractionStep <-- MediaFileRepo
+
+deactivate MetaDataExtractionStep
+ScanJob <-- MetaDataExtractionStep
+
+ScanService <-- ScanJob
+deactivate ScanJob
+deactivate ScanService
+
+@enduml
